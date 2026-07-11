@@ -1,0 +1,512 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import {
+  Package, MapPin, Heart, User, Clock, Check, Truck, CreditCard, ExternalLink, FileText, Sparkles
+} from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { db } from '@/lib/db';
+import { toggleFavoriteAction } from '@/actions/shopActions';
+import { authService } from '@/lib/supabaseAuth';
+
+export default function ClienteDashboard() {
+  const [activeTab, setActiveTab] = useState('pedidos');
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  
+  // Data States
+  const [orders, setOrders] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [profileForm, setProfileForm] = useState({ name: 'Jaque Customer', email: 'cliente@example.com' });
+  const [profileSaved, setProfileSaved] = useState(false);
+  const [subscription, setSubscription] = useState<any>(null);
+
+  const handleCancelSub = () => {
+    const updated = { ...subscription, status: 'cancelled' };
+    setSubscription(updated);
+    localStorage.setItem('yedam_sub', JSON.stringify(updated));
+  };
+
+  const handleReactivateSub = () => {
+    const updated = { ...subscription, status: 'active' };
+    setSubscription(updated);
+    localStorage.setItem('yedam_sub', JSON.stringify(updated));
+  };
+
+  const handleSubscribe = (planName: string, price: number) => {
+    const nextDate = new Date();
+    nextDate.setMonth(nextDate.getMonth() + 1);
+    const newSub = {
+      plan: planName,
+      price: price,
+      status: 'active',
+      next_billing: nextDate.toISOString().split('T')[0],
+      history: [
+        { date: new Date().toISOString().split('T')[0], amount: price, status: 'paid' }
+      ]
+    };
+    setSubscription(newSub);
+    localStorage.setItem('yedam_sub', JSON.stringify(newSub));
+  };
+
+  const loadData = () => {
+    const user = authService.getCurrentUser();
+    const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
+    const userEmail = user ? user.email : 'cliente@example.com';
+
+    // Load orders
+    const allOrders = db.get('orders') || [];
+    const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
+    setOrders(userOrders);
+
+    // Load addresses
+    const allAddresses = db.get('addresses') || [];
+    const userAddrs = allAddresses.filter((a: any) => a.user_id === userId);
+    setAddresses(userAddrs);
+
+    // Load favorites products from localStorage
+    let userFavIds: string[] = [];
+    if (typeof window !== 'undefined') {
+      const savedFavs = localStorage.getItem('yedam_favorites');
+      userFavIds = savedFavs ? JSON.parse(savedFavs) : [];
+    }
+    const products = db.get('products') || [];
+    const userFavProducts = products.filter((p: any) => userFavIds.includes(p.id));
+    setFavorites(userFavProducts);
+
+
+    // Load email logs
+    const allLogs = db.get('communication_logs') || [];
+    setLogs(allLogs.filter((l: any) => l.recipient === userEmail));
+
+    // Load subscription
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('yedam_sub');
+      setSubscription(saved ? JSON.parse(saved) : {
+        plan: 'Premium Box',
+        price: 29.90,
+        status: 'active',
+        next_billing: '2026-08-11',
+        history: [
+          { date: '2026-07-11', amount: 29.90, status: 'paid' }
+        ]
+      });
+    }
+  };
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    setCurrentUser(user);
+    if (user) {
+      setProfileForm({ name: user.name, email: user.email });
+    }
+    loadData();
+    // Support tab direct navigation query parameter
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      if (tab === 'favorites') {
+        setActiveTab('favorites');
+      }
+    }
+  }, []);
+
+  const handleRemoveFavorite = async (productId: string) => {
+    const userId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
+    const res = await toggleFavoriteAction(userId, productId);
+    if (res.success) {
+      // Sync local storage
+      const saved = localStorage.getItem('yedam_favorites');
+      const parsed = saved ? JSON.parse(saved) : [];
+      const updated = parsed.filter((id: string) => id !== productId);
+      localStorage.setItem('yedam_favorites', JSON.stringify(updated));
+      loadData();
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen bg-background">
+      <Header />
+
+      <main className="flex-1 max-w-7xl mx-auto w-full py-12 px-4 md:px-8">
+        {/* User profile brief header */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-16 rounded-full border-2 border-accent bg-[#030712] flex items-center justify-center text-accent text-lg font-light uppercase tracking-wider font-heading">
+              {currentUser?.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : <User className="h-7 w-7" />}
+            </div>
+            <div>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-accent">Área del Cliente</span>
+              <h1 className="font-heading text-3xl font-light text-white uppercase tracking-wider">
+                Hola, {currentUser?.name || 'Cliente'}
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Tabs Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Navigation Sidebar */}
+          <div className="flex flex-col gap-1 border border-white/5 rounded-3xl p-4 bg-card shadow-xl h-fit">
+            {[
+              { id: 'pedidos', label: 'Mis Pedidos', icon: Package },
+              { id: 'favorites', label: 'Mis Favoritos', icon: Heart },
+              { id: 'suscripciones', label: 'Club Yedam', icon: Sparkles },
+              { id: 'addresses', label: 'Direcciones', icon: MapPin },
+              { id: 'emails', label: 'Comunicaciones', icon: Clock },
+              { id: 'perfil', label: 'Mi Perfil', icon: User }
+            ].map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-full flex items-center justify-between px-4 py-3 text-xs uppercase tracking-wider font-bold rounded-2xl transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-accent text-background shadow-lg shadow-accent/15'
+                      : 'hover:bg-white/5 text-foreground/80'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Main Area */}
+          <div className="lg:col-span-3 min-h-[500px]">
+            {/* TAB: MIS PEDIDOS */}
+            {activeTab === 'pedidos' && (
+              <div className="flex flex-col gap-6">
+                {orders.length > 0 ? (
+                  orders.map((order) => (
+                    <div key={order.id} className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl flex flex-col gap-6">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/5 pb-4 gap-3">
+                        <div>
+                          <span className="text-[10px] text-accent font-bold uppercase tracking-wider">Pedido #{order.id.substring(0, 8)}</span>
+                          <span className="text-[10px] text-muted-foreground block mt-0.5">Fecha: {new Date(order.created_at).toLocaleDateString('es-ES')}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[9px] font-bold px-3 py-1 rounded-full uppercase border ${
+                            order.status === 'payment_approved'
+                              ? 'bg-green-500/10 text-green-400 border-green-500/20'
+                              : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                          }`}>
+                            {order.status === 'payment_approved' ? 'Pago Aprobado' : 'Pendiente'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Items brief */}
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Detalle del Envío:</span>
+                          <span className="text-white font-bold">{order.shipping_address.street}, {order.shipping_address.city}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Método de Pago:</span>
+                          <span className="text-white font-bold uppercase">{order.gateway}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Identificación Fiscal:</span>
+                          <span className="text-white font-bold uppercase">{order.document_type}: {order.document_number}</span>
+                        </div>
+                      </div>
+
+                      {/* Order tracking timeline visual */}
+                      <div className="border-t border-white/5 pt-4">
+                        <h4 className="text-[10px] font-bold text-accent uppercase tracking-wider mb-4">Estado del Envío</h4>
+                        {(() => {
+                          const getStatusStep = (status: string) => {
+                            switch (status) {
+                              case 'pending': return 1;
+                              case 'payment_approved': return 2;
+                              case 'preparing': return 3;
+                              case 'shipped': return 4;
+                              case 'delivered': return 5;
+                              default: return 1;
+                            }
+                          };
+                          const currentStep = getStatusStep(order.status);
+                          return (
+                            <div className="grid grid-cols-5 gap-2 text-center text-[9px] font-bold uppercase text-muted-foreground">
+                              <div className="flex flex-col items-center gap-1 text-accent">
+                                <span className="p-1 bg-accent text-background rounded-full"><Check className="h-3 w-3" /></span>
+                                <span>Recibido</span>
+                              </div>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 2 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 2 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                                  <CreditCard className="h-3 w-3" />
+                                </span>
+                                <span>Pago</span>
+                              </div>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 3 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 3 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                                  <Package className="h-3 w-3" />
+                                </span>
+                                <span>Preparación</span>
+                              </div>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 4 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 4 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                                  <Truck className="h-3 w-3" />
+                                </span>
+                                <span>Enviado</span>
+                              </div>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 5 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 5 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                                  <Check className="h-3 w-3" />
+                                </span>
+                                <span>Entregado</span>
+                              </div>
+                            </div>
+                          );
+                        })()}
+                      </div>
+
+                      {/* Invoice link */}
+                      <div className="flex items-center justify-between border-t border-white/5 pt-4">
+                        <a href={order.commercial_invoice_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold text-accent hover:underline flex items-center gap-1">
+                          <FileText className="h-4 w-4" />
+                          VER COMMERCIAL INVOICE
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                        <span className="text-sm font-bold text-white font-heading">Total: US$ {order.total_amount.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="border border-dashed border-white/10 rounded-3xl p-12 text-center text-xs text-muted-foreground bg-card">
+                    No has realizado ninguna compra todavía.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB: FAVORITOS */}
+            {activeTab === 'favorites' && (
+              <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+                <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Mis Favoritos</h2>
+                
+                {favorites.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    {favorites.map((prod) => {
+                      const imgUrl = prod.id === '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11' ? 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' :
+                                     prod.id === '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22' ? 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' :
+                                     prod.id === '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33' ? 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' :
+                                     prod.id === '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44' ? 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' :
+                                     'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400';
+
+                      return (
+                        <div key={prod.id} className="bg-secondary/40 border border-white/5 rounded-2xl p-4 flex flex-col justify-between group">
+                          <div className="relative aspect-square w-full rounded-xl overflow-hidden mb-3">
+                            <Image src={imgUrl} alt={prod.name} fill unoptimized className="object-cover" />
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-white line-clamp-1">{prod.name}</h4>
+                            <span className="text-xs font-bold text-accent block mt-1 font-heading">US$ {prod.price.toFixed(2)}</span>
+                          </div>
+                          <div className="flex gap-2 mt-4">
+                            <Link href={`/tienda/produto/${prod.slug}`} className="flex-1">
+                              <Button size="sm" variant="outline" className="w-full text-[10px] border-white/10 text-white h-8">VER</Button>
+                            </Link>
+                            <Button size="sm" onClick={() => handleRemoveFavorite(prod.id)} className="bg-red-500 hover:bg-red-600 text-white h-8">
+                              Remover
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center text-xs text-muted-foreground py-8">
+                    Tu lista de deseos está vacía.
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB: SUSCRIPCIONES (CLUB YEDAM) */}
+            {activeTab === 'suscripciones' && (
+              <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl flex flex-col gap-6">
+                <div>
+                  <span className="text-[10px] text-accent uppercase font-bold tracking-widest block">Membresía VIP</span>
+                  <h2 className="font-heading text-2xl font-light text-white uppercase mt-1">Club Yedam K-Beauty</h2>
+                </div>
+
+                {subscription ? (
+                  <div className="flex flex-col gap-6">
+                    <div className="border border-white/5 rounded-2xl p-5 bg-secondary/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                      <div>
+                        <h4 className="text-sm font-bold text-white uppercase">{subscription.plan}</h4>
+                        <p className="text-[10px] text-muted-foreground mt-1">
+                          Facturación mensual de US$ {subscription.price.toFixed(2)} • Próximo cobro: {subscription.next_billing}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[9px] font-bold px-3 py-1 rounded-full uppercase border ${
+                          subscription.status === 'active'
+                            ? 'bg-green-500/10 text-green-400 border-green-500/20'
+                            : 'bg-red-500/10 text-red-400 border-red-500/20'
+                        }`}>
+                          {subscription.status === 'active' ? 'Activa' : 'Cancelada'}
+                        </span>
+                        {subscription.status === 'active' ? (
+                          <Button onClick={handleCancelSub} size="sm" className="bg-red-500 hover:bg-red-600 text-white text-[10px] h-7 px-3 rounded-lg">
+                            Cancelar
+                          </Button>
+                        ) : (
+                          <Button onClick={handleReactivateSub} size="sm" className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] h-7 px-3 rounded-lg">
+                            Reactivar
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Benefits of Club Yedam */}
+                    <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-3">
+                      <span className="text-[9px] text-accent font-bold uppercase tracking-wider">Beneficios Incluidos</span>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted-foreground leading-normal">
+                        <li>✓ Box mensual con lo último en cosmética coreana</li>
+                        <li>✓ Envíos 100% gratuitos en todos tus pedidos</li>
+                        <li>✓ 15% de descuento adicional en toda la tienda</li>
+                        <li>✓ Acceso prioritario a lanzamientos y novedades</li>
+                      </ul>
+                    </div>
+
+                    {/* Billing history */}
+                    <div>
+                      <span className="text-[9px] text-accent font-bold uppercase tracking-wider block mb-3">Historial de Pagos</span>
+                      <div className="border border-white/5 rounded-2xl overflow-hidden bg-secondary/10 text-xs">
+                        <div className="grid grid-cols-3 p-3 bg-secondary/30 font-bold border-b border-white/5">
+                          <span>Fecha</span>
+                          <span>Monto</span>
+                          <span className="text-right">Estado</span>
+                        </div>
+                        {subscription.history.map((h: any, idx: number) => (
+                          <div key={idx} className="grid grid-cols-3 p-3 border-b border-white/5 last:border-0">
+                            <span>{h.date}</span>
+                            <span>US$ {h.amount.toFixed(2)}</span>
+                            <span className="text-right text-green-400 font-semibold uppercase">{h.status === 'paid' ? 'Aprobado' : 'Pendiente'}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-8">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Únete al **Club Yedam** para recibir mensualmente una box seleccionada de productos coreanos auténticos, además de acceder a beneficios, cupones y muestras exclusivas.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {[
+                        { name: 'Box Standard', price: 19.90, desc: '3 productos coreanos esenciales para el cuidado facial diario.' },
+                        { name: 'Box Premium', price: 29.90, desc: '5 productos premium de alta gama y muestras exclusivas.' },
+                        { name: 'Box Deluxe', price: 39.90, desc: '7 productos deluxe, accesorios de ritual y regalos VIP.' }
+                      ].map((plan) => (
+                        <div key={plan.name} className="border border-white/5 bg-secondary/30 rounded-2xl p-5 flex flex-col justify-between gap-4">
+                          <div>
+                            <h4 className="text-xs font-bold text-white uppercase">{plan.name}</h4>
+                            <span className="font-heading text-xl font-bold text-accent block mt-1">US$ {plan.price.toFixed(2)}<span className="text-[9px] text-muted-foreground font-sans">/mes</span></span>
+                            <p className="text-[10px] text-muted-foreground mt-2 leading-relaxed">{plan.desc}</p>
+                          </div>
+                          <Button onClick={() => handleSubscribe(plan.name, plan.price)} className="w-full bg-accent hover:bg-accentHover text-background font-bold text-[10px] py-2 rounded-lg">
+                            SUSCRIBIRSE
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TAB: DIRECCIONES */}
+            {activeTab === 'addresses' && (
+              <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+                <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Mis Direcciones</h2>
+                
+                <div className="flex flex-col gap-3">
+                  {addresses.map((addr) => (
+                    <div key={addr.id} className="border border-white/5 rounded-2xl p-5 bg-secondary/30 flex items-start gap-4">
+                      <MapPin className="h-5 w-5 text-accent mt-0.5" />
+                      <div className="text-xs text-muted-foreground leading-relaxed">
+                        <h4 className="font-bold text-white text-sm">{addr.first_name} {addr.last_name}</h4>
+                        <p className="mt-1">{addr.street}, #{addr.number} ({addr.complement})</p>
+                        <p>{addr.postal_code} - {addr.city}, {addr.country}</p>
+                        <p className="mt-1 text-accent font-semibold">{addr.document_type.toUpperCase()}: {addr.document_number}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB: EMAILS / COMMS */}
+            {activeTab === 'emails' && (
+              <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+                <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Comunicaciones Enviadas</h2>
+                
+                <div className="flex flex-col gap-4">
+                  {logs.map((log) => (
+                    <div key={log.id} className="border border-white/5 rounded-2xl p-4 bg-secondary/30 text-xs">
+                      <div className="flex justify-between items-center text-[10px] text-accent font-bold uppercase tracking-wider mb-2">
+                        <span>Canal: {log.type}</span>
+                        <span>{new Date(log.created_at).toLocaleString('es-ES')}</span>
+                      </div>
+                      <h4 className="font-bold text-white mb-1">{log.subject}</h4>
+                      <p className="text-muted-foreground">{log.content}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB: PERFIL */}
+            {activeTab === 'perfil' && (
+              <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+                <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Datos Personales</h2>
+                {profileSaved && (
+                  <div className="bg-green-500/10 border border-green-500/20 text-green-400 text-xs rounded-xl p-3.5 mb-6">
+                    ✓ Datos guardados con éxito.
+                  </div>
+                )}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setProfileSaved(true);
+                    setTimeout(() => setProfileSaved(false), 3000);
+                  }}
+                  className="flex flex-col gap-4 max-w-md text-xs text-muted-foreground"
+                >
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-white">Nombre Completo</label>
+                    <Input value={profileForm.name} onChange={e => setProfileForm({ ...profileForm, name: e.target.value })} required />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-semibold text-white">E-mail</label>
+                    <Input type="email" value={profileForm.email} onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} required />
+                  </div>
+                  <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl mt-2 text-xs">
+                    GUARDAR CAMBIOS
+                  </Button>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
