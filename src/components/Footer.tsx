@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
 
 const Instagram = (props: React.SVGProps<SVGSVGElement>) => (
@@ -26,22 +27,15 @@ export default function Footer() {
         {/* Left Column - Brand info */}
         {/* Left Column - Brand info */}
         <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2.5">
-            <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-accent">
-              <path d="M50 5L95 50L50 95L5 50L50 5Z" stroke="currentColor" strokeWidth="3" strokeMiterlimit="10"/>
-              <path d="M50 20L80 50L50 80L20 50L50 20Z" fill="currentColor" fillOpacity="0.15"/>
-              <circle cx="50" cy="50" r="12" stroke="currentColor" strokeWidth="2.5"/>
-              <circle cx="50" cy="50" r="4" fill="currentColor"/>
-            </svg>
-            <div className="flex flex-col">
-              <span className="font-heading text-xl font-bold tracking-[0.2em] text-accent uppercase leading-none">
-                YEDAM
-              </span>
-              <span className="text-[7.5px] uppercase tracking-[0.25em] text-accent/80 font-semibold mt-1">
-                K-BEAUTY
-              </span>
-            </div>
-          </div>
+          <Link href="/" className="flex items-center group">
+            <Image
+              src="/images/logo.png"
+              alt="Yedam"
+              width={140}
+              height={40}
+              className="h-10 w-auto object-contain"
+            />
+          </Link>
           <p className="text-xs text-muted-foreground leading-relaxed mt-2">
             Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.
           </p>
