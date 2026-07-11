@@ -41,7 +41,7 @@ export default function CookieBanner() {
     setIsVisible(false);
     
     // Aqui você pode integrar com Google Analytics, Facebook Pixel, etc.
-    console.log('✓ Todos os cookies aceitos');
+    console.log('✓ Todas las cookies aceptadas');
   };
 
   const handleRejectAll = () => {
@@ -53,7 +53,7 @@ export default function CookieBanner() {
     };
     localStorage.setItem('yedam_cookie_consent', JSON.stringify(consent));
     setIsVisible(false);
-    console.log('✓ Apenas cookies necessários ativos');
+    console.log('✓ Solo cookies necesarias activas');
   };
 
   const handleSavePreferences = () => {
@@ -64,7 +64,7 @@ export default function CookieBanner() {
     localStorage.setItem('yedam_cookie_consent', JSON.stringify(consent));
     setIsVisible(false);
     setShowPreferences(false);
-    console.log('✓ Preferências salvas:', preferences);
+    console.log('✓ Preferencias guardadas:', preferences);
   };
 
   if (!isVisible) return null;
@@ -81,10 +81,10 @@ export default function CookieBanner() {
                 <div>
                   <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide flex items-center gap-2">
                     <Settings className="h-5 w-5 text-accent" />
-                    Preferências de Cookies
+                    Preferencias de Cookies
                   </h3>
                   <p className="text-xs text-foreground/60 mt-2">
-                    Escolha quais cookies deseja aceitar. Você pode mudar suas configurações a qualquer momento.
+                    Elige qué cookies deseas aceptar. Puedes cambiar tu configuración en cualquier momento.
                   </p>
                 </div>
                 <button
@@ -95,16 +95,16 @@ export default function CookieBanner() {
                 </button>
               </div>
 
-              {/* Opções de Cookies */}
+              {/* Opciones de Cookies */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Necessary */}
                 <div className="bg-secondary/50 border border-white/5 rounded-xl p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <CheckCircle className="h-5 w-5 text-green-400" />
-                    <span className="text-xs font-bold text-white uppercase">Necessários</span>
+                    <span className="text-xs font-bold text-white uppercase">Necesarios</span>
                   </div>
                   <p className="text-[10px] text-foreground/60 leading-relaxed mb-3">
-                    Essenciais para o funcionamento do site. Não podem ser desativados.
+                    Esenciales para el funcionamiento del sitio. No pueden ser desactivados.
                   </p>
                   <div className="flex items-center gap-2">
                     <input
@@ -113,7 +113,9 @@ export default function CookieBanner() {
                       disabled
                       className="rounded border-white/20 bg-secondary text-accent focus:ring-accent/20"
                     />
-                    <span className="text-[9px] text-muted-foreground uppercase">Sempre ativo</span>
+                    <span className="text-[9px] text-muted-foreground uppercase">
+                      Siempre activo
+                    </span>
                   </div>
                 </div>
 
@@ -124,7 +126,7 @@ export default function CookieBanner() {
                     <span className="text-xs font-bold text-white uppercase">Analytics</span>
                   </div>
                   <p className="text-[10px] text-foreground/60 leading-relaxed mb-3">
-                    Google Analytics para entender como visitantes usam o site.
+                    Google Analytics para entender cómo los visitantes usan el sitio.
                   </p>
                   <div className="flex items-center gap-2">
                     <input
@@ -134,7 +136,7 @@ export default function CookieBanner() {
                       className="rounded border-white/20 bg-secondary text-accent focus:ring-accent/20"
                     />
                     <span className="text-[9px] text-muted-foreground uppercase">
-                      {preferences.analytics ? 'Ativado' : 'Desativado'}
+                      {preferences.analytics ? 'Activado' : 'Desactivado'}
                     </span>
                   </div>
                 </div>
@@ -146,7 +148,7 @@ export default function CookieBanner() {
                     <span className="text-xs font-bold text-white uppercase">Marketing</span>
                   </div>
                   <p className="text-[10px] text-foreground/60 leading-relaxed mb-3">
-                    Facebook Pixel e Google Ads para anúncios personalizados.
+                    Facebook Pixel y Google Ads para anuncios personalizados.
                   </p>
                   <div className="flex items-center gap-2">
                     <input
@@ -156,7 +158,7 @@ export default function CookieBanner() {
                       className="rounded border-white/20 bg-secondary text-accent focus:ring-accent/20"
                     />
                     <span className="text-[9px] text-muted-foreground uppercase">
-                      {preferences.marketing ? 'Ativado' : 'Desativado'}
+                      {preferences.marketing ? 'Activado' : 'Desactivado'}
                     </span>
                   </div>
                 </div>
@@ -167,7 +169,7 @@ export default function CookieBanner() {
                   onClick={handleSavePreferences}
                   className="flex-1 bg-accent hover:bg-accentHover text-background font-bold py-3 rounded-xl text-xs"
                 >
-                  SALVAR PREFERÊNCIAS
+                  GUARDAR PREFERENCIAS
                 </Button>
               </div>
             </div>
@@ -183,10 +185,10 @@ export default function CookieBanner() {
                     Usamos Cookies
                   </h3>
                   <p className="text-xs text-foreground/70 leading-relaxed max-w-2xl">
-                    Utilizamos cookies próprios e de terceiros para melhorar sua experiência, analisar tráfego e personalizar conteúdo. 
-                    Ao continuar navegando, você aceita nossa{' '}
+                    Utilizamos cookies propios y de terceros para mejorar tu experiencia, analizar tráfico y personalizar contenido. 
+                    Al continuar navegando, aceptas nuestra{' '}
                     <Link href="/politica-de-privacidad" className="text-accent hover:underline">
-                      Política de Privacidade
+                      Política de Privacidad
                     </Link>
                     .
                   </p>
@@ -207,13 +209,13 @@ export default function CookieBanner() {
                   variant="outline"
                   className="border-white/10 text-white hover:bg-white/5 font-bold py-3 px-6 rounded-xl text-xs whitespace-nowrap"
                 >
-                  Recusar Todos
+                  Rechazar Todo
                 </Button>
                 <Button
                   onClick={handleAcceptAll}
                   className="bg-accent hover:bg-accentHover text-background font-bold py-3 px-6 rounded-xl text-xs whitespace-nowrap"
                 >
-                  Aceitar Todos
+                  Aceptar Todo
                 </Button>
               </div>
             </div>
