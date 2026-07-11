@@ -13,8 +13,13 @@ interface DbState {
   favorites: any[];
   routines: any[];
   cms_blocks: any[];
+  site_content: Record<string, any>;
   system_settings: Record<string, any>;
+  coupons: any[];
+  blog_posts: any[];
 }
+
+const STORAGE_KEY = 'yedam_db_state';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -22,12 +27,12 @@ const DEFAULT_STATE: DbState = {
     { id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', email: 'cliente@example.com', name: 'Jaque Customer', role: 'customer' }
   ],
   categories: [
-    { id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', name: 'Cuidado Facial', slug: 'cuidado-facial', description: 'Produtos de limpeza, tônicos, séruns e hidratantes para o rosto.' },
-    { id: '20eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Cuidado Corporal', slug: 'cuidado-corporal', description: 'Hidratação e tratamento para todo o corpo.' },
-    { id: '30eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Cuidado Capilar', slug: 'cuidado-capilar', description: 'Shampoos, condicionadores e máscaras capilares.' },
-    { id: '40eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Maquillaje', slug: 'maquillaje', description: 'Bases, corretivos, batons e maquiagens premium.' },
-    { id: '50eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Cuidado de Uñas', slug: 'cuidado-de-unas', description: 'Esmaltes e fortalecedores de unhas.' },
-    { id: '60eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Protección Solar', slug: 'proteccion-solar', description: 'Protetores solares faciais e corporais de alta tecnologia.' }
+    { id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', name: 'Cuidado Facial', slug: 'cuidado-facial', description: 'Produtos de limpeza, tônicos, séruns e hidratantes para o rosto.', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
+    { id: '20eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Cuidado Corporal', slug: 'cuidado-corporal', description: 'Hidratação e tratamento para todo o corpo.', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400' },
+    { id: '30eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Cuidado Capilar', slug: 'cuidado-capilar', description: 'Shampoos, condicionadores e máscaras capilares.', image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=400' },
+    { id: '40eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Maquillaje', slug: 'maquillaje', description: 'Bases, corretivos, batons e maquiagens premium.', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
+    { id: '50eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Cuidado de Uñas', slug: 'cuidado-de-unas', description: 'Esmaltes e fortalecedores de unhas.', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' },
+    { id: '60eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Protección Solar', slug: 'proteccion-solar', description: 'Protetores solares faciais e corporais de alta tecnologia.', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' }
   ],
   brands: [
     { id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Round Lab', slug: 'round-lab', description: 'Produtos formulados com água do fundo do mar e ingredientes naturais.', is_featured: true },
@@ -37,19 +42,13 @@ const DEFAULT_STATE: DbState = {
     { id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', name: 'Skin1004', slug: 'skin1004', description: 'Produtos baseados em extrato puro de Centella Asiática de Madagascar.', is_featured: true }
   ],
   products: [
-    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidratación.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' },
-    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'Sérum iluminador diseñado para combatir la pigmentación y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' },
-    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cutánea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' },
-    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'Tónico calmante ideal para pieles sensibles y con tendencia al acné.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' },
-    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asiática para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' }
+    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidratación.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
+    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'Sérum iluminador diseñado para combatir la pigmentación y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' },
+    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cutánea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' },
+    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'Tónico calmante ideal para pieles sensibles y con tendencia al acné.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
+    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asiática para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' }
   ],
-  product_images: [
-    { id: 'img-1', product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', url: '/products/dokdo-cleanser.jpg', is_main: true, sort_order: 0 },
-    { id: 'img-2', product_id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', url: '/products/glow-deep-serum.jpg', is_main: true, sort_order: 0 },
-    { id: 'img-3', product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', url: '/products/snail-essence.jpg', is_main: true, sort_order: 0 },
-    { id: 'img-4', product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', url: '/products/heartleaf-toner.jpg', is_main: true, sort_order: 0 },
-    { id: 'img-5', product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', url: '/products/centella-ampoule.jpg', is_main: true, sort_order: 0 }
-  ],
+  product_images: [],
   addresses: [
     { id: 'addr-1', user_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', address_type: 'shipping', first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', complement: 'Apt 4B', city: 'Madrid', state: 'Madrid', postal_code: '28013', country: 'España', phone: '+34600111222', document_type: 'nif', document_number: '12345678Z' }
   ],
@@ -100,9 +99,9 @@ const DEFAULT_STATE: DbState = {
       block_type: 'features',
       content: {
         items: [
-          { icon: 'Award', title: '100% ORIGINALES', text: 'Directo desde Corea' },
-          { icon: 'Globe', title: 'ENVÍOS INTERNACIONALES', text: 'A toda América Latina' },
-          { icon: 'Shield', title: 'PAGOS SEGUROS', text: 'Protegemos tu compra' },
+          { icon: 'ShieldCheck', title: '100% ORIGINALES', text: 'Directo desde Corea' },
+          { icon: 'Truck', title: 'ENVÍOS INTERNACIONALES', text: 'A toda América Latina' },
+          { icon: 'ShieldAlert', title: 'PAGOS SEGUROS', text: 'Protegemos tu compra' },
           { icon: 'Heart', title: 'ATENCIÓN PREMIUM', text: 'Estamos para ayudarte' }
         ]
       },
@@ -110,6 +109,152 @@ const DEFAULT_STATE: DbState = {
       active: true
     }
   ],
+  site_content: {
+    home: {
+      hero: {
+        titleLine1: 'Tu belleza.',
+        titleLine2: 'Tu ritual.',
+        titleLine3: 'Tu momento.',
+        subtitle: 'Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial. Fórmulas botânicas que revelan tu luminosidad natural.',
+        btnBuyText: 'COMPRAR AHORA',
+        btnBuyLink: '/tienda',
+        btnRoutineText: 'DESCUBRIR RUTINAS',
+        btnRoutineLink: '/rutinas',
+        bgImage: '/images/banner.png'
+      },
+      highlights: {
+        items: [
+          { icon: 'ShieldCheck', title: '100% ORIGINALES', text: 'Directo desde Corea' },
+          { icon: 'Truck', title: 'ENVÍOS INTERNACIONALES', text: 'A toda América Latina' },
+          { icon: 'ShieldAlert', title: 'PASOS SEGUROS', text: 'Protegemos tu compra' },
+          { icon: 'Heart', title: 'ATENCIÓN PERSONALIZADA', text: 'Estamos para ayudarte' }
+        ]
+      },
+      categories: {
+        preTitle: 'Colección Curada',
+        title: 'Descubre lo mejor del K-Beauty',
+        subtitle: 'Productos auténticos para realzar tu belleza natural.',
+        buttonText: 'VER TODAS LAS CATEGORÍAS'
+      },
+      bestSellers: {
+        preTitle: 'Favoritos de la Comunidad',
+        title: 'Más vendidos',
+        subtitle: 'Los favoritos de nuestra comunidad internacional. Fórmulas probadas que entregan resultados visibles.',
+        buttonText: 'VER TODOS'
+      },
+      experiencias: {
+        preTitle: 'Experiencias Yedam',
+        title: 'Vive la belleza coreana más allá de los productos',
+        cards: [
+          {
+            badge: 'YEDAM EXPERIENCE',
+            badgeColor: 'accent',
+            title: 'Prueba, siente y descubre.',
+            text: 'Damos a probar productos exclusivos en experiencias únicas en Corea del Sur.',
+            buttonText: 'SABER MÁS',
+            image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400'
+          },
+          {
+            badge: 'EN COLABORACIÓN CON MAEUM',
+            badgeColor: 'blue',
+            title: 'Viajes que transforman.',
+            text: 'Viaja a Corea y vive la cultura, la belleza y el bienestar de una forma auténtica.',
+            buttonText: 'EXPLORAR VIAJES',
+            image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400'
+          },
+          {
+            badge: 'BEAUTY & CULTURA',
+            badgeColor: 'accent',
+            title: 'Más que belleza, una conexión.',
+            text: 'Sumérgete en la cultura coreana y descubre el origen de tu rutina de belleza.',
+            buttonText: 'VER EXPERIENCIAS',
+            image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400'
+          }
+        ]
+      },
+      routines: {
+        preTitle: 'Tratamientos Específicos',
+        title: 'Rutinas para cada necesidad',
+        subtitle: 'Encuentra la rutina ideal para tu tipo de piel y estilo de vida.',
+        buttonText: 'VER TODAS LAS RUTINAS',
+        items: [
+          { name: 'Piel Hidratada', icon: 'Droplet' },
+          { name: 'Piel Iluminada', icon: 'Sparkles' },
+          { name: 'Piel Sensible', icon: 'Smile' },
+          { name: 'Anti-acné', icon: 'ShieldCheck' },
+          { name: 'Anti-edad', icon: 'Hourglass' },
+          { name: 'Rutina Completa', icon: 'ClipboardList' }
+        ],
+        badges: [
+          { icon: 'ShieldCheck', title: 'Ingredientes seguros' },
+          { icon: 'Droplet', title: 'Fórmulas efectivas' },
+          { icon: 'Star', title: 'Resultados reales' },
+          { icon: 'Compass', title: 'Inspirado en la tradición' },
+          { icon: 'Smile', title: 'Desarrollado con ciencia' }
+        ]
+      },
+      instagram: {
+        title: 'Únete a nuestra comunidad',
+        subtitle: 'Tips, rutinas, lanzamientos y mucho más en Instagram.',
+        buttonText: 'SEGUIR EN INSTAGRAM',
+        buttonLink: 'https://instagram.com/yedam.kbeauty',
+        images: [
+          'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
+          'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400',
+          'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=400',
+          'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400',
+          'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400'
+        ]
+      },
+      newsletter: {
+        preTitle: 'YEDAM CLUB',
+        title: 'Sé la primera en descubrir nuevos lanzamientos y ofertas.',
+        buttonText: 'SUBSCRIBIRSE',
+        successMessage: '✓ ¡Te has suscrito con éxito!'
+      }
+    },
+    header: {
+      announcementText: 'Belleza que nace de la tradición. Cosmética que transforma.',
+      shippingText: 'Envíos para toda América Latina',
+      attentionText: 'Atención',
+      logoUrl: '/images/logo.png'
+    },
+    footer: {
+      description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
+      social: {
+        instagram: 'https://instagram.com/yedam.kbeauty',
+        youtube: 'https://youtube.com/yedam.kbeauty'
+      },
+      columns: [
+        {
+          title: 'Tienda',
+          links: [
+            { label: 'Todos los productos', href: '/tienda' },
+            { label: 'Cuidado Facial', href: '/tienda?category=cuidado-facial' },
+            { label: 'Protección Solar', href: '/tienda?category=proteccion-solar' },
+            { label: 'Rutinas Recomendadas', href: '/rutinas' }
+          ]
+        },
+        {
+          title: 'Ayuda & Políticas',
+          links: [
+            { label: 'Envíos y Entregas', href: '/ayuda/envios' },
+            { label: 'Cambios y Devoluciones', href: '/ayuda/devoluciones' },
+            { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
+            { label: 'Términos y Condiciones', href: '/terminos' }
+          ]
+        },
+        {
+          title: 'Atención al Cliente',
+          links: [
+            { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
+            { label: 'hola@yedambeauty.com', href: 'mailto:hola@yedambeauty.com', icon: 'Mail' },
+            { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
+          ]
+        }
+      ]
+    }
+  },
   system_settings: {
     visual_theme: {
       colors: {
@@ -140,6 +285,19 @@ const DEFAULT_STATE: DbState = {
         youtube: 'https://youtube.com/yedam.kbeauty'
       }
     },
+    seo: {
+      titleSuffix: '| Yedam K-Beauty',
+      metaDescription: 'Cosméticos coreanos de alta performance seleccionados para tu rutina.',
+      googleAnalyticsId: ''
+    },
+    smtp: {
+      server: 'smtp.mailgun.org',
+      email: 'no-reply@yedambeauty.com',
+      user: 'no-reply@yedambeauty.com'
+    },
+    payments: {
+      stripePublicKey: 'pk_live_51M3c...'
+    },
     invoice_templates: {
       es: {
         title: 'FACTURA COMERCIAL',
@@ -166,17 +324,83 @@ const DEFAULT_STATE: DbState = {
         grandTotal: 'Grand Total'
       }
     }
-  }
+  },
+  coupons: [
+    { id: '1', code: 'CUPOM10', discount: 10.00, type: 'fixed', status: 'active' },
+    { id: '2', code: 'KBEAUTY5', discount: 5.00, type: 'fixed', status: 'active' }
+  ],
+  blog_posts: [
+    { id: '1', title: '5 Secretos del Skincare Coreano', author: 'Dr. Park', content: '', image: '', created_at: '2026-07-08' },
+    { id: '2', title: 'Cómo aplicar el Dokdo Cleanser', author: 'Kim Min-seo', content: '', image: '', created_at: '2026-07-09' }
+  ]
 };
 
-// Global in-memory storage matching DbState
-let memoryDb: DbState = DEFAULT_STATE;
+let memoryDb: DbState = { ...DEFAULT_STATE, site_content: JSON.parse(JSON.stringify(DEFAULT_STATE.site_content)), system_settings: JSON.parse(JSON.stringify(DEFAULT_STATE.system_settings)) };
+
+function deepClone<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function persistToLocalStorage() {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryDb));
+  } catch (e) {
+    console.error('Failed to persist DB state:', e);
+  }
+}
+
+function loadFromLocalStorage(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      memoryDb = {
+        ...DEFAULT_STATE,
+        ...parsed,
+        site_content: { ...DEFAULT_STATE.site_content, ...(parsed.site_content || {}) },
+        system_settings: { ...DEFAULT_STATE.system_settings, ...(parsed.system_settings || {}) }
+      };
+      return true;
+    }
+  } catch (e) {
+    console.error('Failed to load DB state:', e);
+  }
+  return false;
+}
+
+function getDefault<K extends keyof DbState>(table: K): DbState[K] {
+  return deepClone(DEFAULT_STATE[table]);
+}
 
 export const db = {
+  init: () => {
+    loadFromLocalStorage();
+  },
+
   get: <K extends keyof DbState>(table: K): DbState[K] => {
     return memoryDb[table];
   },
+
   save: <K extends keyof DbState>(table: K, records: DbState[K]): void => {
     memoryDb[table] = records;
-  }
+    persistToLocalStorage();
+  },
+
+  update: <K extends keyof DbState>(table: K, updater: (data: DbState[K]) => DbState[K]): DbState[K] => {
+    const updated = updater(memoryDb[table]);
+    memoryDb[table] = updated;
+    persistToLocalStorage();
+    return updated;
+  },
+
+  reset: (): void => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+    memoryDb = { ...DEFAULT_STATE, site_content: deepClone(DEFAULT_STATE.site_content), system_settings: deepClone(DEFAULT_STATE.system_settings) };
+  },
+
+  getDefault,
 };

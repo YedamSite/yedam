@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Settings, Palette, Layers, Database, Users, Shield,
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
-  TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles
+  TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
+  Layout, PenTool, Grid3X3, Save
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,6 +13,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTheme } from '@/contexts/ThemeContext';
 import { db } from '@/lib/db';
+import SiteContentTab from '@/components/admin/SiteContentTab';
+import CategoriesTab from '@/components/admin/CategoriesTab';
+import BrandsTab from '@/components/admin/BrandsTab';
 
 export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('visual');
@@ -44,18 +48,12 @@ export default function AdminDashboard() {
   const [prodDescEn, setProdDescEn] = useState('');
 
   // Coupons State
-  const [coupons, setCoupons] = useState<any[]>([
-    { id: '1', code: 'CUPOM10', discount: 10.00, type: 'fixed', status: 'active' },
-    { id: '2', code: 'KBEAUTY5', discount: 5.00, type: 'fixed', status: 'active' }
-  ]);
+  const [coupons, setCoupons] = useState<any[]>([]);
   const [newCouponCode, setNewCouponCode] = useState('');
   const [newCouponDiscount, setNewCouponDiscount] = useState(0);
 
   // Blog State
-  const [blogPosts, setBlogPosts] = useState<any[]>([
-    { id: '1', title: '5 Secretos del Skincare Coreano', author: 'Dr. Park', created_at: '2026-07-08' },
-    { id: '2', title: 'Cómo aplicar el Dokdo Cleanser', author: 'Kim Min-seo', created_at: '2026-07-09' }
-  ]);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [newPostTitle, setNewPostTitle] = useState('');
   const [newPostAuthor, setNewPostAuthor] = useState('');
 
@@ -76,6 +74,8 @@ export default function AdminDashboard() {
     setCategories(db.get('categories') || []);
     setOrders(db.get('orders') || []);
     setEmailLogs(db.get('communication_logs') || []);
+    setCoupons(db.get('coupons') || []);
+    setBlogPosts(db.get('blog_posts') || []);
   };
 
   useEffect(() => {
@@ -123,12 +123,60 @@ export default function AdminDashboard() {
     db.save('cms_blocks', updated);
   };
 
-  // Create Product CRUD
+  // Product editing state
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
+
+  const handleEditProduct = (prod: any) => {
+    setEditingProductId(prod.id);
+    setProdName(prod.name);
+    setProdPrice(prod.price);
+    setProdStock(prod.stock);
+    setProdCategory(prod.category_id);
+    setProdSku(prod.sku);
+    setProdHsCode(prod.hs_code);
+    setProdWeight(prod.weight);
+    setProdVolume(prod.volume);
+    setProdDesc(prod.description);
+    setProdDescEn(prod.description_en);
+  };
+
+  const cancelEditProduct = () => {
+    setEditingProductId(null);
+    setProdName(''); setProdPrice(0); setProdStock(10); setProdCategory('10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
+    setProdSku(''); setProdHsCode('3304.99.90'); setProdWeight(0.15); setProdVolume('50ml');
+    setProdDesc(''); setProdDescEn('');
+  };
+
+  // Create/Update Product
   const handleCreateProduct = (e: React.FormEvent) => {
     e.preventDefault();
     if (!prodName || !prodPrice) return;
 
     const allProds = db.get('products');
+
+    if (editingProductId) {
+      const idx = allProds.findIndex((p: any) => p.id === editingProductId);
+      if (idx !== -1) {
+        allProds[idx] = {
+          ...allProds[idx],
+          name: prodName,
+          sku: prodSku || allProds[idx].sku,
+          price: Number(prodPrice),
+          stock: Number(prodStock),
+          category_id: prodCategory,
+          hs_code: prodHsCode,
+          weight: Number(prodWeight),
+          volume: prodVolume,
+          description: prodDesc,
+          description_en: prodDescEn,
+        };
+        db.save('products', allProds);
+        cancelEditProduct();
+        loadData();
+        return;
+      }
+    }
+
     const newProd = {
       id: crypto.randomUUID(),
       sku: prodSku || 'YD-' + Math.floor(Math.random() * 10000),
@@ -182,6 +230,7 @@ export default function AdminDashboard() {
   const handleCreateCoupon = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCouponCode || !newCouponDiscount) return;
+    const allCoupons = db.get('coupons') || [];
     const newC = {
       id: crypto.randomUUID(),
       code: newCouponCode.toUpperCase(),
@@ -189,7 +238,9 @@ export default function AdminDashboard() {
       type: 'fixed',
       status: 'active'
     };
-    setCoupons([...coupons, newC]);
+    allCoupons.push(newC);
+    db.save('coupons', allCoupons);
+    setCoupons(allCoupons);
     setNewCouponCode('');
     setNewCouponDiscount(0);
   };
@@ -198,19 +249,26 @@ export default function AdminDashboard() {
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPostTitle) return;
+    const allPosts = db.get('blog_posts') || [];
     const newP = {
       id: crypto.randomUUID(),
       title: newPostTitle,
       author: newPostAuthor || 'Yedam Editor',
+      content: '',
+      image: '',
       created_at: new Date().toISOString().split('T')[0]
     };
-    setBlogPosts([...blogPosts, newP]);
+    allPosts.push(newP);
+    db.save('blog_posts', allPosts);
+    setBlogPosts(allPosts);
     setNewPostTitle('');
     setNewPostAuthor('');
   };
 
   const handleDeletePost = (id: string) => {
-    setBlogPosts(blogPosts.filter(p => p.id !== id));
+    const allPosts = db.get('blog_posts') || [];
+    db.save('blog_posts', allPosts.filter((p: any) => p.id !== id));
+    setBlogPosts(db.get('blog_posts'));
   };
 
   return (
@@ -233,6 +291,9 @@ export default function AdminDashboard() {
           {[
             { id: 'visual', label: 'Estilo Visual', icon: Palette },
             { id: 'builder', label: 'Page Builder (Home)', icon: Layers },
+            { id: 'sitecontent', label: 'Conteúdo do Site', icon: PenTool },
+            { id: 'categories', label: 'Categorias', icon: Grid3X3 },
+            { id: 'brands', label: 'Marcas', icon: Grid3X3 },
             { id: 'products', label: 'CRUD Productos & Stock', icon: Database },
             { id: 'orders', label: 'Pedidos & Invoices', icon: ShoppingCart },
             { id: 'suscripciones', label: 'Membresías Club', icon: Sparkles },
@@ -262,6 +323,15 @@ export default function AdminDashboard() {
 
         {/* Content Area */}
         <div className="min-h-[400px]">
+          {/* TAB: SITE CONTENT */}
+          {activeSubTab === 'sitecontent' && <SiteContentTab />}
+
+          {/* TAB: CATEGORIES */}
+          {activeSubTab === 'categories' && <CategoriesTab />}
+
+          {/* TAB: BRANDS */}
+          {activeSubTab === 'brands' && <BrandsTab />}
+
           {/* TAB: VISUAL STYLE */}
           {activeSubTab === 'visual' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
@@ -367,7 +437,12 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Product Form */}
               <div className="bg-card border border-white/5 rounded-3xl p-6 shadow-xl h-fit">
-                <h3 className="font-heading text-xl font-light text-white mb-6 border-b border-white/5 pb-3">Nuevo Producto</h3>
+                <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-3">
+                  <h3 className="font-heading text-xl font-light text-white">{editingProductId ? 'Editar Producto' : 'Nuevo Producto'}</h3>
+                  {editingProductId && (
+                    <button type="button" onClick={cancelEditProduct} className="text-[10px] text-red-400 hover:text-red-300 font-bold uppercase">✕ Cancelar</button>
+                  )}
+                </div>
                 <form onSubmit={handleCreateProduct} className="flex flex-col gap-4 text-xs text-muted-foreground">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-bold uppercase text-accent">Nombre de Producto</label>
@@ -424,7 +499,7 @@ export default function AdminDashboard() {
                     <textarea value={prodDescEn} onChange={e => setProdDescEn(e.target.value)} placeholder="English description for export invoices..." className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
                   </div>
                   <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl text-xs mt-2">
-                    CREAR PRODUCTO
+                    {editingProductId ? 'ATUALIZAR PRODUCTO' : 'CREAR PRODUCTO'}
                   </Button>
                 </form>
               </div>
@@ -449,6 +524,12 @@ export default function AdminDashboard() {
                         </div>
 
                         <span className="text-sm font-bold text-accent font-heading">US$ {prod.price.toFixed(2)}</span>
+                        <button
+                          onClick={() => handleEditProduct(prod)}
+                          className="text-accent hover:text-accentHover p-2 hover:bg-accent/5 rounded-lg transition-all"
+                        >
+                          <FileText className="h-4 w-4" />
+                        </button>
                         <button
                           onClick={() => handleDeleteProduct(prod.id)}
                           className="text-red-500 hover:text-red-400 p-2 hover:bg-red-500/5 rounded-lg transition-all"
@@ -846,6 +927,11 @@ export default function AdminDashboard() {
 
               <form onSubmit={(e) => {
                 e.preventDefault();
+                const settings = db.get('system_settings');
+                settings.seo = { titleSuffix: seoTitleSuffix, metaDescription: seoDescription, googleAnalyticsId: settings.seo?.googleAnalyticsId || '' };
+                settings.smtp = { server: smtpServer, email: smtpUser, user: smtpUser };
+                settings.payments = { stripePublicKey: stripeKey };
+                db.save('system_settings', settings);
                 setConfigSaved(true);
                 setTimeout(() => setConfigSaved(false), 3000);
               }} className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs text-muted-foreground">
@@ -909,23 +995,40 @@ export default function AdminDashboard() {
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Reportes de Vendas e Inventário</h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturado Total</span>
-                  <h3 className="font-heading text-3xl font-bold text-accent mt-2">US$ 5,340.00</h3>
-                  <p className="text-[10px] text-green-500 mt-2 font-semibold">✓ Ventas internacionales aprobadas</p>
-                </div>
-                <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ticket Medio</span>
-                  <h3 className="font-heading text-3xl font-bold text-white mt-2">US$ 68.50</h3>
-                  <p className="text-[10px] text-accent mt-2 font-semibold">Rutina completa promedio</p>
-                </div>
-                <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
-                  <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Tasa de Conversión</span>
-                  <h3 className="font-heading text-3xl font-bold text-white mt-2">4.8%</h3>
-                  <p className="text-[10px] text-green-500 mt-2 font-semibold">Superior al promedio global</p>
-                </div>
-              </div>
+              {(() => {
+                const allOrders = db.get('orders') || [];
+                const allProducts = db.get('products') || [];
+                const totalBilled = allOrders.reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const avgTicket = allOrders.length > 0 ? totalBilled / allOrders.length : 0;
+                const totalStock = allProducts.reduce((sum: number, p: any) => sum + (p.stock || 0), 0);
+                const totalProducts = allProducts.length;
+                const pendingOrders = allOrders.filter((o: any) => o.status === 'pending' || o.status === 'preparing').length;
+
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
+                      <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturado Total</span>
+                      <h3 className="font-heading text-3xl font-bold text-accent mt-2">US$ {totalBilled.toFixed(2)}</h3>
+                      <p className="text-[10px] text-green-500 mt-2 font-semibold">{allOrders.length} pedidos realizados</p>
+                    </div>
+                    <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
+                      <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ticket Medio</span>
+                      <h3 className="font-heading text-3xl font-bold text-white mt-2">US$ {avgTicket.toFixed(2)}</h3>
+                      <p className="text-[10px] text-accent mt-2 font-semibold">Valor médio por pedido</p>
+                    </div>
+                    <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
+                      <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Produtos em Estoque</span>
+                      <h3 className="font-heading text-3xl font-bold text-white mt-2">{totalStock} un.</h3>
+                      <p className="text-[10px] text-accent mt-2 font-semibold">{totalProducts} produtos cadastrados</p>
+                    </div>
+                    <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
+                      <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Pedidos Pendentes</span>
+                      <h3 className="font-heading text-3xl font-bold text-white mt-2">{pendingOrders}</h3>
+                      <p className="text-[10px] text-yellow-500 mt-2 font-semibold">Aguardando processamento</p>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           )}
 

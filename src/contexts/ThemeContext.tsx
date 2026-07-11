@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { db } from '@/lib/db';
 
 export interface ThemeColors {
   primary: string;
@@ -54,7 +55,6 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children, initialTheme }: { children: React.ReactNode; initialTheme?: ThemeSettings }) {
   const [theme, setTheme] = useState<ThemeSettings>(initialTheme || DEFAULT_THEME);
 
-  // Apply CSS variables to root element
   const applyTheme = (t: ThemeSettings) => {
     if (typeof window === 'undefined') return;
     const root = document.documentElement;
@@ -68,19 +68,42 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
   };
 
   useEffect(() => {
-    // Try to load custom theme from localStorage first if client side
+    db.init();
+
+    const settings = db.get('system_settings');
+    const dbTheme = settings?.visual_theme;
     const saved = localStorage.getItem('yedam_theme');
+
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         setTheme(parsed);
         applyTheme(parsed);
-      } catch (e) {
-        applyTheme(theme);
-      }
-    } else {
-      applyTheme(theme);
+        return;
+      } catch (e) {}
     }
+
+    if (dbTheme) {
+      const loadedTheme: ThemeSettings = {
+        colors: {
+          primary: dbTheme.colors?.primary || DEFAULT_THEME.colors.primary,
+          secondary: dbTheme.colors?.secondary || DEFAULT_THEME.colors.secondary,
+          accent: dbTheme.colors?.accent || DEFAULT_THEME.colors.accent,
+          accentHover: dbTheme.colors?.accentHover || DEFAULT_THEME.colors.accentHover,
+          text: dbTheme.colors?.text || DEFAULT_THEME.colors.text,
+          background: dbTheme.colors?.background || DEFAULT_THEME.colors.background,
+          card: dbTheme.colors?.card || DEFAULT_THEME.colors.card,
+        },
+        typography: dbTheme.typography || DEFAULT_THEME.typography,
+        logo_url: dbTheme.logo_url || DEFAULT_THEME.logo_url,
+        favicon_url: dbTheme.favicon_url || DEFAULT_THEME.favicon_url,
+      };
+      setTheme(loadedTheme);
+      applyTheme(loadedTheme);
+      return;
+    }
+
+    applyTheme(theme);
   }, []);
 
   const updateTheme = (newTheme: Partial<ThemeSettings>) => {
@@ -92,6 +115,16 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
         typography: { ...prev.typography, ...newTheme.typography }
       } as ThemeSettings;
       localStorage.setItem('yedam_theme', JSON.stringify(updated));
+
+      const settings = db.get('system_settings');
+      settings.visual_theme = {
+        colors: updated.colors,
+        typography: updated.typography,
+        logo_url: updated.logo_url,
+        favicon_url: updated.favicon_url,
+      };
+      db.save('system_settings', settings);
+
       applyTheme(updated);
       return updated;
     });

@@ -92,6 +92,7 @@ export default function Header() {
     setMobileMenuOpen(false);
   };
 
+  const headerContent = db.get('site_content')?.header || {};
   const navItems = [
     { label: 'Inicio', href: '/' },
     { label: 'Tienda', href: '/tienda' },
@@ -101,12 +102,12 @@ export default function Header() {
 
   return (
     <div className="w-full flex flex-col sticky top-0 z-50">
-      {/* Top Announcement Bar matching reference */}
+      {/* Top Announcement Bar */}
       <div className="w-full bg-[#030712] border-b border-white/5 py-2.5 px-4 md:px-8 text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-center md:justify-between text-center">
-        <div className="leading-relaxed">Belleza que nace de la tradición. Cosmética que transforma.</div>
+        <div className="leading-relaxed">{headerContent.announcementText || 'Belleza que nace de la tradición. Cosmética que transforma.'}</div>
         <div className="hidden md:flex items-center gap-6">
-          <div>Envíos para toda América Latina</div>
-          <div>Atención</div>
+          <div>{headerContent.shippingText || 'Envíos para toda América Latina'}</div>
+          <div>{headerContent.attentionText || 'Atención'}</div>
           <div className="text-white">ES ▾</div>
         </div>
       </div>
@@ -117,7 +118,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center group">
             <Image
-              src="/images/logo.png"
+              src={headerContent.logoUrl || '/images/logo.png'}
               alt="Yedam"
               width={140}
               height={40}

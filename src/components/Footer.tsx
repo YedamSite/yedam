@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
+import { db } from '@/lib/db';
 
 const Instagram = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -20,16 +21,28 @@ const Youtube = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const LINK_ICONS: Record<string, React.ComponentType<any>> = {
+  MessageCircle, Mail, MapPin
+};
+
 export default function Footer() {
+  const content = db.get('site_content')?.footer || null;
+  const settings = db.get('system_settings');
+  const company = settings?.company_details || {};
+
+  const logoUrl = content?.logoUrl || '/images/logo.png';
+  const description = content?.description || '';
+  const social = content?.social || {};
+  const columns = content?.columns || [];
+
   return (
     <footer className="w-full border-t border-white/10 bg-secondary text-foreground py-16 px-4 md:px-8 mt-auto">
       <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Left Column - Brand info */}
-        {/* Left Column - Brand info */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
           <Link href="/" className="flex items-center group">
             <Image
-              src="/images/logo.png"
+              src={logoUrl}
               alt="Yedam"
               width={140}
               height={40}
@@ -37,64 +50,47 @@ export default function Footer() {
             />
           </Link>
           <p className="text-xs text-muted-foreground leading-relaxed mt-2">
-            Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.
+            {description}
           </p>
           <div className="flex gap-4 mt-2">
-            <a href="https://instagram.com/yedam.kbeauty" target="_blank" rel="noreferrer" className="text-accent hover:text-accentHover transition-colors">
-              <Instagram className="h-4.5 w-4.5" />
-            </a>
-            <a href="https://youtube.com/yedam.kbeauty" target="_blank" rel="noreferrer" className="text-accent hover:text-accentHover transition-colors">
-              <Youtube className="h-4.5 w-4.5" />
-            </a>
+            {social.instagram && (
+              <a href={social.instagram} target="_blank" rel="noreferrer" className="text-accent hover:text-accentHover transition-colors">
+                <Instagram className="h-4.5 w-4.5" />
+              </a>
+            )}
+            {social.youtube && (
+              <a href={social.youtube} target="_blank" rel="noreferrer" className="text-accent hover:text-accentHover transition-colors">
+                <Youtube className="h-4.5 w-4.5" />
+              </a>
+            )}
           </div>
         </div>
 
-        {/* Column 2 - Tienda */}
-        <div className="flex flex-col gap-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-accent">Tienda</h3>
-          <ul className="flex flex-col gap-2.5 text-xs text-muted-foreground">
-            <li><Link href="/tienda" className="hover:text-accent transition-colors">Todos los productos</Link></li>
-            <li><Link href="/tienda?category=cuidado-facial" className="hover:text-accent transition-colors">Cuidado Facial</Link></li>
-            <li><Link href="/tienda?category=proteccion-solar" className="hover:text-accent transition-colors">Protección Solar</Link></li>
-            <li><Link href="/rutinas" className="hover:text-accent transition-colors">Rutinas Recomendadas</Link></li>
-          </ul>
-        </div>
-
-        {/* Column 3 - Ayuda */}
-        <div className="flex flex-col gap-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-accent">Ayuda & Políticas</h3>
-          <ul className="flex flex-col gap-2.5 text-xs text-muted-foreground">
-            <li><Link href="/ayuda/envios" className="hover:text-accent transition-colors">Envíos y Entregas</Link></li>
-            <li><Link href="/ayuda/devoluciones" className="hover:text-accent transition-colors">Cambios y Devoluciones</Link></li>
-            <li><Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">Política de Privacidad</Link></li>
-            <li><Link href="/terminos" className="hover:text-accent transition-colors">Términos y Condiciones</Link></li>
-          </ul>
-        </div>
-
-        {/* Column 4 - Atencion al Cliente */}
-        <div className="flex flex-col gap-4">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-accent">Atención al Cliente</h3>
-          <ul className="flex flex-col gap-3 text-xs text-muted-foreground">
-            <li className="flex items-center gap-2">
-              <MessageCircle className="h-4 w-4 text-accent" />
-              <span>WhatsApp: +34 600 111 222</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-accent" />
-              <span>hola@yedambeauty.com</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <MapPin className="h-4 w-4 text-accent mt-0.5 shrink-0" />
-              <span className="leading-relaxed">Calle Gran Vía 12, Madrid, España</span>
-            </li>
-          </ul>
-        </div>
+        {/* Dynamic Columns */}
+        {columns.map((col: any, idx: number) => (
+          <div key={idx} className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-accent">{col.title}</h3>
+            <ul className="flex flex-col gap-2.5 text-xs text-muted-foreground items-center md:items-start">
+              {(col.links || []).map((link: any, li: number) => {
+                const Icon = LINK_ICONS[link.icon || ''];
+                return (
+                  <li key={li}>
+                    <Link href={link.href} className="hover:text-accent transition-colors flex items-center gap-2">
+                      {Icon && <Icon className="h-4 w-4 text-accent shrink-0" />}
+                      <span>{link.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </div>
 
       <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] text-muted-foreground gap-4">
-        <p>&copy; {new Date().getFullYear()} YEDAM K-BEAUTY. Todos los derechos reservados.</p>
+        <p>&copy; {new Date().getFullYear()} {company.name || 'YEDAM K-BEAUTY'}. Todos los derechos reservados.</p>
         <div className="flex items-center gap-1">
-          <span>Orgulhosamente desenvolvido por</span>
+          <span>Orgullosamente desarrollado por</span>
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">Voltris</a>
         </div>
         <p className="mt-2 sm:mt-0">En colaboración con Maeum Global Agency.</p>
