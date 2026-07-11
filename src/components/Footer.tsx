@@ -33,7 +33,7 @@ export default function Footer() {
               alt="Yedam"
               width={140}
               height={40}
-              className="h-10 w-auto object-contain"
+              className="h-28 w-auto object-contain"
             />
           </Link>
           <p className="text-xs text-muted-foreground leading-relaxed mt-2">

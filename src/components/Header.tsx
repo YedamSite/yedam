@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Search, Heart, ShoppingBag, User, Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
 import { authService } from '@/lib/supabaseAuth';
+import { db } from '@/lib/db';
 import AuthModal from './AuthModal';
 
 export default function Header() {
@@ -14,6 +15,26 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [favCount, setFavCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
+  
+  // Search state & filtering
+  const [headerSearchQuery, setHeaderSearchQuery] = useState('');
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+
+  const productsList = db.get('products') || [];
+  const categoriesList = db.get('categories') || [];
+  
+  const searchResults = headerSearchQuery.trim()
+    ? productsList.filter((p: any) =>
+        p.name.toLowerCase().includes(headerSearchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(headerSearchQuery.toLowerCase())
+      ).slice(0, 4)
+    : [];
+
+  const matchedCategories = headerSearchQuery.trim()
+    ? categoriesList.filter((c: any) =>
+        c.name.toLowerCase().includes(headerSearchQuery.toLowerCase())
+      ).slice(0, 3)
+    : [];
 
   // Auth state
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -121,7 +142,102 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-6">
-            <Search strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 cursor-pointer transition-all" />
+            {/* Dynamic Search Bar with Autocomplete */}
+            <div className="relative flex items-center">
+              {isSearchExpanded ? (
+                <div className="relative flex items-center">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (headerSearchQuery.trim()) {
+                        router.push(`/tienda?search=${encodeURIComponent(headerSearchQuery.trim())}`);
+                        setIsSearchExpanded(false);
+                        setHeaderSearchQuery('');
+                      }
+                    }}
+                    className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-full px-3 py-1 animate-in fade-in zoom-in-95 duration-200"
+                  >
+                    <input
+                      type="text"
+                      value={headerSearchQuery}
+                      onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                      placeholder="Buscar..."
+                      autoFocus
+                      className="bg-transparent text-white border-0 outline-none text-[10px] w-28 uppercase tracking-wider placeholder-gray-500 font-bold"
+                    />
+                    <button type="submit">
+                      <Search strokeWidth={1.8} className="h-3.5 w-3.5 text-accent hover:scale-110 transition-all" />
+                    </button>
+                    <button type="button" onClick={() => { setIsSearchExpanded(false); setHeaderSearchQuery(''); }} className="text-gray-400 hover:text-white text-[9px] font-bold ml-1">
+                      ✕
+                    </button>
+                  </form>
+
+                  {/* Autocomplete Dropdown */}
+                  {headerSearchQuery.trim() && (searchResults.length > 0 || matchedCategories.length > 0) && (
+                    <div className="absolute right-0 top-full mt-2.5 w-72 rounded-2xl border border-white/10 bg-[#07101E] p-3.5 shadow-2xl z-50 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-150">
+                      {matchedCategories.length > 0 && (
+                        <div className="flex flex-col gap-1.5">
+                          <span className="text-[8px] text-accent font-bold uppercase tracking-widest">Categorías</span>
+                          <div className="flex flex-col gap-1">
+                            {matchedCategories.map((cat: any) => (
+                              <Link
+                                key={cat.id}
+                                href={`/tienda?category=${cat.slug}`}
+                                onClick={() => {
+                                  setIsSearchExpanded(false);
+                                  setHeaderSearchQuery('');
+                                }}
+                                className="text-[10px] text-white hover:text-accent font-semibold transition-colors py-0.5 uppercase tracking-wide"
+                              >
+                                📁 {cat.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {searchResults.length > 0 && (
+                        <div className="flex flex-col gap-2">
+                          <span className="text-[8px] text-accent font-bold uppercase tracking-widest border-t border-white/5 pt-2">Productos</span>
+                          <div className="flex flex-col gap-2.5">
+                            {searchResults.map((prod: any) => {
+                              const imgUrl = prod.id === '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11' ? 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=100' :
+                                             prod.id === '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22' ? 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=100' :
+                                             prod.id === '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33' ? 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=100' :
+                                             prod.id === '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44' ? 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=100' :
+                                             'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=100';
+                              return (
+                                <Link
+                                  key={prod.id}
+                                  href={`/tienda/produto/${prod.slug}`}
+                                  onClick={() => {
+                                    setIsSearchExpanded(false);
+                                    setHeaderSearchQuery('');
+                                  }}
+                                  className="flex items-center gap-2.5 group/item"
+                                >
+                                  <div className="relative h-8 w-8 rounded overflow-hidden shrink-0 bg-secondary/50">
+                                    <Image src={imgUrl} alt={prod.name} fill unoptimized className="object-cover" />
+                                  </div>
+                                  <div className="flex flex-col truncate">
+                                    <span className="text-[10px] text-white group-hover/item:text-accent font-bold truncate transition-colors leading-tight uppercase">{prod.name}</span>
+                                    <span className="text-[9px] text-accent/80 font-heading">US$ {prod.price.toFixed(2)}</span>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button onClick={() => setIsSearchExpanded(true)}>
+                  <Search strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 cursor-pointer transition-all" />
+                </button>
+              )}
+            </div>
 
             {/* Favorites */}
             <Link href="/dashboard/cliente?tab=favorites" className="relative">
@@ -197,6 +313,61 @@ export default function Header() {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden absolute inset-x-0 top-full bg-background border-b border-white/10 shadow-2xl p-6 flex flex-col gap-6 animate-in fade-in slide-in-from-top-5 duration-200 z-50">
+            {/* Search Input for Mobile */}
+            <div className="relative">
+              <input
+                type="text"
+                value={headerSearchQuery}
+                onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                placeholder="Buscar producto..."
+                className="w-full bg-black/30 border border-white/10 text-white rounded-xl py-2.5 px-4 pr-10 text-xs uppercase tracking-wider placeholder-gray-500 font-bold outline-none focus:border-accent"
+              />
+              <button
+                onClick={() => {
+                  if (headerSearchQuery.trim()) {
+                    router.push(`/tienda?search=${encodeURIComponent(headerSearchQuery.trim())}`);
+                    setMobileMenuOpen(false);
+                    setHeaderSearchQuery('');
+                  }
+                }}
+                className="absolute right-3 top-3"
+              >
+                <Search className="h-4 w-4 text-accent" />
+              </button>
+              
+              {/* Autocomplete for Mobile */}
+              {headerSearchQuery.trim() && (searchResults.length > 0 || matchedCategories.length > 0) && (
+                <div className="absolute left-0 right-0 top-full mt-1.5 rounded-xl border border-white/10 bg-[#07101E] p-3 shadow-2xl z-50 flex flex-col gap-2">
+                  {matchedCategories.map((cat: any) => (
+                    <Link
+                      key={cat.id}
+                      href={`/tienda?category=${cat.slug}`}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setHeaderSearchQuery('');
+                      }}
+                      className="text-[10px] text-white hover:text-accent font-semibold py-0.5 uppercase tracking-wide px-2"
+                    >
+                      📁 {cat.name}
+                    </Link>
+                  ))}
+                  {searchResults.map((prod: any) => (
+                    <Link
+                      key={prod.id}
+                      href={`/tienda/produto/${prod.slug}`}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setHeaderSearchQuery('');
+                      }}
+                      className="text-[10px] text-white hover:text-accent font-bold py-0.5 truncate uppercase px-2 border-t border-white/5 pt-1.5"
+                    >
+                      ✨ {prod.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <Link
