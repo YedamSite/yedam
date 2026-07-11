@@ -191,7 +191,7 @@ export default function TiendaPage() {
 
                       <div className="relative aspect-square w-full overflow-hidden bg-secondary">
                         <Image
-                          src={prod.id === '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11' ? 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' : 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400'}
+                          src={prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'}
                           alt={prod.name}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -204,7 +204,8 @@ export default function TiendaPage() {
                           <h3 className="font-heading text-sm font-medium text-white line-clamp-2 mt-1 leading-snug group-hover:text-accent transition-colors">
                             {prod.name}
                           </h3>
-                          <div className="flex items-center gap-1 mt-1">
+                          <p className="text-[9px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{prod.description}</p>
+                          <div className="flex items-center gap-1 mt-1.5">
                             <div className="flex text-amber-400">
                               {[...Array(5)].map((_, i) => (
                                 <Star key={i} className="h-3 w-3 fill-current" />
@@ -217,7 +218,12 @@ export default function TiendaPage() {
                         <div className="flex flex-col gap-3 mt-4 pt-2 border-t border-white/5">
                           <div className="flex items-center justify-between">
                             <span className="text-xs font-bold text-accent font-heading">US$ {prod.price.toFixed(2)}</span>
-                            <span className="text-[10px] text-muted-foreground">{prod.volume} • Stock: {prod.stock}</span>
+                            <div className="flex items-center gap-2">
+                              <span className={`text-[9px] font-semibold ${prod.stock > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {prod.stock > 0 ? `Stock: ${prod.stock}` : 'Agotado'}
+                              </span>
+                              <span className="text-[10px] text-muted-foreground">{prod.volume}</span>
+                            </div>
                           </div>
                           
                           <div className="flex gap-2">

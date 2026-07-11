@@ -46,6 +46,7 @@ export default function AdminDashboard() {
   const [prodVolume, setProdVolume] = useState('50ml');
   const [prodDesc, setProdDesc] = useState('');
   const [prodDescEn, setProdDescEn] = useState('');
+  const [prodImage, setProdImage] = useState('');
 
   // Coupons State
   const [coupons, setCoupons] = useState<any[]>([]);
@@ -138,13 +139,14 @@ export default function AdminDashboard() {
     setProdVolume(prod.volume);
     setProdDesc(prod.description);
     setProdDescEn(prod.description_en);
+    setProdImage(prod.image || '');
   };
 
   const cancelEditProduct = () => {
     setEditingProductId(null);
     setProdName(''); setProdPrice(0); setProdStock(10); setProdCategory('10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
     setProdSku(''); setProdHsCode('3304.99.90'); setProdWeight(0.15); setProdVolume('50ml');
-    setProdDesc(''); setProdDescEn('');
+    setProdDesc(''); setProdDescEn(''); setProdImage('');
   };
 
   // Create/Update Product
@@ -169,6 +171,7 @@ export default function AdminDashboard() {
           volume: prodVolume,
           description: prodDesc,
           description_en: prodDescEn,
+          image: prodImage || allProds[idx].image,
         };
         db.save('products', allProds);
         cancelEditProduct();
@@ -191,7 +194,8 @@ export default function AdminDashboard() {
       hs_code: prodHsCode || '3304.99.90',
       status: 'active',
       brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33',
-      category_id: prodCategory
+      category_id: prodCategory,
+      image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'
     };
 
     allProds.push(newProd);
@@ -205,6 +209,7 @@ export default function AdminDashboard() {
     setProdVolume('50ml');
     setProdDesc('');
     setProdDescEn('');
+    setProdImage('');
     loadData();
   };
 
@@ -489,6 +494,10 @@ export default function AdminDashboard() {
                       <label className="text-[10px] font-bold uppercase text-accent">Volumen</label>
                       <Input required value={prodVolume} onChange={e => setProdVolume(e.target.value)} placeholder="150ml" />
                     </div>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-bold uppercase text-accent">URL da Imagem do Produto</label>
+                    <Input value={prodImage} onChange={e => setProdImage(e.target.value)} placeholder="https://..." />
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-bold uppercase text-accent">Descripción (Español)</label>

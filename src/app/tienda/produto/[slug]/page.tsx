@@ -103,7 +103,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
           {/* Left - Image Gallery */}
           <div className="relative aspect-square w-full rounded-3xl overflow-hidden border border-white/5 bg-secondary shadow-xl">
             <Image
-              src={product.id === '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11' ? 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=800' : 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=800'}
+              src={product.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=800'}
               alt={product.name}
               fill
               className="object-cover"
@@ -132,9 +132,20 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
 
             <div className="flex items-center justify-between border-y border-white/5 py-4">
               <span className="font-heading text-3xl font-bold text-accent">US$ {product.price.toFixed(2)}</span>
-              <div className="text-right">
-                <span className="text-xs text-muted-foreground block">{product.volume}</span>
-                <span className="text-xs text-green-500 font-semibold">{product.stock > 0 ? `Stock Disponible (${product.stock})` : 'Agotado'}</span>
+              <div className="text-right flex items-center gap-3">
+                <span className="text-xs text-muted-foreground">{product.volume}</span>
+                <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border ${
+                  product.stock > 10
+                    ? 'bg-green-500/10 text-green-400 border-green-500/20'
+                    : product.stock > 0
+                    ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
+                    : 'bg-red-500/10 text-red-400 border-red-500/20'
+                }`}>
+                  <span className={`h-1.5 w-1.5 rounded-full ${
+                    product.stock > 10 ? 'bg-green-400' : product.stock > 0 ? 'bg-yellow-400' : 'bg-red-400'
+                  }`} />
+                  {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
+                </span>
               </div>
             </div>
 
