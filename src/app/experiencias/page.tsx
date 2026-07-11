@@ -12,6 +12,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { db } from '@/lib/db';
 
 const EXPERIENCES = [
   {
@@ -394,7 +395,22 @@ export default function ExperienciasPage() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (newsletterEmail) setNewsletterSubmitted(true);
+                  if (newsletterEmail) {
+                    const subs = db.get('newsletter_subscribers') || [];
+                    const exists = subs.some((s: any) => s.email === newsletterEmail);
+                    if (!exists) {
+                      subs.push({
+                        id: crypto.randomUUID(),
+                        email: newsletterEmail,
+                        name: '',
+                        source: 'experiencias',
+                        status: 'active',
+                        created_at: new Date().toISOString().split('T')[0]
+                      });
+                      db.save('newsletter_subscribers', subs);
+                    }
+                    setNewsletterSubmitted(true);
+                  }
                 }}
                 className="flex w-full max-w-md items-center gap-2 mt-2"
               >

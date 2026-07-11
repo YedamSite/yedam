@@ -7,6 +7,15 @@
 -- Add image column to products (for main product image directly on product record)
 ALTER TABLE yedam_products ADD COLUMN IF NOT EXISTS image TEXT;
 
+-- Add image column to categories for category thumbnail
+ALTER TABLE yedam_categories ADD COLUMN IF NOT EXISTS image TEXT;
+UPDATE yedam_categories SET image = 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' WHERE slug = 'cuidado-facial' AND image IS NULL;
+UPDATE yedam_categories SET image = 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400' WHERE slug = 'cuidado-corporal' AND image IS NULL;
+UPDATE yedam_categories SET image = 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=400' WHERE slug = 'cuidado-capilar' AND image IS NULL;
+UPDATE yedam_categories SET image = 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' WHERE slug = 'maquillaje' AND image IS NULL;
+UPDATE yedam_categories SET image = 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' WHERE slug = 'cuidado-de-unas' AND image IS NULL;
+UPDATE yedam_categories SET image = 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' WHERE slug = 'proteccion-solar' AND image IS NULL;
+
 -- Create site_content table for full CMS page editing
 CREATE TABLE IF NOT EXISTS yedam_site_content (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

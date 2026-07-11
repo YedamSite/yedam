@@ -5,6 +5,7 @@ import { Save, Plus, Trash2, ImageUp, Type, Heading, List, GripVertical } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function SiteContentTab() {
   const [content, setContent] = useState<any>(null);
@@ -159,10 +160,12 @@ export default function SiteContentTab() {
               {renderInput('Texto Botão Rutinas', c.hero?.btnRoutineText, v => handleChange('hero', 'btnRoutineText', v))}
               {renderInput('Link Botão Rutinas', c.hero?.btnRoutineLink, v => handleChange('hero', 'btnRoutineLink', v))}
             </div>
-            {renderInput('URL da Imagem de Fundo', c.hero?.bgImage, v => handleChange('hero', 'bgImage', v), { placeholder: 'URL ou caminho da imagem...' })}
-            <div className="relative h-32 rounded-xl overflow-hidden border border-white/10 bg-secondary">
-              {c.hero?.bgImage && <img src={c.hero.bgImage} alt="Preview" className="w-full h-full object-cover" />}
-            </div>
+            <ImageUpload
+              currentUrl={c.hero?.bgImage || ''}
+              onUrlChange={v => handleChange('hero', 'bgImage', v)}
+              folder="hero"
+              label="Imagem de Fundo do Hero"
+            />
           </div>
         )}
 
@@ -252,7 +255,12 @@ export default function SiteContentTab() {
                     {renderInput('Texto do Botão', card.buttonText, v => handleArrayItemChange('experiencias', 'cards', idx, 'buttonText', v))}
                   </div>
                   {renderInput('Texto', card.text, v => handleArrayItemChange('experiencias', 'cards', idx, 'text', v), { rows: 2 })}
-                  {renderInput('URL da Imagem', card.image, v => handleArrayItemChange('experiencias', 'cards', idx, 'image', v))}
+                  <ImageUpload
+                    currentUrl={card.image || ''}
+                    onUrlChange={v => handleArrayItemChange('experiencias', 'cards', idx, 'image', v)}
+                    folder="experiencias"
+                    label="Imagem do Card"
+                  />
                 </div>
               ))}
             </div>
@@ -324,16 +332,23 @@ export default function SiteContentTab() {
             </div>
             <div className="border-t border-white/5 pt-4">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-[10px] font-bold text-accent uppercase">URLs das Imagens</h4>
+                <h4 className="text-[10px] font-bold text-accent uppercase">Imagens do Feed</h4>
                 <Button onClick={() => addArrayItem('instagram', 'images', 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
                   <Plus className="h-3 w-3" /> ADICIONAR
                 </Button>
               </div>
-              <div className="grid grid-cols-1 gap-2">
+              <div className="grid grid-cols-1 gap-3">
                 {(c.instagram?.images || []).map((url: string, idx: number) => (
-                  <div key={idx} className="flex gap-2 items-center">
-                    <input value={url} onChange={e => handleArrayItemChange('instagram', 'images', idx, '', e.target.value)} className="flex-1 bg-black/30 border border-white/10 rounded px-3 py-2 text-[11px] text-white" placeholder="URL da imagem..." />
-                    <button onClick={() => removeArrayItem('instagram', 'images', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <div key={idx} className="flex gap-2 items-start">
+                    <div className="flex-1">
+                      <ImageUpload
+                        currentUrl={url}
+                        onUrlChange={v => handleArrayItemChange('instagram', 'images', idx, '', v)}
+                        folder="instagram"
+                        label={`Imagem ${idx + 1}`}
+                      />
+                    </div>
+                    <button onClick={() => removeArrayItem('instagram', 'images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
               </div>
@@ -362,7 +377,12 @@ export default function SiteContentTab() {
               {renderInput('Texto do Anúncio (barra superior)', h.header?.announcementText, v => { setContent((prev: any) => { const u = JSON.parse(JSON.stringify(prev)); u.header.announcementText = v; return u; }); })}
               {renderInput('Texto "Envíos"', h.header?.shippingText, v => { setContent((prev: any) => { const u = JSON.parse(JSON.stringify(prev)); u.header.shippingText = v; return u; }); })}
               {renderInput('Texto "Atención"', h.header?.attentionText, v => { setContent((prev: any) => { const u = JSON.parse(JSON.stringify(prev)); u.header.attentionText = v; return u; }); })}
-              {renderInput('URL do Logo', h.header?.logoUrl, v => { setContent((prev: any) => { const u = JSON.parse(JSON.stringify(prev)); u.header.logoUrl = v; return u; }); })}
+              <ImageUpload
+                currentUrl={h.header?.logoUrl || ''}
+                onUrlChange={v => { setContent((prev: any) => { const u = JSON.parse(JSON.stringify(prev)); u.header.logoUrl = v; return u; }); }}
+                folder="logo"
+                label="Logo do Site"
+              />
             </div>
           </div>
         )}

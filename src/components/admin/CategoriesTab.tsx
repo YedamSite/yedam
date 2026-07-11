@@ -5,6 +5,7 @@ import { Plus, Trash2, Save, Edit3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function CategoriesTab() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -81,10 +82,12 @@ export default function CategoriesTab() {
               <label className="text-[10px] font-bold uppercase text-accent">Descrição</label>
               <textarea value={formDesc} onChange={e => setFormDesc(e.target.value)} rows={2} className="flex min-h-[50px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
             </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-bold uppercase text-accent">URL da Imagem</label>
-              <Input value={formImage} onChange={e => setFormImage(e.target.value)} placeholder="https://..." />
-            </div>
+            <ImageUpload
+              currentUrl={formImage}
+              onUrlChange={setFormImage}
+              folder="categories"
+              label="Imagem da Categoria"
+            />
             <div className="flex gap-2">
               <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2 rounded-xl text-xs flex-1">
                 {editingId ? 'ATUALIZAR' : 'CRIAR'}

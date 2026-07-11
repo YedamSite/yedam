@@ -7,6 +7,7 @@ import {
   TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
   Layout, PenTool, Grid3X3, Save
 } from 'lucide-react';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ import { db } from '@/lib/db';
 import SiteContentTab from '@/components/admin/SiteContentTab';
 import CategoriesTab from '@/components/admin/CategoriesTab';
 import BrandsTab from '@/components/admin/BrandsTab';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('visual');
@@ -53,10 +55,20 @@ export default function AdminDashboard() {
   const [newCouponCode, setNewCouponCode] = useState('');
   const [newCouponDiscount, setNewCouponDiscount] = useState(0);
 
+  // Newsletter Subscribers State
+  const [subscribers, setSubscribers] = useState<any[]>([]);
+
   // Blog State
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [newPostTitle, setNewPostTitle] = useState('');
+  const [newPostSlug, setNewPostSlug] = useState('');
+  const [newPostSubtitle, setNewPostSubtitle] = useState('');
+  const [newPostContent, setNewPostContent] = useState('');
+  const [newPostImage, setNewPostImage] = useState('');
   const [newPostAuthor, setNewPostAuthor] = useState('');
+  const [newPostSeoTitle, setNewPostSeoTitle] = useState('');
+  const [newPostSeoDesc, setNewPostSeoDesc] = useState('');
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
 
   // SEO & Gateway Config State
   const [seoTitleSuffix, setSeoTitleSuffix] = useState('| Yedam K-Beauty');
@@ -77,6 +89,7 @@ export default function AdminDashboard() {
     setEmailLogs(db.get('communication_logs') || []);
     setCoupons(db.get('coupons') || []);
     setBlogPosts(db.get('blog_posts') || []);
+    setSubscribers(db.get('newsletter_subscribers') || []);
   };
 
   useEffect(() => {
@@ -250,30 +263,95 @@ export default function AdminDashboard() {
     setNewCouponDiscount(0);
   };
 
+  const generateSlug = (title: string) => {
+    return title.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+  const resetBlogForm = () => {
+    setNewPostTitle('');
+    setNewPostSlug('');
+    setNewPostSubtitle('');
+    setNewPostContent('');
+    setNewPostImage('');
+    setNewPostAuthor('');
+    setNewPostSeoTitle('');
+    setNewPostSeoDesc('');
+    setEditingPostId(null);
+  };
+
   // Create Blog Post
   const handleCreatePost = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPostTitle) return;
     const allPosts = db.get('blog_posts') || [];
-    const newP = {
-      id: crypto.randomUUID(),
-      title: newPostTitle,
-      author: newPostAuthor || 'Yedam Editor',
-      content: '',
-      image: '',
-      created_at: new Date().toISOString().split('T')[0]
-    };
-    allPosts.push(newP);
+    const slug = newPostSlug || generateSlug(newPostTitle);
+    const now = new Date().toISOString().split('T')[0];
+    if (editingPostId) {
+      const idx = allPosts.findIndex((p: any) => p.id === editingPostId);
+      if (idx !== -1) {
+        allPosts[idx] = {
+          ...allPosts[idx],
+          title: newPostTitle,
+          slug,
+          subtitle: newPostSubtitle,
+          content: newPostContent,
+          image: newPostImage,
+          author: newPostAuthor || 'Yedam Editor',
+          seo_title: newPostSeoTitle,
+          seo_description: newPostSeoDesc,
+          updated_at: now,
+        };
+      }
+    } else {
+      allPosts.push({
+        id: crypto.randomUUID(),
+        title: newPostTitle,
+        slug,
+        subtitle: newPostSubtitle,
+        content: newPostContent,
+        image: newPostImage,
+        author: newPostAuthor || 'Yedam Editor',
+        seo_title: newPostSeoTitle,
+        seo_description: newPostSeoDesc,
+        status: 'draft',
+        created_at: now,
+      });
+    }
     db.save('blog_posts', allPosts);
-    setBlogPosts(allPosts);
-    setNewPostTitle('');
-    setNewPostAuthor('');
+    setBlogPosts(db.get('blog_posts'));
+    resetBlogForm();
+  };
+
+  const handleEditPost = (post: any) => {
+    setNewPostTitle(post.title);
+    setNewPostSlug(post.slug);
+    setNewPostSubtitle(post.subtitle || '');
+    setNewPostContent(post.content || '');
+    setNewPostImage(post.image || '');
+    setNewPostAuthor(post.author || '');
+    setNewPostSeoTitle(post.seo_title || '');
+    setNewPostSeoDesc(post.seo_description || '');
+    setEditingPostId(post.id);
   };
 
   const handleDeletePost = (id: string) => {
+    if (!confirm('¿Eliminar este artículo permanentemente?')) return;
     const allPosts = db.get('blog_posts') || [];
     db.save('blog_posts', allPosts.filter((p: any) => p.id !== id));
     setBlogPosts(db.get('blog_posts'));
+  };
+
+  const handlePublishToggle = (id: string, currentStatus: string) => {
+    const allPosts = db.get('blog_posts') || [];
+    const idx = allPosts.findIndex((p: any) => p.id === id);
+    if (idx !== -1) {
+      allPosts[idx].status = currentStatus === 'published' ? 'draft' : 'published';
+      db.save('blog_posts', allPosts);
+      setBlogPosts(db.get('blog_posts'));
+    }
   };
 
   return (
@@ -302,6 +380,7 @@ export default function AdminDashboard() {
             { id: 'products', label: 'CRUD Productos & Stock', icon: Database },
             { id: 'orders', label: 'Pedidos & Invoices', icon: ShoppingCart },
             { id: 'suscripciones', label: 'Membresías Club', icon: Sparkles },
+            { id: 'newsletter', label: 'Newsletter & Leads', icon: Mail },
             { id: 'coupons', label: 'Cupones & Promos', icon: Tag },
             { id: 'blog', label: 'Blog & Artículos', icon: BookOpen },
             { id: 'settings', label: 'APIs, SMTP & SEO', icon: Globe },
@@ -495,10 +574,12 @@ export default function AdminDashboard() {
                       <Input required value={prodVolume} onChange={e => setProdVolume(e.target.value)} placeholder="150ml" />
                     </div>
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-accent">URL da Imagem do Produto</label>
-                    <Input value={prodImage} onChange={e => setProdImage(e.target.value)} placeholder="https://..." />
-                  </div>
+                  <ImageUpload
+                    currentUrl={prodImage}
+                    onUrlChange={setProdImage}
+                    folder="products"
+                    label="Imagem do Produto"
+                  />
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-bold uppercase text-accent">Descripción (Español)</label>
                     <textarea value={prodDesc} onChange={e => setProdDesc(e.target.value)} placeholder="Descripción en español..." className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
@@ -820,47 +901,344 @@ export default function AdminDashboard() {
           {/* TAB: BLOG & ARTICLES CRUD */}
           {activeSubTab === 'blog' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Gestión del Blog Corporativo</h2>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">
+                {editingPostId ? 'Editar Artículo' : 'Gestión del Blog Corporativo'}
+              </h2>
+
+              <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
                 {/* Form */}
-                <div className="bg-secondary/30 border border-white/5 rounded-2xl p-6 h-fit text-xs text-muted-foreground flex flex-col gap-4">
-                  <h3 className="text-xs font-bold text-accent uppercase tracking-wider">Nuevo Artículo</h3>
+                <div className="xl:col-span-2 bg-secondary/30 border border-white/5 rounded-2xl p-6 h-fit text-xs text-muted-foreground flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider">
+                      {editingPostId ? '✏️ Editando' : '✍️ Nuevo Artículo'}
+                    </h3>
+                    {editingPostId && (
+                      <button onClick={resetBlogForm} className="text-[9px] text-accent hover:underline uppercase tracking-wider">
+                        + Nuevo
+                      </button>
+                    )}
+                  </div>
+
                   <form onSubmit={handleCreatePost} className="flex flex-col gap-4">
+                    {/* Title */}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Título del Artículo</label>
-                      <Input required value={newPostTitle} onChange={e => setNewPostTitle(e.target.value)} placeholder="Ej: Fórmulas de Centella Asiática" />
+                      <label className="text-[10px] font-bold uppercase text-accent">Título *</label>
+                      <Input required value={newPostTitle} onChange={e => {
+                        setNewPostTitle(e.target.value);
+                        if (!editingPostId) setNewPostSlug(generateSlug(e.target.value));
+                      }} placeholder="Ej: Fórmulas de Centella Asiática" />
                     </div>
+
+                    {/* Slug */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">Slug (URL)</label>
+                      <Input value={newPostSlug} onChange={e => setNewPostSlug(e.target.value)} placeholder="generado-automaticamente" />
+                      {newPostSlug && (
+                        <span className="text-[8px] text-foreground/40">URL: /blog/{newPostSlug}</span>
+                      )}
+                    </div>
+
+                    {/* Subtitle */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">Subtítulo</label>
+                      <Input value={newPostSubtitle} onChange={e => setNewPostSubtitle(e.target.value)} placeholder="Breve descripción que aparece en la tarjeta" />
+                    </div>
+
+                    {/* Author */}
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-bold uppercase text-accent">Autor</label>
                       <Input value={newPostAuthor} onChange={e => setNewPostAuthor(e.target.value)} placeholder="Ej: Dr. Park" />
                     </div>
-                    <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2 rounded-xl text-xs">
-                      PUBLICAR ARTÍCULO
-                    </Button>
+
+                    {/* Image Upload */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">Imagen Destacada</label>
+                      <ImageUpload currentUrl={newPostImage} onUrlChange={setNewPostImage} />
+                    </div>
+
+                    {/* Content (HTML textarea) */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">Contenido (HTML)</label>
+                      <textarea
+                        value={newPostContent}
+                        onChange={e => setNewPostContent(e.target.value)}
+                        rows={8}
+                        className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[150px]"
+                        placeholder="<p>Escribe aquí el contenido del artículo...</p>"
+                      />
+                      <span className="text-[8px] text-foreground/40">Usa etiquetas HTML: &lt;h3&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;ul&gt;, &lt;li&gt;</span>
+                    </div>
+
+                    {/* SEO Meta Title */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">SEO Title (Meta Título)</label>
+                      <Input value={newPostSeoTitle} onChange={e => setNewPostSeoTitle(e.target.value)} placeholder="Ej: 5 Secretos del Skincare Coreano | Yedam K-Beauty" />
+                      {newPostSeoTitle && (
+                        <div className="flex items-center gap-2 text-[8px]">
+                          <span className={`font-bold ${newPostSeoTitle.length > 60 ? 'text-red-400' : 'text-green-400'}`}>
+                            {newPostSeoTitle.length}/60
+                          </span>
+                          <span className="text-foreground/40">
+                            {newPostSeoTitle.length > 60 ? '⚠️ El título SEO es demasiado largo (máx. 60 caracteres)' : '✅ Longitud ideal'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* SEO Meta Description */}
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">SEO Description (Meta Descripción)</label>
+                      <textarea
+                        value={newPostSeoDesc}
+                        onChange={e => setNewPostSeoDesc(e.target.value)}
+                        rows={3}
+                        className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[60px]"
+                        placeholder="Descripción para buscadores (aparece en Google)..."
+                      />
+                      {newPostSeoDesc && (
+                        <div className="flex items-center gap-2 text-[8px]">
+                          <span className={`font-bold ${newPostSeoDesc.length > 160 ? 'text-red-400' : newPostSeoDesc.length > 120 ? 'text-yellow-400' : 'text-green-400'}`}>
+                            {newPostSeoDesc.length}/160
+                          </span>
+                          <span className="text-foreground/40">
+                            {newPostSeoDesc.length === 0 ? '' :
+                              newPostSeoDesc.length > 160 ? '⚠️ Muy largo (Google truncará)' :
+                              newPostSeoDesc.length < 50 ? '⚠️ Muy corto' :
+                              newPostSeoDesc.length > 120 ? '⚠️ Casi en el límite' :
+                              '✅ Entre 50-120 caracteres (ideal)'
+                            }
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* SEO Preview */}
+                    {(newPostSeoTitle || newPostSeoDesc) && (
+                      <div className="bg-black/40 border border-white/5 rounded-xl p-4">
+                        <span className="text-[8px] font-bold text-accent uppercase tracking-widest block mb-2">📱 Vista previa Google</span>
+                        <div className="bg-white rounded-lg p-3">
+                          <p className="text-[10px] text-[#1a0dab] font-medium leading-tight hover:underline cursor-pointer truncate">
+                            {newPostSeoTitle || 'Título SEO'}
+                          </p>
+                          <p className="text-[9px] text-[#006621] leading-tight truncate">
+                            {`yedambeauty.com/blog/${newPostSlug || 'slug-del-articulo'}`}
+                          </p>
+                          <p className="text-[9px] text-[#545454] leading-snug mt-0.5 line-clamp-2">
+                            {newPostSeoDesc || 'Descripción SEO del artículo...'}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Professional SEO Tips */}
+                    <div className="bg-accent/5 border border-accent/10 rounded-xl p-4">
+                      <h4 className="text-[9px] font-bold text-accent uppercase tracking-widest mb-2">🔍 Consejos SEO Profesional</h4>
+                      <ul className="text-[9px] text-foreground/60 flex flex-col gap-1 list-disc pl-4">
+                        <li className={newPostSeoTitle && newPostSeoTitle.length <= 60 ? 'text-green-400' : ''}>
+                          <strong>Título:</strong> Máx. 60 caracteres, incluye la palabra clave principal.
+                        </li>
+                        <li className={newPostSeoDesc && newPostSeoDesc.length >= 50 && newPostSeoDesc.length <= 160 ? 'text-green-400' : ''}>
+                          <strong>Meta descripción:</strong> Entre 50-160 caracteres, incluye llamado a la acción.
+                        </li>
+                        <li><strong>Slug:</strong> Usa solo letras, números y guiones. Sin caracteres especiales.</li>
+                        <li><strong>Imagen:</strong> Usa imágenes originales con texto alternativo descriptivo.</li>
+                        <li><strong>Contenido:</strong> Artículos con más de 300 palabras tienen mejor ranking.</li>
+                        <li><strong>Subtítulo:</strong> Debe contener la palabra clave de forma natural.</li>
+                      </ul>
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button type="submit" className="flex-1 bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl text-xs">
+                        {editingPostId ? '💾 ACTUALIZAR ARTÍCULO' : '📝 GUARDAR ARTÍCULO'}
+                      </Button>
+                      {editingPostId && (
+                        <Button type="button" variant="outline" onClick={resetBlogForm} className="border-white/10 text-white hover:bg-white/5 py-2.5 rounded-xl text-xs">
+                          Cancelar
+                        </Button>
+                      )}
+                    </div>
                   </form>
                 </div>
 
                 {/* List */}
-                <div className="lg:col-span-2 flex flex-col gap-3">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2">Artículos Publicados</h3>
-                  {blogPosts.map((post) => (
-                    <div key={post.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4 text-xs">
-                      <div>
-                        <h4 className="font-bold text-white">{post.title}</h4>
-                        <span className="text-[10px] text-muted-foreground">Autor: {post.author} • Fecha: {post.created_at}</span>
-                      </div>
-                      <button onClick={() => handleDeletePost(post.id)} className="text-red-500 hover:text-red-400 p-2">
-                        <Trash2 className="h-4.5 w-4.5" />
-                      </button>
+                <div className="xl:col-span-3 flex flex-col gap-3">
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2">
+                    Artículos ({blogPosts.length})
+                  </h3>
+                  {blogPosts.length === 0 ? (
+                    <div className="border border-dashed border-white/5 rounded-xl p-8 text-center text-[10px] text-foreground/40">
+                      No hay artículos todavía. ¡Crea el primero!
                     </div>
-                  ))}
+                  ) : (
+                    blogPosts.map((post) => (
+                      <div key={post.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4 text-xs">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          {post.image && (
+                            <div className="relative h-12 w-12 rounded-lg overflow-hidden shrink-0 bg-secondary/50">
+                              <Image src={post.image} alt={post.title} fill className="object-cover" unoptimized />
+                            </div>
+                          )}
+                          <div className="min-w-0">
+                            <h4 className="font-bold text-white truncate">{post.title}</h4>
+                            <div className="flex items-center gap-2 text-[10px] text-muted-foreground flex-wrap">
+                              <span>✍️ {post.author || 'Anónimo'}</span>
+                              <span>📅 {post.created_at}</span>
+                              <button
+                                onClick={() => handlePublishToggle(post.id, post.status)}
+                                className={`font-bold ${post.status === 'published' ? 'text-green-400' : 'text-yellow-400'}`}
+                              >
+                                {post.status === 'published' ? '🟢 Publicado' : '🟡 Borrador'}
+                              </button>
+                            </div>
+                            {post.slug && (
+                              <span className="text-[8px] text-foreground/30 truncate block max-w-[200px]">
+                                /blog/{post.slug}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button onClick={() => handleEditPost(post)} className="text-foreground/40 hover:text-accent p-2">
+                            <FileText className="h-4 w-4" />
+                          </button>
+                          <button onClick={() => handleDeletePost(post.id)} className="text-red-500 hover:text-red-400 p-2">
+                            <Trash2 className="h-4.5 w-4.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
           )}
 
           {/* TAB: SUSCRIPCIONES (CLUB YEDAM ADMIN) */}
+          {/* TAB: NEWSLETTER SUBSCRIBERS */}
+          {activeSubTab === 'newsletter' && (
+            <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+                <h2 className="font-heading text-2xl font-light text-white">Newsletter & Leads de E-mail</h2>
+                <button
+                  onClick={() => {
+                    const csv = [
+                      ['E-mail', 'Nombre', 'Origen', 'Estado', 'Fecha de Registro'],
+                      ...subscribers.map((s: any) => [s.email, s.name || '', s.source || 'website', s.status || 'active', s.created_at || ''])
+                    ].map(row => row.join(',')).join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `newsletter_${new Date().toISOString().split('T')[0]}.csv`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  className="text-[9px] bg-accent hover:bg-accentHover text-background font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all"
+                >
+                  <FileText className="h-4 w-4" />
+                  EXPORTAR CSV
+                </button>
+              </div>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                {[
+                  { label: 'Total Suscriptores', value: subscribers.length, icon: Users, color: 'text-accent' },
+                  { label: 'Activos', value: subscribers.filter((s: any) => s.status === 'active').length, icon: CheckCircle2, color: 'text-green-400' },
+                  { label: 'De la Homepage', value: subscribers.filter((s: any) => s.source === 'homepage').length, icon: Globe, color: 'text-blue-400' },
+                  { label: 'De Experiencias', value: subscribers.filter((s: any) => s.source === 'experiencias').length, icon: Sparkles, color: 'text-purple-400' }
+                ].map((stat, idx) => {
+                  const StatIcon = stat.icon;
+                  return (
+                    <div key={idx} className="bg-secondary/30 border border-white/5 rounded-2xl p-4 flex items-center gap-4">
+                      <StatIcon className={`h-6 w-6 ${stat.color}`} />
+                      <div>
+                        <p className="text-lg font-bold text-white">{stat.value}</p>
+                        <p className="text-[9px] text-muted-foreground uppercase tracking-wider font-bold">{stat.label}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Search / Filter */}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Buscar por e-mail..."
+                  className="w-full max-w-xs bg-black/30 border border-white/10 rounded-xl py-2 px-4 text-xs text-white placeholder-gray-500 outline-none focus:border-accent"
+                  onChange={e => {
+                    const q = e.target.value.toLowerCase();
+                    const all = db.get('newsletter_subscribers') || [];
+                    setSubscribers(q ? all.filter((s: any) => s.email.toLowerCase().includes(q)) : all);
+                  }}
+                />
+              </div>
+
+              {/* Subscribers Table */}
+              {subscribers.length === 0 ? (
+                <div className="border border-dashed border-white/5 rounded-xl p-12 text-center">
+                  <Mail className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                  <p className="text-xs text-foreground/40">Nenhum inscrito na newsletter ainda.</p>
+                  <p className="text-[9px] text-foreground/30 mt-1">Os e-mails serão registrados automaticamente quando alguém se inscrever no site.</p>
+                </div>
+              ) : (
+                <div className="border border-white/5 rounded-2xl overflow-hidden bg-secondary/10 text-xs">
+                  <div className="grid grid-cols-5 p-3 bg-secondary/30 font-bold border-b border-white/5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <span className="col-span-2">E-mail</span>
+                    <span>Origen</span>
+                    <span>Fecha</span>
+                    <span className="text-right">Acción</span>
+                  </div>
+                  {subscribers.map((sub: any) => (
+                    <div key={sub.id} className="grid grid-cols-5 p-3 border-b border-white/5 last:border-0 items-center hover:bg-white/5 transition-colors">
+                      <div className="col-span-2 flex flex-col">
+                        <span className="font-bold text-white truncate">{sub.email}</span>
+                        {sub.name && <span className="text-[9px] text-muted-foreground">{sub.name}</span>}
+                      </div>
+                      <span>
+                        <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                          sub.source === 'homepage' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                        }`}>
+                          {sub.source === 'homepage' ? 'Homepage' : 'Experiencias'}
+                        </span>
+                      </span>
+                      <span className="text-muted-foreground">{sub.created_at || '-'}</span>
+                      <span className="text-right">
+                        <button
+                          onClick={() => {
+                            if (!confirm(`¿Eliminar a ${sub.email} de la lista?`)) return;
+                            const all = db.get('newsletter_subscribers') || [];
+                            db.save('newsletter_subscribers', all.filter((s: any) => s.id !== sub.id));
+                            setSubscribers(db.get('newsletter_subscribers') || []);
+                          }}
+                          className="text-red-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/5 transition-colors"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Info Box */}
+              <div className="mt-6 bg-accent/5 border border-accent/10 rounded-xl p-4">
+                <h4 className="text-[9px] font-bold text-accent uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                  <Info className="h-3.5 w-3.5" />
+                  Información de Suscripción
+                </h4>
+                <ul className="text-[9px] text-foreground/60 flex flex-col gap-1 list-disc pl-4">
+                  <li>Los suscriptores se registran automáticamente desde los formularios de la Homepage y la página de Experiencias.</li>
+                  <li>Los datos persisten en localStorage y se sincronizan con todos los dispositivos.</li>
+                  <li>Puedes exportar la lista completa a CSV para usar en campañas de e-mail marketing.</li>
+                  <li>Usa los datos de SMTP configurados en la pestaña "APIs, SMTP & SEO" para enviar newsletters.</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: MEMBRESÍAS CLUB */}
           {activeSubTab === 'suscripciones' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl flex flex-col gap-6">
               <div>

@@ -333,13 +333,28 @@ export default function Home() {
             <div className="w-full max-w-md">
               {newsletterSubscribed ? (
                 <div className="text-accent font-bold text-xs bg-accent/10 border border-accent/30 p-4 rounded-xl text-center">
-                  {c?.newsletter?.successMessage || '✓ ¡Te has suscrito con éxito!'}
+                  {c?.newsletter?.successMessage || '✓ ¡Te has suscrito con éxito! Bienvenido al Yedam Club.'}
                 </div>
               ) : (
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    setNewsletterSubscribed(true);
+                    if (newsletterEmail) {
+                      const subs = db.get('newsletter_subscribers') || [];
+                      const exists = subs.some((s: any) => s.email === newsletterEmail);
+                      if (!exists) {
+                        subs.push({
+                          id: crypto.randomUUID(),
+                          email: newsletterEmail,
+                          name: '',
+                          source: 'homepage',
+                          status: 'active',
+                          created_at: new Date().toISOString().split('T')[0]
+                        });
+                        db.save('newsletter_subscribers', subs);
+                      }
+                      setNewsletterSubscribed(true);
+                    }
                   }}
                   className="flex gap-3"
                 >
@@ -349,7 +364,7 @@ export default function Home() {
                     value={newsletterEmail}
                     onChange={e => setNewsletterEmail(e.target.value)}
                     placeholder="Tu E-mail"
-                    className="bg-black/50 border-white/10 rounded-full text-white placeholder-gray-500 text-xs h-11 px-6"
+                    className="bg-black/50 border-white/10 rounded-full text-white placeholder-gray-500 text-xs h-11 px-6 min-w-[200px]"
                   />
                   <Button type="submit" className="bg-accent hover:bg-accentHover text-background rounded-full font-bold px-8 h-11 text-xs shrink-0 transition-all hover:scale-105">
                     {c?.newsletter?.buttonText || 'SUBSCRIBIRSE'}

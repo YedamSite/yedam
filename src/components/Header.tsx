@@ -97,6 +97,7 @@ export default function Header() {
     { label: 'Inicio', href: '/' },
     { label: 'Tienda', href: '/tienda' },
     { label: 'Rutinas', href: '/rutinas' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Experiencias', href: '/experiencias' }
   ];
 
@@ -115,8 +116,8 @@ export default function Header() {
       <header className="w-full border-t border-b border-white/10 px-4 md:px-8 h-20 bg-transparent relative flex items-center">
         <div className="absolute inset-0 -z-10 bg-background/95 backdrop-blur" />
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between relative z-10">
-          {/* Logo */}
-          <Link href="/" className="flex items-center group">
+          {/* Logo - Left */}
+          <Link href="/" className="flex items-center group shrink-0">
             <Image
               src={headerContent.logoUrl || '/images/logo.png'}
               alt="Yedam"
@@ -127,13 +128,13 @@ export default function Header() {
             />
           </Link>
 
-          {/* Desktop Nav Centered */}
-          <nav className="hidden md:flex items-center justify-center gap-10 absolute left-1/2 -translate-x-1/2">
+          {/* Desktop Nav Centered - flex-1 to fill space */}
+          <nav className="hidden md:flex items-center justify-center gap-10 flex-1">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-xs uppercase tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
+                className={`text-xs uppercase tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
                   }`}
               >
                 {item.label}
@@ -141,8 +142,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Action Buttons */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Action Buttons - Right */}
+          <div className="hidden md:flex items-center gap-6 shrink-0">
             {/* Dynamic Search Bar with Autocomplete */}
             <div className="relative flex items-center">
               {isSearchExpanded ? (
