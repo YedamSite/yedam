@@ -196,7 +196,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-x-0 top-[70px] bg-background border-b border-white/10 shadow-2xl p-6 flex flex-col gap-6 animate-in fade-in slide-in-from-top-5 duration-200">
+          <div className="md:hidden absolute inset-x-0 top-full bg-background border-b border-white/10 shadow-2xl p-6 flex flex-col gap-6 animate-in fade-in slide-in-from-top-5 duration-200 z-50">
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <Link
