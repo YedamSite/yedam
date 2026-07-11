@@ -81,9 +81,9 @@ export default function Header() {
   return (
     <div className="w-full flex flex-col sticky top-0 z-50">
       {/* Top Announcement Bar matching reference */}
-      <div className="w-full bg-[#030712] border-b border-white/5 py-2 px-4 md:px-8 text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-between">
-        <div>Belleza que nace de la tradición. Cosmética que transforma.</div>
-        <div className="flex items-center gap-6">
+      <div className="w-full bg-[#030712] border-b border-white/5 py-2.5 px-4 md:px-8 text-[9px] font-bold text-gray-400 uppercase tracking-widest flex items-center justify-center md:justify-between text-center">
+        <div className="leading-relaxed">Belleza que nace de la tradición. Cosmética que transforma.</div>
+        <div className="hidden md:flex items-center gap-6">
           <div>Envíos para toda América Latina</div>
           <div>Atención</div>
           <div className="text-white">ES ▾</div>
