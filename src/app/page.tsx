@@ -60,7 +60,7 @@ export default function Home() {
       <Header />
 
       {/* Hero Section Split Layout matching reference exactly */}
-      <section className="relative min-h-[95vh] flex flex-col justify-between pt-8 overflow-hidden border-b border-white/5 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/banner.png')" }}>
+      <section className="relative min-h-[95vh] flex flex-col justify-between pt-8 overflow-hidden border-b border-white/5 bg-cover bg-[position:75%_center] md:bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/banner.png')" }}>
         
         {/* Dark elegant overlay to integrate the image with the layout and ensure high contrast */}
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent z-0" />
