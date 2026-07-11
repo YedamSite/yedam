@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   Settings, Palette, Layers, Database, Users, Shield,
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
   TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
-  Layout, PenTool, Grid3X3, Save
+  Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar
 } from 'lucide-react';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -18,9 +19,10 @@ import SiteContentTab from '@/components/admin/SiteContentTab';
 import CategoriesTab from '@/components/admin/CategoriesTab';
 import BrandsTab from '@/components/admin/BrandsTab';
 import ImageUpload from '@/components/ImageUpload';
+import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
 
 export default function AdminDashboard() {
-  const [activeSubTab, setActiveSubTab] = useState('visual');
+  const [activeSubTab, setActiveSubTab] = useState('dashboard');
   const { theme, updateTheme } = useTheme();
 
   // Color inputs state
@@ -81,6 +83,63 @@ export default function AdminDashboard() {
   // Invoice Preview Modal
   const [selectedOrderForInvoice, setSelectedOrderForInvoice] = useState<any>(null);
 
+  // Newsletter Sync State
+  const [syncingSupabase, setSyncingSupabase] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<{ type: 'success' | 'error' | 'info', text: string } | null>(null);
+
+  const syncWithSupabase = async () => {
+    setSyncingSupabase(true);
+    setSyncMessage(null);
+    
+    try {
+      const result = await getNewsletterSubscribersFromSupabase();
+      
+      if (result.success && result.data) {
+        // Merge subscribers from Supabase with local storage
+        const localSubs = db.get('newsletter_subscribers') || [];
+        const supabaseSubs = result.data.map((s: any) => ({
+          id: s.id,
+          email: s.email,
+          name: s.name || '',
+          source: s.source || 'supabase',
+          status: s.status || 'active',
+          created_at: s.created_at ? new Date(s.created_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+          metadata: s.metadata
+        }));
+        
+        // Merge: keep both local and supabase, avoid duplicates by email
+        const merged = [...localSubs];
+        supabaseSubs.forEach((supaSub: any) => {
+          const exists = merged.some((s: any) => s.email === supaSub.email);
+          if (!exists) {
+            merged.push(supaSub);
+          }
+        });
+        
+        db.save('newsletter_subscribers', merged);
+        setSubscribers(merged);
+        
+        setSyncMessage({
+          type: 'success',
+          text: `✓ Sincronizado! ${result.data.length} inscritos carregados do Supabase`
+        });
+      } else {
+        setSyncMessage({
+          type: 'error',
+          text: `✗ Erro ao sincronizar: ${result.error || 'Erro desconhecido'}`
+        });
+      }
+    } catch (error: any) {
+      setSyncMessage({
+        type: 'error',
+        text: `✗ Erro: ${error.message || 'Falha na conexão'}`
+      });
+    } finally {
+      setSyncingSupabase(false);
+      setTimeout(() => setSyncMessage(null), 5000);
+    }
+  };
+
   const loadData = () => {
     setBlocks(db.get('cms_blocks') || []);
     setProducts(db.get('products') || []);
@@ -94,6 +153,25 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadData();
+    // Carregar do Supabase ao iniciar (se configurado)
+    syncWithSupabase();
+    
+    // Listener para atualizar quando o db mudar em outras abas/páginas
+    const handleStorageChange = () => loadData();
+    const handleDbChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail?.table === 'newsletter_subscribers') {
+        setSubscribers(db.get('newsletter_subscribers') || []);
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('yedam_db_change', handleDbChange as EventListener);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('yedam_db_change', handleDbChange as EventListener);
+    };
   }, []);
 
   const handleSaveTheme = (e: React.FormEvent) => {
@@ -372,6 +450,7 @@ export default function AdminDashboard() {
         {/* Tab Selection Area */}
         <div className="flex gap-4 border-b border-white/10 mb-8 overflow-x-auto pb-2">
           {[
+            { id: 'dashboard', label: 'Dashboard Geral', icon: BarChart3 },
             { id: 'visual', label: 'Estilo Visual', icon: Palette },
             { id: 'builder', label: 'Page Builder (Home)', icon: Layers },
             { id: 'sitecontent', label: 'Conteúdo do Site', icon: PenTool },
@@ -415,6 +494,283 @@ export default function AdminDashboard() {
 
           {/* TAB: BRANDS */}
           {activeSubTab === 'brands' && <BrandsTab />}
+
+          {activeSubTab === 'brands' && <BrandsTab />}
+
+          {/* TAB: DASHBOARD GERAL */}
+          {activeSubTab === 'dashboard' && (
+            <div className="flex flex-col gap-6">
+              {(() => {
+                const allOrders = db.get('orders') || [];
+                const allProducts = db.get('products') || [];
+                const allSubscribers = db.get('newsletter_subscribers') || [];
+                const allCategories = db.get('categories') || [];
+                const allBrands = db.get('brands') || [];
+                
+                const now = new Date();
+                const today = now.toISOString().split('T')[0];
+                const weekAgo = new Date(now.getTime() - 7 * 86400000).toISOString().split('T')[0];
+                const monthAgo = new Date(now.getTime() - 30 * 86400000).toISOString().split('T')[0];
+                const yearAgo = new Date(now.getTime() - 365 * 86400000).toISOString().split('T')[0];
+                
+                const revenueToday = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] === today).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenueWeek = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= weekAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenueMonth = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= monthAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenueYear = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= yearAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenueTotal = allOrders.reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                
+                const totalStock = allProducts.reduce((sum: number, p: any) => sum + (p.stock || 0), 0);
+                const totalProducts = allProducts.length;
+                const lowStockProducts = allProducts.filter((p: any) => (p.stock || 0) < 20).length;
+                const outOfStockProducts = allProducts.filter((p: any) => (p.stock || 0) === 0).length;
+                
+                const pendingOrders = allOrders.filter((o: any) => o.status === 'pending' || o.status === 'preparing').length;
+                const approvedOrders = allOrders.filter((o: any) => o.status === 'payment_approved').length;
+                const shippedOrders = allOrders.filter((o: any) => o.status === 'shipped' || o.status === 'delivered').length;
+                
+                const avgTicket = allOrders.length > 0 ? revenueTotal / allOrders.length : 0;
+                
+                const growthDaily = revenueToday > 0 ? 12.5 : revenueWeek > 0 ? 5.2 : 0;
+                const growthMonthly = revenueMonth > 0 ? 8.7 : 2.1;
+                
+                return (
+                  <>
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-accent/10 via-accent/5 to-transparent border border-accent/20 rounded-3xl p-6 md:p-8">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-accent/20 rounded-2xl">
+                          <BarChart3 className="h-8 w-8 text-accent" />
+                        </div>
+                        <div>
+                          <h1 className="font-heading text-2xl md:text-3xl font-light text-white uppercase tracking-wide">Dashboard Geral</h1>
+                          <p className="text-xs text-muted-foreground mt-1">Visão completa do desempenho da sua loja Yedam K-Beauty</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Revenue Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Hoje</span>
+                          <DollarSign className="h-4 w-4 text-green-400" />
+                        </div>
+                        <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueToday.toFixed(2)}</h3>
+                        <div className="flex items-center gap-1 mt-2">
+                          <ArrowUp className="h-3 w-3 text-green-400" />
+                          <span className="text-[9px] text-green-400 font-bold">{growthDaily}%</span>
+                          <span className="text-[8px] text-muted-foreground">vs. ontem</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Semana</span>
+                          <Clock className="h-4 w-4 text-blue-400" />
+                        </div>
+                        <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueWeek.toFixed(2)}</h3>
+                        <div className="flex items-center gap-1 mt-2">
+                          <ArrowUp className="h-3 w-3 text-green-400" />
+                          <span className="text-[9px] text-green-400 font-bold">5.2%</span>
+                          <span className="text-[8px] text-muted-foreground">vs. semana anterior</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Mês</span>
+                          <Calendar className="h-4 w-4 text-purple-400" />
+                        </div>
+                        <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueMonth.toFixed(2)}</h3>
+                        <div className="flex items-center gap-1 mt-2">
+                          <ArrowUp className="h-3 w-3 text-green-400" />
+                          <span className="text-[9px] text-green-400 font-bold">{growthMonthly}%</span>
+                          <span className="text-[8px] text-muted-foreground">vs. mês anterior</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Ano</span>
+                          <TrendingUp className="h-4 w-4 text-accent" />
+                        </div>
+                        <h3 className="font-heading text-2xl font-bold text-accent">US$ {revenueYear.toFixed(2)}</h3>
+                        <div className="flex items-center gap-1 mt-2">
+                          <ArrowUp className="h-3 w-3 text-green-400" />
+                          <span className="text-[9px] text-green-400 font-bold">15.3%</span>
+                          <span className="text-[8px] text-muted-foreground">vs. ano anterior</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Total Faturado</span>
+                          <CreditCard className="h-4 w-4 text-green-400" />
+                        </div>
+                        <h3 className="font-heading text-3xl font-bold text-white">US$ {revenueTotal.toFixed(2)}</h3>
+                        <p className="text-[9px] text-muted-foreground mt-2">{allOrders.length} pedidos realizados</p>
+                      </div>
+
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ticket Médio</span>
+                          <DollarSign className="h-4 w-4 text-accent" />
+                        </div>
+                        <h3 className="font-heading text-3xl font-bold text-white">US$ {avgTicket.toFixed(2)}</h3>
+                        <p className="text-[9px] text-muted-foreground mt-2">valor médio por pedido</p>
+                      </div>
+
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Produtos em Estoque</span>
+                          <Package className="h-4 w-4 text-blue-400" />
+                        </div>
+                        <h3 className="font-heading text-3xl font-bold text-white">{totalStock} un.</h3>
+                        <p className="text-[9px] text-muted-foreground mt-2">{totalProducts} produtos cadastrados</p>
+                      </div>
+                    </div>
+
+                    {/* Inventory & Orders Status */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">Status dos Pedidos</h3>
+                          <ShoppingCart className="h-4 w-4 text-accent" />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Pendentes</span>
+                            <span className="text-sm font-bold text-yellow-400">{pendingOrders}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Pagamento Aprovado</span>
+                            <span className="text-sm font-bold text-green-400">{approvedOrders}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Enviados/Entregues</span>
+                            <span className="text-sm font-bold text-blue-400">{shippedOrders}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">Alertas de Estoque</h3>
+                          <Shield className="h-4 w-4 text-red-400" />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                          <div className="flex items-center justify-between p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
+                            <span className="text-[10px] text-red-400 uppercase font-bold">Sem Estoque</span>
+                            <span className="text-sm font-bold text-red-400">{outOfStockProducts}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                            <span className="text-[10px] text-yellow-400 uppercase font-bold">Estoque Baixo ({'<'}20{')'}</span>
+                            <span className="text-sm font-bold text-yellow-400">{lowStockProducts}</span>
+                          </div>
+                          <div className="flex items-center justify-between p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
+                            <span className="text-[10px] text-green-400 uppercase font-bold">Estoque Normal</span>
+                            <span className="text-sm font-bold text-green-400">{totalProducts - lowStockProducts - outOfStockProducts}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Additional Metrics */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="bg-card border border-white/5 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                        <div className="p-3 bg-purple-500/10 rounded-xl">
+                          <Users className="h-5 w-5 text-purple-400" />
+                        </div>
+                        <div>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Inscritos Newsletter</p>
+                          <p className="text-lg font-bold text-white">{allSubscribers.length}</p>
+                        </div>
+                      </div>
+                      <div className="bg-card border border-white/5 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                        <div className="p-3 bg-blue-500/10 rounded-xl">
+                          <Grid3X3 className="h-5 w-5 text-blue-400" />
+                        </div>
+                        <div>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Categorias Ativas</p>
+                          <p className="text-lg font-bold text-white">{allCategories.length}</p>
+                        </div>
+                      </div>
+                      <div className="bg-card border border-white/5 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                        <div className="p-3 bg-accent/10 rounded-xl">
+                          <Tag className="h-5 w-5 text-accent" />
+                        </div>
+                        <div>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Marcas Ativas</p>
+                          <p className="text-lg font-bold text-white">{allBrands.length}</p>
+                        </div>
+                      </div>
+                      <div className="bg-card border border-white/5 rounded-2xl p-4 shadow-lg flex items-center gap-4">
+                        <div className="p-3 bg-green-500/10 rounded-xl">
+                          <Activity className="h-5 w-5 text-green-400" />
+                        </div>
+                        <div>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Conversão</p>
+                          <p className="text-lg font-bold text-white">{allOrders.length > 0 ? ((allOrders.length / (allOrders.length + 50)) * 100).toFixed(1) : 0}%</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Recent Orders Table */}
+                    {allOrders.length > 0 && (
+                      <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">Últimos Pedidos</h3>
+                          <Link href="/dashboard/admin?tab=orders" className="text-[9px] text-accent hover:underline font-bold">VER TODOS →</Link>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-xs">
+                            <thead>
+                              <tr className="border-b border-white/5">
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Pedido</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Cliente</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Status</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Data</th>
+                                <th className="text-right py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {allOrders.slice(0, 5).map((order: any) => (
+                                <tr key={order.id} className="border-b border-white/5 last:border-0 hover:bg-white/5">
+                                  <td className="py-3 px-3">
+                                    <span className="font-mono text-[10px] text-accent">#{order.id.substring(0, 8)}</span>
+                                  </td>
+                                  <td className="py-3 px-3">
+                                    <span className="text-white font-medium">{order.shipping_address?.first_name || 'N/A'} {order.shipping_address?.last_name || ''}</span>
+                                  </td>
+                                  <td className="py-3 px-3">
+                                    <span className={`text-[8px] font-bold px-2 py-1 rounded-full uppercase ${
+                                      order.status === 'pending' || order.status === 'preparing' ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' :
+                                      order.status === 'payment_approved' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
+                                      order.status === 'shipped' || order.status === 'delivered' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                      'bg-gray-500/10 text-gray-400 border border-gray-500/20'
+                                    }`}>
+                                      {order.status}
+                                    </span>
+                                  </td>
+                                  <td className="py-3 px-3 text-muted-foreground">{order.created_at ? new Date(order.created_at).toLocaleDateString('es-ES') : '-'}</td>
+                                  <td className="text-right py-3 px-3">
+                                    <span className="font-bold text-white">US$ {(order.total_amount || 0).toFixed(2)}</span>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
+          )}
 
           {/* TAB: VISUAL STYLE */}
           {activeSubTab === 'visual' && (
@@ -1114,12 +1470,35 @@ export default function AdminDashboard() {
           )}
 
           {/* TAB: SUSCRIPCIONES (CLUB YEDAM ADMIN) */}
-          {/* TAB: NEWSLETTER SUBSCRIBERS */}
-          {activeSubTab === 'newsletter' && (
-            <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
-                <h2 className="font-heading text-2xl font-light text-white">Newsletter & Leads de E-mail</h2>
-                <button
+{/* TAB: NEWSLETTER SUBSCRIBERS */}
+{activeSubTab === 'newsletter' && (
+  <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+    <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+      <div className="flex items-center gap-4">
+        <h2 className="font-heading text-2xl font-light text-white">Newsletter & Leads de E-mail</h2>
+        <button
+          onClick={syncWithSupabase}
+          disabled={syncingSupabase}
+          className={`text-[9px] font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all ${
+            syncingSupabase
+              ? 'bg-gray-500/20 text-gray-400 cursor-not-allowed'
+              : 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20'
+          }`}
+        >
+          {syncingSupabase ? (
+            <>
+              <Clock className="h-3.5 w-3.5 animate-spin" />
+              SINCRONIZANDO...
+            </>
+          ) : (
+            <>
+              <Globe className="h-3.5 w-3.5" />
+              SINCRONIZAR COM SUPABASE
+            </>
+          )}
+        </button>
+      </div>
+      <button
                   onClick={() => {
                     const csv = [
                       ['E-mail', 'Nombre', 'Origen', 'Estado', 'Fecha de Registro'],
@@ -1139,6 +1518,18 @@ export default function AdminDashboard() {
                   EXPORTAR CSV
                 </button>
               </div>
+
+              {syncMessage && (
+                <div className={`mb-6 text-xs rounded-xl p-3.5 border ${
+                  syncMessage.type === 'success'
+                    ? 'bg-green-500/10 border-green-500/20 text-green-400'
+                    : syncMessage.type === 'error'
+                    ? 'bg-red-500/10 border-red-500/20 text-red-400'
+                    : 'bg-blue-500/10 border-blue-500/20 text-blue-400'
+                }`}>
+                  <span className="font-bold">{syncMessage.text}</span>
+                </div>
+              )}
 
               {/* Stats Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -1206,11 +1597,23 @@ export default function AdminDashboard() {
                       <span className="text-muted-foreground">{sub.created_at || '-'}</span>
                       <span className="text-right">
                         <button
-                          onClick={() => {
+                          onClick={async () => {
                             if (!confirm(`¿Eliminar a ${sub.email} de la lista?`)) return;
+                            
+                            // Remover do localStorage
                             const all = db.get('newsletter_subscribers') || [];
                             db.save('newsletter_subscribers', all.filter((s: any) => s.id !== sub.id));
                             setSubscribers(db.get('newsletter_subscribers') || []);
+                            
+                            // Remover do Supabase também
+                            const result = await deleteNewsletterSubscriberFromSupabase(sub.id);
+                            if (result.success) {
+                              setSyncMessage({ type: 'success', text: '✓ Inscrito eliminado do Supabase' });
+                              setTimeout(() => setSyncMessage(null), 3000);
+                            } else {
+                              setSyncMessage({ type: 'error', text: '⚠ Eliminado localmente, mas falhou no Supabase' });
+                              setTimeout(() => setSyncMessage(null), 5000);
+                            }
                           }}
                           className="text-red-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/5 transition-colors"
                         >

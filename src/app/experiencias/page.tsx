@@ -13,6 +13,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
+import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 
 const EXPERIENCES = [
   {
@@ -408,6 +409,20 @@ export default function ExperienciasPage() {
                         created_at: new Date().toISOString().split('T')[0]
                       });
                       db.save('newsletter_subscribers', subs);
+                    }
+                    // Salvar também no Supabase (async, não bloqueia a UI)
+                    saveNewsletterSubscriberToSupabase(newsletterEmail, '', 'experiencias')
+                      .then(result => {
+                        if (result.success) {
+                          console.log('✓ Newsletter subscriber saved to Supabase');
+                        } else {
+                          console.error('✗ Failed to save to Supabase:', result.error);
+                        }
+                      });
+                    // Disparar evento para atualizar outras abas/páginas
+                    if (typeof window !== 'undefined') {
+                      window.dispatchEvent(new Event('storage'));
+                      window.dispatchEvent(new CustomEvent('yedam_db_change', { detail: { table: 'newsletter_subscribers' } }));
                     }
                     setNewsletterSubmitted(true);
                   }

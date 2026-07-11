@@ -40,7 +40,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Left Column - Brand info */}
         <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
-          <Link href="/" className="flex items-center group">
+          <Link href="/" className="flex flex-col items-center gap-2 group">
             <Image
               src={logoUrl}
               alt="Yedam"
@@ -48,6 +48,14 @@ export default function Footer() {
               height={40}
               className="h-28 w-auto object-contain"
             />
+            <div className="flex flex-col items-center justify-center">
+              <span className="font-heading text-xl font-light text-white uppercase tracking-wider leading-none">
+                Yedum
+              </span>
+              <span className="text-[7px] font-bold text-accent uppercase tracking-[0.3em] leading-none mt-0.5 text-center">
+                BEAUTY
+              </span>
+            </div>
           </Link>
           <p className="text-xs text-muted-foreground leading-relaxed mt-2">
             {description}
@@ -93,7 +101,13 @@ export default function Footer() {
           <span>Orgullosamente desarrollado por</span>
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">Voltris</a>
         </div>
-        <p className="mt-2 sm:mt-0">En colaboración con Maeum Global Agency.</p>
+        <p className="mt-2 sm:mt-0">
+          En colaboración con{' '}
+          <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
+            Maeum Global Agency
+          </a>
+          .
+        </p>
       </div>
     </footer>
   );

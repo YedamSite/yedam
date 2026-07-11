@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Manrope, Playfair_Display } from "next/font/google"
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import FloatingCart from "@/components/FloatingCart";
+import CookieBanner from "@/components/CookieBanner";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-heading",
@@ -45,6 +46,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
           <FloatingCart />
+          <CookieBanner />
         </ThemeProvider>
       </body>
     </html>

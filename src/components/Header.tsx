@@ -117,15 +117,31 @@ export default function Header() {
         <div className="absolute inset-0 -z-10 bg-background/95 backdrop-blur" />
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between relative z-10">
           {/* Logo - Left */}
-          <Link href="/" className="flex items-center group shrink-0">
+          <Link href="/" className="flex items-center gap-2 group shrink-0">
             <Image
               src={headerContent.logoUrl || '/images/logo.png'}
               alt="Yedam"
               width={140}
               height={40}
               priority
-              className="h-20 w-auto object-contain"
+              className="h-16 md:h-20 w-auto object-contain"
             />
+            <div className="flex flex-col items-center justify-center md:hidden">
+              <span className="font-heading text-lg font-light text-white uppercase tracking-wider leading-none">
+                Yedum
+              </span>
+              <span className="text-[6px] font-bold text-accent uppercase tracking-[0.3em] leading-none mt-0.5 text-center">
+                BEAUTY
+              </span>
+            </div>
+            <div className="hidden md:flex flex-col items-center justify-center">
+              <span className="font-heading text-2xl font-light text-white uppercase tracking-wider leading-none">
+                Yedum
+              </span>
+              <span className="text-[8px] font-bold text-accent uppercase tracking-[0.3em] leading-none mt-0.5 text-center">
+                BEAUTY
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav Centered - flex-1 to fill space */}

@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
 import { toggleFavoriteAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
+import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
   ShieldCheck, Truck, ShieldAlert, Heart, Droplet, Sparkles,
@@ -352,11 +353,25 @@ export default function Home() {
                           created_at: new Date().toISOString().split('T')[0]
                         });
                         db.save('newsletter_subscribers', subs);
+                        // Salvar também no Supabase (async, não bloqueia a UI)
+                        saveNewsletterSubscriberToSupabase(newsletterEmail, '', 'homepage')
+                          .then(result => {
+                            if (result.success) {
+                              console.log('✓ Newsletter subscriber saved to Supabase');
+                            } else {
+                              console.error('✗ Failed to save to Supabase:', result.error);
+                            }
+                          });
+                        // Disparar evento para atualizar outras abas/páginas
+                        if (typeof window !== 'undefined') {
+                          window.dispatchEvent(new Event('storage'));
+                          window.dispatchEvent(new CustomEvent('yedam_db_change', { detail: { table: 'newsletter_subscribers' } }));
+                        }
                       }
                       setNewsletterSubscribed(true);
                     }
                   }}
-                  className="flex gap-3"
+                  className="flex flex-col sm:flex-row gap-3 w-full"
                 >
                   <Input
                     type="email"
@@ -364,9 +379,9 @@ export default function Home() {
                     value={newsletterEmail}
                     onChange={e => setNewsletterEmail(e.target.value)}
                     placeholder="Tu E-mail"
-                    className="bg-black/50 border-white/10 rounded-full text-white placeholder-gray-500 text-xs h-11 px-6 min-w-[200px]"
+                    className="bg-black/50 border-white/10 rounded-full text-white placeholder-gray-500 text-xs h-11 px-6 w-full"
                   />
-                  <Button type="submit" className="bg-accent hover:bg-accentHover text-background rounded-full font-bold px-8 h-11 text-xs shrink-0 transition-all hover:scale-105">
+                  <Button type="submit" className="bg-accent hover:bg-accentHover text-background rounded-full font-bold px-8 h-11 text-xs shrink-0 transition-all hover:scale-105 w-full sm:w-auto">
                     {c?.newsletter?.buttonText || 'SUBSCRIBIRSE'}
                   </Button>
                 </form>
