@@ -38,9 +38,9 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${manrope.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased`}
+      className={`${manrope.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased overflow-x-hidden`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+      <body className="min-h-full flex flex-col bg-background text-foreground font-sans overflow-x-hidden">
         <ThemeProvider>
           {children}
         </ThemeProvider>
