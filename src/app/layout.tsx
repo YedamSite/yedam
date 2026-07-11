@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   title: "YEDAM K-BEAUTY | Cosmética Coreana Premium e Internacional",
   description: "Tu belleza. Tu ritual. Tu momento. Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial y corporal.",
   keywords: ["K-Beauty España", "Cosméticos Coreanos", "Rutina Coreana", "Skincare Coreano Premium", "Yedam"],
+  verification: {
+    google: "eXHmuLNMDThcGcALh0xpBDXXtJSNyKHHza5ZIfiYsx0",
+  },
 };
 
 export default function RootLayout({
