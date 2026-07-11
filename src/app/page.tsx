@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#020617] text-white relative overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-[#020617] text-white relative overflow-x-hidden">
       
       {/* Background Starry Glows */}
       <div className="absolute top-[5%] left-[10%] w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
