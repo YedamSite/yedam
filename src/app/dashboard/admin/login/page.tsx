@@ -34,7 +34,8 @@ export default function AdminLoginPage() {
         }
 
         // Validate if logged-in user is an admin
-        if (data.user && data.user.email === 'admin@cheotnun.com') {
+        const adminEmails = ['admin@cheotnun.com', 'mauemglobal@gmail.com'];
+        if (data.user && data.user.email && adminEmails.includes(data.user.email)) {
           // Success
           document.cookie = "cheotnun_admin_session=true; path=/; max-age=7200; SameSite=Lax";
           setSuccessMsg('✓ Autenticado com sucesso! Redirecionando...');
@@ -48,7 +49,8 @@ export default function AdminLoginPage() {
         }
       } else {
         // Fallback local mock authentication
-        if (cleanEmail === 'admin@cheotnun.com' && password === 'admin123') {
+        if ((cleanEmail === 'admin@cheotnun.com' && password === 'admin123') || 
+            (cleanEmail === 'mauemglobal@gmail.com' && password === 'Ja@que12')) {
           document.cookie = "cheotnun_admin_session=true; path=/; max-age=7200; SameSite=Lax";
           setSuccessMsg('✓ Autenticado com sucesso! (Modo de Demonstração)');
           setTimeout(() => {
