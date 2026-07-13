@@ -7,18 +7,21 @@ import { useParams, notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { db } from '@/lib/db';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function BlogPostPage() {
+  const { t, locale } = useLanguage();
   const { slug } = useParams<{ slug: string }>();
   const posts = db.get('blog_posts') || [];
-  const post = posts.find((p: any) => p.slug === slug);
+  const rawPost = posts.find((p: any) => p.slug === slug);
+  const post = rawPost ? db.getTranslatedRecord(rawPost, locale) : null;
 
   if (!post || post.status !== 'published') {
     notFound();
   }
 
   useEffect(() => {
-    document.title = post.seo_title || `${post.title} | Yedam K-Beauty`;
+    document.title = post.seo_title || `${post.title} ${t('| Cheotnun K-Beauty')}`;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (post.seo_description) {
       if (metaDesc) metaDesc.setAttribute('content', post.seo_description);
@@ -38,9 +41,9 @@ export default function BlogPostPage() {
         <article className="max-w-3xl mx-auto px-4 md:px-8 py-16">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-[10px] text-foreground/40 font-bold uppercase tracking-wider mb-8">
-            <Link href="/" className="hover:text-accent transition-colors">Inicio</Link>
+            <Link href="/" className="hover:text-accent transition-colors">{t('Inicio')}</Link>
             <span>/</span>
-            <Link href="/blog" className="hover:text-accent transition-colors">Blog</Link>
+            <Link href="/blog" className="hover:text-accent transition-colors">{t('Blog')}</Link>
             <span>/</span>
             <span className="text-accent truncate max-w-[200px]">{post.title}</span>
           </div>
@@ -48,7 +51,7 @@ export default function BlogPostPage() {
           {/* Header */}
           <header className="mb-10">
             <div className="flex items-center gap-3 text-[9px] text-accent font-bold uppercase tracking-widest mb-4">
-              <span>K-Beauty</span>
+              <span>{t('K-Beauty')}</span>
               <span className="text-foreground/20">·</span>
               <span className="text-foreground/40">{post.created_at}</span>
               <span className="text-foreground/20">·</span>
@@ -90,13 +93,13 @@ export default function BlogPostPage() {
           {/* Footer */}
           <div className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="text-xs text-foreground/40">
-              <span className="font-bold text-white">{post.author}</span> &middot; Yedam K-Beauty
+              <span className="font-bold text-white">{post.author}</span> &middot; {t('Cheotnun K-Beauty')}
             </div>
             <Link
               href="/blog"
               className="text-[10px] font-bold text-accent uppercase tracking-widest hover:underline flex items-center gap-2"
             >
-              ← Volver al Blog
+              ← {t('Volver al Blog')}
             </Link>
           </div>
         </article>

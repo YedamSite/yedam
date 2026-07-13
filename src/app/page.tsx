@@ -16,6 +16,7 @@ import { db } from '@/lib/db';
 import { toggleFavoriteAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
 import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
+import { useLanguage } from '@/context/LanguageContext';
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
   ShieldCheck, Truck, ShieldAlert, Heart, Droplet, Sparkles,
@@ -23,24 +24,30 @@ const ICON_MAP: Record<string, React.ComponentType<any>> = {
 };
 
 export default function Home() {
+  const [content, setContent] = useState<any>(null);
+  const { t, locale } = useLanguage();
   const [products, setProducts] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
-  const [content, setContent] = useState<any>(null);
 
   const loadData = () => {
-    setProducts(db.get('products') || []);
-    setContent(db.get('site_content')?.home || null);
+    const rawProds = db.get('products') || [];
+    setProducts(rawProds.map((p: any) => db.getTranslatedRecord(p, locale)));
+
+    const siteContent = db.get('site_content');
+    const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
+    setContent(translatedContent.home || null);
+
     if (typeof window !== 'undefined') {
-      const savedFavs = localStorage.getItem('yedam_favorites');
+      const savedFavs = localStorage.getItem('cheotnun_favorites');
       setFavorites(savedFavs ? JSON.parse(savedFavs) : []);
     }
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [locale]);
 
   const handleToggleFavorite = async (productId: string) => {
     const user = authService.getCurrentUser();
@@ -54,12 +61,13 @@ export default function Home() {
         updatedFavs = updatedFavs.filter(id => id !== productId);
       }
       setFavorites(updatedFavs);
-      localStorage.setItem('yedam_favorites', JSON.stringify(updatedFavs));
+      localStorage.setItem('cheotnun_favorites', JSON.stringify(updatedFavs));
     }
   };
 
   const c = content;
-  const categories = db.get('categories') || [];
+  const rawCategories = db.get('categories') || [];
+  const categories = rawCategories.map((cat: any) => db.getTranslatedRecord(cat, locale));
 
   return (
     <div className="flex flex-col min-h-screen bg-[#020617] text-white relative">
@@ -78,24 +86,24 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 py-16 lg:py-24">
           <div className="lg:col-span-12 flex flex-col items-start gap-8 text-left max-w-2xl">
             <h1 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-white">
-              {c?.hero?.titleLine1 || 'Tu belleza.'}<br />
-              <span className="text-accent italic font-serif">{c?.hero?.titleLine2 || 'Tu ritual.'}</span><br />
-              {c?.hero?.titleLine3 || 'Tu momento.'}
+              {t(c?.hero?.titleLine1 || 'Tu belleza.')}<br />
+              <span className="text-accent italic font-serif">{t(c?.hero?.titleLine2 || 'Tu ritual.')}</span><br />
+              {t(c?.hero?.titleLine3 || 'Tu momento.')}
             </h1>
 
             <p className="text-sm sm:text-base text-gray-200 max-w-lg font-normal leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              {c?.hero?.subtitle || 'Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial. Fórmulas botánicas que revelan tu luminosidad natural.'}
+              {t(c?.hero?.subtitle || 'Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial. Fórmulas botánicas que revelan tu luminosidad natural.')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-2">
               <Link href={c?.hero?.btnBuyLink || '/tienda'}>
                 <Button className="w-full sm:w-auto bg-accent hover:bg-accentHover text-background font-bold text-xs tracking-[0.1em] py-6 px-10 rounded-full shadow-xl shadow-accent/15 transition-all hover:-translate-y-0.5 duration-300">
-                  {c?.hero?.btnBuyText || 'COMPRAR AHORA'}
+                  {t(c?.hero?.btnBuyText || 'COMPRAR AHORA')}
                 </Button>
               </Link>
               <Link href={c?.hero?.btnRoutineLink || '/rutinas'}>
                 <Button variant="outline" className="w-full sm:w-auto text-white border-white/20 hover:bg-white/5 hover:border-accent/40 font-bold text-xs tracking-[0.1em] py-6 px-10 rounded-full backdrop-blur transition-all hover:-translate-y-0.5 duration-300">
-                  {c?.hero?.btnRoutineText || 'DESCUBRIR RUTINAS'}
+                  {t(c?.hero?.btnRoutineText || 'DESCUBRIR RUTINAS')}
                 </Button>
               </Link>
             </div>
@@ -114,8 +122,8 @@ export default function Home() {
                   <Icon strokeWidth={1.8} className="h-5 w-5" />
                 </span>
                 <div>
-                  <h4 className="font-bold text-white text-[10px] tracking-wider uppercase">{feat.title}</h4>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{feat.text}</p>
+                  <h4 className="font-bold text-white text-[10px] tracking-wider uppercase">{t(feat.title)}</h4>
+                  <p className="text-[10px] text-gray-400 mt-0.5">{t(feat.text)}</p>
                 </div>
               </div>
             );
@@ -126,9 +134,9 @@ export default function Home() {
       {/* Categorias Circular Row */}
       <section className="py-24 lg:py-28 max-w-7xl mx-auto w-full px-4 md:px-8">
         <div className="text-center max-w-md mx-auto mb-16">
-          <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block mb-2">{c?.categories?.preTitle || 'Colección Curada'}</span>
-          <h2 className="font-heading text-3xl sm:text-4xl font-light text-white tracking-wide">{c?.categories?.title || 'Descubre lo mejor del K-Beauty'}</h2>
-          <p className="text-xs text-muted-foreground mt-2 font-light">{c?.categories?.subtitle || 'Productos auténticos para realzar tu belleza natural.'}</p>
+          <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block mb-2">{t(c?.categories?.preTitle || 'Colección Curada')}</span>
+          <h2 className="font-heading text-3xl sm:text-4xl font-light text-white tracking-wide">{t(c?.categories?.title || 'Descubre lo mejor del K-Beauty')}</h2>
+          <p className="text-xs text-muted-foreground mt-2 font-light">{t(c?.categories?.subtitle || 'Productos auténticos para realzar tu belleza natural.')}</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-6 gap-6">
@@ -136,8 +144,8 @@ export default function Home() {
             <Link key={cat.id} href={`/tienda?category=${cat.slug}`} className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group shadow-xl">
               <Image src={cat.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'} alt={cat.name} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-sm py-4 px-2 text-center border-t border-white/5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-white group-hover:text-accent transition-colors leading-snug">
-                  {cat.name}
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-white group-hover:text-accent transition-colors leading-snug">
+                  {t(cat.name)}
                 </span>
               </div>
             </Link>
@@ -146,7 +154,7 @@ export default function Home() {
         <div className="flex justify-center mt-12">
           <Link href="/tienda">
             <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 hover:border-accent/40 font-bold text-xs px-8 py-5 rounded-full uppercase tracking-wider transition-all hover:-translate-y-0.5 duration-300">
-              {c?.categories?.buttonText || 'VER TODAS LAS CATEGORÍAS'}
+              {t(c?.categories?.buttonText || 'VER TODAS LAS CATEGORÍAS')}
             </Button>
           </Link>
         </div>
@@ -156,13 +164,13 @@ export default function Home() {
       <section className="py-24 lg:py-28 border-y border-white/5 bg-[#050b1c] w-full">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-4 gap-12 items-center">
           <div className="flex flex-col items-start gap-4">
-            <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block">{c?.bestSellers?.preTitle || 'Favoritos de la Comunidad'}</span>
-            <h2 className="font-heading text-4xl font-light text-white leading-tight">{c?.bestSellers?.title || 'Más vendidos'}</h2>
+            <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block">{t(c?.bestSellers?.preTitle || 'Favoritos de la Comunidad')}</span>
+            <h2 className="font-heading text-4xl font-light text-white leading-tight">{t(c?.bestSellers?.title || 'Más vendidos')}</h2>
             <p className="text-xs text-gray-400 font-light leading-relaxed">
-              {c?.bestSellers?.subtitle || 'Los favoritos de nuestra comunidad internacional. Fórmulas probadas que entregan resultados visibles.'}
+              {t(c?.bestSellers?.subtitle || 'Los favoritos de nuestra comunidad internacional. Fórmulas probadas que entregan resultados visibles.')}
             </p>
             <Link href="/tienda" className="text-xs font-bold text-accent hover:underline flex items-center gap-1.5 uppercase tracking-[0.15em] mt-4">
-              {c?.bestSellers?.buttonText || 'VER TODOS'} →
+              {t(c?.bestSellers?.buttonText || 'VER TODOS')} →
             </Link>
           </div>
 
@@ -204,7 +212,7 @@ export default function Home() {
                     </div>
                     <div className="flex items-center justify-between pt-2.5 border-t border-white/5 mt-auto">
                       <div className="flex flex-col">
-                        <span className="text-[8px] text-gray-500 uppercase font-bold tracking-wider">Precio</span>
+                        <span className="text-[8px] text-gray-500 uppercase font-bold tracking-wider">{t('Precio')}</span>
                         <span className="text-xs font-bold text-accent font-heading">US$ {prod.price.toFixed(2)}</span>
                       </div>
                       <Link href={`/tienda/produto/${prod.slug}`} className="p-2 bg-[#091E3A] hover:bg-accent text-white hover:text-background rounded-full border border-white/10 transition-all shadow-md">
@@ -219,11 +227,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Experiencias Yedam Section */}
+      {/* Experiencias Cheotnun Section */}
       <section className="py-24 lg:py-28 px-4 md:px-8 max-w-7xl mx-auto w-full">
         <div className="text-center max-w-md mx-auto mb-16">
-          <span className="text-[9px] font-bold text-accent tracking-widest uppercase">{c?.experiencias?.preTitle || 'Experiencias Yedam'}</span>
-          <h2 className="font-heading text-3xl font-light text-white mt-1">{c?.experiencias?.title || 'Vive la belleza coreana más allá de los productos'}</h2>
+          <span className="text-[9px] font-bold text-accent tracking-widest uppercase">{t(c?.experiencias?.preTitle || 'Experiencias Cheotnun')}</span>
+          <h2 className="font-heading text-3xl font-light text-white mt-1">{t(c?.experiencias?.title || 'Vive la belleza coreana más allá de los productos')}</h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -236,13 +244,13 @@ export default function Home() {
                 <div className="flex-1 p-6 md:p-8 flex flex-col justify-between relative z-10">
                   <div>
                     <span className={`text-[8px] font-bold tracking-widest px-2.5 py-1 border rounded-full uppercase w-fit block ${badgeColor}`}>
-                      {card.badge}
+                      {t(card.badge)}
                     </span>
-                    <h3 className="font-heading text-2xl font-light text-white mt-6">{card.title}</h3>
-                    <p className="text-xs text-gray-400 mt-3 leading-relaxed">{card.text}</p>
+                    <h3 className="font-heading text-2xl font-light text-white mt-6">{t(card.title)}</h3>
+                    <p className="text-xs text-gray-400 mt-3 leading-relaxed">{t(card.text)}</p>
                   </div>
                   <Button variant="outline" className="border-white/20 text-white hover:bg-white/5 hover:border-accent/40 font-bold text-[9px] px-6 py-4.5 rounded-full uppercase tracking-wider w-fit mt-6 transition-all hover:-translate-y-0.5 duration-300">
-                    {card.buttonText || 'SABER MÁS'}
+                    {t(card.buttonText || 'SABER MÁS')}
                   </Button>
                 </div>
                 <div className="w-full md:w-[45%] h-[200px] md:h-auto relative shrink-0 border-t md:border-t-0 md:border-l border-white/5">
@@ -259,12 +267,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex justify-between items-end mb-16">
             <div className="text-left">
-              <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block mb-2">{c?.routines?.preTitle || 'Tratamientos Específicos'}</span>
-              <h2 className="font-heading text-3xl font-light text-white uppercase tracking-wide">{c?.routines?.title || 'Rutinas para cada necesidad'}</h2>
-              <p className="text-xs text-gray-400 mt-2 font-light">{c?.routines?.subtitle || 'Encuentra la rutina ideal para tu tipo de piel y estilo de vida.'}</p>
+              <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block mb-2">{t(c?.routines?.preTitle || 'Tratamientos Específicos')}</span>
+              <h2 className="font-heading text-3xl font-light text-white uppercase tracking-wide">{t(c?.routines?.title || 'Rutinas para cada necesidad')}</h2>
+              <p className="text-xs text-gray-400 mt-2 font-light">{t(c?.routines?.subtitle || 'Encuentra la rutina ideal para tu tipo de piel y estilo de vida.')}</p>
             </div>
             <Link href="/rutinas" className="text-xs font-bold text-accent hover:underline uppercase tracking-[0.15em] shrink-0 pb-1 hidden sm:block">
-              {c?.routines?.buttonText || 'VER TODAS LAS RUTINAS'} →
+              {t(c?.routines?.buttonText || 'VER TODAS LAS RUTINAS')} →
             </Link>
           </div>
 
@@ -276,7 +284,7 @@ export default function Home() {
                   <span className="p-3 bg-white/5 rounded-full text-accent border border-white/10">
                     <Icon strokeWidth={1.8} className="h-5 w-5" />
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-300 mt-1">{item.name}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-300 mt-1">{t(item.name)}</span>
                 </div>
               );
             })}
@@ -290,7 +298,7 @@ export default function Home() {
                   <span className="p-2 bg-white/5 rounded-full text-accent border border-white/10">
                     <Icon strokeWidth={1.8} className="h-4 w-4" />
                   </span>
-                  <span className="font-bold text-white text-[9.5px] uppercase tracking-wider text-center">{badge.title}</span>
+                  <span className="font-bold text-white text-[9.5px] uppercase tracking-wider text-center">{t(badge.title)}</span>
                 </div>
               );
             })}
@@ -302,11 +310,11 @@ export default function Home() {
       <section className="py-24 lg:py-28 max-w-7xl mx-auto px-4 md:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center mb-10">
           <div className="flex flex-col items-start gap-4">
-            <h2 className="font-heading text-3xl font-light text-white uppercase leading-tight">{c?.instagram?.title || 'Únete a nuestra comunidad'}</h2>
-            <p className="text-xs text-gray-400 font-light leading-relaxed">{c?.instagram?.subtitle || 'Tips, rutinas, lanzamientos y mucho más en Instagram.'}</p>
-            <a href={c?.instagram?.buttonLink || 'https://instagram.com/yedam.kbeauty'} target="_blank" rel="noreferrer">
+            <h2 className="font-heading text-3xl font-light text-white uppercase leading-tight">{t(c?.instagram?.title || 'Únete a nuestra comunidad')}</h2>
+            <p className="text-xs text-gray-400 font-light leading-relaxed">{t(c?.instagram?.subtitle || 'Tips, rutinas, lanzamientos y mucho más en Instagram.')}</p>
+            <a href={c?.instagram?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer">
               <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white font-bold text-[10px] px-8 py-5 rounded-full uppercase tracking-wider transition-all hover:-translate-y-0.5 duration-300">
-                {c?.instagram?.buttonText || 'SEGUIR EN INSTAGRAM'}
+                {t(c?.instagram?.buttonText || 'SEGUIR EN INSTAGRAM')}
               </Button>
             </a>
           </div>
@@ -327,14 +335,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="relative bg-[#0b1329] border border-white/10 rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="max-w-md">
-              <span className="text-[8px] font-bold text-accent uppercase tracking-widest">{c?.newsletter?.preTitle || 'YEDAM CLUB'}</span>
-              <h2 className="font-heading text-3xl font-light text-accent uppercase tracking-wide mt-2">{c?.newsletter?.title || 'Sé la primera en descubrir nuevos lanzamientos y ofertas.'}</h2>
+              <span className="text-[8px] font-bold text-accent uppercase tracking-widest">{t(c?.newsletter?.preTitle || 'CHEOTNUN CLUB')}</span>
+              <h2 className="font-heading text-3xl font-light text-accent uppercase tracking-wide mt-2">{t(c?.newsletter?.title || 'Sé la primera en descubrir nuevos lanzamientos y ofertas.')}</h2>
             </div>
 
             <div className="w-full max-w-md">
               {newsletterSubscribed ? (
                 <div className="text-accent font-bold text-xs bg-accent/10 border border-accent/30 p-4 rounded-xl text-center">
-                  {c?.newsletter?.successMessage || '✓ ¡Te has suscrito con éxito! Bienvenido al Yedam Club.'}
+                  {t(c?.newsletter?.successMessage || '✓ ¡Te has suscrito con éxito! Bienvenido al Cheotnun Club.')}
                 </div>
               ) : (
                 <form
@@ -365,7 +373,7 @@ export default function Home() {
                         // Disparar evento para atualizar outras abas/páginas
                         if (typeof window !== 'undefined') {
                           window.dispatchEvent(new Event('storage'));
-                          window.dispatchEvent(new CustomEvent('yedam_db_change', { detail: { table: 'newsletter_subscribers' } }));
+                          window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table: 'newsletter_subscribers' } }));
                         }
                       }
                       setNewsletterSubscribed(true);
@@ -378,11 +386,11 @@ export default function Home() {
                     required
                     value={newsletterEmail}
                     onChange={e => setNewsletterEmail(e.target.value)}
-                    placeholder="Tu E-mail"
+                    placeholder={t('Tu correo electrónico')}
                     className="bg-black/50 border-white/10 rounded-full text-white placeholder-gray-500 text-xs h-11 px-6 w-full"
                   />
                   <Button type="submit" className="bg-accent hover:bg-accentHover text-background rounded-full font-bold px-8 h-11 text-xs shrink-0 transition-all hover:scale-105 w-full sm:w-auto">
-                    {c?.newsletter?.buttonText || 'SUBSCRIBIRSE'}
+                    {t(c?.newsletter?.buttonText || 'SUSCRIBIRSE')}
                   </Button>
                 </form>
               )}

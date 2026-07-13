@@ -1,4 +1,4 @@
-// Local In-Memory Database Engine for Yedam K-Beauty (Completely client-safe)
+// Local In-Memory Database Engine for Cheotnun K-Beauty (Completely client-safe)
 interface DbState {
   users: any[];
   categories: any[];
@@ -20,11 +20,11 @@ interface DbState {
   newsletter_subscribers: any[];
 }
 
-const STORAGE_KEY = 'yedam_db_state';
+const STORAGE_KEY = 'cheotnun_db_state';
 
 const DEFAULT_STATE: DbState = {
   users: [
-    { id: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', email: 'admin@yedam.com', name: 'Super Administrador Yedam', role: 'super_admin' },
+    { id: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', email: 'admin@cheotnun.com', name: 'Super Administrador Cheotnun', role: 'super_admin' },
     { id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', email: 'cliente@example.com', name: 'Jaque Customer', role: 'customer' }
   ],
   categories: [
@@ -55,50 +55,50 @@ const DEFAULT_STATE: DbState = {
   ],
   orders: [
     {
-      id: 'ord-001', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'payment_approved', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 2, price: 18.00 }],
-      subtotal: 36.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 51.00, gateway: 'stripe', commercial_invoice_url: '/invoices/yedam-inv-ord-001.pdf',
+      id: 'ord-001', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'pagamento_confirmado', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 2, price: 18.00 }],
+      subtotal: 36.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 51.00, gateway: 'stripe', commercial_invoice_url: '/invoices/cheotnun-inv-ord-001.pdf',
       shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 0 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: 'ord-002', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'payment_approved', items: [{ product_id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Glow Deep Serum', quantity: 1, price: 22.90 }],
-      subtotal: 22.90, shipping_amount: 15.00, discount_amount: 0, total_amount: 37.90, gateway: 'stripe', commercial_invoice_url: '/invoices/yedam-inv-ord-002.pdf',
+      id: 'ord-002', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'pagamento_confirmado', items: [{ product_id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Glow Deep Serum', quantity: 1, price: 22.90 }],
+      subtotal: 22.90, shipping_amount: 15.00, discount_amount: 0, total_amount: 37.90, gateway: 'stripe', commercial_invoice_url: '/invoices/cheotnun-inv-ord-002.pdf',
       shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 1 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: 'ord-003', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'pending', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }],
-      subtotal: 19.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 34.00, gateway: 'paypal', commercial_invoice_url: '/invoices/yedam-inv-ord-003.pdf',
+      id: 'ord-003', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'recebido', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }],
+      subtotal: 19.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 34.00, gateway: 'paypal', commercial_invoice_url: '/invoices/cheotnun-inv-ord-003.pdf',
       shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 2 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: 'ord-004', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'payment_approved', items: [{ product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 2, price: 21.00 }, { product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 1, price: 23.00 }],
-      subtotal: 65.00, shipping_amount: 15.00, discount_amount: 5.00, total_amount: 75.00, gateway: 'stripe', commercial_invoice_url: '/invoices/yedam-inv-ord-004.pdf',
+      id: 'ord-004', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'pagamento_confirmado', items: [{ product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 2, price: 21.00 }, { product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 1, price: 23.00 }],
+      subtotal: 65.00, shipping_amount: 15.00, discount_amount: 5.00, total_amount: 75.00, gateway: 'stripe', commercial_invoice_url: '/invoices/cheotnun-inv-ord-004.pdf',
       shipping_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'São Paulo', state: 'SP', country: 'Brasil' },
       billing_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'São Paulo', state: 'SP', country: 'Brasil' },
       created_at: new Date(Date.now() - 5 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: 'ord-005', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'payment_approved', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 3, price: 18.00 }],
-      subtotal: 54.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 69.00, gateway: 'stripe', commercial_invoice_url: '/invoices/yedam-inv-ord-005.pdf',
+      id: 'ord-005', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'pagamento_confirmado', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 3, price: 18.00 }],
+      subtotal: 54.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 69.00, gateway: 'stripe', commercial_invoice_url: '/invoices/cheotnun-inv-ord-005.pdf',
       shipping_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 10 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: 'ord-006', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'payment_approved', items: [{ product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 2, price: 23.00 }],
-      subtotal: 46.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 61.00, gateway: 'paypal', commercial_invoice_url: '/invoices/yedam-inv-ord-006.pdf',
+      id: 'ord-006', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'pagamento_confirmado', items: [{ product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 2, price: 23.00 }],
+      subtotal: 46.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 61.00, gateway: 'paypal', commercial_invoice_url: '/invoices/cheotnun-inv-ord-006.pdf',
       shipping_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Cataluña', country: 'España' },
       billing_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Cataluña', country: 'España' },
       created_at: new Date(Date.now() - 20 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
-      id: 'ord-007', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'shipped', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }, { product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 1, price: 21.00 }],
-      subtotal: 40.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 55.00, gateway: 'stripe', commercial_invoice_url: '/invoices/yedam-inv-ord-007.pdf',
+      id: 'ord-007', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'enviado', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }, { product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 1, price: 21.00 }],
+      subtotal: 40.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 55.00, gateway: 'stripe', commercial_invoice_url: '/invoices/cheotnun-inv-ord-007.pdf',
       shipping_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogotá', state: 'Cundinamarca', country: 'Colombia' },
       billing_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogotá', state: 'Cundinamarca', country: 'Colombia' },
       created_at: new Date(Date.now() - 45 * 86400000).toISOString(), updated_at: new Date().toISOString()
@@ -166,7 +166,7 @@ const DEFAULT_STATE: DbState = {
         titleLine1: 'Tu belleza.',
         titleLine2: 'Tu ritual.',
         titleLine3: 'Tu momento.',
-        subtitle: 'Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial. Fórmulas botânicas que revelan tu luminosidad natural.',
+        subtitle: 'Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial. Fórmulas botánicas que revelan tu luminosidad natural.',
         btnBuyText: 'COMPRAR AHORA',
         btnBuyLink: '/tienda',
         btnRoutineText: 'DESCUBRIR RUTINAS',
@@ -194,11 +194,11 @@ const DEFAULT_STATE: DbState = {
         buttonText: 'VER TODOS'
       },
       experiencias: {
-        preTitle: 'Experiencias Yedam',
+        preTitle: 'Experiencias Cheotnun',
         title: 'Vive la belleza coreana más allá de los productos',
         cards: [
           {
-            badge: 'YEDAM EXPERIENCE',
+            badge: 'CHEOTNUN EXPERIENCE',
             badgeColor: 'accent',
             title: 'Prueba, siente y descubre.',
             text: 'Damos a probar productos exclusivos en experiencias únicas en Corea del Sur.',
@@ -248,7 +248,7 @@ const DEFAULT_STATE: DbState = {
         title: 'Únete a nuestra comunidad',
         subtitle: 'Tips, rutinas, lanzamientos y mucho más en Instagram.',
         buttonText: 'SEGUIR EN INSTAGRAM',
-        buttonLink: 'https://instagram.com/yedam.kbeauty',
+        buttonLink: 'https://instagram.com/cheotnun.kbeauty',
         images: [
           'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
           'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400',
@@ -258,10 +258,10 @@ const DEFAULT_STATE: DbState = {
         ]
       },
       newsletter: {
-        preTitle: 'YEDAM CLUB',
+        preTitle: 'CHEOTNUN CLUB',
         title: 'Sé la primera en descubrir nuevos lanzamientos y ofertas.',
-        buttonText: 'SUBSCRIBIRSE',
-        successMessage: '✓ ¡Te has suscrito con éxito!'
+        buttonText: 'SUSCRIBIRSE',
+        successMessage: '✓ ¡Te has suscrito con éxito! Bienvenido al Cheotnun Club.'
       }
     },
     header: {
@@ -273,8 +273,8 @@ const DEFAULT_STATE: DbState = {
     footer: {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
       social: {
-        instagram: 'https://instagram.com/yedam.kbeauty',
-        youtube: 'https://youtube.com/yedam.kbeauty'
+        instagram: 'https://instagram.com/cheotnun.kbeauty',
+        youtube: 'https://youtube.com/cheotnun.kbeauty'
       },
       columns: [
         {
@@ -300,7 +300,7 @@ const DEFAULT_STATE: DbState = {
           title: 'Atención al Cliente',
           links: [
             { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
-            { label: 'hola@yedambeauty.com', href: 'mailto:hola@yedambeauty.com', icon: 'Mail' },
+            { label: 'hola@cheotnun.com', href: 'mailto:hola@cheotnun.com', icon: 'Mail' },
             { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
           ]
         }
@@ -323,30 +323,39 @@ const DEFAULT_STATE: DbState = {
         bodyFont: 'Inter',
         baseSize: '16px'
       },
-      logo_url: '/logo-yedam.png',
+      logo_url: '/logo-cheotnun.png',
       favicon_url: '/favicon.ico'
     },
     company_details: {
-      name: 'Yedam K-Beauty S.L.',
+      name: 'Cheotnun K-Beauty S.L.',
       phone: '+34 912 345 678',
       whatsapp: '+34600000000',
-      email: 'hola@yedambeauty.com',
+      email: 'hola@cheotnun.com',
       address: 'Calle Gran Vía 12, Madrid, España',
       social: {
-        instagram: 'https://instagram.com/yedam.kbeauty',
-        youtube: 'https://youtube.com/yedam.kbeauty'
+        instagram: 'https://instagram.com/cheotnun.kbeauty',
+        youtube: 'https://youtube.com/cheotnun.kbeauty'
       }
     },
     seo: {
-      titleSuffix: '| Yedam K-Beauty',
+      titleSuffix: '| Cheotnun K-Beauty',
       metaDescription: 'Cosméticos coreanos de alta performance seleccionados para tu rutina.',
       googleAnalyticsId: ''
     },
     smtp: {
       server: 'smtp.mailgun.org',
-      email: 'no-reply@yedambeauty.com',
-      user: 'no-reply@yedambeauty.com'
+      email: 'no-reply@cheotnun.com',
+      user: 'no-reply@cheotnun.com'
     },
+    
+    shipping_zones: [
+      { country: 'Brasil', methods: [{ name: 'K-Packet', days: '15-25', price: 15.00 }, { name: 'EMS', days: '7-10', price: 35.00 }] },
+      { country: 'México', methods: [{ name: 'K-Packet', days: '15-20', price: 15.00 }] },
+      { country: 'Chile', methods: [{ name: 'K-Packet', days: '12-20', price: 18.00 }] },
+      { country: 'Colombia', methods: [{ name: 'K-Packet', days: '15-25', price: 18.00 }] },
+      { country: 'Argentina', methods: [{ name: 'K-Packet', days: '20-30', price: 20.00 }] },
+      { country: 'España', methods: [{ name: 'Correos', days: '5-10', price: 10.00 }] }
+    ],
     payments: {
       stripePublicKey: 'pk_live_51M3c...'
     },
@@ -456,4 +465,38 @@ export const db = {
   },
 
   getDefault,
+  mergeTranslations: (base: any, translation: any) => mergeTranslations(base, translation),
+  getTranslatedRecord: (record: any, locale: string) => getTranslatedRecord(record, locale),
 };
+
+export function mergeTranslations(base: any, translation: any): any {
+  if (!base) return translation || {};
+  if (!translation) return base;
+  const result = { ...base };
+  for (const key in translation) {
+    if (translation[key] && typeof translation[key] === 'object' && !Array.isArray(translation[key])) {
+      result[key] = mergeTranslations(base[key], translation[key]);
+    } else if (Array.isArray(translation[key]) && Array.isArray(base[key])) {
+      result[key] = base[key].map((item: any, index: number) => {
+        if (translation[key][index]) {
+          if (typeof item === 'object' && typeof translation[key][index] === 'object') {
+            return mergeTranslations(item, translation[key][index]);
+          }
+          return translation[key][index];
+        }
+        return item;
+      });
+    } else {
+      result[key] = translation[key];
+    }
+  }
+  return result;
+}
+
+export function getTranslatedRecord(record: any, locale: string): any {
+  if (!record) return record;
+  const base = { ...record };
+  const translation = record.translations?.[locale];
+  if (!translation) return base;
+  return mergeTranslations(base, translation);
+}

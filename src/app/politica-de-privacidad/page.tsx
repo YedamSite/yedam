@@ -10,7 +10,7 @@ const privacySections = [
   {
     icon: Shield,
     title: '1. Responsable del Tratamiento',
-    content: 'Yedam K-Beauty S.L., con domicilio en Calle Gran Vía 12, Madrid, España, NIF B-12345678, email: hola@yedambeauty.com, es la responsable del tratamiento de tus datos personales.'
+    content: 'Cheotnun K-Beauty S.L., con domicilio en Calle Gran Vía 12, Madrid, España, NIF B-12345678, email: hola@cheotnun.com, es la responsable del tratamiento de tus datos personales.'
   },
   {
     icon: Database,
@@ -35,7 +35,7 @@ const privacySections = [
   {
     icon: CheckCircle,
     title: '6. Tus Derechos',
-    content: 'Tienes derecho a: acceder, rectificar, suprimir, limitar, portar y oponerte al tratamiento de tus datos. También puedes retirar tu consentimiento en cualquier momento. Ejerce tus derechos escribiendo a hola@yedambeauty.com.'
+    content: 'Tienes derecho a: acceder, rectificar, suprimir, limitar, portar y oponerte al tratamiento de tus datos. También puedes retirar tu consentimiento en cualquier momento. Ejerce tus derechos escribiendo a hola@cheotnun.com.'
   }
 ];
 
@@ -61,7 +61,7 @@ export default function PrivacidadPage() {
           {/* Intro */}
           <div className="bg-card border border-white/5 rounded-3xl p-8 mb-10">
             <p className="text-sm text-foreground/70 leading-relaxed mb-4">
-              En <strong className="text-white">Yedam K-Beauty</strong> nos tomamos muy en serio tu privacidad. Esta política explica de forma clara y transparente cómo recopilamos, usamos y protegemos tus datos personales.
+              En <strong className="text-white">Cheotnun K-Beauty</strong> nos tomamos muy en serio tu privacidad. Esta política explica de forma clara y transparente cómo recopilamos, usamos y protegemos tus datos personales.
             </p>
             <p className="text-sm text-foreground/70 leading-relaxed">
               Al usar nuestra web, aceptas las prácticas descritas aquí. Si no estás de acuerdo, por favor no uses nuestros servicios.
@@ -122,8 +122,8 @@ export default function PrivacidadPage() {
               Nuestro Delegado de Protección de Datos (DPO) está disponible para cualquier consulta.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
-              <a href="mailto:dpo@yedambeauty.com" className="text-accent hover:underline font-bold">
-                ✉️ dpo@yedambeauty.com
+              <a href="mailto:dpo@cheotnun.com" className="text-accent hover:underline font-bold">
+                ✉️ dpo@cheotnun.com
               </a>
               <span className="text-foreground/20">|</span>
               <span className="text-foreground/70">Calle Gran Vía 12, Madrid, España</span>

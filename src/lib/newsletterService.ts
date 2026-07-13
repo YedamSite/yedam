@@ -9,7 +9,7 @@ export async function saveNewsletterSubscriberToSupabase(email: string, name: st
 
     // Check if email already exists
     const { data: existing, error: fetchError } = await supabase
-      .from('yedam_newsletter_subscribers')
+      .from('cheotnun_newsletter_subscribers')
       .select('id')
       .eq('email', email)
       .single();
@@ -26,7 +26,7 @@ export async function saveNewsletterSubscriberToSupabase(email: string, name: st
 
     // Insert new subscriber
     const { error: insertError } = await supabase
-      .from('yedam_newsletter_subscribers')
+      .from('cheotnun_newsletter_subscribers')
       .insert({
         email,
         name: name || '',
@@ -58,7 +58,7 @@ export async function deleteNewsletterSubscriberFromSupabase(id: string) {
     }
 
     const { error } = await supabase
-      .from('yedam_newsletter_subscribers')
+      .from('cheotnun_newsletter_subscribers')
       .delete()
       .eq('id', id);
 
@@ -81,7 +81,7 @@ export async function getNewsletterSubscribersFromSupabase() {
     }
 
     const { data, error } = await supabase
-      .from('yedam_newsletter_subscribers')
+      .from('cheotnun_newsletter_subscribers')
       .select('*')
       .order('created_at', { ascending: false });
 

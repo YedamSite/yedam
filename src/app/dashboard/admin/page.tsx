@@ -6,7 +6,7 @@ import {
   Settings, Palette, Layers, Database, Users, Shield,
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
   TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
-  Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar
+  Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar, Loader2
 } from 'lucide-react';
 import Image from 'next/image';
 import Header from '@/components/Header';
@@ -19,10 +19,14 @@ import SiteContentTab from '@/components/admin/SiteContentTab';
 import CategoriesTab from '@/components/admin/CategoriesTab';
 import BrandsTab from '@/components/admin/BrandsTab';
 import ImageUpload from '@/components/ImageUpload';
+import ShippingTab from '@/components/admin/ShippingTab';
+import LiveChatTab from '@/components/admin/LiveChatTab';
+import { MessageCircle } from 'lucide-react';
 import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
 
 export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('dashboard');
+  const [authorized, setAuthorized] = useState(false);
   const { theme, updateTheme } = useTheme();
 
   // Color inputs state
@@ -51,6 +55,11 @@ export default function AdminDashboard() {
   const [prodDesc, setProdDesc] = useState('');
   const [prodDescEn, setProdDescEn] = useState('');
   const [prodImage, setProdImage] = useState('');
+  const [prodActiveLang, setProdActiveLang] = useState<'es' | 'pt' | 'en'>('es');
+  const [prodTranslations, setProdTranslations] = useState<Record<string, { name: string; description: string }>>({
+    pt: { name: '', description: '' },
+    en: { name: '', description: '' }
+  });
 
   // Coupons State
   const [coupons, setCoupons] = useState<any[]>([]);
@@ -71,13 +80,24 @@ export default function AdminDashboard() {
   const [newPostSeoTitle, setNewPostSeoTitle] = useState('');
   const [newPostSeoDesc, setNewPostSeoDesc] = useState('');
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [blogActiveLang, setBlogActiveLang] = useState<'es' | 'pt' | 'en'>('es');
+  const [blogTranslations, setBlogTranslations] = useState<Record<string, {
+    title: string;
+    subtitle: string;
+    content: string;
+    seo_title: string;
+    seo_description: string;
+  }>>({
+    pt: { title: '', subtitle: '', content: '', seo_title: '', seo_description: '' },
+    en: { title: '', subtitle: '', content: '', seo_title: '', seo_description: '' }
+  });
 
   // SEO & Gateway Config State
-  const [seoTitleSuffix, setSeoTitleSuffix] = useState('| Yedam K-Beauty');
+  const [seoTitleSuffix, setSeoTitleSuffix] = useState('| Cheotnun K-Beauty');
   const [seoDescription, setSeoDescription] = useState('Cosméticos coreanos de alta performance seleccionados para tu rutina.');
   const [stripeKey, setStripeKey] = useState('pk_live_51M3c...');
   const [smtpServer, setSmtpServer] = useState('smtp.mailgun.org');
-  const [smtpUser, setSmtpUser] = useState('no-reply@yedambeauty.com');
+  const [smtpUser, setSmtpUser] = useState('no-reply@cheotnun.com');
   const [configSaved, setConfigSaved] = useState(false);
 
   // Invoice Preview Modal
@@ -152,6 +172,13 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
+    const hasCookie = document.cookie.split('; ').some(row => row.startsWith('cheotnun_admin_session=true'));
+    if (!hasCookie) {
+      window.location.href = '/dashboard/admin/login';
+      return;
+    }
+    setAuthorized(true);
+
     loadData();
     // Carregar do Supabase ao iniciar (se configurado)
     syncWithSupabase();
@@ -166,11 +193,11 @@ export default function AdminDashboard() {
     };
     
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('yedam_db_change', handleDbChange as EventListener);
+    window.addEventListener('cheotnun_db_change', handleDbChange as EventListener);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('yedam_db_change', handleDbChange as EventListener);
+      window.removeEventListener('cheotnun_db_change', handleDbChange as EventListener);
     };
   }, []);
 
@@ -231,13 +258,29 @@ export default function AdminDashboard() {
     setProdDesc(prod.description);
     setProdDescEn(prod.description_en);
     setProdImage(prod.image || '');
+    setProdTranslations({
+      pt: {
+        name: prod.translations?.pt?.name || '',
+        description: prod.translations?.pt?.description || ''
+      },
+      en: {
+        name: prod.translations?.en?.name || '',
+        description: prod.translations?.en?.description || prod.description_en || ''
+      }
+    });
+    setProdActiveLang('es');
   };
 
   const cancelEditProduct = () => {
     setEditingProductId(null);
-    setProdName(''); setProdPrice(0); setProdStock(10); setProdCategory('10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
+    setProdName(''); setProdPrice(0); setProdStock(10);
     setProdSku(''); setProdHsCode('3304.99.90'); setProdWeight(0.15); setProdVolume('50ml');
     setProdDesc(''); setProdDescEn(''); setProdImage('');
+    setProdTranslations({
+      pt: { name: '', description: '' },
+      en: { name: '', description: '' }
+    });
+    setProdActiveLang('es');
   };
 
   // Create/Update Product
@@ -246,6 +289,17 @@ export default function AdminDashboard() {
     if (!prodName || !prodPrice) return;
 
     const allProds = db.get('products');
+
+    const productTranslations = {
+      pt: {
+        name: prodTranslations.pt.name || '',
+        description: prodTranslations.pt.description || ''
+      },
+      en: {
+        name: prodTranslations.en.name || '',
+        description: prodTranslations.en.description || prodDescEn || ''
+      }
+    };
 
     if (editingProductId) {
       const idx = allProds.findIndex((p: any) => p.id === editingProductId);
@@ -261,8 +315,9 @@ export default function AdminDashboard() {
           weight: Number(prodWeight),
           volume: prodVolume,
           description: prodDesc,
-          description_en: prodDescEn,
+          description_en: prodTranslations.en.description || prodDescEn || prodDesc,
           image: prodImage || allProds[idx].image,
+          translations: productTranslations
         };
         db.save('products', allProds);
         cancelEditProduct();
@@ -277,7 +332,7 @@ export default function AdminDashboard() {
       name: prodName,
       slug: prodName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       description: prodDesc || 'Nuevo cosmético coreano importado.',
-      description_en: prodDescEn || 'New imported Korean cosmetic product.',
+      description_en: prodTranslations.en.description || prodDescEn || 'New imported Korean cosmetic product.',
       price: Number(prodPrice),
       stock: Number(prodStock),
       volume: prodVolume || '50ml',
@@ -286,21 +341,13 @@ export default function AdminDashboard() {
       status: 'active',
       brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33',
       category_id: prodCategory,
-      image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'
+      image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
+      translations: productTranslations
     };
 
     allProds.push(newProd);
     db.save('products', allProds);
-    setProdName('');
-    setProdPrice(0);
-    setProdStock(10);
-    setProdSku('');
-    setProdHsCode('3304.99.90');
-    setProdWeight(0.15);
-    setProdVolume('50ml');
-    setProdDesc('');
-    setProdDescEn('');
-    setProdImage('');
+    cancelEditProduct();
     loadData();
   };
 
@@ -358,6 +405,11 @@ export default function AdminDashboard() {
     setNewPostSeoTitle('');
     setNewPostSeoDesc('');
     setEditingPostId(null);
+    setBlogTranslations({
+      pt: { title: '', subtitle: '', content: '', seo_title: '', seo_description: '' },
+      en: { title: '', subtitle: '', content: '', seo_title: '', seo_description: '' }
+    });
+    setBlogActiveLang('es');
   };
 
   // Create Blog Post
@@ -367,6 +419,24 @@ export default function AdminDashboard() {
     const allPosts = db.get('blog_posts') || [];
     const slug = newPostSlug || generateSlug(newPostTitle);
     const now = new Date().toISOString().split('T')[0];
+
+    const postTranslations = {
+      pt: {
+        title: blogTranslations.pt.title || '',
+        subtitle: blogTranslations.pt.subtitle || '',
+        content: blogTranslations.pt.content || '',
+        seo_title: blogTranslations.pt.seo_title || '',
+        seo_description: blogTranslations.pt.seo_description || ''
+      },
+      en: {
+        title: blogTranslations.en.title || '',
+        subtitle: blogTranslations.en.subtitle || '',
+        content: blogTranslations.en.content || '',
+        seo_title: blogTranslations.en.seo_title || '',
+        seo_description: blogTranslations.en.seo_description || ''
+      }
+    };
+
     if (editingPostId) {
       const idx = allPosts.findIndex((p: any) => p.id === editingPostId);
       if (idx !== -1) {
@@ -377,10 +447,11 @@ export default function AdminDashboard() {
           subtitle: newPostSubtitle,
           content: newPostContent,
           image: newPostImage,
-          author: newPostAuthor || 'Yedam Editor',
+          author: newPostAuthor || 'Cheotnun Editor',
           seo_title: newPostSeoTitle,
           seo_description: newPostSeoDesc,
           updated_at: now,
+          translations: postTranslations
         };
       }
     } else {
@@ -391,11 +462,12 @@ export default function AdminDashboard() {
         subtitle: newPostSubtitle,
         content: newPostContent,
         image: newPostImage,
-        author: newPostAuthor || 'Yedam Editor',
+        author: newPostAuthor || 'Cheotnun Editor',
         seo_title: newPostSeoTitle,
         seo_description: newPostSeoDesc,
         status: 'draft',
         created_at: now,
+        translations: postTranslations
       });
     }
     db.save('blog_posts', allPosts);
@@ -413,6 +485,23 @@ export default function AdminDashboard() {
     setNewPostSeoTitle(post.seo_title || '');
     setNewPostSeoDesc(post.seo_description || '');
     setEditingPostId(post.id);
+    setBlogTranslations({
+      pt: {
+        title: post.translations?.pt?.title || '',
+        subtitle: post.translations?.pt?.subtitle || '',
+        content: post.translations?.pt?.content || '',
+        seo_title: post.translations?.pt?.seo_title || '',
+        seo_description: post.translations?.pt?.seo_description || ''
+      },
+      en: {
+        title: post.translations?.en?.title || '',
+        subtitle: post.translations?.en?.subtitle || '',
+        content: post.translations?.en?.content || '',
+        seo_title: post.translations?.en?.seo_title || '',
+        seo_description: post.translations?.en?.seo_description || ''
+      }
+    });
+    setBlogActiveLang('es');
   };
 
   const handleDeletePost = (id: string) => {
@@ -432,19 +521,40 @@ export default function AdminDashboard() {
     }
   };
 
+  if (!authorized) {
+    return (
+      <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center text-xs text-muted-foreground gap-3">
+        <Loader2 className="h-6 w-6 text-accent animate-spin" />
+        <span>Verificando autorização administrativa...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
 
       <main className="flex-1 max-w-7xl mx-auto w-full py-12 px-4 md:px-8">
-        <div className="flex items-center gap-4 border-b border-white/10 pb-6 mb-8">
-          <span className="p-3 bg-accent/10 rounded-2xl">
-            <Settings className="h-6 w-6 text-accent" />
-          </span>
-          <div>
-            <span className="text-[10px] font-bold text-accent uppercase tracking-widest">CMS & Sales Enterprise</span>
-            <h1 className="font-heading text-3xl font-light text-white uppercase">Panel Administrativo Yedam</h1>
+        <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-8">
+          <div className="flex items-center gap-4">
+            <span className="p-3 bg-accent/10 rounded-2xl">
+              <Settings className="h-6 w-6 text-accent" />
+            </span>
+            <div>
+              <span className="text-[10px] font-bold text-accent uppercase tracking-widest">CMS & Sales Enterprise</span>
+              <h1 className="font-heading text-3xl font-light text-white uppercase">Panel Administrativo Cheotnun</h1>
+            </div>
           </div>
+          <Button
+            onClick={() => {
+              document.cookie = "cheotnun_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+              window.location.href = '/dashboard/admin/login';
+            }}
+            variant="outline"
+            className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"
+          >
+            Sair do Painel
+          </Button>
         </div>
 
         {/* Tab Selection Area */}
@@ -543,7 +653,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                           <h1 className="font-heading text-2xl md:text-3xl font-light text-white uppercase tracking-wide">Dashboard Geral</h1>
-                          <p className="text-xs text-muted-foreground mt-1">Visão completa do desempenho da sua loja Yedam K-Beauty</p>
+                          <p className="text-xs text-muted-foreground mt-1">Visão completa do desempenho da sua loja Cheotnun K-Beauty</p>
                         </div>
                       </div>
                     </div>
@@ -826,7 +936,7 @@ export default function AdminDashboard() {
                   <div>
                     <span className="text-[10px] uppercase font-bold tracking-widest text-accent block mb-4">MOCK-UP PREVIEW</span>
                     <div className="border border-white/10 rounded-2xl p-6 shadow-xl" style={{ backgroundColor: bgColor }}>
-                      <h4 className="font-heading text-lg font-bold" style={{ color: accentColor }}>YEDAM K-BEAUTY</h4>
+                      <h4 className="font-heading text-lg font-bold" style={{ color: accentColor }}>CHEOTNUN K-BEAUTY</h4>
                       <p className="text-xs leading-relaxed mt-2" style={{ color: secondaryColor }}>
                         Demostración del contraste de colores de marca y tipografías en el e-commerce internacional.
                       </p>
@@ -884,10 +994,45 @@ export default function AdminDashboard() {
                   )}
                 </div>
                 <form onSubmit={handleCreateProduct} className="flex flex-col gap-4 text-xs text-muted-foreground">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-accent">Nombre de Producto</label>
-                    <Input required value={prodName} onChange={e => setProdName(e.target.value)} placeholder="Ej: Hydrating Emulsion" />
+                  {/* Language Selector */}
+                  <div className="flex bg-[#030712] rounded-full p-1 border border-white/5">
+                    {(['es', 'pt', 'en'] as const).map(lang => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => setProdActiveLang(lang)}
+                        className={`flex-1 text-center py-1.5 rounded-full font-bold uppercase tracking-wider text-[9px] transition-all ${
+                          prodActiveLang === lang ? 'bg-accent text-background' : 'hover:text-white text-muted-foreground'
+                        }`}
+                      >
+                        {lang.toUpperCase()}
+                      </button>
+                    ))}
                   </div>
+
+                  {prodActiveLang === 'es' ? (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold uppercase text-accent">Nombre de Producto (ES)</label>
+                        <Input required value={prodName} onChange={e => setProdName(e.target.value)} placeholder="Ej: Hydrating Emulsion" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold uppercase text-accent">Nombre de Producto ({prodActiveLang.toUpperCase()})</label>
+                        <Input 
+                          value={prodTranslations[prodActiveLang].name} 
+                          onChange={e => setProdTranslations(prev => ({
+                            ...prev,
+                            [prodActiveLang]: { ...prev[prodActiveLang], name: e.target.value }
+                          }))} 
+                          placeholder={`[ES]: ${prodName}`} 
+                        />
+                      </div>
+                    </>
+                  )}
+
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-bold uppercase text-accent">Categoría</label>
@@ -936,14 +1081,31 @@ export default function AdminDashboard() {
                     folder="products"
                     label="Imagem do Produto"
                   />
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-accent">Descripción (Español)</label>
-                    <textarea value={prodDesc} onChange={e => setProdDesc(e.target.value)} placeholder="Descripción en español..." className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-accent">Descripción (Inglés - Invoice)</label>
-                    <textarea value={prodDescEn} onChange={e => setProdDescEn(e.target.value)} placeholder="English description for export invoices..." className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
-                  </div>
+                  
+                  {prodActiveLang === 'es' ? (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold uppercase text-accent">Descripción (Español)</label>
+                        <textarea value={prodDesc} onChange={e => setProdDesc(e.target.value)} placeholder="Descripción en español..." className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-bold uppercase text-accent">Descripción ({prodActiveLang.toUpperCase()})</label>
+                        <textarea 
+                          value={prodTranslations[prodActiveLang].description} 
+                          onChange={e => setProdTranslations(prev => ({
+                            ...prev,
+                            [prodActiveLang]: { ...prev[prodActiveLang], description: e.target.value }
+                          }))} 
+                          placeholder={`[ES]: ${prodDesc}`} 
+                          className="flex min-h-[70px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white placeholder-gray-500" 
+                        />
+                      </div>
+                    </>
+                  )}
+
                   <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl text-xs mt-2">
                     {editingProductId ? 'ATUALIZAR PRODUCTO' : 'CREAR PRODUCTO'}
                   </Button>
@@ -1038,7 +1200,7 @@ export default function AdminDashboard() {
                       <div className="grid grid-cols-2 gap-2 text-[8px]">
                         <div>
                           <span className="font-bold block">EXPORTER:</span>
-                          YEDAM BEAUTY S.L.<br />Calle Gran Vía 12, Madrid, España
+                          CHEOTNUN BEAUTY S.L.<br />Calle Gran Vía 12, Madrid, España
                         </div>
                         <div>
                           <span className="font-bold block">IMPORTER:</span>
@@ -1116,7 +1278,7 @@ export default function AdminDashboard() {
                                 type: 'email',
                                 status: 'sent',
                                 recipient: 'cliente@example.com',
-                                subject: `Estado del Pedido - Yedam K-Beauty`,
+                                subject: `Estado del Pedido - Cheotnun K-Beauty`,
                                 content: `Hola Jaque, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${newStatus.toUpperCase()}`,
                                 created_at: new Date().toISOString()
                               });
@@ -1128,12 +1290,16 @@ export default function AdminDashboard() {
                           }}
                           className="flex h-9 w-full rounded-md border border-white/10 bg-background px-3 py-1 text-xs text-white"
                         >
-                          <option value="pending">Pendiente</option>
-                          <option value="payment_approved">Pago Aprobado</option>
-                          <option value="preparing">Separación / Preparación</option>
-                          <option value="shipped">Enviado / Shipped</option>
-                          <option value="delivered">Entregado</option>
-                          <option value="cancelled">Cancelado</option>
+                          <option value="recebido">Recibido</option>
+                          <option value="em_validacao">En Validación (48-72h)</option>
+                          <option value="estoque_confirmado">Stock Confirmado</option>
+                          <option value="pagamento_confirmado">Pago Confirmado</option>
+                          <option value="preparando_coreia">Preparando en Corea</option>
+                          <option value="documentacao_exportacao">Doc. Exportación / Invoice</option>
+                          <option value="enviado">Enviado (Shipped)</option>
+                          <option value="processo_aduaneiro">Proceso Aduanero</option>
+                          <option value="entregue">Entregado</option>
+                          <option value="cancelado">Cancelado</option>
                         </select>
                       </div>
 
@@ -1190,7 +1356,7 @@ export default function AdminDashboard() {
                               type: 'email',
                               status: 'sent',
                               recipient: 'cliente@example.com',
-                              subject: `Seguimiento de tu pedido - Yedam K-Beauty`,
+                              subject: `Seguimiento de tu pedido - Cheotnun K-Beauty`,
                               content: `Hola Jaque, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ha sido enviado vía ${selectedOrderForInvoice.carrier}. Número de seguimiento: ${selectedOrderForInvoice.tracking_code}`,
                               created_at: new Date().toISOString()
                             });
@@ -1276,111 +1442,176 @@ export default function AdminDashboard() {
                   </div>
 
                   <form onSubmit={handleCreatePost} className="flex flex-col gap-4">
-                    {/* Title */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Título *</label>
-                      <Input required value={newPostTitle} onChange={e => {
-                        setNewPostTitle(e.target.value);
-                        if (!editingPostId) setNewPostSlug(generateSlug(e.target.value));
-                      }} placeholder="Ej: Fórmulas de Centella Asiática" />
+                    {/* Language Selector */}
+                    <div className="flex bg-[#030712] rounded-full p-1 border border-white/5">
+                      {(['es', 'pt', 'en'] as const).map(lang => (
+                        <button
+                          key={lang}
+                          type="button"
+                          onClick={() => setBlogActiveLang(lang)}
+                          className={`flex-1 text-center py-1.5 rounded-full font-bold uppercase tracking-wider text-[9px] transition-all ${
+                            blogActiveLang === lang ? 'bg-accent text-background' : 'hover:text-white text-muted-foreground'
+                          }`}
+                        >
+                          {lang.toUpperCase()}
+                        </button>
+                      ))}
                     </div>
 
-                    {/* Slug */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Slug (URL)</label>
-                      <Input value={newPostSlug} onChange={e => setNewPostSlug(e.target.value)} placeholder="generado-automaticamente" />
-                      {newPostSlug && (
-                        <span className="text-[8px] text-foreground/40">URL: /blog/{newPostSlug}</span>
-                      )}
-                    </div>
-
-                    {/* Subtitle */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Subtítulo</label>
-                      <Input value={newPostSubtitle} onChange={e => setNewPostSubtitle(e.target.value)} placeholder="Breve descripción que aparece en la tarjeta" />
-                    </div>
-
-                    {/* Author */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Autor</label>
-                      <Input value={newPostAuthor} onChange={e => setNewPostAuthor(e.target.value)} placeholder="Ej: Dr. Park" />
-                    </div>
-
-                    {/* Image Upload */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Imagen Destacada</label>
-                      <ImageUpload currentUrl={newPostImage} onUrlChange={setNewPostImage} />
-                    </div>
-
-                    {/* Content (HTML textarea) */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Contenido (HTML)</label>
-                      <textarea
-                        value={newPostContent}
-                        onChange={e => setNewPostContent(e.target.value)}
-                        rows={8}
-                        className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[150px]"
-                        placeholder="<p>Escribe aquí el contenido del artículo...</p>"
-                      />
-                      <span className="text-[8px] text-foreground/40">Usa etiquetas HTML: &lt;h3&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;ul&gt;, &lt;li&gt;</span>
-                    </div>
-
-                    {/* SEO Meta Title */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">SEO Title (Meta Título)</label>
-                      <Input value={newPostSeoTitle} onChange={e => setNewPostSeoTitle(e.target.value)} placeholder="Ej: 5 Secretos del Skincare Coreano | Yedam K-Beauty" />
-                      {newPostSeoTitle && (
-                        <div className="flex items-center gap-2 text-[8px]">
-                          <span className={`font-bold ${newPostSeoTitle.length > 60 ? 'text-red-400' : 'text-green-400'}`}>
-                            {newPostSeoTitle.length}/60
-                          </span>
-                          <span className="text-foreground/40">
-                            {newPostSeoTitle.length > 60 ? '⚠️ El título SEO es demasiado largo (máx. 60 caracteres)' : '✅ Longitud ideal'}
-                          </span>
+                    {blogActiveLang === 'es' ? (
+                      <>
+                        {/* Title */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Título *</label>
+                          <Input required value={newPostTitle} onChange={e => {
+                            setNewPostTitle(e.target.value);
+                            if (!editingPostId) setNewPostSlug(generateSlug(e.target.value));
+                          }} placeholder="Ej: Fórmulas de Centella Asiática" />
                         </div>
-                      )}
-                    </div>
 
-                    {/* SEO Meta Description */}
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">SEO Description (Meta Descripción)</label>
-                      <textarea
-                        value={newPostSeoDesc}
-                        onChange={e => setNewPostSeoDesc(e.target.value)}
-                        rows={3}
-                        className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[60px]"
-                        placeholder="Descripción para buscadores (aparece en Google)..."
-                      />
-                      {newPostSeoDesc && (
-                        <div className="flex items-center gap-2 text-[8px]">
-                          <span className={`font-bold ${newPostSeoDesc.length > 160 ? 'text-red-400' : newPostSeoDesc.length > 120 ? 'text-yellow-400' : 'text-green-400'}`}>
-                            {newPostSeoDesc.length}/160
-                          </span>
-                          <span className="text-foreground/40">
-                            {newPostSeoDesc.length === 0 ? '' :
-                              newPostSeoDesc.length > 160 ? '⚠️ Muy largo (Google truncará)' :
-                              newPostSeoDesc.length < 50 ? '⚠️ Muy corto' :
-                              newPostSeoDesc.length > 120 ? '⚠️ Casi en el límite' :
-                              '✅ Entre 50-120 caracteres (ideal)'
-                            }
-                          </span>
+                        {/* Slug */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Slug (URL)</label>
+                          <Input value={newPostSlug} onChange={e => setNewPostSlug(e.target.value)} placeholder="generado-automaticamente" />
+                          {newPostSlug && (
+                            <span className="text-[8px] text-foreground/40">URL: /blog/{newPostSlug}</span>
+                          )}
                         </div>
-                      )}
-                    </div>
+
+                        {/* Subtitle */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Subtítulo</label>
+                          <Input value={newPostSubtitle} onChange={e => setNewPostSubtitle(e.target.value)} placeholder="Breve descripción que aparece en la tarjeta" />
+                        </div>
+
+                        {/* Author */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Autor</label>
+                          <Input value={newPostAuthor} onChange={e => setNewPostAuthor(e.target.value)} placeholder="Ej: Dr. Park" />
+                        </div>
+
+                        {/* Image Upload */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Imagen Destacada</label>
+                          <ImageUpload currentUrl={newPostImage} onUrlChange={setNewPostImage} />
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Contenido (HTML)</label>
+                          <textarea
+                            value={newPostContent}
+                            onChange={e => setNewPostContent(e.target.value)}
+                            rows={8}
+                            className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[150px]"
+                            placeholder="<p>Escribe aquí el contenido del artículo...</p>"
+                          />
+                        </div>
+
+                        {/* SEO Title */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">SEO Title</label>
+                          <Input value={newPostSeoTitle} onChange={e => setNewPostSeoTitle(e.target.value)} placeholder="Título SEO..." />
+                        </div>
+
+                        {/* SEO Description */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">SEO Description</label>
+                          <textarea
+                            value={newPostSeoDesc}
+                            onChange={e => setNewPostSeoDesc(e.target.value)}
+                            rows={3}
+                            className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[60px]"
+                            placeholder="Meta descripción..."
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {/* Title */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Título ({blogActiveLang.toUpperCase()})</label>
+                          <Input 
+                            value={blogTranslations[blogActiveLang].title} 
+                            onChange={e => setBlogTranslations(prev => ({
+                              ...prev,
+                              [blogActiveLang]: { ...prev[blogActiveLang], title: e.target.value }
+                            }))} 
+                            placeholder={`[ES]: ${newPostTitle}`} 
+                          />
+                        </div>
+
+                        {/* Subtitle */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Subtítulo ({blogActiveLang.toUpperCase()})</label>
+                          <Input 
+                            value={blogTranslations[blogActiveLang].subtitle} 
+                            onChange={e => setBlogTranslations(prev => ({
+                              ...prev,
+                              [blogActiveLang]: { ...prev[blogActiveLang], subtitle: e.target.value }
+                            }))} 
+                            placeholder={`[ES]: ${newPostSubtitle}`} 
+                          />
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Contenido (HTML - {blogActiveLang.toUpperCase()})</label>
+                          <textarea
+                            value={blogTranslations[blogActiveLang].content}
+                            onChange={e => setBlogTranslations(prev => ({
+                              ...prev,
+                              [blogActiveLang]: { ...prev[blogActiveLang], content: e.target.value }
+                            }))}
+                            rows={8}
+                            className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[150px]"
+                            placeholder={`[ES]: ${newPostContent}`}
+                          />
+                        </div>
+
+                        {/* SEO Title */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">SEO Title ({blogActiveLang.toUpperCase()})</label>
+                          <Input 
+                            value={blogTranslations[blogActiveLang].seo_title} 
+                            onChange={e => setBlogTranslations(prev => ({
+                              ...prev,
+                              [blogActiveLang]: { ...prev[blogActiveLang], seo_title: e.target.value }
+                            }))} 
+                            placeholder={`[ES]: ${newPostSeoTitle}`} 
+                          />
+                        </div>
+
+                        {/* SEO Description */}
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">SEO Description ({blogActiveLang.toUpperCase()})</label>
+                          <textarea
+                            value={blogTranslations[blogActiveLang].seo_description}
+                            onChange={e => setBlogTranslations(prev => ({
+                              ...prev,
+                              [blogActiveLang]: { ...prev[blogActiveLang], seo_description: e.target.value }
+                            }))}
+                            rows={3}
+                            className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[60px]"
+                            placeholder={`[ES]: ${newPostSeoDesc}`}
+                          />
+                        </div>
+                      </>
+                    )}
 
                     {/* SEO Preview */}
-                    {(newPostSeoTitle || newPostSeoDesc) && (
+                    {((blogActiveLang === 'es' ? newPostSeoTitle : blogTranslations[blogActiveLang].seo_title) || (blogActiveLang === 'es' ? newPostSeoDesc : blogTranslations[blogActiveLang].seo_description)) && (
                       <div className="bg-black/40 border border-white/5 rounded-xl p-4">
                         <span className="text-[8px] font-bold text-accent uppercase tracking-widest block mb-2">📱 Vista previa Google</span>
                         <div className="bg-white rounded-lg p-3">
                           <p className="text-[10px] text-[#1a0dab] font-medium leading-tight hover:underline cursor-pointer truncate">
-                            {newPostSeoTitle || 'Título SEO'}
+                            {(blogActiveLang === 'es' ? newPostSeoTitle : blogTranslations[blogActiveLang].seo_title) || 'Título SEO'}
                           </p>
                           <p className="text-[9px] text-[#006621] leading-tight truncate">
-                            {`yedambeauty.com/blog/${newPostSlug || 'slug-del-articulo'}`}
+                            {`cheotnun.com/blog/${newPostSlug || 'slug-del-articulo'}`}
                           </p>
                           <p className="text-[9px] text-[#545454] leading-snug mt-0.5 line-clamp-2">
-                            {newPostSeoDesc || 'Descripción SEO del artículo...'}
+                            {(blogActiveLang === 'es' ? newPostSeoDesc : blogTranslations[blogActiveLang].seo_description) || 'Descripción SEO del artículo...'}
                           </p>
                         </div>
                       </div>
@@ -1390,10 +1621,10 @@ export default function AdminDashboard() {
                     <div className="bg-accent/5 border border-accent/10 rounded-xl p-4">
                       <h4 className="text-[9px] font-bold text-accent uppercase tracking-widest mb-2">🔍 Consejos SEO Profesional</h4>
                       <ul className="text-[9px] text-foreground/60 flex flex-col gap-1 list-disc pl-4">
-                        <li className={newPostSeoTitle && newPostSeoTitle.length <= 60 ? 'text-green-400' : ''}>
+                        <li className={(blogActiveLang === 'es' ? newPostSeoTitle : blogTranslations[blogActiveLang].seo_title) && ((blogActiveLang === 'es' ? newPostSeoTitle : blogTranslations[blogActiveLang].seo_title).length <= 60) ? 'text-green-400' : ''}>
                           <strong>Título:</strong> Máx. 60 caracteres, incluye la palabra clave principal.
                         </li>
-                        <li className={newPostSeoDesc && newPostSeoDesc.length >= 50 && newPostSeoDesc.length <= 160 ? 'text-green-400' : ''}>
+                        <li className={(blogActiveLang === 'es' ? newPostSeoDesc : blogTranslations[blogActiveLang].seo_description) && ((blogActiveLang === 'es' ? newPostSeoDesc : blogTranslations[blogActiveLang].seo_description).length >= 50 && (blogActiveLang === 'es' ? newPostSeoDesc : blogTranslations[blogActiveLang].seo_description).length <= 160) ? 'text-green-400' : ''}>
                           <strong>Meta descripción:</strong> Entre 50-160 caracteres, incluye llamado a la acción.
                         </li>
                         <li><strong>Slug:</strong> Usa solo letras, números y guiones. Sin caracteres especiales.</li>
@@ -1469,7 +1700,7 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* TAB: SUSCRIPCIONES (CLUB YEDAM ADMIN) */}
+          {/* TAB: SUSCRIPCIONES (CLUB CHEOTNUN ADMIN) */}
 {/* TAB: NEWSLETTER SUBSCRIBERS */}
 {activeSubTab === 'newsletter' && (
   <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
@@ -1645,7 +1876,7 @@ export default function AdminDashboard() {
           {activeSubTab === 'suscripciones' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl flex flex-col gap-6">
               <div>
-                <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">Membresías del Club Yedam</h2>
+                <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">Membresías del Club Cheotnun</h2>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -1705,6 +1936,9 @@ export default function AdminDashboard() {
           )}
 
           {/* TAB: GENERAL SETTINGS, SMTP & SEO */}
+          {activeSubTab === 'shipping' && <ShippingTab />}
+          {activeSubTab === 'chat' && <LiveChatTab />}
+
           {activeSubTab === 'settings' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Configuración del Sistema, SMTP & SEO</h2>

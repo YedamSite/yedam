@@ -10,8 +10,10 @@ import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
 import { toggleFavoriteAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function ProductoDetallePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { t, locale } = useLanguage();
   // Resolve params using React 19 `use` hook
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
@@ -23,17 +25,17 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
   const loadData = () => {
     const products = db.get('products') || [];
     const prod = products.find((p: any) => p.slug === slug);
-    setProduct(prod || null);
+    setProduct(prod ? db.getTranslatedRecord(prod, locale) : null);
 
     if (typeof window !== 'undefined') {
-      const savedFavs = localStorage.getItem('yedam_favorites');
+      const savedFavs = localStorage.getItem('cheotnun_favorites');
       setFavorites(savedFavs ? JSON.parse(savedFavs) : []);
     }
   };
 
   useEffect(() => {
     loadData();
-  }, [slug]);
+  }, [slug, locale]);
 
   const handleToggleFavorite = async () => {
     if (!product) return;
@@ -48,13 +50,13 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
         updatedFavs = updatedFavs.filter(id => id !== product.id);
       }
       setFavorites(updatedFavs);
-      localStorage.setItem('yedam_favorites', JSON.stringify(updatedFavs));
+      localStorage.setItem('cheotnun_favorites', JSON.stringify(updatedFavs));
     }
   };
 
   const handleAddToCart = () => {
     if (!product || typeof window === 'undefined') return;
-    const cart = localStorage.getItem('yedam_cart');
+    const cart = localStorage.getItem('cheotnun_cart');
     const parsedCart = cart ? JSON.parse(cart) : [];
 
     const existingIdx = parsedCart.findIndex((item: any) => item.product_id === product.id);
@@ -70,7 +72,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
       });
     }
 
-    localStorage.setItem('yedam_cart', JSON.stringify(parsedCart));
+    localStorage.setItem('cheotnun_cart', JSON.stringify(parsedCart));
     setAdded(true);
     setTimeout(() => setAdded(false), 3000);
   };
@@ -80,7 +82,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex-1 flex flex-col items-center justify-center p-12 text-muted-foreground">
-          Cargando producto...
+          {t('Cargando producto...')}
         </div>
         <Footer />
       </div>
@@ -96,7 +98,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
       <main className="flex-1 py-12 px-4 md:px-8 max-w-6xl mx-auto w-full">
         <Link href="/tienda" className="flex items-center gap-1.5 text-xs font-bold text-accent hover:underline mb-8">
           <ArrowLeft className="h-4 w-4" />
-          VOLVER AL CATÁLOGO
+          {t('VOLVER AL CATÁLOGO')}
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -114,7 +116,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
           {/* Right - Product details */}
           <div className="flex flex-col gap-6">
             <div>
-              <span className="text-[10px] uppercase font-bold tracking-widest text-accent">K-Beauty Skincare</span>
+              <span className="text-[10px] uppercase font-bold tracking-widest text-accent">{t('K-Beauty Skincare')}</span>
               <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1 leading-snug">{product.name}</h1>
               <div className="flex items-center gap-4 mt-3">
                 <div className="flex items-center gap-1">
@@ -123,10 +125,10 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
                       <Star key={i} className="h-4 w-4 fill-current" />
                     ))}
                   </div>
-                  <span className="text-xs text-muted-foreground">(48 opiniones)</span>
+                  <span className="text-xs text-muted-foreground">{t('(48 opiniones)')}</span>
                 </div>
                 <span className="text-xs text-muted-foreground">•</span>
-                <span className="text-xs text-accent font-semibold uppercase tracking-wider">SKU: {product.sku}</span>
+                <span className="text-xs text-accent font-semibold uppercase tracking-wider">{t('SKU:')} {product.sku}</span>
               </div>
             </div>
 
@@ -144,15 +146,15 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
                   <span className={`h-1.5 w-1.5 rounded-full ${
                     product.stock > 10 ? 'bg-green-400' : product.stock > 0 ? 'bg-yellow-400' : 'bg-red-400'
                   }`} />
-                  {product.stock > 0 ? `${product.stock} en stock` : 'Agotado'}
+                  {product.stock > 0 ? `${product.stock} ${t('en stock')}` : t('Agotado')}
                 </span>
               </div>
             </div>
 
             <div className="text-xs text-muted-foreground leading-relaxed">
-              <h3 className="font-bold text-white uppercase tracking-wider mb-2">Descripción del Producto</h3>
+              <h3 className="font-bold text-white uppercase tracking-wider mb-2">{t('Descripción del Producto')}</h3>
               <p>{product.description}</p>
-              <h4 className="font-bold text-white uppercase tracking-wider mt-4 mb-2">English Details</h4>
+              <h4 className="font-bold text-white uppercase tracking-wider mt-4 mb-2">{t('English Details')}</h4>
               <p>{product.description_en}</p>
             </div>
 
@@ -162,7 +164,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
                 disabled={product.stock <= 0}
                 className="flex-1 bg-accent hover:bg-accentHover text-background font-bold py-3.5 rounded-full"
               >
-                {added ? '¡AGREGADO AL CARRITO!' : 'AGREGAR AL CARRITO'}
+                {added ? t('¡AGREGADO AL CARRITO!') : t('AGREGAR AL CARRITO')}
               </Button>
               <Button
                 onClick={handleToggleFavorite}
@@ -177,18 +179,18 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
             <div className="grid grid-cols-3 gap-4 border-t border-white/5 pt-8 mt-4 text-center">
               <div className="flex flex-col items-center gap-1.5">
                 <ShieldCheck className="h-5 w-5 text-accent" />
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Certificado</span>
-                <span className="text-[9px] text-muted-foreground">Original de Corea</span>
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">{t('Certificado')}</span>
+                <span className="text-[9px] text-muted-foreground">{t('Original de Corea')}</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <RefreshCcw className="h-5 w-5 text-accent" />
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Garantía</span>
-                <span className="text-[9px] text-muted-foreground">15 días cambios</span>
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">{t('Garantía')}</span>
+                <span className="text-[9px] text-muted-foreground">{t('15 días cambios')}</span>
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <Truck className="h-5 w-5 text-accent" />
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Envíos</span>
-                <span className="text-[9px] text-muted-foreground">Seguimiento postal</span>
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider">{t('Envíos')}</span>
+                <span className="text-[9px] text-muted-foreground">{t('Seguimiento postal')}</span>
               </div>
             </div>
           </div>

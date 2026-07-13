@@ -10,7 +10,7 @@ export default function FloatingCart() {
 
   const updateCart = () => {
     if (typeof window === 'undefined') return;
-    const cart = localStorage.getItem('yedam_cart');
+    const cart = localStorage.getItem('cheotnun_cart');
     const parsed = cart ? JSON.parse(cart) : [];
     setCartItems(parsed);
     setIsVisible(parsed.length > 0);

@@ -1,6 +1,6 @@
 import { supabase } from './supabaseAuth';
 
-const BUCKET_NAME = 'yedam-images';
+const BUCKET_NAME = 'cheotnun-images';
 
 export async function uploadImage(file: File, folder: string = 'general'): Promise<string | null> {
   if (!supabase) {

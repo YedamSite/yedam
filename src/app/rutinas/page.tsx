@@ -7,20 +7,25 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function RutinasPage() {
+  const { t, locale } = useLanguage();
   const [routines, setRoutines] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [selectedSkinType, setSelectedSkinType] = useState('Piel Sensible');
 
   const loadData = () => {
-    setRoutines(db.get('routines') || []);
-    setProducts(db.get('products') || []);
+    const rawRoutines = db.get('routines') || [];
+    setRoutines(rawRoutines.map((r: any) => db.getTranslatedRecord(r, locale)));
+    
+    const rawProducts = db.get('products') || [];
+    setProducts(rawProducts.map((p: any) => db.getTranslatedRecord(p, locale)));
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [locale]);
 
   const skinTypes = [
     { id: 'Piel Hidratada', label: 'Piel Hidratada', emoji: '💧' },
@@ -38,10 +43,10 @@ export default function RutinasPage() {
 
       <main className="flex-1 py-12 px-4 md:px-8 max-w-6xl mx-auto w-full">
         <div className="max-w-2xl mb-12">
-          <span className="text-xs uppercase tracking-widest text-accent font-bold">RITUALES DE CUIDADO</span>
-          <h1 className="font-heading text-4xl sm:text-5xl font-light text-white mt-2">Rutinas Recomendadas</h1>
+          <span className="text-xs uppercase tracking-widest text-accent font-bold">{t('RITUALES DE CUIDADO')}</span>
+          <h1 className="font-heading text-4xl sm:text-5xl font-light text-white mt-2">{t('Rutinas Recomendadas')}</h1>
           <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-            Descubre el ritual coreano perfecto para tu tipo de piel. Siguiendo estos simples pasos, nutrirás y protegerás tu cutis de forma efectiva y duradera.
+            {t('Descubre el ritual coreano perfecto para tu tipo de piel. Siguiendo estos simples pasos, nutrirás y protegerás tu cutis de forma efectiva y duradera.')}
           </p>
         </div>
 
@@ -58,7 +63,7 @@ export default function RutinasPage() {
               }`}
             >
               <span>{type.emoji}</span>
-              <span>{type.label}</span>
+              <span>{t(type.label)}</span>
             </button>
           ))}
         </div>
@@ -71,10 +76,10 @@ export default function RutinasPage() {
               <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
                 <h2 className="font-heading text-2xl font-light text-white mb-2 flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-accent animate-pulse" />
-                  {currentRoutine.title}
+                  {t(currentRoutine.title)}
                 </h2>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  {currentRoutine.description}
+                  {t(currentRoutine.description)}
                 </p>
 
                 {/* Steps Timeline */}
@@ -87,13 +92,13 @@ export default function RutinasPage() {
                           {step.step}
                         </div>
                         <div className="flex items-center justify-between gap-4 text-[10px] text-accent font-bold uppercase tracking-wider">
-                          <span>Etapa: {step.action}</span>
+                          <span>{t('Etapa:')} {t(step.action)}</span>
                         </div>
                         <h4 className="font-heading text-base font-medium text-white mt-1">
-                          {prod ? prod.name : 'Producto Recomendado'}
+                          {prod ? prod.name : t('Producto Recomendado')}
                         </h4>
                         <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                          {step.instruction}
+                          {t(step.instruction)}
                         </p>
                       </div>
                     );
@@ -118,9 +123,9 @@ export default function RutinasPage() {
                   </a>
                 </div>
                 <div className="p-6">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Videotutorial de Aplicación</h4>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Videotutorial de Aplicación')}</h4>
                   <p className="text-[10px] text-muted-foreground mt-1.5 leading-relaxed">
-                    Aprende la técnica de masaje coreano para maximizar la absorción de los nutrientes.
+                    {t('Aprende la técnica de masaje coreano para maximizar la absorción de los nutrientes.')}
                   </p>
                 </div>
               </div>
@@ -129,20 +134,20 @@ export default function RutinasPage() {
               <div className="bg-gradient-to-br from-secondary to-card border border-white/5 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
                 <div>
                   <BookOpen className="h-6 w-6 text-accent" />
-                  <h4 className="font-heading text-lg font-medium text-white mt-3">¿Dudas sobre tu rutina?</h4>
+                  <h4 className="font-heading text-lg font-medium text-white mt-3">{t('¿Dudas sobre tu rutina?')}</h4>
                   <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                    Haz nuestro test de piel rápido o chatea directamente con una experta en cosmetología.
+                    {t('Haz nuestro test de piel rápido o chatea directamente con una experta en cosmetología.')}
                   </p>
                 </div>
                 <Button className="w-full bg-accent hover:bg-accentHover text-background text-xs font-bold py-2.5 rounded-xl mt-6">
-                  INICIAR EVALUACIÓN GRATUITA
+                  {t('INICIAR EVALUACIÓN GRATUITA')}
                 </Button>
               </div>
             </div>
           </div>
         ) : (
           <div className="border border-dashed border-white/10 rounded-3xl p-12 text-center text-xs text-muted-foreground">
-            No hay rutinas registradas para este tipo de piel.
+            {t('No hay rutinas registradas para este tipo de piel.')}
           </div>
         )}
       </main>

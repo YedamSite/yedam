@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
 import { db } from '@/lib/db';
+import { useLanguage } from '@/context/LanguageContext';
 
 const Instagram = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -26,7 +27,10 @@ const LINK_ICONS: Record<string, React.ComponentType<any>> = {
 };
 
 export default function Footer() {
-  const content = db.get('site_content')?.footer || null;
+  const { t, locale } = useLanguage();
+  const siteContent = db.get('site_content');
+  const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
+  const content = translatedContent.footer || null;
   const settings = db.get('system_settings');
   const company = settings?.company_details || {};
 
@@ -43,14 +47,14 @@ export default function Footer() {
           <Link href="/" className="flex flex-col items-center gap-2 group">
             <Image
               src={logoUrl}
-              alt="Yedam"
+              alt="Cheotnun"
               width={140}
               height={40}
               className="h-28 w-auto object-contain"
             />
             <div className="flex flex-col items-center justify-center">
               <span className="font-heading text-xl font-light text-white uppercase tracking-wider leading-none">
-                Yedum
+                Cheotnun
               </span>
               <span className="text-[7px] font-bold text-accent uppercase tracking-[0.3em] leading-none mt-0.5 text-center">
                 BEAUTY
@@ -58,7 +62,7 @@ export default function Footer() {
             </div>
           </Link>
           <p className="text-xs text-muted-foreground leading-relaxed mt-2">
-            {description}
+            {t(description)}
           </p>
           <div className="flex gap-4 mt-2">
             {social.instagram && (
@@ -77,7 +81,7 @@ export default function Footer() {
         {/* Dynamic Columns */}
         {columns.map((col: any, idx: number) => (
           <div key={idx} className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-accent">{col.title}</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-accent">{t(col.title)}</h3>
             <ul className="flex flex-col gap-2.5 text-xs text-muted-foreground items-center md:items-start">
               {(col.links || []).map((link: any, li: number) => {
                 const Icon = LINK_ICONS[link.icon || ''];
@@ -85,7 +89,7 @@ export default function Footer() {
                   <li key={li}>
                     <Link href={link.href} className="hover:text-accent transition-colors flex items-center gap-2">
                       {Icon && <Icon className="h-4 w-4 text-accent shrink-0" />}
-                      <span>{link.label}</span>
+                      <span>{t(link.label)}</span>
                     </Link>
                   </li>
                 );
@@ -96,13 +100,13 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] text-muted-foreground gap-4">
-        <p>&copy; {new Date().getFullYear()} {company.name || 'YEDAM K-BEAUTY'}. Todos los derechos reservados.</p>
+<p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
         <div className="flex items-center gap-1">
-          <span>Orgullosamente desarrollado por</span>
+          <span>{t('Orgulhosamente desenvolvido por')}</span>
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">Voltris</a>
         </div>
         <p className="mt-2 sm:mt-0">
-          En colaboración con{' '}
+          {t('En colaboración con')}{' '}
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
             Maeum Global Agency
           </a>

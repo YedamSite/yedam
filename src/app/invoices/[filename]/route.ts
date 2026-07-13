@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ filename: string }> }
 ) {
   const { filename } = await params;
-  const match = filename.match(/yedam-inv-(.+)\.pdf/);
+  const match = filename.match(/cheotnun-inv-(.+)\.pdf/);
   if (!match) {
     return new NextResponse('Invalid Invoice Filename', { status: 400 });
   }
@@ -36,7 +36,7 @@ export async function GET(
   doc.setFontSize(8);
   doc.setFont('Helvetica', 'normal');
   doc.setTextColor(100);
-  doc.text(`Invoice Number: YEDAM-INV-${order.id.substring(0, 8).toUpperCase()}`, 15, 26);
+  doc.text(`Invoice Number: CHEOTNUN-INV-${order.id.substring(0, 8).toUpperCase()}`, 15, 26);
   doc.text(`Date of Issue: ${new Date(order.created_at).toLocaleDateString('en-US')}`, 15, 30);
 
   // Divider
@@ -52,15 +52,15 @@ export async function GET(
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
   const company = db.get('system_settings')?.company_details || {
-    name: 'Yedam K-Beauty S.L.',
+    name: 'Cheotnun K-Beauty S.L.',
     address: 'Calle Gran Vía 12, Madrid, España',
     phone: '+34 912 345 678',
-    email: 'hola@yedambeauty.com'
+    email: 'hola@cheotnun.com'
   };
-  doc.text(company.name || 'Yedam K-Beauty S.L.', 15, 47);
+  doc.text(company.name || 'Cheotnun K-Beauty S.L.', 15, 47);
   doc.text(company.address || 'Calle Gran Vía 12, Madrid, España', 15, 51);
   doc.text(`Phone: ${company.phone || '+34 912 345 678'}`, 15, 55);
-  doc.text(`Email: ${company.email || 'hola@yedambeauty.com'}`, 15, 59);
+  doc.text(`Email: ${company.email || 'hola@cheotnun.com'}`, 15, 59);
 
   // Importer info
   doc.setFont('Helvetica', 'bold');

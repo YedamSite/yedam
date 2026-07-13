@@ -11,7 +11,7 @@ const returnSteps = [
     step: '01',
     icon: Clock,
     title: 'Solicitud (14 días)',
-    desc: 'Tienes 14 días naturales desde la recepción para solicitar la devolución. Escribe a hola@yedambeauty.com con tu número de pedido y motivo.'
+    desc: 'Tienes 14 días naturales desde la recepción para solicitar la devolución. Escribe a hola@cheotnun.com con tu número de pedido y motivo.'
   },
   {
     step: '02',
@@ -148,8 +148,8 @@ export default function DevolucionesPage() {
               Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier duda sobre cambios o devoluciones.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs">
-              <a href="mailto:hola@yedambeauty.com" className="text-accent hover:underline font-bold">
-                ✉️ hola@yedambeauty.com
+              <a href="mailto:hola@cheotnun.com" className="text-accent hover:underline font-bold">
+                ✉️ hola@cheotnun.com
               </a>
               <span className="text-foreground/20">|</span>
               <a href="https://wa.me/34600111222" className="text-accent hover:underline font-bold">

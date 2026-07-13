@@ -11,8 +11,10 @@ import { toggleFavoriteAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function TiendaPage() {
+  const { t, locale } = useLanguage();
   const [products, setProducts] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -25,18 +27,24 @@ export default function TiendaPage() {
   const [addedProduct, setAddedProduct] = useState<string | null>(null);
 
   const loadData = () => {
-    setProducts(db.get('products') || []);
-    setBrands(db.get('brands') || []);
-    setCategories(db.get('categories') || []);
+    const rawProds = db.get('products') || [];
+    setProducts(rawProds.map((p: any) => db.getTranslatedRecord(p, locale)));
+
+    const rawBrands = db.get('brands') || [];
+    setBrands(rawBrands.map((b: any) => db.getTranslatedRecord(b, locale)));
+
+    const rawCategories = db.get('categories') || [];
+    setCategories(rawCategories.map((c: any) => db.getTranslatedRecord(c, locale)));
+
     if (typeof window !== 'undefined') {
-      const savedFavs = localStorage.getItem('yedam_favorites');
+      const savedFavs = localStorage.getItem('cheotnun_favorites');
       setFavorites(savedFavs ? JSON.parse(savedFavs) : []);
     }
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [locale]);
 
   const handleToggleFavorite = async (productId: string) => {
     const user = authService.getCurrentUser();
@@ -50,13 +58,13 @@ export default function TiendaPage() {
         updatedFavs = updatedFavs.filter(id => id !== productId);
       }
       setFavorites(updatedFavs);
-      localStorage.setItem('yedam_favorites', JSON.stringify(updatedFavs));
+      localStorage.setItem('cheotnun_favorites', JSON.stringify(updatedFavs));
     }
   };
 
   const handleAddToCart = (product: any) => {
     if (typeof window === 'undefined') return;
-    const cart = localStorage.getItem('yedam_cart');
+    const cart = localStorage.getItem('cheotnun_cart');
     const parsedCart = cart ? JSON.parse(cart) : [];
 
     const existingIdx = parsedCart.findIndex((item: any) => item.product_id === product.id);
@@ -72,7 +80,7 @@ export default function TiendaPage() {
       });
     }
 
-    localStorage.setItem('yedam_cart', JSON.stringify(parsedCart));
+    localStorage.setItem('cheotnun_cart', JSON.stringify(parsedCart));
     setAddedProduct(product.name);
     setTimeout(() => setAddedProduct(null), 3000);
   };
@@ -91,14 +99,14 @@ export default function TiendaPage() {
       <main className="flex-1 py-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
           <div>
-            <span className="text-xs text-accent uppercase font-bold tracking-widest">K-Beauty Shop</span>
-            <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1">Catálogo de Cosméticos</h1>
+            <span className="text-xs text-accent uppercase font-bold tracking-widest">{t('K-Beauty Shop')}</span>
+            <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1">{t('Catálogo de Cosméticos')}</h1>
           </div>
           
           {/* Global notification for cart addition */}
           {addedProduct && (
             <div className="bg-accent/25 border border-accent/40 text-accent text-xs rounded-xl px-4 py-2 animate-bounce">
-              ✓ ¡{addedProduct} agregado al carrito!
+              ✓ ¡{addedProduct} {t('agregado al carrito')}!
             </div>
           )}
         </div>
@@ -108,12 +116,12 @@ export default function TiendaPage() {
           <div className="flex flex-col gap-6 border border-white/10 rounded-3xl p-6 bg-card shadow-xl h-fit">
             {/* Search */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] font-bold text-accent uppercase tracking-wider">Buscar Producto</label>
+              <label className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Buscar Producto')}</label>
               <div className="relative">
                 <Input
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Ej: Sérum, Limpiador..."
+                  placeholder={t('Ej: Sérum, Limpiador...')}
                   className="bg-black/30 border-white/10 text-white rounded-xl pr-10 text-xs"
                 />
                 <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -122,7 +130,7 @@ export default function TiendaPage() {
 
             {/* Category Filter */}
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-bold text-accent uppercase tracking-wider">Categorías</label>
+              <label className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Categorías')}</label>
               <div className="flex flex-col gap-1.5">
                 <button
                   onClick={() => setSelectedCategory('ALL')}
@@ -130,7 +138,7 @@ export default function TiendaPage() {
                     selectedCategory === 'ALL' ? 'bg-accent/15 text-accent font-bold' : 'text-muted-foreground hover:bg-white/5'
                   }`}
                 >
-                  Todas las categorías
+                  {t('Todas las categorías')}
                 </button>
                 {categories.map((cat) => (
                   <button
@@ -140,7 +148,7 @@ export default function TiendaPage() {
                       selectedCategory === cat.id ? 'bg-accent/15 text-accent font-bold' : 'text-muted-foreground hover:bg-white/5'
                     }`}
                   >
-                    {cat.name}
+                    {t(cat.name)}
                   </button>
                 ))}
               </div>
@@ -148,7 +156,7 @@ export default function TiendaPage() {
 
             {/* Brand Filter */}
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-bold text-accent uppercase tracking-wider">Marcas</label>
+              <label className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Marcas')}</label>
               <div className="flex flex-col gap-1.5">
                 <button
                   onClick={() => setSelectedBrand('ALL')}
@@ -156,7 +164,7 @@ export default function TiendaPage() {
                     selectedBrand === 'ALL' ? 'bg-accent/15 text-accent font-bold' : 'text-muted-foreground hover:bg-white/5'
                   }`}
                 >
-                  Todas las marcas
+                  {t('Todas las marcas')}
                 </button>
                 {brands.map((br) => (
                   <button
@@ -192,7 +200,7 @@ export default function TiendaPage() {
                       <div className="relative aspect-square w-full overflow-hidden bg-secondary">
                         <Image
                           src={prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'}
-                          alt={prod.name}
+                          alt={t(prod.name)}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
@@ -200,11 +208,11 @@ export default function TiendaPage() {
                       
                       <div className="p-4 flex-1 flex flex-col justify-between">
                         <div>
-                          <span className="text-[9px] font-bold text-accent uppercase tracking-wider">SKINCARE</span>
+                          <span className="text-[9px] font-bold text-accent uppercase tracking-wider">{t('Skin Care')}</span>
                           <h3 className="font-heading text-sm font-medium text-white line-clamp-2 mt-1 leading-snug group-hover:text-accent transition-colors">
-                            {prod.name}
+                            {t(prod.name)}
                           </h3>
-                          <p className="text-[9px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{prod.description}</p>
+                          <p className="text-[9px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{t(prod.description)}</p>
                           <div className="flex items-center gap-1 mt-1.5">
                             <div className="flex text-amber-400">
                               {[...Array(5)].map((_, i) => (
@@ -220,16 +228,16 @@ export default function TiendaPage() {
                             <span className="text-xs font-bold text-accent font-heading">US$ {prod.price.toFixed(2)}</span>
                             <div className="flex items-center gap-2">
                               <span className={`text-[9px] font-semibold ${prod.stock > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {prod.stock > 0 ? `Stock: ${prod.stock}` : 'Agotado'}
+                                {prod.stock > 0 ? `Stock: ${prod.stock}` : t('Agotado')}
                               </span>
-                              <span className="text-[10px] text-muted-foreground">{prod.volume}</span>
+                              <span className="text-[10px] text-muted-foreground">{t(prod.volume)}</span>
                             </div>
                           </div>
                           
                           <div className="flex gap-2">
                             <Link href={`/tienda/produto/${prod.slug}`} className="flex-1">
                               <Button variant="outline" className="w-full text-[10px] font-bold text-white border-white/10 hover:bg-white/5 py-1.5 h-8">
-                                VER DETALLES
+                                {t('VER DETALLES')}
                               </Button>
                             </Link>
                             <Button
@@ -248,7 +256,7 @@ export default function TiendaPage() {
               </div>
             ) : (
               <div className="border border-dashed border-white/10 rounded-3xl p-12 text-center text-xs text-muted-foreground">
-                Ningún producto coincide con los filtros aplicados.
+                {t('Ningún producto coincide con los filtros aplicados.')}
               </div>
             )}
           </div>

@@ -20,7 +20,7 @@ export default function CookieBanner() {
   });
 
   useEffect(() => {
-    const savedConsent = localStorage.getItem('yedam_cookie_consent');
+    const savedConsent = localStorage.getItem('cheotnun_cookie_consent');
     if (!savedConsent) {
       // Delay de 2 segundos antes de mostrar o banner
       const timer = setTimeout(() => {
@@ -37,7 +37,7 @@ export default function CookieBanner() {
       marketing: true,
       timestamp: new Date().toISOString()
     };
-    localStorage.setItem('yedam_cookie_consent', JSON.stringify(consent));
+    localStorage.setItem('cheotnun_cookie_consent', JSON.stringify(consent));
     setIsVisible(false);
     
     // Aqui você pode integrar com Google Analytics, Facebook Pixel, etc.
@@ -51,7 +51,7 @@ export default function CookieBanner() {
       marketing: false,
       timestamp: new Date().toISOString()
     };
-    localStorage.setItem('yedam_cookie_consent', JSON.stringify(consent));
+    localStorage.setItem('cheotnun_cookie_consent', JSON.stringify(consent));
     setIsVisible(false);
     console.log('✓ Solo cookies necesarias activas');
   };
@@ -61,7 +61,7 @@ export default function CookieBanner() {
       ...preferences,
       timestamp: new Date().toISOString()
     };
-    localStorage.setItem('yedam_cookie_consent', JSON.stringify(consent));
+    localStorage.setItem('cheotnun_cookie_consent', JSON.stringify(consent));
     setIsVisible(false);
     setShowPreferences(false);
     console.log('✓ Preferencias guardadas:', preferences);

@@ -10,7 +10,7 @@ const termsSections = [
   {
     icon: FileText,
     title: '1. Condiciones Generales',
-    content: 'Al acceder y usar yedambeauty.com, aceptas estos términos de uso en su totalidad. Si no estás de acuerdo, no uses esta web. Nos reservamos el derecho de modificar estos términos en cualquier momento sin previo aviso.'
+    content: 'Al acceder y usar cheotnun.com, aceptas estos términos de uso en su totalidad. Si no estás de acuerdo, no uses esta web. Nos reservamos el derecho de modificar estos términos en cualquier momento sin previo aviso.'
   },
   {
     icon: ShoppingCart,
@@ -25,7 +25,7 @@ const termsSections = [
   {
     icon: Scale,
     title: '4. Propiedad Intelectual',
-    content: 'Todo el contenido de esta web (textos, imágenes, logos, diseños, código) es propiedad de Yedam K-Beauty S.L. o de terceros licenciados. Queda prohibida la reproducción, distribución o uso comercial sin autorización escrita.'
+    content: 'Todo el contenido de esta web (textos, imágenes, logos, diseños, código) es propiedad de Cheotnun K-Beauty S.L. o de terceros licenciados. Queda prohibida la reproducción, distribución o uso comercial sin autorización escrita.'
   },
   {
     icon: AlertTriangle,
@@ -61,13 +61,13 @@ export default function TerminosPage() {
           {/* Intro */}
           <div className="bg-card border border-white/5 rounded-3xl p-8 mb-10">
             <p className="text-sm text-foreground/70 leading-relaxed mb-4">
-              Bienvenido a <strong className="text-white">Yedam K-Beauty</strong>. Estos términos establecen las condiciones bajo las cuales proporcionamos nuestros servicios de comercio electrónico de productos de belleza coreana.
+              Bienvenido a <strong className="text-white">Cheotnun K-Beauty</strong>. Estos términos establecen las condiciones bajo las cuales proporcionamos nuestros servicios de comercio electrónico de productos de belleza coreana.
             </p>
             <p className="text-sm text-foreground/70 leading-relaxed">
-              <strong className="text-white">Empresa:</strong> Yedam K-Beauty S.L.<br/>
+              <strong className="text-white">Empresa:</strong> Cheotnun K-Beauty S.L.<br/>
               <strong className="text-white">NIF:</strong> B-12345678<br/>
               <strong className="text-white">Domicilio:</strong> Calle Gran Vía 12, Madrid, España<br/>
-              <strong className="text-white">Email:</strong> hola@yedambeauty.com<br/>
+              <strong className="text-white">Email:</strong> hola@cheotnun.com<br/>
               <strong className="text-white">Teléfono:</strong> +34 600 111 222
             </p>
           </div>
@@ -117,8 +117,8 @@ export default function TerminosPage() {
               Para cualquier duda sobre estos términos, contacta con nuestro departamento legal.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm">
-              <a href="mailto:legal@yedambeauty.com" className="text-accent hover:underline font-bold">
-                ✉️ legal@yedambeauty.com
+              <a href="mailto:legal@cheotnun.com" className="text-accent hover:underline font-bold">
+                ✉️ legal@cheotnun.com
               </a>
               <span className="text-foreground/20">|</span>
               <a href="tel:+34912345678" className="text-accent hover:underline font-bold">

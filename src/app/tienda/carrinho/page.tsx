@@ -10,13 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { submitOrderAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function CheckoutWizard() {
+  const { t } = useLanguage();
   const [step, setStep] = useState(1);
   const [cartItems, setCartItems] = useState<any[]>([]);
 
   // Form states
-  const [country, setCountry] = useState('España');
+  const [country, setCountry] = useState('Brasil');
   const [docType, setDocType] = useState('nif');
   const [docNumber, setDocNumber] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -54,7 +56,7 @@ export default function CheckoutWizard() {
   // Load cart from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const cart = localStorage.getItem('yedam_cart');
+      const cart = localStorage.getItem('cheotnun_cart');
       setCartItems(cart ? JSON.parse(cart) : []);
     }
   }, []);
@@ -68,13 +70,13 @@ export default function CheckoutWizard() {
       return item;
     });
     setCartItems(updated);
-    localStorage.setItem('yedam_cart', JSON.stringify(updated));
+    localStorage.setItem('cheotnun_cart', JSON.stringify(updated));
   };
 
   const handleRemoveItem = (prodId: string) => {
     const filtered = cartItems.filter(item => item.product_id !== prodId);
     setCartItems(filtered);
-    localStorage.setItem('yedam_cart', JSON.stringify(filtered));
+    localStorage.setItem('cheotnun_cart', JSON.stringify(filtered));
   };
 
   // Apply Coupon "CUPOM10"
@@ -121,7 +123,7 @@ export default function CheckoutWizard() {
     setLoading(false);
     if (res.success) {
       setOrderSuccess(res.order);
-      localStorage.removeItem('yedam_cart');
+      localStorage.removeItem('cheotnun_cart');
       setCartItems([]);
       setStep(4);
     }
@@ -133,19 +135,21 @@ export default function CheckoutWizard() {
 
       <main className="flex-1 py-12 px-4 md:px-8 max-w-5xl mx-auto w-full">
         {/* Wizard Steps indicator */}
-        <div className="flex justify-between items-center max-w-md mx-auto mb-10 text-xs font-bold text-muted-foreground uppercase tracking-wider">
-          <span className={step >= 1 ? 'text-accent' : ''}>1. Carrito</span>
+        <div className="flex justify-between items-center max-w-lg mx-auto mb-10 text-[9px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wider">
+          <span className={step >= 1 ? 'text-accent' : ''}>{t('1. Carrito')}</span>
           <span>→</span>
-          <span className={step >= 2 ? 'text-accent' : ''}>2. Envío & Identificación</span>
+          <span className={step >= 2 ? 'text-accent' : ''}>{t('2. Identificación')}</span>
           <span>→</span>
-          <span className={step >= 3 ? 'text-accent' : ''}>3. Pago</span>
+          <span className={step >= 3 ? 'text-accent' : ''}>{t('3. Pago')}</span>
+          <span>→</span>
+          <span className={step >= 4 ? 'text-accent' : ''}>{t('4. Confirmación')}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* STEP 1: CART ITEMS */}
           {step === 1 && (
             <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white mb-6">Carrito de Compras</h2>
+              <h2 className="font-heading text-2xl font-light text-white mb-6">{t('Carrito de Compras')}</h2>
               
               {cartItems.length > 0 ? (
                 <div className="flex flex-col gap-4">
@@ -179,18 +183,18 @@ export default function CheckoutWizard() {
                     <Input
                       value={couponCode}
                       onChange={e => setCouponCode(e.target.value)}
-                      placeholder="Cupón de descuento (CUPOM10)"
+                      placeholder={t('Cupón de descuento (CUPOM10)')}
                       className="bg-black/30 border-white/10 text-white rounded-xl text-xs flex-1"
                     />
                     <Button onClick={handleApplyCoupon} className="bg-accent hover:bg-accentHover text-background font-bold rounded-xl text-xs px-5">
-                      APLICAR
+                      {t('APLICAR')}
                     </Button>
                   </div>
-                  {couponApplied && <span className="text-[10px] text-green-500 mt-1 font-semibold">✓ Cupón "CUPOM10" aplicado: -US$ 10.00</span>}
+                  {couponApplied && <span className="text-[10px] text-green-500 mt-1 font-semibold">{t('✓ Cupón "CUPOM10" aplicado: -US$ 10.00')}</span>}
                 </div>
               ) : (
                 <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-xs text-muted-foreground">
-                  El carrito está vacío.
+                  {t('El carrito está vacío.')}
                 </div>
               )}
             </div>
@@ -199,28 +203,33 @@ export default function CheckoutWizard() {
           {/* STEP 2: ADDRESS & DOCUMENT AUTO REQUIREMENTS */}
           {step === 2 && (
             <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white mb-6">Información de Envío</h2>
+              <h2 className="font-heading text-2xl font-light text-white mb-6">{t('Información de Envío')}</h2>
               
               <div className="flex flex-col gap-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">Nombre</label>
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Nombre')}</label>
                     <Input value={firstName} onChange={e => setFirstName(e.target.value)} required />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">Apellido</label>
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Apellido')}</label>
                     <Input value={lastName} onChange={e => setLastName(e.target.value)} required />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">País de Destino</label>
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('País de Destino')}</label>
                     <select
                       value={country}
                       onChange={e => setCountry(e.target.value)}
                       className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white"
                     >
+                      <option value="Brasil">Brasil</option>
+                      <option value="México">México</option>
+                      <option value="Chile">Chile</option>
+                      <option value="Colombia">Colombia</option>
+                      <option value="Argentina">Argentina</option>
                       <option value="España">España</option>
                       <option value="Uruguay">Uruguay</option>
                       <option value="Paraguay">Paraguay</option>
@@ -229,15 +238,20 @@ export default function CheckoutWizard() {
                   {/* Dynamic Document input based on country selection */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-semibold uppercase text-accent">
-                      {country === 'España' && 'Documento NIF / NIE'}
-                      {country === 'Uruguay' && 'Documento RUT o CI'}
-                      {country === 'Paraguay' && 'Documento RUC o CI'}
+                      {country === 'Brasil' && t('Documento CPF / CNPJ')}
+                      {country === 'México' && t('Documento RFC o CURP')}
+                      {country === 'Chile' && t('Documento RUT')}
+                      {country === 'Colombia' && t('Documento RUT o CC')}
+                      {country === 'Argentina' && t('Documento DNI o CUIT')}
+                      {country === 'España' && t('Documento NIF / NIE')}
+                      {country === 'Uruguay' && t('Documento RUT o CI')}
+                      {country === 'Paraguay' && t('Documento RUC o CI')}
                     </label>
                     <Input
                       value={docNumber}
                       onChange={e => setDocNumber(e.target.value)}
                       placeholder={
-                        country === 'España' ? 'Ej: 12345678Z' : country === 'Uruguay' ? 'Ej: 1234567-8' : 'Ej: 123456-7'
+                        country === 'España' ? t('Ej: 12345678Z') : country === 'Uruguay' ? t('Ej: 1234567-8') : t('Ej: 123456-7')
                       }
                       required
                     />
@@ -245,23 +259,23 @@ export default function CheckoutWizard() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-semibold uppercase text-accent">Calle & Número</label>
-                  <Input value={street} onChange={e => setStreet(e.target.value)} required />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">Ciudad</label>
-                    <Input value={city} onChange={e => setCity(e.target.value)} required />
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Calle & Número')}</label>
+                    <Input value={street} onChange={e => setStreet(e.target.value)} required />
                   </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">Código Postal</label>
-                    <Input value={zipCode} onChange={e => setZipCode(e.target.value)} required />
-                  </div>
-                </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-semibold uppercase text-accent">Teléfono de Contacto</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-semibold uppercase text-accent">{t('Ciudad')}</label>
+                      <Input value={city} onChange={e => setCity(e.target.value)} required />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-semibold uppercase text-accent">{t('Código Postal')}</label>
+                      <Input value={zipCode} onChange={e => setZipCode(e.target.value)} required />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Teléfono de Contacto')}</label>
                   <Input value={phone} onChange={e => setPhone(e.target.value)} required />
                 </div>
               </div>
@@ -271,14 +285,14 @@ export default function CheckoutWizard() {
           {/* STEP 3: PAYMENT GATEWAYS */}
           {step === 3 && (
             <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white mb-6">Método de Pago</h2>
+              <h2 className="font-heading text-2xl font-light text-white mb-6">{t('Método de Pago')}</h2>
               
               <div className="flex flex-col gap-4">
                 {[
-                  { id: 'stripe', name: 'Stripe Checkout', desc: 'Tarjetas de crédito, débito internacionales y Apple Pay' },
-                  { id: 'paypal', name: 'PayPal Integration', desc: 'Paga de forma rápida y segura con tu cuenta PayPal' },
-                  { id: 'mercadopago', name: 'Mercado Pago LatAm', desc: 'Tarjetas de crédito locales y transferencias' },
-                  { id: 'dlocal', name: 'dLocal Payments', desc: 'Medios de pago locales para Uruguay, Paraguay y otros' }
+                  { id: 'stripe', name: t('Stripe Checkout'), desc: t('Tarjetas de crédito, débito internacionales y Apple Pay') },
+                  { id: 'paypal', name: t('PayPal Integration'), desc: t('Paga de forma rápida y segura con tu cuenta PayPal') },
+                  { id: 'mercadopago', name: t('Mercado Pago LatAm'), desc: t('Tarjetas de crédito locales y transferencias') },
+                  { id: 'dlocal', name: t('dLocal Payments'), desc: t('Medios de pago locales para Uruguay, Paraguay y otros') }
                 ].map((gatewayOption) => (
                   <div key={gatewayOption.id} className="flex flex-col gap-3">
                     <button
@@ -296,7 +310,7 @@ export default function CheckoutWizard() {
                     
                     {gateway === 'dlocal' && gatewayOption.id === 'dlocal' && (country === 'Paraguay' || country === 'Uruguay') && (
                       <div className="border border-white/10 rounded-2xl p-4 bg-black/20 ml-4 flex flex-col gap-3">
-                        <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Selecciona la modalidad dLocal:</span>
+                        <span className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Selecciona la modalidad dLocal:')}</span>
                         <div className="flex gap-4">
                           <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
                             <input
@@ -307,7 +321,7 @@ export default function CheckoutWizard() {
                               onChange={() => setDlocalSubMethod('card')}
                               className="accent-accent"
                             />
-                            Tarjeta de Crédito Internacional
+                            {t('Tarjeta de Crédito Internacional')}
                           </label>
                           <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
                             <input
@@ -318,13 +332,13 @@ export default function CheckoutWizard() {
                               onChange={() => setDlocalSubMethod('cash')}
                               className="accent-accent"
                             />
-                            Pago en Efectivo (Redes Locales)
+                            {t('Pago en Efectivo (Redes Locales)')}
                           </label>
                         </div>
                         
                         {dlocalSubMethod === 'cash' && (
                           <div className="flex flex-col gap-2 mt-2">
-                            <span className="text-[9px] text-muted-foreground uppercase font-bold">Red de Cobranza:</span>
+                            <span className="text-[9px] text-muted-foreground uppercase font-bold">{t('Red de Cobranza:')}</span>
                             <select
                               value={cashNetwork}
                               onChange={(e) => setCashNetwork(e.target.value)}
@@ -358,24 +372,24 @@ export default function CheckoutWizard() {
               <span className="p-4 bg-accent/20 border border-accent/40 rounded-full text-accent">
                 <Check className="h-10 w-10" />
               </span>
-              <h2 className="font-heading text-3xl font-light text-white uppercase tracking-wider">¡Gracias por tu compra!</h2>
+              <h2 className="font-heading text-3xl font-light text-white uppercase tracking-wider">{t('¡Gracias por tu compra!')}</h2>
               
               {gateway === 'dlocal' && dlocalSubMethod === 'cash' ? (
                 <div className="w-full flex flex-col gap-4 mt-2">
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    Hemos registrado tu pedido **#{orderSuccess.id.substring(0, 8)}**. Para completar el pago, utiliza el siguiente cupón de cobranza local:
+                    {t('Hemos registrado tu pedido')} **#{orderSuccess.id.substring(0, 8)}**. {t('Para completar el pago, utiliza el siguiente cupón de cobranza local:')}
                   </p>
                   
                   {/* Visual Barcode Voucher Card */}
                   <div className="bg-white text-black font-mono text-left p-6 rounded-2xl border border-gray-200 flex flex-col gap-4 shadow-lg text-xs leading-normal">
                     <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                       <div>
-                        <span className="text-[9px] uppercase font-bold text-gray-500 block">Red de Cobranza</span>
+                        <span className="text-[9px] uppercase font-bold text-gray-500 block">{t('Red de Cobranza')}</span>
                         <span className="text-sm font-bold uppercase text-accent">
-                          {cashNetwork === 'pago_movil' && 'Pago Móvil (Paraguay)'}
-                          {cashNetwork === 'aqui_pago' && 'Aquí Pago (Paraguay)'}
-                          {cashNetwork === 'abitab' && 'Abitab (Uruguay)'}
-                          {cashNetwork === 'redpagos' && 'Redpagos (Uruguay)'}
+                          {cashNetwork === 'pago_movil' && t('Pago Móvil (Paraguay)')}
+                          {cashNetwork === 'aqui_pago' && t('Aquí Pago (Paraguay)')}
+                          {cashNetwork === 'abitab' && t('Abitab (Uruguay)')}
+                          {cashNetwork === 'redpagos' && t('Redpagos (Uruguay)')}
                         </span>
                       </div>
                       <span className="text-lg font-bold font-heading text-accent">US$ {total.toFixed(2)}</span>
@@ -383,11 +397,11 @@ export default function CheckoutWizard() {
 
                     <div className="grid grid-cols-2 gap-4 text-[10px]">
                       <div>
-                        <span className="font-bold text-gray-500 uppercase block text-[8px]">Referencia de Pago</span>
+                        <span className="font-bold text-gray-500 uppercase block text-[8px]">{t('Referencia de Pago')}</span>
                         <span className="font-bold text-black select-all">1029-4820-{orderSuccess.id.substring(0, 4).toUpperCase()}</span>
                       </div>
                       <div>
-                        <span className="font-bold text-gray-500 uppercase block text-[8px]">Fecha de Vencimiento</span>
+                        <span className="font-bold text-gray-500 uppercase block text-[8px]">{t('Fecha de Vencimiento')}</span>
                         <span className="font-bold text-black">
                           {(() => {
                             const date = new Date();
@@ -416,21 +430,47 @@ export default function CheckoutWizard() {
                     </div>
 
                     <div className="text-[8px] text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
-                      <span className="font-bold block uppercase text-[9px] text-gray-600 mb-1">Instrucciones de pago:</span>
-                      1. Presenta este cupón impreso o en tu celular en cualquier sucursal de la red seleccionada.<br />
-                      2. O bien, ingresa a la aplicación de tu banco o billetera digital y digita el número de referencia.<br />
-                      3. Guarda el recibo. Tu pedido será procesado inmediatamente una vez confirmada la compensación.
+                      <span className="font-bold block uppercase text-[9px] text-gray-600 mb-1">{t('Instrucciones de pago:')}</span>
+                      {t('1. Presenta este cupón impreso o en tu celular en cualquier sucursal de la red seleccionada.')}<br />
+                      {t('2. O bien, ingresa a la aplicación de tu banco o billetera digital y digita el número de referencia.')}<br />
+                      {t('3. Guarda el recibo. Tu pedido será procesado inmediatamente una vez confirmada la compensación.')}
                     </div>
                   </div>
                   
                   <Button onClick={() => window.print()} variant="outline" className="border-white/10 text-white hover:bg-white/5 py-2 px-6 rounded-xl text-xs w-fit mx-auto mt-2">
-                    IMPRIMIR VOUCHER
+                    {t('IMPRIMIR VOUCHER')}
                   </Button>
                 </div>
               ) : (
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Hemos recibido tu pedido con el ID **{orderSuccess.id.substring(0, 8)}**. En unos momentos se acreditará el pago y recibirás tu **Commercial Invoice** junto con los detalles de envío en tu dashboard.
-                </p>
+                <div className="flex flex-col gap-4 items-center w-full">
+                  <p className="text-sm text-white leading-relaxed">
+                    {t('Hemos recibido tu pedido con el ID')} <strong className="text-accent">#{orderSuccess.id.substring(0, 8)}</strong>.
+                  </p>
+                  
+                  <div className="bg-orange-500/10 border border-orange-500/30 text-orange-200 text-xs p-5 rounded-2xl text-left w-full shadow-inner mt-2">
+                    <strong className="block mb-2 text-orange-400 text-sm flex items-center gap-2">
+                      <span className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                      </span>
+                      {t('Importante: Validación de Pedido (48-72h)')}
+                    </strong>
+                    <p className="opacity-90">{t('Como operamos con envíos directos desde Corea del Sur hacia Latinoamérica, tu pedido ha entrado en la fase de validación de disponibilidad y documentación de exportación (48-72 horas).')}</p>
+                    <p className="opacity-90 mt-2">{t('Una vez confirmado el stock y el pago, emitiremos tu Commercial Invoice final y prepararemos el paquete para envío.')}</p>
+                  </div>
+
+                  <div className="flex flex-col items-center mt-4 p-4 border border-white/5 rounded-2xl w-full bg-black/20">
+                    <p className="text-xs text-muted-foreground mb-3">
+                      {t('Tu orden ha sido registrada. Puedes descargar la factura proforma (Invoice preliminar) aquí:')}
+                    </p>
+                    <a href={`/invoices/cheotnun-inv-${orderSuccess.id}.pdf`} target="_blank" rel="noreferrer">
+                      <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-black py-2 px-6 rounded-xl text-xs flex gap-2 transition-all">
+                        <FileText className="h-4 w-4" />
+                        {t('DESCARGAR COMMERCIAL INVOICE')}
+                      </Button>
+                    </a>
+                  </div>
+                </div>
               )}
               
               <div className="h-px bg-white/10 w-full my-4" />
@@ -438,12 +478,12 @@ export default function CheckoutWizard() {
               <div className="flex gap-4">
                 <Link href="/dashboard/cliente">
                   <Button className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 px-6 rounded-xl text-xs">
-                    IR A MI DASHBOARD
+                    {t('IR A MI DASHBOARD')}
                   </Button>
                 </Link>
                 <Link href="/tienda">
                   <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 py-2.5 px-6 rounded-xl text-xs">
-                    SEGUIR COMPRANDO
+                    {t('SEGUIR COMPRANDO')}
                   </Button>
                 </Link>
               </div>
@@ -454,26 +494,26 @@ export default function CheckoutWizard() {
           {step !== 4 && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 shadow-xl h-fit flex flex-col justify-between">
               <div>
-                <h3 className="text-xs font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-3 mb-4">Resumen del Pedido</h3>
+                <h3 className="text-xs font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-3 mb-4">{t('Resumen del Pedido')}</h3>
                 
                 <div className="flex flex-col gap-2.5 text-xs text-muted-foreground">
                   <div className="flex justify-between">
-                    <span>Subtotal</span>
+                    <span>{t('Subtotal')}</span>
                     <span>US$ {subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Envío</span>
+                    <span>{t('Envío')}</span>
                     <span>US$ 15.00</span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-green-500">
-                      <span>Descuento (Cupón)</span>
+                      <span>{t('Descuento (Cupón)')}</span>
                       <span>-US$ {discount.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="h-px bg-white/5 my-2" />
                   <div className="flex justify-between text-sm font-bold text-white">
-                    <span>Total General</span>
+                    <span>{t('Total General')}</span>
                     <span className="text-accent font-heading text-lg">US$ {total.toFixed(2)}</span>
                   </div>
                 </div>
@@ -487,7 +527,7 @@ export default function CheckoutWizard() {
                     disabled={cartItems.length === 0}
                     className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                   >
-                    CONTINUAR AL ENVÍO
+                    {t('CONTINUAR AL ENVÍO')}
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 )}
@@ -498,11 +538,11 @@ export default function CheckoutWizard() {
                       disabled={!firstName || !lastName || !street || !city || !zipCode || !docNumber}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
-                      CONTINUAR AL PAGO
+                      {t('CONTINUAR AL PAGO')}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <Button variant="ghost" onClick={() => setStep(1)} className="text-xs text-muted-foreground">
-                      Volver al carrito
+                      {t('Volver al carrito')}
                     </Button>
                   </div>
                 )}
@@ -513,10 +553,10 @@ export default function CheckoutWizard() {
                       disabled={loading}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
-                      {loading ? 'Procesando...' : 'COMPLETAR PEDIDO'}
+                      {loading ? t('Procesando...') : t('COMPLETAR PEDIDO')}
                     </Button>
                     <Button variant="ghost" onClick={() => setStep(2)} className="text-xs text-muted-foreground">
-                      Volver al envío
+                      {t('Volver al envío')}
                     </Button>
                   </div>
                 )}

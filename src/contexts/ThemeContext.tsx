@@ -46,7 +46,7 @@ const DEFAULT_THEME: ThemeSettings = {
     bodyFont: 'Inter',
     baseSize: '16px'
   },
-  logo_url: '/logo-yedam.png',
+  logo_url: '/logo-cheotnun.png',
   favicon_url: '/favicon.ico'
 };
 
@@ -72,7 +72,7 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
 
     const settings = db.get('system_settings');
     const dbTheme = settings?.visual_theme;
-    const saved = localStorage.getItem('yedam_theme');
+    const saved = localStorage.getItem('cheotnun_theme');
 
     if (saved) {
       try {
@@ -114,7 +114,7 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
         colors: { ...prev.colors, ...newTheme.colors },
         typography: { ...prev.typography, ...newTheme.typography }
       } as ThemeSettings;
-      localStorage.setItem('yedam_theme', JSON.stringify(updated));
+      localStorage.setItem('cheotnun_theme', JSON.stringify(updated));
 
       const settings = db.get('system_settings');
       settings.visual_theme = {

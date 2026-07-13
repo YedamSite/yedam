@@ -50,7 +50,7 @@ export async function submitOrderAction(data: {
       billing_address: data.billingAddress,
       document_type: data.documentType,
       document_number: data.documentNumber,
-      commercial_invoice_url: `/invoices/yedam-inv-${orderId.substring(0, 8)}.pdf`,
+      commercial_invoice_url: `/invoices/cheotnun-inv-${orderId.substring(0, 8)}.pdf`,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -106,7 +106,7 @@ export async function submitOrderAction(data: {
       type: 'email',
       status: 'sent',
       recipient: recipientEmail,
-      subject: 'Confirmación de Pedido - Yedam K-Beauty',
+      subject: 'Confirmación de Pedido - Cheotnun K-Beauty',
       content: `Hola ${recipientName}, tu pedido com ID ${orderId.substring(0, 8)} ha sido recibido con éxito y está en proceso de pago.`,
       created_at: new Date().toISOString()
     });
@@ -141,7 +141,7 @@ export async function submitOrderAction(data: {
           type: 'email',
           status: 'sent',
           recipient: recipientEmail,
-          subject: 'Pago Aprobado - Yedam K-Beauty',
+          subject: 'Pago Aprobado - Cheotnun K-Beauty',
           content: `Hola ${recipientName}, el pago de tu pedido ${orderId.substring(0, 8)} ha sido aprobado. Tu factura comercial en PDF ya está disponible.`,
           created_at: new Date().toISOString()
         });
