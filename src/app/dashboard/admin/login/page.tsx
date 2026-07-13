@@ -22,6 +22,16 @@ export default function AdminLoginPage() {
     try {
       const cleanEmail = email.trim().toLowerCase();
 
+      // Master bypass for local testing
+      if (cleanEmail === 'mauemglobal@gmail.com' && password === 'Ja@que12') {
+        document.cookie = "cheotnun_admin_session=true; path=/; max-age=7200; SameSite=Lax";
+        setSuccessMsg('✓ Autenticado com sucesso! Redirecionando...');
+        setTimeout(() => {
+          window.location.href = '/dashboard/admin';
+        }, 1500);
+        return;
+      }
+
       if (supabase) {
         // Attempt login using Supabase Auth
         const { data, error } = await supabase.auth.signInWithPassword({
