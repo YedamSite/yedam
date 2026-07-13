@@ -63,13 +63,13 @@ export default function LiveChatTab() {
     loadChats();
   };
 
+  const activeChat = chats.find(c => c.id === activeChatId);
+
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [chats, activeChatId]);
-
-  const activeChat = chats.find(c => c.id === activeChatId);
+  }, [activeChat?.messages?.length, activeChatId]);
 
   return (
     <div className="flex flex-col h-[600px] border border-white/5 rounded-3xl bg-card overflow-hidden">
