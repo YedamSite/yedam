@@ -13,6 +13,7 @@ export default function LiveChat() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([]);
   const [chatId, setChatId] = useState<string>('');
+  const [unread, setUnread] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -82,6 +83,18 @@ export default function LiveChat() {
     setMessage('');
   };
 
+  const prevMessagesLength = useRef(0);
+  useEffect(() => {
+    if (messages.length > prevMessagesLength.current) {
+      const newMsgs = messages.slice(prevMessagesLength.current);
+      const hasNewAdminMsg = newMsgs.some(m => m.sender === 'admin');
+      if (hasNewAdminMsg && !isOpen) {
+        setUnread(prev => prev + newMsgs.filter(m => m.sender === 'admin').length);
+      }
+    }
+    prevMessagesLength.current = messages.length;
+  }, [messages, isOpen]);
+
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -92,10 +105,15 @@ export default function LiveChat() {
     <>
       {/* Floating Chat Button */}
       <button
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-${isOpen ? '-20' : '6'} z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen ? 'scale-0' : 'scale-100'}`}
+        onClick={() => { setIsOpen(true); setUnread(0); }}
+        className={`fixed bottom-6 right-${isOpen ? '-20' : '6'} z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen ? 'scale-0' : 'scale-100'} relative`}
       >
         <MessageCircle className="h-6 w-6" />
+        {unread > 0 && !isOpen && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center animate-bounce">
+            {unread}
+          </span>
+        )}
       </button>
 
       {/* Chat Window */}
@@ -125,11 +143,16 @@ export default function LiveChat() {
             </div>
           ) : (
             messages.map((msg) => (
-              <div key={msg.id} className={`max-w-[85%] rounded-2xl px-4 py-2 text-xs ${msg.sender === 'client' ? 'bg-accent text-background self-end rounded-tr-sm' : 'bg-secondary border border-white/5 text-white self-start rounded-tl-sm'}`}>
-                <p>{msg.content}</p>
-                <span className={`text-[8px] mt-1 block ${msg.sender === 'client' ? 'text-background/70 text-right' : 'text-muted-foreground'}`}>
-                  {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              <div key={msg.id} className={`flex flex-col ${msg.sender === 'client' ? 'items-end' : 'items-start'}`}>
+                <span className="text-[10px] text-muted-foreground mb-1 px-1">
+                  {msg.sender === 'client' ? t('Você') : t('Atendimento')}
                 </span>
+                <div className={`max-w-[85%] rounded-2xl px-4 py-2 text-xs ${msg.sender === 'client' ? 'bg-accent text-background rounded-tr-sm' : 'bg-secondary border border-white/5 text-white rounded-tl-sm'}`}>
+                  <p>{msg.content}</p>
+                  <span className={`text-[8px] mt-1 block ${msg.sender === 'client' ? 'text-background/70 text-right' : 'text-muted-foreground'}`}>
+                    {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
               </div>
             ))
           )}

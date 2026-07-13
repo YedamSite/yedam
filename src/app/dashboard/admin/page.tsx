@@ -572,6 +572,8 @@ export default function AdminDashboard() {
             { id: 'newsletter', label: 'Newsletter & Leads', icon: Mail },
             { id: 'coupons', label: 'Cupones & Promos', icon: Tag },
             { id: 'blog', label: 'Blog & Artículos', icon: BookOpen },
+            { id: 'shipping', label: 'Fretes e Zonas', icon: Globe },
+            { id: 'chat', label: 'Live Chat', icon: MessageCircle },
             { id: 'settings', label: 'APIs, SMTP & SEO', icon: Globe },
             { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
             { id: 'emails', label: 'Transaccionales & Auditoría', icon: Mail }
