@@ -106,7 +106,7 @@ export default function LiveChat() {
       {/* Floating Chat Button */}
       <button
         onClick={() => { setIsOpen(true); setUnread(0); }}
-        className={`fixed bottom-6 z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen ? '-right-20 scale-0' : 'right-6 scale-100'} relative`}
+        className={`fixed bottom-6 z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen ? '-right-20 scale-0' : 'right-6 scale-100'}`}
       >
         <MessageCircle className="h-6 w-6" />
         {unread > 0 && !isOpen && (
