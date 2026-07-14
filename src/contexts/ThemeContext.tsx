@@ -35,8 +35,8 @@ const DEFAULT_THEME: ThemeSettings = {
   colors: {
     primary: '#08152F',
     secondary: '#091731',
-    accent: '#CFA573',
-    accentHover: '#D7B282',
+    accent: '#C9C9C9',
+    accentHover: '#C9C9C9',
     text: '#F3F4F6',
     background: '#08152F',
     card: 'rgba(15, 23, 42, 0.65)'
@@ -77,6 +77,12 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        const oldGold = ['#CFA573', '#D7B282', '#D4AF37', '#E2C974'];
+        if (parsed.colors && oldGold.includes(parsed.colors.accent?.toUpperCase())) {
+          parsed.colors.accent = '#C9C9C9';
+          parsed.colors.accentHover = '#C9C9C9';
+          localStorage.setItem('cheotnun_theme', JSON.stringify(parsed));
+        }
         setTheme(parsed);
         applyTheme(parsed);
         return;

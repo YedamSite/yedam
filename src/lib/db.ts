@@ -312,8 +312,8 @@ const DEFAULT_STATE: DbState = {
       colors: {
         primary: '#08152F',
         secondary: '#091731',
-        accent: '#CFA573',
-        accentHover: '#D7B282',
+        accent: '#C9C9C9',
+        accentHover: '#C9C9C9',
         text: '#F3F4F6',
         background: '#08152F',
         card: 'rgba(15, 23, 42, 0.65)'
