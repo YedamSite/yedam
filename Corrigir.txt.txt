@@ -1,29 +1,3 @@
-## Error Type
-Runtime Error
+mude a cor amarela inteira do site para essa:
 
-## Error Message
-Invalid src prop (https://qzmmpprdyvhaleixzlma.supabase.co/storage/v1/object/public/yedam-images/products/1783757677221-eb3jib.png) on `next/image`, hostname "qzmmpprdyvhaleixzlma.supabase.co" is not configured under images in your `next.config.js`
-See more info: https://nextjs.org/docs/messages/next-image-unconfigured-host
-
-
-    at defaultLoader (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_0098udc._.js:2809:49)
-    at <unknown> (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_0098udc._.js:233:39)
-    at Array.map (<anonymous>:null:null)
-    at generateImgAttrs (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_0098udc._.js:233:24)
-    at getImgProps (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_0098udc._.js:646:27)
-    at <unknown> (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_0098udc._.js:3146:82)
-    at Object.react_stack_bottom_frame (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15037:24)
-    at renderWithHooks (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:4620:24)
-    at updateForwardRef (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:5908:21)
-    at beginWork (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6766:24)
-    at runWithFiberInDEV (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
-    at performUnitOfWork (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
-    at workLoopSync (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
-    at renderRootSync (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
-    at performWorkOnRoot (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9098:47)
-    at performWorkOnRootViaSchedulerTask (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
-    at MessagePort.performWorkUntilDeadline (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64)
-    at ProductoDetallePage (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/src_0tykv2u._.js:2236:245)
-    at ClientPageRoot (file://D:/Minhas Coisas/Desktop/Sites/yedam/.next/dev/static/chunks/node_modules_0h1pxxh._.js:5622:50)
-
-Next.js version: 16.2.10 (Turbopack)
+#C9C9C9

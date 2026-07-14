@@ -120,7 +120,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
               <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1 leading-snug">{product.name}</h1>
               <div className="flex items-center gap-4 mt-3">
                 <div className="flex items-center gap-1">
-                  <div className="flex text-amber-400">
+                  <div className="flex text-accent">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="h-4 w-4 fill-current" />
                     ))}
@@ -140,11 +140,11 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
                   product.stock > 10
                     ? 'bg-green-500/10 text-green-400 border-green-500/20'
                     : product.stock > 0
-                    ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20'
+                    ? 'bg-accent/10 text-accent border-accent/20'
                     : 'bg-red-500/10 text-red-400 border-red-500/20'
                 }`}>
                   <span className={`h-1.5 w-1.5 rounded-full ${
-                    product.stock > 10 ? 'bg-green-400' : product.stock > 0 ? 'bg-yellow-400' : 'bg-red-400'
+                    product.stock > 10 ? 'bg-green-400' : product.stock > 0 ? 'bg-accent' : 'bg-red-400'
                   }`} />
                   {product.stock > 0 ? `${product.stock} ${t('en stock')}` : t('Agotado')}
                 </span>

@@ -755,7 +755,7 @@ export default function AdminDashboard() {
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
                             <span className="text-[10px] text-muted-foreground uppercase font-bold">Pendentes</span>
-                            <span className="text-sm font-bold text-yellow-400">{pendingOrders}</span>
+                            <span className="text-sm font-bold text-accent">{pendingOrders}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
                             <span className="text-[10px] text-muted-foreground uppercase font-bold">Pagamento Aprovado</span>
@@ -778,9 +778,9 @@ export default function AdminDashboard() {
                             <span className="text-[10px] text-red-400 uppercase font-bold">Sem Estoque</span>
                             <span className="text-sm font-bold text-red-400">{outOfStockProducts}</span>
                           </div>
-                          <div className="flex items-center justify-between p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
-                            <span className="text-[10px] text-yellow-400 uppercase font-bold">Estoque Baixo ({'<'}20{')'}</span>
-                            <span className="text-sm font-bold text-yellow-400">{lowStockProducts}</span>
+                          <div className="flex items-center justify-between p-3 bg-accent/10 border border-accent/20 rounded-xl">
+                            <span className="text-[10px] text-accent uppercase font-bold">Estoque Baixo ({'<'}20{')'}</span>
+                            <span className="text-sm font-bold text-accent">{lowStockProducts}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
                             <span className="text-[10px] text-green-400 uppercase font-bold">Estoque Normal</span>
@@ -859,7 +859,7 @@ export default function AdminDashboard() {
                                   </td>
                                   <td className="py-3 px-3">
                                     <span className={`text-[8px] font-bold px-2 py-1 rounded-full uppercase ${
-                                      order.status === 'pending' || order.status === 'preparing' ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' :
+                                      order.status === 'pending' || order.status === 'preparing' ? 'bg-accent/10 text-accent border border-accent/20' :
                                       order.status === 'payment_approved' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
                                       order.status === 'shipped' || order.status === 'delivered' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
                                       'bg-gray-500/10 text-gray-400 border border-gray-500/20'
@@ -1674,7 +1674,7 @@ export default function AdminDashboard() {
                               <span>📅 {post.created_at}</span>
                               <button
                                 onClick={() => handlePublishToggle(post.id, post.status)}
-                                className={`font-bold ${post.status === 'published' ? 'text-green-400' : 'text-yellow-400'}`}
+                                className={`font-bold ${post.status === 'published' ? 'text-green-400' : 'text-accent'}`}
                               >
                                 {post.status === 'published' ? '🟢 Publicado' : '🟡 Borrador'}
                               </button>
@@ -2050,7 +2050,7 @@ export default function AdminDashboard() {
                     <div className="border border-white/5 bg-secondary/20 rounded-2xl p-6 shadow-sm">
                       <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Pedidos Pendentes</span>
                       <h3 className="font-heading text-3xl font-bold text-white mt-2">{pendingOrders}</h3>
-                      <p className="text-[10px] text-yellow-500 mt-2 font-semibold">Aguardando processamento</p>
+                      <p className="text-[10px] text-accent mt-2 font-semibold">Aguardando processamento</p>
                     </div>
                   </div>
                 );

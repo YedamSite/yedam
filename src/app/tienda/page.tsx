@@ -214,7 +214,7 @@ export default function TiendaPage() {
                           </h3>
                           <p className="text-[9px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{t(prod.description)}</p>
                           <div className="flex items-center gap-1 mt-1.5">
-                            <div className="flex text-amber-400">
+                            <div className="flex text-accent">
                               {[...Array(5)].map((_, i) => (
                                 <Star key={i} className="h-3 w-3 fill-current" />
                               ))}

@@ -120,7 +120,7 @@ export default function EnviosPage() {
           <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-secondary/30 border border-white/5 rounded-2xl p-6">
               <div className="flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-yellow-400 shrink-0 mt-0.5" />
+                <AlertCircle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-bold text-white text-xs uppercase mb-2">Zonas Remotas</h4>
                   <p className="text-xs text-foreground/60">

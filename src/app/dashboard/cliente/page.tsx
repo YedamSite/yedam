@@ -201,7 +201,7 @@ export default function ClienteDashboard() {
                           <span className={`text-[9px] font-bold px-3 py-1 rounded-full uppercase border ${
                             ['pagamento_confirmado', 'preparando_coreia', 'documentacao_exportacao', 'enviado', 'processo_aduaneiro', 'entregue'].includes(order.status)
                               ? 'bg-green-500/10 text-green-400 border-green-500/20'
-                              : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                              : 'bg-accent/10 text-accent border-accent/20'
                           }`}>
                             {order.status.replace(/_/g, ' ')}
                           </span>

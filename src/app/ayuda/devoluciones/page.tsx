@@ -121,7 +121,7 @@ export default function DevolucionesPage() {
 
             <div className="bg-card border border-white/5 rounded-3xl p-8">
               <h3 className="font-heading text-xl font-light text-white uppercase mb-6 flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-yellow-400" />
+                <AlertCircle className="h-5 w-5 text-accent" />
                 No Aceptamos Devoluciones de
               </h3>
               <ul className="flex flex-col gap-3">
@@ -133,7 +133,7 @@ export default function DevolucionesPage() {
                   'Devoluciones después de 14 días'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start gap-3 text-xs text-foreground/70">
-                    <AlertCircle className="h-4 w-4 text-yellow-400 shrink-0 mt-0.5" />
+                    <AlertCircle className="h-4 w-4 text-accent shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
