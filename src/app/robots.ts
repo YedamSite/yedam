@@ -57,7 +57,7 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       `${baseUrl}/sitemap.xml`,
-      `${baseUrl}/sitemap-images.xml`,
+      `${baseUrl}/api/sitemap-images`,
     ],
   }
 }

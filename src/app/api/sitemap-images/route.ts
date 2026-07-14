@@ -1,7 +1,7 @@
-import { MetadataRoute } from 'next'
+import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export async function GET() {
   const baseUrl = 'https://www.cheotnun.com'
   
   // URLs de todas as imagens
@@ -41,13 +41,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     })
 
-  // Cria entries do sitemap - apenas URLs das imagens
-  const imageEntries: MetadataRoute.Sitemap = imageUrls.map((url) => ({
-    url,
-    lastModified: new Date(),
-    changeFrequency: 'monthly',
-    priority: 0.5,
-  }))
+  // Gera o XML do sitemap de imagens
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${imageUrls.map((url) => `  <url>
+    <loc>${url}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>`).join('\n')}
+</urlset>`
 
-  return imageEntries
+  return new NextResponse(xml, {
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, s-maxage=3600',
+    },
+  })
 }
