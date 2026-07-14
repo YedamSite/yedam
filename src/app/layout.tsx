@@ -110,6 +110,7 @@ export default function RootLayout({
     >
       <head>
         <meta name="msvalidate.01" content="BE206678019BB93C1BF74506BE356F3D" />
+        <meta name="indexnow" content="cee1c4680a5647be9b5444aa3fce9374" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
