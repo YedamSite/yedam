@@ -52,8 +52,6 @@ export const metadata: Metadata = {
   publisher: "Cheotnun K-Beauty",
   verification: {
     google: "fwcjoRIRoX966r_rXvFgPvvcsoWSFwytgqzj2YIcGOU",
-    yandex: "fwcjoRIRoX966r_rXvFgPvvcsoWSFwytgqzj2YIcGOU",
-    bing: "BE206678019BB93C1BF74506BE356F3D",
   },
   alternates: {
     canonical: baseUrl,
@@ -111,6 +109,7 @@ export default function RootLayout({
       className={`${manrope.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased overflow-x-hidden`}
     >
       <head>
+        <meta name="msvalidate.01" content="BE206678019BB93C1BF74506BE356F3D" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
