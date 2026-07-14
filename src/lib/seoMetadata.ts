@@ -87,7 +87,7 @@ export function generateShopMetadata(locale: string = 'es'): Metadata {
     title: titles[locale as keyof typeof titles],
     description: descriptions[locale as keyof typeof descriptions],
     openGraph: {
-      type: 'product.group',
+      type: 'website',
       locale: locale === 'es' ? 'es_ES' : locale === 'pt' ? 'pt_BR' : 'en_US',
       url: `${baseUrl}/tienda`,
     },
@@ -111,7 +111,7 @@ export function generateBlogMetadata(locale: string = 'es'): Metadata {
     title: titles[locale as keyof typeof titles],
     description: descriptions[locale as keyof typeof descriptions],
     openGraph: {
-      type: 'blog',
+      type: 'website',
       locale: locale === 'es' ? 'es_ES' : locale === 'pt' ? 'pt_BR' : 'en_US',
       url: `${baseUrl}/blog`,
     },
