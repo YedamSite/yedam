@@ -14,7 +14,6 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/auth/',
           '/invoices/',
-          '/sitemap-images.xml',
         ],
       },
       {
@@ -39,9 +38,26 @@ export default function robots(): MetadataRoute.Robots {
           '/invoices/',
         ],
       },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/',
+        disallow: [
+          '/dashboard/',
+          '/admin/',
+        ],
+      },
+      {
+        userAgent: 'bingbot',
+        allow: '/',
+        disallow: [
+          '/dashboard/',
+          '/admin/',
+        ],
+      },
     ],
     sitemap: [
       `${baseUrl}/sitemap.xml`,
+      `${baseUrl}/sitemap-images.xml`,
     ],
   }
 }
