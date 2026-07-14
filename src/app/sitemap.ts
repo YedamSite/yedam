@@ -76,5 +76,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }))
 
-  return [...routes, ...productUrls, ...blogUrls, ...routineUrls]
+  // Imagens para Google Images
+  const productsList = (await import('@/lib/db')).db.get('products') || []
+  const categories = (await import('@/lib/db')).db.get('categories') || []
+  const blogPostsList = (await import('@/lib/db')).db.get('blog_posts') || []
+  
+  const imageUrls = [
+    `${baseUrl}/images/logo.webp`,
+    `${baseUrl}/images/banner.webp`,
+    ...productsList.filter((p: any) => p.status === 'active' && p.image).map((p: any) => p.image),
+    ...categories.filter((c: any) => c.image).map((c: any) => c.image),
+    ...blogPostsList.filter((post: any) => post.status === 'published' && post.image).map((post: any) => post.image),
+  ].filter((url: string, index: number, self: string[]) => self.indexOf(url) === index) // Remove duplicates
+
+  const imageEntries: MetadataRoute.Sitemap = imageUrls.map((url: string) => ({
+    url,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+  }))
+
+  return [...routes, ...productUrls, ...blogUrls, ...routineUrls, ...imageEntries]
 }
