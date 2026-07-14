@@ -17,16 +17,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Generate sitemap entries with hreflang alternatives
-  const routes = staticRoutes.flatMap((route) => {
+  const routes = staticRoutes.map((route) => {
     const url = `${baseUrl}${route}`
     const lastModified = new Date()
     
-    // Return one entry per route - hreflang will be in metadata
+    let changeFrequency: MetadataRoute.Sitemap[0]['changeFrequency'] = 'monthly'
+    let priority: MetadataRoute.Sitemap[0]['priority'] = 0.8
+    
+    if (route === '') {
+      changeFrequency = 'daily'
+      priority = 1.0
+    } else if (route === '/tienda') {
+      changeFrequency = 'daily'
+      priority = 0.9
+    } else if (route === '/blog') {
+      changeFrequency = 'weekly'
+      priority = 0.8
+    }
+    
     return {
       url,
       lastModified,
-      changeFrequency: route === '' ? 'daily' : route === '/tienda' ? 'daily' : route === '/blog' ? 'weekly' : 'monthly' as const,
-      priority: route === '' ? 1.0 : route === '/tienda' ? 0.9 : 0.8,
+      changeFrequency,
+      priority,
     }
   })
 
@@ -34,10 +47,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = (await import('@/lib/db')).db.get('products') || []
   const productUrls = products
     .filter((p: any) => p.status === 'active')
-    .map((product: any) => ({
+    .map((product: any): MetadataRoute.Sitemap[0] => ({
       url: `${baseUrl}/tienda/produto/${product.slug}`,
       lastModified: new Date(product.updated_at || product.created_at || Date.now()),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.7,
     }))
 
@@ -45,10 +58,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPosts = (await import('@/lib/db')).db.get('blog_posts') || []
   const blogUrls = blogPosts
     .filter((post: any) => post.status === 'published')
-    .map((post: any) => ({
+    .map((post: any): MetadataRoute.Sitemap[0] => ({
       url: `${baseUrl}/blog/${post.slug}`,
       lastModified: new Date(post.updated_at || post.created_at || Date.now()),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.8,
     }))
 
@@ -56,10 +69,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routines = (await import('@/lib/db')).db.get('routines') || []
   const routineUrls = routines
     .filter((r: any) => r.status === 'active')
-    .map((routine: any) => ({
+    .map((routine: any): MetadataRoute.Sitemap[0] => ({
       url: `${baseUrl}/rutinas/${routine.slug}`,
       lastModified: new Date(routine.updated_at || routine.created_at || Date.now()),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.7,
     }))
 
