@@ -159,7 +159,7 @@ export function generateExperienciasMetadata(locale: string = 'es'): Metadata {
     title: titles[locale as keyof typeof titles],
     description: descriptions[locale as keyof typeof descriptions],
     openGraph: {
-      type: 'event',
+      type: 'website',
       locale: locale === 'es' ? 'es_ES' : locale === 'pt' ? 'pt_BR' : 'en_US',
       url: `${baseUrl}/experiencias`,
     },
