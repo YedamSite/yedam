@@ -25,13 +25,79 @@ const playfair = Playfair_Display({
   weight: ["400","500","600","700","800","900"],
 });
 
+const baseUrl = "https://www.cheotnun.com";
+
 export const metadata: Metadata = {
-  title: "CHEOTNUN K-BEAUTY | Cosmética Coreana Premium e Internacional",
-  description: "Tu belleza. Tu ritual. Tu momento. Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial y corporal.",
-  keywords: ["K-Beauty España", "Cosméticos Coreanos", "Rutina Coreana", "Skincare Coreano Premium", "Cheotnun"],
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium",
+    template: "%s | CHEOTNUN K-BEAUTY",
+  },
+  description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial. Fórmulas botânicas que revelam sua luminosidade natural. Envios para toda América Latina e Espanha.",
+  keywords: [
+    "K-Beauty",
+    "Cosméticos Coreanos",
+    "Skincare Coreano",
+    "Rutina Coreana",
+    "Skincare Premium",
+    "Cheotnun",
+    "Belleza Coreana",
+    "Korean Cosmetics",
+    "Korean Skincare",
+    "Cuidado Facial",
+    "Skincare Internacional",
+  ],
+  authors: [{ name: "Cheotnun K-Beauty", url: baseUrl }],
+  creator: "Cheotnun K-Beauty",
+  publisher: "Cheotnun K-Beauty",
   verification: {
     google: "fwcjoRIRoX966r_rXvFgPvvcsoWSFwytgqzj2YIcGOU",
+    yandex: "fwcjoRIRoX966r_rXvFgPvvcsoWSFwytgqzj2YIcGOU",
+    bing: "BE206678019BB93C1BF74506BE356F3D",
   },
+  alternates: {
+    canonical: baseUrl,
+    languages: {
+      "es": `${baseUrl}/es`,
+      "pt": `${baseUrl}/pt`,
+      "en": `${baseUrl}/en`,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_ES",
+    alternateLocale: ["pt_BR", "en_US"],
+    url: baseUrl,
+    siteName: "CHEOTNUN K-BEAUTY",
+    title: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium",
+    description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial. Envios internacionais.",
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "CHEOTNUN K-BEAUTY - Cosméticos Coreanos Premium",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium",
+    description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial.",
+    images: ["/images/twitter-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  category: "beauty",
 };
 
 export default function RootLayout({
@@ -44,6 +110,12 @@ export default function RootLayout({
       lang="es"
       className={`${manrope.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased overflow-x-hidden`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans overflow-x-hidden">
         <ThemeProvider>
           <LanguageProvider>

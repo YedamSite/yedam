@@ -17,6 +17,8 @@ import { toggleFavoriteAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
 import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 import { useLanguage } from '@/context/LanguageContext';
+import { StructuredData } from '@/components/StructuredData';
+import { generateOrganizationSchema, generateWebSiteSchema, generateBreadcrumbSchema } from '@/lib/structuredData';
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
   ShieldCheck, Truck, ShieldAlert, Heart, Droplet, Sparkles,
@@ -400,6 +402,13 @@ export default function Home() {
       </section>
 
       <Footer />
+      
+      {/* Structured Data for SEO */}
+      <StructuredData data={generateOrganizationSchema()} id="organization-schema" />
+      <StructuredData data={generateWebSiteSchema()} id="website-schema" />
+      <StructuredData data={generateBreadcrumbSchema([
+        { name: 'Inicio', url: 'https://www.cheotnun.com' },
+      ])} id="breadcrumb-schema" />
     </div>
   );
 }
