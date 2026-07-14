@@ -82,7 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPostsList = (await import('@/lib/db')).db.get('blog_posts') || []
   
   const imageUrls = [
-    `${baseUrl}/images/logo.webp`,
+    `${baseUrl}/images/cheotnun-logo.webp`,
     `${baseUrl}/images/banner.webp`,
     ...productsList.filter((p: any) => p.status === 'active' && p.image).map((p: any) => p.image),
     ...categories.filter((c: any) => c.image).map((c: any) => c.image),

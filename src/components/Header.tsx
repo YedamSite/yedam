@@ -175,7 +175,7 @@ export default function Header() {
           {/* Logo - Left */}
           <Link href="/" className="flex items-center gap-2 group shrink-0">
             <Image
-              src={headerContent.logoUrl || '/images/logo.webp'}
+              src={headerContent.logoUrl || '/images/cheotnun-logo.webp'}
               alt="Cheotnun"
               width={140}
               height={40}

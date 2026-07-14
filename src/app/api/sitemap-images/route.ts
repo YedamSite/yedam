@@ -7,7 +7,7 @@ export async function GET() {
   // URLs de todas as imagens
   const imageUrls: string[] = [
     // Imagens estáticas
-    `${baseUrl}/images/logo.webp`,
+    `${baseUrl}/images/cheotnun-logo.webp`,
     `${baseUrl}/images/banner.webp`,
   ]
 

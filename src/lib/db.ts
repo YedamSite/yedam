@@ -269,7 +269,7 @@ const DEFAULT_STATE: DbState = {
       announcementText: 'Belleza que nace de la tradición. Cosmética que transforma.',
       shippingText: 'Envíos para toda América Latina',
       attentionText: 'Atención',
-      logoUrl: '/images/logo.webp'
+      logoUrl: '/images/cheotnun-logo.webp'
     },
     footer: {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
@@ -324,7 +324,7 @@ const DEFAULT_STATE: DbState = {
         bodyFont: 'Inter',
         baseSize: '16px'
       },
-      logo_url: '/images/logo.webp',
+      logo_url: '/images/cheotnun-logo.webp',
       favicon_url: '/favicon.ico'
     },
     company_details: {
