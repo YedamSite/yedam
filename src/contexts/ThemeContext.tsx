@@ -46,7 +46,7 @@ const DEFAULT_THEME: ThemeSettings = {
     bodyFont: 'Inter',
     baseSize: '16px'
   },
-  logo_url: '/logo-cheotnun.png',
+  logo_url: '/images/logo.webp',
   favicon_url: '/favicon.ico'
 };
 

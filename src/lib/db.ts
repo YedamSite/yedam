@@ -171,7 +171,7 @@ const DEFAULT_STATE: DbState = {
         btnBuyLink: '/tienda',
         btnRoutineText: 'DESCUBRIR RUTINAS',
         btnRoutineLink: '/rutinas',
-        bgImage: '/images/banner.png'
+        bgImage: '/images/banner.webp'
       },
       highlights: {
         items: [
@@ -268,7 +268,7 @@ const DEFAULT_STATE: DbState = {
       announcementText: 'Belleza que nace de la tradición. Cosmética que transforma.',
       shippingText: 'Envíos para toda América Latina',
       attentionText: 'Atención',
-      logoUrl: '/images/logo.png'
+      logoUrl: '/images/logo.webp'
     },
     footer: {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
@@ -323,7 +323,7 @@ const DEFAULT_STATE: DbState = {
         bodyFont: 'Inter',
         baseSize: '16px'
       },
-      logo_url: '/logo-cheotnun.png',
+      logo_url: '/images/logo.webp',
       favicon_url: '/favicon.ico'
     },
     company_details: {

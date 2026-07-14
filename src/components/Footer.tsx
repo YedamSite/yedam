@@ -34,7 +34,7 @@ export default function Footer() {
   const settings = db.get('system_settings');
   const company = settings?.company_details || {};
 
-  const logoUrl = content?.logoUrl || '/images/logo.png';
+  const logoUrl = content?.logoUrl || '/images/logo.webp';
   const description = content?.description || '';
   const social = content?.social || {};
   const columns = content?.columns || [];
