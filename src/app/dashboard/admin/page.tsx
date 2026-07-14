@@ -1945,6 +1945,15 @@ export default function AdminDashboard() {
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Configuración del Sistema, SMTP & SEO</h2>
               
+              {syncMessage && (
+                <div className={`text-xs rounded-xl p-3.5 mb-4 ${
+                  syncMessage.type === 'success' ? 'bg-green-50/10 border border-green-50/20 text-green-400' :
+                  syncMessage.type === 'error' ? 'bg-red-50/10 border border-red-50/20 text-red-400' :
+                  'bg-blue-50/10 border border-blue-50/20 text-blue-400'
+                }`}>
+                  {syncMessage.text}
+                </div>
+              )}
               {configSaved && (
                 <div className="bg-green-50/10 border border-green-50/20 text-green-400 text-xs rounded-xl p-3.5 mb-6">
                   ✓ ¡Configuraciones generales de APIs, SMTP y SEO guardadas con éxito!
@@ -2009,6 +2018,29 @@ export default function AdminDashboard() {
                     </Button>
                     <Button variant="outline" type="button" onClick={() => alert('¡Generando backup completo del JSON DbState!')} className="border-white/10 text-white hover:bg-white/5 py-2.5 rounded-xl">
                       DESCARGAR COPIA DE SEGURIDAD (BACKUP)
+                    </Button>
+                    <Button
+                      variant="outline"
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          setSyncMessage({ type: 'info', text: 'Sincronizando con Supabase...' });
+                          const res = await fetch('/api/supabase-migrate');
+                          const data = await res.json();
+                          if (data.status === 'ready') {
+                            setSyncMessage({ type: 'success', text: '✓ Supabase conectado. Datos sincronizados.' });
+                          } else {
+                            setSyncMessage({ type: 'info', text: 'Ejecuta el SQL de migración en Supabase Dashboard. Ve a Settings → API para instrucciones.' });
+                          }
+                        } catch {
+                          setSyncMessage({ type: 'error', text: '✗ Error al conectar con Supabase' });
+                        }
+                        setTimeout(() => setSyncMessage(null), 5000);
+                      }}
+                      className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 py-2.5 rounded-xl"
+                    >
+                      <Database className="h-4 w-4 mr-1.5" />
+                      SINCRONIZAR CON SUPABASE
                     </Button>
                   </div>
                 </div>

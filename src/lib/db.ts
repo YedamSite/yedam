@@ -1,4 +1,5 @@
-// Local In-Memory Database Engine for Cheotnun K-Beauty (Completely client-safe)
+// Local In-Memory Database Engine for Cheotnun K-Beauty
+// Syncs with Supabase when available, falls back to localStorage
 interface DbState {
   users: any[];
   categories: any[];
@@ -436,9 +437,63 @@ function getDefault<K extends keyof DbState>(table: K): DbState[K] {
   return deepClone(DEFAULT_STATE[table]);
 }
 
+const SYNC_TABLES: (keyof DbState)[] = ['categories', 'brands', 'products', 'blog_posts', 'routines', 'cms_blocks'];
+
+let supabaseReady = false;
+
+async function tryLoadFromSupabase() {
+  try {
+    const { supabaseDb } = await import('@/lib/supabaseDb');
+    const ready = await supabaseDb.init();
+    if (!ready) return;
+    supabaseReady = true;
+
+    for (const table of SYNC_TABLES) {
+      try {
+        const data = await supabaseDb.get(table);
+        if (data && data.length > 0) {
+          (memoryDb as any)[table] = data as any;
+        }
+      } catch {}
+    }
+
+    const themeVal = await supabaseDb.getSettings('visual_theme');
+    if (themeVal) {
+      memoryDb.system_settings.visual_theme = themeVal;
+    }
+    const companyVal = await supabaseDb.getSettings('company_details');
+    if (companyVal) {
+      memoryDb.system_settings.company_details = companyVal;
+    }
+
+    persistToLocalStorage();
+  } catch (e) {
+    console.warn('Supabase sync unavailable, using localStorage:', e);
+  }
+}
+
+function trySaveToSupabase(table: string, records: any[]) {
+  if (!supabaseReady) return;
+  import('@/lib/supabaseDb').then(({ supabaseDb }) => {
+    if (supabaseDb.isConnected()) {
+      supabaseDb.save(table as any, records);
+    }
+  }).catch(() => {});
+}
+
+function trySaveSettingsToSupabase(key: string, value: any) {
+  if (!supabaseReady) return;
+  import('@/lib/supabaseDb').then(({ supabaseDb }) => {
+    if (supabaseDb.isConnected()) {
+      supabaseDb.saveSettings(key, value);
+    }
+  }).catch(() => {});
+}
+
 export const db = {
   init: () => {
     loadFromLocalStorage();
+    tryLoadFromSupabase();
   },
 
   get: <K extends keyof DbState>(table: K): DbState[K] => {
@@ -448,12 +503,30 @@ export const db = {
   save: <K extends keyof DbState>(table: K, records: DbState[K]): void => {
     memoryDb[table] = records;
     persistToLocalStorage();
+    if (table === 'system_settings') {
+      const settings = records as any;
+      if (settings.visual_theme) trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
+      if (settings.company_details) trySaveSettingsToSupabase('company_details', settings.company_details);
+      if (settings.seo) trySaveSettingsToSupabase('seo', settings.seo);
+      if (settings.invoice_templates) trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
+    } else {
+      trySaveToSupabase(table as string, records as any[]);
+    }
   },
 
   update: <K extends keyof DbState>(table: K, updater: (data: DbState[K]) => DbState[K]): DbState[K] => {
     const updated = updater(memoryDb[table]);
     memoryDb[table] = updated;
     persistToLocalStorage();
+    if (table === 'system_settings') {
+      const settings = updated as any;
+      if (settings.visual_theme) trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
+      if (settings.company_details) trySaveSettingsToSupabase('company_details', settings.company_details);
+      if (settings.seo) trySaveSettingsToSupabase('seo', settings.seo);
+      if (settings.invoice_templates) trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
+    } else {
+      trySaveToSupabase(table as string, updated as any[]);
+    }
     return updated;
   },
 
