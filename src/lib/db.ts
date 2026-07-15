@@ -496,10 +496,34 @@ function trySaveSettingsToSupabase(key: string, value: any) {
   }).catch(() => {});
 }
 
+function setMemoryAndPersist(table: string, data: any) {
+  (memoryDb as any)[table] = data;
+  persistToLocalStorage();
+}
+
 export const db = {
   init: () => {
     loadFromLocalStorage();
     tryLoadFromSupabase();
+  },
+
+  reloadFromSupabase: async (tables?: string[]): Promise<void> => {
+    try {
+      const { supabaseDb } = await import('@/lib/supabaseDb');
+      const ready = await supabaseDb.init();
+      if (!ready) return;
+      supabaseReady = true;
+
+      const targetTables = tables || SYNC_TABLES;
+      for (const table of targetTables) {
+        try {
+          const data = await supabaseDb.get(table);
+          if (data && data.length > 0) {
+            setMemoryAndPersist(table, data as any);
+          }
+        } catch {}
+      }
+    } catch {}
   },
 
   get: <K extends keyof DbState>(table: K): DbState[K] => {

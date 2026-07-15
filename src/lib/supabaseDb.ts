@@ -16,6 +16,8 @@ const TABLE_MAP: Record<string, string> = {
   newsletter_subscribers: 'cheotnun_newsletter_subscribers',
   users: 'cheotnun_users',
   orders: 'cheotnun_orders',
+  order_tracking: 'cheotnun_order_tracking',
+  communication_logs: 'cheotnun_communication_logs',
 };
 
 let client: ReturnType<typeof createClient> | null = null;

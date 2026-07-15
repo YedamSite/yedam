@@ -195,9 +195,16 @@ export default function AdminDashboard() {
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('cheotnun_db_change', handleDbChange as EventListener);
     
+    // Polling: recarregar pedidos do Supabase a cada 5 segundos
+    const poll = setInterval(async () => {
+      await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
+      loadData();
+    }, 5000);
+    
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('cheotnun_db_change', handleDbChange as EventListener);
+      clearInterval(poll);
     };
   }, []);
 

@@ -1,13 +1,23 @@
 'use server';
 
 import { db } from '@/lib/db';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 async function syncOrderWithSupabase(table: string, records: any[]) {
+  if (!supabaseUrl || !supabaseAnonKey) return;
   try {
-    const { supabaseDb } = await import('@/lib/supabaseDb');
-    if (supabaseDb.isConnected()) {
-      await supabaseDb.upsert(table as any, records);
-    }
+    const client = createClient(supabaseUrl, supabaseAnonKey);
+    const tableName = ({
+      orders: 'cheotnun_orders',
+      order_tracking: 'cheotnun_order_tracking',
+      communication_logs: 'cheotnun_communication_logs',
+    } as Record<string, string>)[table];
+    if (!tableName) return;
+    const tb = client.from(tableName) as any;
+    await tb.upsert(records, { onConflict: 'id', ignoreDuplicates: false });
   } catch {}
 }
 
