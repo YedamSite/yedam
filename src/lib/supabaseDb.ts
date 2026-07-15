@@ -79,6 +79,19 @@ export const supabaseDb = {
     } catch { return null; }
   },
 
+  async upsert<T extends { id: string }>(table: string, records: T[]): Promise<boolean> {
+    const c = getClient();
+    const tableName = getTableName(table);
+    if (!c || !tableName || !Array.isArray(records) || records.length === 0) return false;
+
+    try {
+      const tb = c.from(tableName) as any;
+      const { error } = await tb.upsert(records, { onConflict: 'id', ignoreDuplicates: false });
+      if (error) { console.error(`supabaseDb.upsert(${table}):`, error); return false; }
+      return true;
+    } catch (e) { console.error(`supabaseDb.upsert(${table}):`, e); return false; }
+  },
+
   async save<T = any>(table: string, records: T[]): Promise<boolean> {
     const c = getClient();
     const tableName = getTableName(table);

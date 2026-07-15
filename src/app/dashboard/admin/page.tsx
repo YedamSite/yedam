@@ -636,9 +636,9 @@ export default function AdminDashboard() {
                 const lowStockProducts = allProducts.filter((p: any) => (p.stock || 0) < 20).length;
                 const outOfStockProducts = allProducts.filter((p: any) => (p.stock || 0) === 0).length;
                 
-                const pendingOrders = allOrders.filter((o: any) => o.status === 'pending' || o.status === 'preparing').length;
-                const approvedOrders = allOrders.filter((o: any) => o.status === 'payment_approved').length;
-                const shippedOrders = allOrders.filter((o: any) => o.status === 'shipped' || o.status === 'delivered').length;
+                const pendingOrders = allOrders.filter((o: any) => o.status === 'aguardando_confirmacao').length;
+                const preparingOrders = allOrders.filter((o: any) => o.status === 'preparando_envio').length;
+                const shippedOrders = allOrders.filter((o: any) => o.status === 'enviado' || o.status === 'entregue').length;
                 
                 const avgTicket = allOrders.length > 0 ? revenueTotal / allOrders.length : 0;
                 
@@ -754,12 +754,12 @@ export default function AdminDashboard() {
                         </div>
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
-                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Pendentes</span>
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Aguardando Confirmação</span>
                             <span className="text-sm font-bold text-accent">{pendingOrders}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
-                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Pagamento Aprovado</span>
-                            <span className="text-sm font-bold text-green-400">{approvedOrders}</span>
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Preparando Envío</span>
+                            <span className="text-sm font-bold text-blue-400">{preparingOrders}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
                             <span className="text-[10px] text-muted-foreground uppercase font-bold">Enviados/Entregues</span>
@@ -859,12 +859,20 @@ export default function AdminDashboard() {
                                   </td>
                                   <td className="py-3 px-3">
                                     <span className={`text-[8px] font-bold px-2 py-1 rounded-full uppercase ${
-                                      order.status === 'pending' || order.status === 'preparing' ? 'bg-accent/10 text-accent border border-accent/20' :
-                                      order.status === 'payment_approved' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
-                                      order.status === 'shipped' || order.status === 'delivered' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                      order.status === 'aguardando_confirmacao' ? 'bg-accent/10 text-accent border border-accent/20' :
+                                      order.status === 'preparando_envio' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                      order.status === 'enviado' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
+                                      order.status === 'entregue' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                      order.status === 'cancelado' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
                                       'bg-gray-500/10 text-gray-400 border border-gray-500/20'
                                     }`}>
-                                      {order.status}
+                                      {({
+                                        'aguardando_confirmacao': 'Aguardando Confirmação',
+                                        'preparando_envio': 'Preparando Envío',
+                                        'enviado': 'Enviado',
+                                        'entregue': 'Entregue',
+                                        'cancelado': 'Cancelado'
+                                      } as Record<string, string>)[order.status] || order.status}
                                     </span>
                                   </td>
                                   <td className="py-3 px-3 text-muted-foreground">{order.created_at ? new Date(order.created_at).toLocaleDateString('es-ES') : '-'}</td>
@@ -1250,6 +1258,12 @@ export default function AdminDashboard() {
                     <div className="flex flex-col gap-2 text-xs text-muted-foreground">
                       <div className="flex flex-col gap-1">
                         <label className="text-[9px] uppercase font-bold text-accent">Estado del Pedido</label>
+                        <div className="flex flex-col gap-1.5 mb-2">
+                          <label className="text-[8px] text-muted-foreground font-bold">Prazo atual: 48h úteis (até 72h em feriados coreanos)</label>
+                          <div className="bg-accent/10 border border-accent/20 rounded-lg px-3 py-2 text-[10px] text-accent">
+                            ⏱ O cliente foi informado que o prazo é de 48h para confirmação e preparação do pedido.
+                          </div>
+                        </div>
                         <select
                           value={selectedOrderForInvoice.status}
                           onChange={(e) => {
@@ -1281,7 +1295,13 @@ export default function AdminDashboard() {
                                 status: 'sent',
                                 recipient: 'cliente@example.com',
                                 subject: `Estado del Pedido - Cheotnun K-Beauty`,
-                                content: `Hola Jaque, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${newStatus.toUpperCase()}`,
+                                content: `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${({
+                                  'aguardando_confirmacao': 'Aguardando Confirmación de la Tienda',
+                                  'preparando_envio': 'Preparando para Envío',
+                                  'enviado': 'Enviado',
+                                  'entregue': 'Entregado',
+                                  'cancelado': 'Cancelado'
+                                } as Record<string, string>)[newStatus] || newStatus.toUpperCase()}`,
                                 created_at: new Date().toISOString()
                               });
                               db.save('communication_logs', logs);
@@ -1292,16 +1312,11 @@ export default function AdminDashboard() {
                           }}
                           className="flex h-9 w-full rounded-md border border-white/10 bg-background px-3 py-1 text-xs text-white"
                         >
-                          <option value="recebido">Recibido</option>
-                          <option value="em_validacao">En Validación (48-72h)</option>
-                          <option value="estoque_confirmado">Stock Confirmado</option>
-                          <option value="pagamento_confirmado">Pago Confirmado</option>
-                          <option value="preparando_coreia">Preparando en Corea</option>
-                          <option value="documentacao_exportacao">Doc. Exportación / Invoice</option>
-                          <option value="enviado">Enviado (Shipped)</option>
-                          <option value="processo_aduaneiro">Proceso Aduanero</option>
-                          <option value="entregue">Entregado</option>
-                          <option value="cancelado">Cancelado</option>
+                          <option value="aguardando_confirmacao">🕐 Aguardando Confirmação (48-72h)</option>
+                          <option value="preparando_envio">📦 Preparando para Envío</option>
+                          <option value="enviado">🚚 Enviado (Shipped)</option>
+                          <option value="entregue">✅ Entregue</option>
+                          <option value="cancelado">❌ Cancelado</option>
                         </select>
                       </div>
 

@@ -2,6 +2,15 @@
 
 import { db } from '@/lib/db';
 
+async function syncOrderWithSupabase(table: string, records: any[]) {
+  try {
+    const { supabaseDb } = await import('@/lib/supabaseDb');
+    if (supabaseDb.isConnected()) {
+      await supabaseDb.upsert(table as any, records);
+    }
+  } catch {}
+}
+
 export async function submitOrderAction(data: {
   customerId: string;
   items: { product_id: string; quantity: number; price: number; name: string }[];
@@ -18,7 +27,7 @@ export async function submitOrderAction(data: {
     const logs = db.get('communication_logs');
 
     const subtotal = data.items.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0);
-    const shipping = 15.00; // standard shipping amount
+    const shipping = 15.00;
     const total = subtotal + shipping;
 
     const orderId = crypto.randomUUID();
@@ -39,7 +48,7 @@ export async function submitOrderAction(data: {
     const newOrder = {
       id: orderId,
       customer_id: data.customerId,
-      status: 'pending',
+      status: 'aguardando_confirmacao',
       items: data.items,
       subtotal,
       shipping_amount: shipping,
@@ -50,12 +59,17 @@ export async function submitOrderAction(data: {
       billing_address: data.billingAddress,
       document_type: data.documentType,
       document_number: data.documentNumber,
+      carrier: null,
+      tracking_code: null,
       commercial_invoice_url: `/invoices/cheotnun-inv-${orderId.substring(0, 8)}.pdf`,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
     orders.push(newOrder);
     db.save('orders', orders);
+
+    // Sync order to Supabase immediately
+    syncOrderWithSupabase('orders', orders);
 
     // Save dynamic address to address list if it does not already exist
     const addresses = db.get('addresses') || [];
@@ -91,13 +105,14 @@ export async function submitOrderAction(data: {
     orderTracking.push({
       id: crypto.randomUUID(),
       order_id: orderId,
-      status: 'pending',
+      status: 'aguardando_confirmacao',
       tracking_code: null,
       carrier: null,
-      notes: 'Pedido recebido com sucesso no sistema e aguardando confirmação do pagamento.',
+      notes: 'Pedido recebido com sucesso. Pagamento confirmado. Aguardando confirmação da loja (prazo de até 48 horas úteis para preparação do envio).',
       updated_at: new Date().toISOString()
     });
     db.save('order_tracking', orderTracking);
+    syncOrderWithSupabase('order_tracking', db.get('order_tracking'));
 
     // Create transactional communication email log (Pedido Recebido)
     logs.push({
@@ -107,47 +122,11 @@ export async function submitOrderAction(data: {
       status: 'sent',
       recipient: recipientEmail,
       subject: 'Confirmación de Pedido - Cheotnun K-Beauty',
-      content: `Hola ${recipientName}, tu pedido com ID ${orderId.substring(0, 8)} ha sido recibido con éxito y está en proceso de pago.`,
+      content: `Hola ${recipientName}, tu pedido con ID ${orderId.substring(0, 8)} ha sido recibido con éxito. El pago ha sido confirmado y tu pedido está en "Aguardando Confirmación de la Tienda". Recibirás una actualización cuando tu pedido esté siendo preparado para envío. El plazo máximo es de 48 horas (72 horas en feriados coreanos).`,
       created_at: new Date().toISOString()
     });
     db.save('communication_logs', logs);
-
-    // Simulate Payment approval automatically in 3 seconds
-    // (This triggers the Payment Approved email, invoice generation, etc.)
-    setTimeout(() => {
-      const ordersList = db.get('orders');
-      const idx = ordersList.findIndex((o: any) => o.id === orderId);
-      if (idx !== -1) {
-        ordersList[idx].status = 'payment_approved';
-        ordersList[idx].updated_at = new Date().toISOString();
-        db.save('orders', ordersList);
-
-        const trackingList = db.get('order_tracking');
-        trackingList.push({
-          id: crypto.randomUUID(),
-          order_id: orderId,
-          status: 'payment_approved',
-          tracking_code: null,
-          carrier: null,
-          notes: 'Pagamento aprovado com sucesso via ' + data.gateway.toUpperCase(),
-          updated_at: new Date().toISOString()
-        });
-        db.save('order_tracking', trackingList);
-
-        const comLogs = db.get('communication_logs');
-        comLogs.push({
-          id: crypto.randomUUID(),
-          order_id: orderId,
-          type: 'email',
-          status: 'sent',
-          recipient: recipientEmail,
-          subject: 'Pago Aprobado - Cheotnun K-Beauty',
-          content: `Hola ${recipientName}, el pago de tu pedido ${orderId.substring(0, 8)} ha sido aprobado. Tu factura comercial en PDF ya está disponible.`,
-          created_at: new Date().toISOString()
-        });
-        db.save('communication_logs', comLogs);
-      }
-    }, 4000);
+    syncOrderWithSupabase('communication_logs', db.get('communication_logs'));
 
     return { success: true, order: newOrder };
   } catch (error: any) {
@@ -161,12 +140,10 @@ export async function toggleFavoriteAction(userId: string, productId: string) {
     const idx = favorites.findIndex((f: any) => f.user_id === userId && f.product_id === productId);
 
     if (idx !== -1) {
-      // remove
       favorites.splice(idx, 1);
       db.save('favorites', favorites);
       return { success: true, isFavorite: false };
     } else {
-      // add
       favorites.push({
         id: crypto.randomUUID(),
         user_id: userId,

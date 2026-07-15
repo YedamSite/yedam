@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  Package, MapPin, Heart, User, Clock, Check, Truck, CreditCard, ExternalLink, FileText, Sparkles
+  Package, MapPin, Heart, User, Clock, Check, Truck, CreditCard, ExternalLink, FileText, Sparkles, Info
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -109,6 +109,15 @@ export default function ClienteDashboard() {
       setProfileForm({ name: user.name, email: user.email });
     }
     loadData();
+
+    // Real-time polling: re-read orders every 5 seconds to catch status changes
+    const interval = setInterval(() => {
+      const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
+      const allOrders = db.get('orders') || [];
+      const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
+      setOrders(userOrders);
+    }, 5000);
+
     // Support tab direct navigation query parameter
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
@@ -117,6 +126,8 @@ export default function ClienteDashboard() {
         setActiveTab('favorites');
       }
     }
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleRemoveFavorite = async (productId: string) => {
@@ -199,11 +210,19 @@ export default function ClienteDashboard() {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className={`text-[9px] font-bold px-3 py-1 rounded-full uppercase border ${
-                            ['pagamento_confirmado', 'preparando_coreia', 'documentacao_exportacao', 'enviado', 'processo_aduaneiro', 'entregue'].includes(order.status)
-                              ? 'bg-green-500/10 text-green-400 border-green-500/20'
-                              : 'bg-accent/10 text-accent border-accent/20'
+                            order.status === 'entregue' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                            order.status === 'enviado' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                            order.status === 'preparando_envio' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
+                            order.status === 'cancelado' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                            'bg-accent/10 text-accent border-accent/20'
                           }`}>
-                            {order.status.replace(/_/g, ' ')}
+                            {({
+                              'aguardando_confirmacao': 'Aguardando Confirmação',
+                              'preparando_envio': 'Preparando Envío',
+                              'enviado': 'Enviado',
+                              'entregue': 'Entregue',
+                              'cancelado': 'Cancelado'
+                            } as Record<string, string>)[order.status] || order.status.replace(/_/g, ' ')}
                           </span>
                         </div>
                       </div>
@@ -224,51 +243,74 @@ export default function ClienteDashboard() {
                         </div>
                       </div>
 
+                      {/* 48h notice for awaiting confirmation */}
+                      {order.status === 'aguardando_confirmacao' && (
+                        <div className="bg-accent/10 border border-accent/20 rounded-xl p-4 flex items-start gap-3">
+                          <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                          <div className="text-[10px] text-foreground/80 leading-relaxed">
+                            <span className="font-bold text-accent">{t('Aguardando Confirmação da Loja')}</span>
+                            <p className="mt-1">{t('Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.')}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Carrier/tracking info */}
+                      {(order.carrier || order.tracking_code) && (
+                        <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-start gap-3">
+                          <Truck className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
+                          <div className="text-[10px] text-foreground/80 leading-relaxed">
+                            <span className="font-bold text-blue-400">{t('Información de Envío')}</span>
+                            {order.carrier && <p className="mt-1">{t('Transportadora')}: {order.carrier}</p>}
+                            {order.tracking_code && <p className="mt-1">{t('Código de Rastreo')}: <span className="font-mono font-bold text-white">{order.tracking_code}</span></p>}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Order tracking timeline visual */}
                       <div className="border-t border-white/5 pt-4">
                         <h4 className="text-[10px] font-bold text-accent uppercase tracking-wider mb-4">{t('Estado del Envío')}</h4>
                         {(() => {
                           const getStatusStep = (status: string) => {
                             switch (status) {
-                              case 'recebido': return 1;
-                              case 'em_validacao': return 1;
-                              case 'estoque_confirmado': return 2;
-                              case 'pagamento_confirmado': return 2;
-                              case 'preparando_coreia': return 3;
-                              case 'documentacao_exportacao': return 3;
-                              case 'enviado': return 4;
-                              case 'processo_aduaneiro': return 4;
-                              case 'entregue': return 5;
+                              case 'aguardando_confirmacao': return 1;
+                              case 'preparando_envio': return 2;
+                              case 'enviado': return 3;
+                              case 'entregue': return 4;
+                              case 'cancelado': return 0;
                               default: return 1;
                             }
                           };
                           const currentStep = getStatusStep(order.status);
+                          const isCanceled = order.status === 'cancelado';
+                          if (isCanceled) {
+                            return (
+                              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-center">
+                                <span className="text-[9px] font-bold text-red-400 uppercase">{t('Pedido Cancelado')}</span>
+                              </div>
+                            );
+                          }
                           return (
-                            <div className="grid grid-cols-5 gap-2 text-center text-[9px] font-bold uppercase text-muted-foreground">
-                              <div className="flex flex-col items-center gap-1 text-accent">
-                                <span className="p-1 bg-accent text-background rounded-full"><Check className="h-3 w-3" /></span>
-                                <span>{t('Recibido')}</span>
+                            <div className="grid grid-cols-4 gap-2 text-center text-[9px] font-bold uppercase text-muted-foreground">
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 1 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 1 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                                  <Clock className="h-3 w-3" />
+                                </span>
+                                <span>{t('Confirmación')}</span>
                               </div>
                               <div className={`flex flex-col items-center gap-1 ${currentStep >= 2 ? 'text-accent' : ''}`}>
                                 <span className={`p-1 rounded-full ${currentStep >= 2 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
-                                  <CreditCard className="h-3 w-3" />
-                                </span>
-                                <span>{t('Pago')}</span>
-                              </div>
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 3 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 3 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Package className="h-3 w-3" />
                                 </span>
                                 <span>{t('Preparación')}</span>
                               </div>
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 4 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 4 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 3 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 3 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Truck className="h-3 w-3" />
                                 </span>
                                 <span>{t('Enviado')}</span>
                               </div>
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 5 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 5 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 4 ? 'text-accent' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 4 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Check className="h-3 w-3" />
                                 </span>
                                 <span>{t('Entregado')}</span>
