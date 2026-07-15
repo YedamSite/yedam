@@ -4,14 +4,14 @@ import { db } from '@/lib/db';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 async function syncOrderWithSupabase(table: string, records: any[]) {
-  if (!supabaseUrl || !supabaseAnonKey) return;
+  if (!supabaseUrl || !supabaseServiceKey) return;
   try {
-    const client = createClient(supabaseUrl, supabaseAnonKey);
+    const client = createClient(supabaseUrl, supabaseServiceKey);
     const tableName = ({
       orders: 'cheotnun_orders',
       order_tracking: 'cheotnun_order_tracking',
@@ -187,5 +187,41 @@ export async function updateProductStockAction(productId: string, stock: number)
     return { success: false, error: 'Product not found' };
   } catch (error: any) {
     return { success: false, error: error.message };
+  }
+}
+
+export async function serverSupabaseUpsert(table: string, records: any[]) {
+  if (!supabaseUrl || !supabaseServiceKey) return { success: false };
+  try {
+    const client = createClient(supabaseUrl, supabaseServiceKey);
+    const tableName = ({
+      orders: 'cheotnun_orders',
+      order_tracking: 'cheotnun_order_tracking',
+      communication_logs: 'cheotnun_communication_logs',
+    } as Record<string, string>)[table];
+    if (!tableName) return { success: false };
+    const valid = records.filter((r: any) => r.id && UUID_RE.test(r.id));
+    if (valid.length === 0) return { success: true };
+    const { error } = await client.from(tableName).upsert(valid, { onConflict: 'id', ignoreDuplicates: false });
+    if (error) console.error(`serverSupabaseUpsert(${table}):`, error);
+    return { success: !error };
+  } catch (e: any) {
+    console.error(`serverSupabaseUpsert(${table}) exception:`, e?.message);
+    return { success: false };
+  }
+}
+
+export async function deleteOrderFromSupabase(orderId: string) {
+  if (!supabaseUrl || !supabaseServiceKey) return { success: false, error: 'Supabase not configured' };
+  try {
+    const client = createClient(supabaseUrl, supabaseServiceKey);
+    const tables = ['cheotnun_orders', 'cheotnun_order_tracking', 'cheotnun_communication_logs'];
+    for (const table of tables) {
+      const { error } = await client.from(table).delete().eq('id', orderId);
+      if (error) console.error(`deleteOrderFromSupabase(${table}):`, error);
+    }
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'Unknown error' };
   }
 }

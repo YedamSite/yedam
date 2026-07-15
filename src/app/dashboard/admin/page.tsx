@@ -23,6 +23,7 @@ import ShippingTab from '@/components/admin/ShippingTab';
 import LiveChatTab from '@/components/admin/LiveChatTab';
 import { MessageCircle } from 'lucide-react';
 import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
+import { deleteOrderFromSupabase } from '@/actions/shopActions';
 
 export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('dashboard');
@@ -1259,8 +1260,9 @@ export default function AdminDashboard() {
                             </Button>
                             <Button
                               size="sm"
-                              onClick={() => {
+                              onClick={async () => {
                                 if (!confirm(`Tem certeza que deseja excluir o pedido #${selectedOrderForInvoice.id.substring(0, 8)} permanentemente?`)) return;
+                                await deleteOrderFromSupabase(selectedOrderForInvoice.id);
                                 const allOrders = db.get('orders').filter((o: any) => o.id !== selectedOrderForInvoice.id);
                                 db.save('orders', allOrders);
                                 setSelectedOrderForInvoice(null);

@@ -446,61 +446,85 @@ function getDefault<K extends keyof DbState>(table: K): DbState[K] {
 }
 
 const SYNC_TABLES: (keyof DbState)[] = ['categories', 'brands', 'products', 'blog_posts', 'routines', 'cms_blocks', 'orders', 'order_tracking', 'communication_logs'];
+const MERGE_TABLES = new Set(['orders', 'order_tracking', 'communication_logs']);
+
+async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
+  try {
+    const resp = await fetch('/api/supabase-reload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tables }),
+    });
+    if (!resp.ok) return {};
+    const json = await resp.json();
+    return json.data || {};
+  } catch { return {}; }
+}
+
+function mergeTableData(table: string, incoming: any[]) {
+  const local = (memoryDb as any)[table] || [];
+  const localIds = new Set(local.map((r: any) => r.id));
+  const novos = incoming.filter((r: any) => !localIds.has(r.id));
+  if (novos.length > 0) {
+    (memoryDb as any)[table] = [...local, ...novos];
+    return true;
+  }
+  return false;
+}
 
 let supabaseReady = false;
 
 async function tryLoadFromSupabase() {
   try {
-    const { supabaseDb } = await import('@/lib/supabaseDb');
-    const ready = await supabaseDb.init();
-    if (!ready) return;
-    supabaseReady = true;
-
+    const data = await serverReload([...SYNC_TABLES] as string[]);
+    let changed = false;
     for (const table of SYNC_TABLES) {
-      try {
-        const data = await supabaseDb.get(table);
-        if (data && data.length > 0) {
-          (memoryDb as any)[table] = data as any;
-        }
-      } catch {}
+      const rows = data[table];
+      if (!rows || rows.length === 0) continue;
+      if (MERGE_TABLES.has(table)) {
+        if (mergeTableData(table, rows)) changed = true;
+      } else {
+        (memoryDb as any)[table] = rows;
+        changed = true;
+      }
     }
-
-    const themeVal = await supabaseDb.getSettings('visual_theme');
-    if (themeVal) {
-      memoryDb.system_settings.visual_theme = themeVal;
-    }
-    const companyVal = await supabaseDb.getSettings('company_details');
-    if (companyVal) {
-      memoryDb.system_settings.company_details = companyVal;
-    }
-
-    persistToLocalStorage();
+    if (changed) persistToLocalStorage();
+    await loadSettingsFromSupabase();
+    supabaseReady = true;
   } catch (e) {
     console.warn('Supabase sync unavailable, using localStorage:', e);
   }
 }
 
-const UPSERT_TABLES = new Set(['orders', 'order_tracking', 'communication_logs']);
-
 function trySaveToSupabase(table: string, records: any[]) {
   if (!supabaseReady) return;
-  import('@/lib/supabaseDb').then(({ supabaseDb }) => {
-    if (supabaseDb.isConnected()) {
-      if (UPSERT_TABLES.has(table)) {
-        supabaseDb.upsert(table as any, records);
-      } else {
-        supabaseDb.save(table as any, records);
-      }
-    }
+  fetch('/api/supabase-reload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'upsert', table, records }),
   }).catch(() => {});
+}
+
+async function loadSettingsFromSupabase() {
+  try {
+    const resp = await fetch('/api/supabase-reload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details'] }),
+    });
+    if (!resp.ok) return;
+    const json = await resp.json();
+    if (json.data?.visual_theme) memoryDb.system_settings.visual_theme = json.data.visual_theme;
+    if (json.data?.company_details) memoryDb.system_settings.company_details = json.data.company_details;
+  } catch {}
 }
 
 function trySaveSettingsToSupabase(key: string, value: any) {
   if (!supabaseReady) return;
-  import('@/lib/supabaseDb').then(({ supabaseDb }) => {
-    if (supabaseDb.isConnected()) {
-      supabaseDb.saveSettings(key, value);
-    }
+  fetch('/api/supabase-reload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'saveSetting', key, value }),
   }).catch(() => {});
 }
 
@@ -517,20 +541,21 @@ export const db = {
 
   reloadFromSupabase: async (tables?: string[]): Promise<void> => {
     try {
-      const { supabaseDb } = await import('@/lib/supabaseDb');
-      const ready = await supabaseDb.init();
-      if (!ready) return;
-      supabaseReady = true;
-
-      const targetTables = tables || SYNC_TABLES;
+      const targetTables = tables || (SYNC_TABLES as string[]);
+      const data = await serverReload(targetTables);
+      let changed = false;
       for (const table of targetTables) {
-        try {
-          const data = await supabaseDb.get(table);
-          if (data && data.length > 0) {
-            setMemoryAndPersist(table, data as any);
-          }
-        } catch {}
+        const rows = data[table];
+        if (!rows || rows.length === 0) continue;
+        if (MERGE_TABLES.has(table)) {
+          if (mergeTableData(table, rows)) changed = true;
+        } else {
+          (memoryDb as any)[table] = rows;
+          changed = true;
+        }
       }
+      if (changed) persistToLocalStorage();
+      supabaseReady = true;
     } catch {}
   },
 
