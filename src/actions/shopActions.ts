@@ -85,7 +85,7 @@ export async function submitOrderAction(data: {
     db.save('orders', orders);
 
     // Sync order to Supabase immediately
-    syncOrderWithSupabase('orders', orders);
+    await syncOrderWithSupabase('orders', orders);
 
     // Save dynamic address to address list if it does not already exist
     const addresses = db.get('addresses') || [];
@@ -128,7 +128,7 @@ export async function submitOrderAction(data: {
       updated_at: new Date().toISOString()
     });
     db.save('order_tracking', orderTracking);
-    syncOrderWithSupabase('order_tracking', db.get('order_tracking'));
+    await syncOrderWithSupabase('order_tracking', db.get('order_tracking'));
 
     // Create transactional communication email log (Pedido Recebido)
     logs.push({
@@ -142,7 +142,7 @@ export async function submitOrderAction(data: {
       created_at: new Date().toISOString()
     });
     db.save('communication_logs', logs);
-    syncOrderWithSupabase('communication_logs', db.get('communication_logs'));
+    await syncOrderWithSupabase('communication_logs', db.get('communication_logs'));
 
     return { success: true, order: newOrder };
   } catch (error: any) {

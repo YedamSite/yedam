@@ -125,6 +125,17 @@ export default function CheckoutWizard() {
       setOrderSuccess(res.order);
       localStorage.removeItem('cheotnun_cart');
       setCartItems([]);
+      // Salvar pedido no localStorage do cliente para aparecer no dashboard
+      try {
+        const raw = localStorage.getItem('cheotnun_db_state');
+        const state = raw ? JSON.parse(raw) : {};
+        if (!state.orders) state.orders = [];
+        const exists = state.orders.some((o: any) => o.id === res.order!.id);
+        if (!exists) {
+          state.orders.push(res.order!);
+          localStorage.setItem('cheotnun_db_state', JSON.stringify(state));
+        }
+      } catch {}
       setStep(4);
     }
   };
