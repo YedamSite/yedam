@@ -204,11 +204,11 @@ export default function AdminDashboard() {
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('cheotnun_db_change', handleDbChange as EventListener);
     
-    // Polling: recarregar pedidos do Supabase a cada 5 segundos
+    // Polling: recarregar pedidos do Supabase a cada 3 segundos
     const poll = setInterval(async () => {
       await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
       loadData();
-    }, 5000);
+    }, 3000);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -1184,6 +1184,15 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
                 <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">Pedidos ({orders.length})</h2>
                 <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                  <button
+                    onClick={async () => {
+                      await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
+                      loadData();
+                    }}
+                    className="text-[9px] font-bold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 rounded-lg px-3 h-7 transition-all"
+                  >
+                    🔄 Sync
+                  </button>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent inline-block" /> Aguardando</span>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> Preparando</span>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> Enviado</span>
