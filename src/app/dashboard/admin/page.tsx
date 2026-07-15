@@ -1176,7 +1176,7 @@ export default function AdminDashboard() {
                         <div>
                           <h4 className="font-bold text-white">Pedido #{order.id.substring(0, 8)}</h4>
                           <p className="text-muted-foreground mt-0.5">Destinatario: {order.shipping_address.first_name} {order.shipping_address.last_name}</p>
-                          <p className="text-muted-foreground">País: {order.shipping_address.country} • Documento: {order.document_type.toUpperCase()} ({order.document_number})</p>
+                          <p className="text-muted-foreground">País: {order.shipping_address?.country || '-'} • Documento: {(order.document_type || '').toUpperCase()} ({order.document_number || '-'})</p>
                         </div>
                         <div className="flex items-center gap-4">
                           <span className="font-bold text-accent">US$ {order.total_amount.toFixed(2)}</span>

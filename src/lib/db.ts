@@ -57,49 +57,49 @@ const DEFAULT_STATE: DbState = {
   orders: [
     {
       id: 'ord-001', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'aguardando_confirmacao', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 2, price: 18.00 }],
-      subtotal: 36.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 51.00, gateway: 'stripe', carrier: null, tracking_code: null, commercial_invoice_url: '/invoices/cheotnun-inv-ord-001.pdf',
+      subtotal: 36.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 51.00, gateway: 'stripe', carrier: null, tracking_code: null, document_type: 'nif', document_number: '12345678Z', commercial_invoice_url: '/invoices/cheotnun-inv-ord-001.pdf',
       shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 0 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-002', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'aguardando_confirmacao', items: [{ product_id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Glow Deep Serum', quantity: 1, price: 22.90 }],
-      subtotal: 22.90, shipping_amount: 15.00, discount_amount: 0, total_amount: 37.90, gateway: 'stripe', carrier: null, tracking_code: null, commercial_invoice_url: '/invoices/cheotnun-inv-ord-002.pdf',
+      subtotal: 22.90, shipping_amount: 15.00, discount_amount: 0, total_amount: 37.90, gateway: 'stripe', carrier: null, tracking_code: null, document_type: 'nif', document_number: '87654321X', commercial_invoice_url: '/invoices/cheotnun-inv-ord-002.pdf',
       shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 1 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-003', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'aguardando_confirmacao', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }],
-      subtotal: 19.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 34.00, gateway: 'paypal', carrier: null, tracking_code: null, commercial_invoice_url: '/invoices/cheotnun-inv-ord-003.pdf',
+      subtotal: 19.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 34.00, gateway: 'paypal', carrier: null, tracking_code: null, document_type: 'nie', document_number: 'Y1234567Z', commercial_invoice_url: '/invoices/cheotnun-inv-ord-003.pdf',
       shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 2 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-004', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'preparando_envio', items: [{ product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 2, price: 21.00 }, { product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 1, price: 23.00 }],
-      subtotal: 65.00, shipping_amount: 15.00, discount_amount: 5.00, total_amount: 75.00, gateway: 'stripe', carrier: 'DHL', tracking_code: 'LX123456789KR', commercial_invoice_url: '/invoices/cheotnun-inv-ord-004.pdf',
+      subtotal: 65.00, shipping_amount: 15.00, discount_amount: 5.00, total_amount: 75.00, gateway: 'stripe', carrier: 'DHL', tracking_code: 'LX123456789KR', document_type: 'ci', document_number: '1234567-8', commercial_invoice_url: '/invoices/cheotnun-inv-ord-004.pdf',
       shipping_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'São Paulo', state: 'SP', country: 'Brasil' },
       billing_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'São Paulo', state: 'SP', country: 'Brasil' },
       created_at: new Date(Date.now() - 5 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-005', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'enviado', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 3, price: 18.00 }],
-      subtotal: 54.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 69.00, gateway: 'stripe', carrier: 'FedEx', tracking_code: 'FX987654321KR', commercial_invoice_url: '/invoices/cheotnun-inv-ord-005.pdf',
+      subtotal: 54.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 69.00, gateway: 'stripe', carrier: 'FedEx', tracking_code: 'FX987654321KR', document_type: 'nif', document_number: 'A12345678', commercial_invoice_url: '/invoices/cheotnun-inv-ord-005.pdf',
       shipping_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'España' },
       billing_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'España' },
       created_at: new Date(Date.now() - 10 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-006', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'entregue', items: [{ product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 2, price: 23.00 }],
-      subtotal: 46.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 61.00, gateway: 'paypal', carrier: 'EMS Korea', tracking_code: 'EM555555555KR', commercial_invoice_url: '/invoices/cheotnun-inv-ord-006.pdf',
+      subtotal: 46.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 61.00, gateway: 'paypal', carrier: 'EMS Korea', tracking_code: 'EM555555555KR', document_type: 'nif', document_number: 'B98765432', commercial_invoice_url: '/invoices/cheotnun-inv-ord-006.pdf',
       shipping_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Cataluña', country: 'España' },
       billing_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Cataluña', country: 'España' },
       created_at: new Date(Date.now() - 20 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-007', customer_id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', status: 'enviado', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }, { product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 1, price: 21.00 }],
-      subtotal: 40.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 55.00, gateway: 'stripe', carrier: 'DHL Express', tracking_code: 'DH333333333KR', commercial_invoice_url: '/invoices/cheotnun-inv-ord-007.pdf',
+      subtotal: 40.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 55.00, gateway: 'stripe', carrier: 'DHL Express', tracking_code: 'DH333333333KR', document_type: 'rut', document_number: '12.345.678-9', commercial_invoice_url: '/invoices/cheotnun-inv-ord-007.pdf',
       shipping_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogotá', state: 'Cundinamarca', country: 'Colombia' },
       billing_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogotá', state: 'Cundinamarca', country: 'Colombia' },
       created_at: new Date(Date.now() - 45 * 86400000).toISOString(), updated_at: new Date().toISOString()
