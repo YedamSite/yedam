@@ -6,6 +6,8 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 async function syncOrderWithSupabase(table: string, records: any[]) {
   if (!supabaseUrl || !supabaseAnonKey) return;
   try {
@@ -16,9 +18,13 @@ async function syncOrderWithSupabase(table: string, records: any[]) {
       communication_logs: 'cheotnun_communication_logs',
     } as Record<string, string>)[table];
     if (!tableName) return;
+    // Filtrar apenas registros com IDs UUID válidos (excluir seed data)
+    const valid = records.filter((r: any) => r.id && UUID_RE.test(r.id));
+    if (valid.length === 0) return;
     const tb = client.from(tableName) as any;
-    await tb.upsert(records, { onConflict: 'id', ignoreDuplicates: false });
-  } catch {}
+    const { error } = await tb.upsert(valid, { onConflict: 'id', ignoreDuplicates: false });
+    if (error) console.error(`syncOrderWithSupabase(${table}):`, error);
+  } catch (e: any) { console.error(`syncOrderWithSupabase(${table}) exception:`, e?.message); }
 }
 
 export async function submitOrderAction(data: {
