@@ -508,9 +508,10 @@ async function tryLoadFromSupabase() {
     }
     if (changed) persistToLocalStorage();
     await loadSettingsFromSupabase();
-    supabaseReady = true;
   } catch (e) {
     console.warn('Supabase sync unavailable, using localStorage:', e);
+  } finally {
+    supabaseReady = true; // sempre marca pronto, mesmo se falhar
   }
 }
 
@@ -575,8 +576,11 @@ export const db = {
         }
       }
       if (changed) persistToLocalStorage();
+    } catch (e) {
+      console.warn('reloadFromSupabase error:', e);
+    } finally {
       supabaseReady = true;
-    } catch {}
+    }
   },
 
   get: <K extends keyof DbState>(table: K): DbState[K] => {
