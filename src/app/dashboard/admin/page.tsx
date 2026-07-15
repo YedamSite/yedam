@@ -1165,232 +1165,311 @@ export default function AdminDashboard() {
           {/* TAB: ORDERS & INVOICES */}
           {activeSubTab === 'orders' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Gestión de Pedidos & Emisión de Commercial Invoice</h2>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Orders list */}
-                <div className="lg:col-span-2 flex flex-col gap-3">
-                  {orders.length > 0 ? (
-                    orders.map((order) => (
-                      <div key={order.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4 text-xs">
-                        <div>
-                          <h4 className="font-bold text-white">Pedido #{order.id.substring(0, 8)}</h4>
-                          <p className="text-muted-foreground mt-0.5">Destinatario: {order.shipping_address.first_name} {order.shipping_address.last_name}</p>
-                          <p className="text-muted-foreground">País: {order.shipping_address?.country || '-'} • Documento: {(order.document_type || '').toUpperCase()} ({order.document_number || '-'})</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <span className="font-bold text-accent">US$ {order.total_amount.toFixed(2)}</span>
-                          <Button
-                            size="sm"
-                            onClick={() => setSelectedOrderForInvoice(order)}
-                            className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] h-8 px-3 rounded-lg"
-                          >
-                            <FileText className="h-3.5 w-3.5 mr-1" />
-                            INVOICE PDF
-                          </Button>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center text-xs text-muted-foreground py-8">
-                      No hay pedidos registrados en el sistema.
-                    </div>
-                  )}
+              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+                <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">Pedidos ({orders.length})</h2>
+                <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent inline-block" /> Aguardando</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> Preparando</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> Enviado</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> Entregue</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> Cancelado</span>
                 </div>
+              </div>
 
-                {/* Commercial Invoice Template Customizer */}
-                <div className="border border-white/5 rounded-2xl p-6 bg-secondary/20 h-fit flex flex-col gap-4">
-                  <h3 className="text-xs font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Configurador de Facturas (ES/EN)</h3>
-                  
-                  {selectedOrderForInvoice ? (
-                    <div className="border border-white/10 bg-white p-4 rounded-xl text-black font-mono text-[9px] flex flex-col gap-2.5 shadow-xl leading-normal">
-                      <div className="text-center font-bold text-xs border-b border-black pb-1.5 uppercase">
-                        COMMERCIAL INVOICE
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 text-[8px]">
-                        <div>
-                          <span className="font-bold block">EXPORTER:</span>
-                          CHEOTNUN BEAUTY S.L.<br />Calle Gran Vía 12, Madrid, España
-                        </div>
-                        <div>
-                          <span className="font-bold block">IMPORTER:</span>
-                          {selectedOrderForInvoice.shipping_address.first_name} {selectedOrderForInvoice.shipping_address.last_name}<br />
-                          {selectedOrderForInvoice.shipping_address.street}, {selectedOrderForInvoice.shipping_address.city}, {selectedOrderForInvoice.shipping_address.country}
-                        </div>
-                      </div>
-                      <div className="border-t border-b border-black py-1">
-                        <div className="grid grid-cols-4 font-bold text-[8px]">
-                          <span>PROD / HS CODE</span>
-                          <span className="text-center">QTY</span>
-                          <span className="text-right">PRICE</span>
-                          <span className="text-right">TOTAL</span>
-                        </div>
-                        <div className="grid grid-cols-4 text-[7px] mt-1">
-                          <span className="truncate">K-Beauty Skincare (3304.99.90)</span>
-                          <span className="text-center">1</span>
-                          <span className="text-right">US$ {selectedOrderForInvoice.subtotal.toFixed(2)}</span>
-                          <span className="text-right">US$ {selectedOrderForInvoice.subtotal.toFixed(2)}</span>
-                        </div>
-                      </div>
-                      <div className="text-right font-bold text-[8px]">
-                        <div>Subtotal: US$ {selectedOrderForInvoice.subtotal.toFixed(2)}</div>
-                        <div>Shipping: US$ {selectedOrderForInvoice.shipping_amount.toFixed(2)}</div>
-                        <div className="text-xs border-t border-dashed border-black pt-1 mt-1">Total: US$ {selectedOrderForInvoice.total_amount.toFixed(2)}</div>
-                      </div>
-                      <a href={selectedOrderForInvoice.commercial_invoice_url} target="_blank" rel="noreferrer" className="w-full">
-                        <Button className="w-full bg-black hover:bg-black/80 text-white font-bold text-[9px] py-1.5 h-7 rounded mt-2">
-                          DESCARGAR INVOICE PDF
-                        </Button>
-                      </a>
-                    </div>
-                  ) : (
-                    <div className="text-center text-xs text-muted-foreground py-8">
-                      Selecciona un pedido para visualizar la Commercial Invoice en PDF de forma automática.
-                    </div>
-                  )}
+              {orders.length === 0 ? (
+                <div className="text-center text-xs text-muted-foreground py-12 border border-dashed border-white/10 rounded-2xl">
+                  Nenhum pedido registrado no sistema.
                 </div>
-
-                {/* Shipping & Status Management */}
-                {selectedOrderForInvoice && (
-                  <div className="border border-white/5 rounded-2xl p-6 bg-secondary/20 h-fit flex flex-col gap-4">
-                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Estado del Pedido & Despacho</h3>
-                    
-                    <div className="flex flex-col gap-2 text-xs text-muted-foreground">
-                      <div className="flex flex-col gap-1">
-                        <label className="text-[9px] uppercase font-bold text-accent">Estado del Pedido</label>
-                        <div className="flex flex-col gap-1.5 mb-2">
-                          <label className="text-[8px] text-muted-foreground font-bold">Prazo atual: 48h úteis (até 72h em feriados coreanos)</label>
-                          <div className="bg-accent/10 border border-accent/20 rounded-lg px-3 py-2 text-[10px] text-accent">
-                            ⏱ O cliente foi informado que o prazo é de 48h para confirmação e preparação do pedido.
+              ) : (
+                <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
+                  {/* Order list */}
+                  <div className="xl:col-span-3 flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-2">
+                    {orders.map((order) => {
+                      const isSelected = selectedOrderForInvoice?.id === order.id;
+                      return (
+                        <div
+                          key={order.id}
+                          onClick={() => setSelectedOrderForInvoice(order)}
+                          className={`border rounded-xl p-4 text-xs cursor-pointer transition-all ${
+                            isSelected
+                              ? 'border-accent bg-accent/5 shadow-lg shadow-accent/5'
+                              : 'border-white/5 bg-secondary/30 hover:border-white/20 hover:bg-secondary/50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                                order.status === 'aguardando_confirmacao' ? 'bg-accent' :
+                                order.status === 'preparando_envio' ? 'bg-blue-400' :
+                                order.status === 'enviado' ? 'bg-green-400' :
+                                order.status === 'entregue' ? 'bg-emerald-400' :
+                                order.status === 'cancelado' ? 'bg-red-400' : 'bg-gray-400'
+                              }`} />
+                              <div className="min-w-0">
+                                <span className="font-bold text-white font-mono text-[11px]">#{order.id.substring(0, 8)}</span>
+                                <span className="text-muted-foreground ml-2">
+                                  {order.shipping_address?.first_name || ''} {order.shipping_address?.last_name || ''}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="text-[10px] text-muted-foreground hidden sm:block">
+                                {order.created_at ? new Date(order.created_at).toLocaleDateString('pt-BR') : '-'}
+                              </span>
+                              <span className="font-bold text-accent font-heading">US$ {(order.total_amount || 0).toFixed(2)}</span>
+                              {isSelected && <span className="text-[8px] text-accent font-bold uppercase">✓ Selecionado</span>}
+                            </div>
                           </div>
                         </div>
-                        <select
-                          value={selectedOrderForInvoice.status}
-                          onChange={(e) => {
-                            const newStatus = e.target.value;
-                            const allOrders = db.get('orders');
-                            const idx = allOrders.findIndex((o: any) => o.id === selectedOrderForInvoice.id);
-                            if (idx !== -1) {
-                              allOrders[idx].status = newStatus;
-                              allOrders[idx].updated_at = new Date().toISOString();
-                              db.save('orders', allOrders);
-                              
-                              const tracking = db.get('order_tracking') || [];
-                              tracking.push({
-                                id: crypto.randomUUID(),
-                                order_id: selectedOrderForInvoice.id,
-                                status: newStatus,
-                                tracking_code: selectedOrderForInvoice.tracking_code || null,
-                                carrier: selectedOrderForInvoice.carrier || null,
-                                notes: `Estado actualizado por el administrador a ${newStatus.toUpperCase()}`,
-                                updated_at: new Date().toISOString()
-                              });
-                              db.save('order_tracking', tracking);
-
-                              const logs = db.get('communication_logs') || [];
-                              logs.push({
-                                id: crypto.randomUUID(),
-                                order_id: selectedOrderForInvoice.id,
-                                type: 'email',
-                                status: 'sent',
-                                recipient: 'cliente@example.com',
-                                subject: `Estado del Pedido - Cheotnun K-Beauty`,
-                                content: `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${({
-                                  'aguardando_confirmacao': 'Aguardando Confirmación de la Tienda',
-                                  'preparando_envio': 'Preparando para Envío',
-                                  'enviado': 'Enviado',
-                                  'entregue': 'Entregado',
-                                  'cancelado': 'Cancelado'
-                                } as Record<string, string>)[newStatus] || newStatus.toUpperCase()}`,
-                                created_at: new Date().toISOString()
-                              });
-                              db.save('communication_logs', logs);
-
-                              setSelectedOrderForInvoice({ ...selectedOrderForInvoice, status: newStatus });
-                              loadData();
-                            }
-                          }}
-                          className="flex h-9 w-full rounded-md border border-white/10 bg-background px-3 py-1 text-xs text-white"
-                        >
-                          <option value="aguardando_confirmacao">🕐 Aguardando Confirmação (48-72h)</option>
-                          <option value="preparando_envio">📦 Preparando para Envío</option>
-                          <option value="enviado">🚚 Enviado (Shipped)</option>
-                          <option value="entregue">✅ Entregue</option>
-                          <option value="cancelado">❌ Cancelado</option>
-                        </select>
-                      </div>
-
-                      <div className="flex flex-col gap-1 mt-2">
-                        <label className="text-[9px] uppercase font-bold text-accent">Transportadora / Carrier</label>
-                        <Input
-                          value={selectedOrderForInvoice.carrier || ''}
-                          onChange={(e) => {
-                            setSelectedOrderForInvoice({ ...selectedOrderForInvoice, carrier: e.target.value });
-                          }}
-                          placeholder="Ej: DHL Express, FedEx"
-                          className="h-8 text-xs bg-black/30 border-white/10 text-white"
-                        />
-                      </div>
-
-                      <div className="flex flex-col gap-1 mt-2">
-                        <label className="text-[9px] uppercase font-bold text-accent">Código de Rastreo</label>
-                        <Input
-                          value={selectedOrderForInvoice.tracking_code || ''}
-                          onChange={(e) => {
-                            setSelectedOrderForInvoice({ ...selectedOrderForInvoice, tracking_code: e.target.value });
-                          }}
-                          placeholder="Ej: LX123456789KR"
-                          className="h-8 text-xs bg-black/30 border-white/10 text-white"
-                        />
-                      </div>
-
-                      <Button
-                        onClick={() => {
-                          const allOrders = db.get('orders');
-                          const idx = allOrders.findIndex((o: any) => o.id === selectedOrderForInvoice.id);
-                          if (idx !== -1) {
-                            allOrders[idx].carrier = selectedOrderForInvoice.carrier;
-                            allOrders[idx].tracking_code = selectedOrderForInvoice.tracking_code;
-                            allOrders[idx].updated_at = new Date().toISOString();
-                            db.save('orders', allOrders);
-
-                            const tracking = db.get('order_tracking') || [];
-                            tracking.push({
-                              id: crypto.randomUUID(),
-                              order_id: selectedOrderForInvoice.id,
-                              status: selectedOrderForInvoice.status,
-                              tracking_code: selectedOrderForInvoice.tracking_code,
-                              carrier: selectedOrderForInvoice.carrier,
-                              notes: `Detalles de rastreo guardados: ${selectedOrderForInvoice.carrier} - ${selectedOrderForInvoice.tracking_code}`,
-                              updated_at: new Date().toISOString()
-                            });
-                            db.save('order_tracking', tracking);
-
-                            const logs = db.get('communication_logs') || [];
-                            logs.push({
-                              id: crypto.randomUUID(),
-                              order_id: selectedOrderForInvoice.id,
-                              type: 'email',
-                              status: 'sent',
-                              recipient: 'cliente@example.com',
-                              subject: `Seguimiento de tu pedido - Cheotnun K-Beauty`,
-                              content: `Hola Jaque, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ha sido enviado vía ${selectedOrderForInvoice.carrier}. Número de seguimiento: ${selectedOrderForInvoice.tracking_code}`,
-                              created_at: new Date().toISOString()
-                            });
-                            db.save('communication_logs', logs);
-
-                            loadData();
-                            alert('¡Detalles de envío actualizados y correo de seguimiento enviado!');
-                          }
-                        }}
-                        className="bg-accent hover:bg-accentHover text-background font-bold py-2 rounded-xl text-xs mt-3"
-                      >
-                        GUARDAR DETALLES
-                      </Button>
-                    </div>
+                      );
+                    })}
                   </div>
-                )}
-              </div>
+
+                  {/* Order detail panel */}
+                  <div className="xl:col-span-2 flex flex-col gap-4">
+                    {selectedOrderForInvoice ? (
+                      <>
+                        {/* Header with actions */}
+                        <div className="border border-white/5 rounded-2xl p-4 bg-secondary/20 flex items-center justify-between">
+                          <div>
+                            <span className="text-[9px] text-accent font-bold uppercase tracking-wider">Pedido</span>
+                            <h3 className="font-heading text-lg font-bold text-white font-mono mt-0.5">#{selectedOrderForInvoice.id.substring(0, 8)}</h3>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                const a = document.createElement('a');
+                                a.href = selectedOrderForInvoice.commercial_invoice_url;
+                                a.target = '_blank';
+                                a.rel = 'noreferrer';
+                                a.click();
+                              }}
+                              className="bg-accent hover:bg-accentHover text-background font-bold text-[9px] h-7 px-3 rounded-lg"
+                            >
+                              <FileText className="h-3 w-3 mr-1" />
+                              INVOICE PDF
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                if (!confirm(`Tem certeza que deseja excluir o pedido #${selectedOrderForInvoice.id.substring(0, 8)} permanentemente?`)) return;
+                                const allOrders = db.get('orders').filter((o: any) => o.id !== selectedOrderForInvoice.id);
+                                db.save('orders', allOrders);
+                                setSelectedOrderForInvoice(null);
+                                loadData();
+                              }}
+                              className="bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold text-[9px] h-7 px-3 rounded-lg border border-red-500/20"
+                            >
+                              <Trash2 className="h-3 w-3 mr-1" />
+                              EXCLUIR
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Status Management */}
+                        <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-4">
+                          <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Status & Envío</h4>
+                          
+                          <div className="bg-accent/10 border border-accent/20 rounded-xl px-4 py-3 text-[10px] text-accent leading-relaxed">
+                            ⏱ Prazo operacional: 48h úteis (até 72h em feriados coreanos). O cliente foi informado.
+                          </div>
+
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[8px] uppercase font-bold text-muted-foreground">Alterar Status</label>
+                            <select
+                              value={selectedOrderForInvoice.status}
+                              onChange={(e) => {
+                                const newStatus = e.target.value;
+                                const allOrders = db.get('orders');
+                                const idx = allOrders.findIndex((o: any) => o.id === selectedOrderForInvoice.id);
+                                if (idx !== -1) {
+                                  allOrders[idx].status = newStatus;
+                                  allOrders[idx].updated_at = new Date().toISOString();
+                                  db.save('orders', allOrders);
+                                  
+                                  const tracking = db.get('order_tracking') || [];
+                                  tracking.push({
+                                    id: crypto.randomUUID(),
+                                    order_id: selectedOrderForInvoice.id,
+                                    status: newStatus,
+                                    tracking_code: selectedOrderForInvoice.tracking_code || null,
+                                    carrier: selectedOrderForInvoice.carrier || null,
+                                    notes: `Estado actualizado por el administrador a ${newStatus.toUpperCase()}`,
+                                    updated_at: new Date().toISOString()
+                                  });
+                                  db.save('order_tracking', tracking);
+
+                                  const logs = db.get('communication_logs') || [];
+                                  logs.push({
+                                    id: crypto.randomUUID(),
+                                    order_id: selectedOrderForInvoice.id,
+                                    type: 'email',
+                                    status: 'sent',
+                                    recipient: 'cliente@example.com',
+                                    subject: `Estado del Pedido - Cheotnun K-Beauty`,
+                                    content: `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${({
+                                      'aguardando_confirmacao': 'Aguardando Confirmación de la Tienda',
+                                      'preparando_envio': 'Preparando para Envío',
+                                      'enviado': 'Enviado',
+                                      'entregue': 'Entregado',
+                                      'cancelado': 'Cancelado'
+                                    } as Record<string, string>)[newStatus] || newStatus.toUpperCase()}`,
+                                    created_at: new Date().toISOString()
+                                  });
+                                  db.save('communication_logs', logs);
+
+                                  setSelectedOrderForInvoice({ ...selectedOrderForInvoice, status: newStatus });
+                                  loadData();
+                                }
+                              }}
+                              className="flex h-9 w-full rounded-lg border border-white/10 bg-background px-3 py-1 text-xs text-white"
+                            >
+                              <option value="aguardando_confirmacao">🕐 Aguardando Confirmação (48-72h)</option>
+                              <option value="preparando_envio">📦 Preparando para Envío</option>
+                              <option value="enviado">🚚 Enviado (Shipped)</option>
+                              <option value="entregue">✅ Entregue</option>
+                              <option value="cancelado">❌ Cancelado</option>
+                            </select>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[8px] uppercase font-bold text-muted-foreground">Transportadora</label>
+                              <Input
+                                value={selectedOrderForInvoice.carrier || ''}
+                                onChange={(e) => setSelectedOrderForInvoice({ ...selectedOrderForInvoice, carrier: e.target.value })}
+                                placeholder="Ex: DHL Express"
+                                className="h-8 text-xs bg-black/30 border-white/10 text-white"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[8px] uppercase font-bold text-muted-foreground">Código de Rastreio</label>
+                              <Input
+                                value={selectedOrderForInvoice.tracking_code || ''}
+                                onChange={(e) => setSelectedOrderForInvoice({ ...selectedOrderForInvoice, tracking_code: e.target.value })}
+                                placeholder="Ex: LX123456789KR"
+                                className="h-8 text-xs bg-black/30 border-white/10 text-white"
+                              />
+                            </div>
+                          </div>
+
+                          <Button
+                            onClick={() => {
+                              const allOrders = db.get('orders');
+                              const idx = allOrders.findIndex((o: any) => o.id === selectedOrderForInvoice.id);
+                              if (idx !== -1) {
+                                allOrders[idx].carrier = selectedOrderForInvoice.carrier;
+                                allOrders[idx].tracking_code = selectedOrderForInvoice.tracking_code;
+                                allOrders[idx].updated_at = new Date().toISOString();
+                                db.save('orders', allOrders);
+
+                                const tracking = db.get('order_tracking') || [];
+                                tracking.push({
+                                  id: crypto.randomUUID(),
+                                  order_id: selectedOrderForInvoice.id,
+                                  status: selectedOrderForInvoice.status,
+                                  tracking_code: selectedOrderForInvoice.tracking_code,
+                                  carrier: selectedOrderForInvoice.carrier,
+                                  notes: `Detalles de rastreo guardados: ${selectedOrderForInvoice.carrier} - ${selectedOrderForInvoice.tracking_code}`,
+                                  updated_at: new Date().toISOString()
+                                });
+                                db.save('order_tracking', tracking);
+
+                                const logs = db.get('communication_logs') || [];
+                                logs.push({
+                                  id: crypto.randomUUID(),
+                                  order_id: selectedOrderForInvoice.id,
+                                  type: 'email',
+                                  status: 'sent',
+                                  recipient: 'cliente@example.com',
+                                  subject: `Seguimiento de tu pedido - Cheotnun K-Beauty`,
+                                  content: `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ha sido enviado vía ${selectedOrderForInvoice.carrier}. Número de seguimiento: ${selectedOrderForInvoice.tracking_code}`,
+                                  created_at: new Date().toISOString()
+                                });
+                                db.save('communication_logs', logs);
+
+                                loadData();
+                                alert('✓ Detalles de envío actualizados y correo de seguimiento enviado al cliente.');
+                              }
+                            }}
+                            className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl text-xs"
+                          >
+                            SALVAR DETALLES DE ENVÍO
+                          </Button>
+                        </div>
+
+                        {/* Customer & Order Info */}
+                        <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-4">
+                          <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Información del Pedido</h4>
+                          <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[10px]">
+                            <span className="text-muted-foreground">Gateway:</span>
+                            <span className="text-white font-bold uppercase">{selectedOrderForInvoice.gateway}</span>
+                            <span className="text-muted-foreground">Documento:</span>
+                            <span className="text-white font-bold uppercase">{(selectedOrderForInvoice.document_type || 'N/A')} ({selectedOrderForInvoice.document_number || '-'})</span>
+                            <span className="text-muted-foreground">Data:</span>
+                            <span className="text-white">{new Date(selectedOrderForInvoice.created_at).toLocaleString('pt-BR')}</span>
+                            <span className="text-muted-foreground">Subtotal:</span>
+                            <span className="text-white">US$ {(selectedOrderForInvoice.subtotal || 0).toFixed(2)}</span>
+                            <span className="text-muted-foreground">Envío:</span>
+                            <span className="text-white">US$ {(selectedOrderForInvoice.shipping_amount || 0).toFixed(2)}</span>
+                            <span className="text-muted-foreground border-t border-white/5 pt-1">Total:</span>
+                            <span className="text-accent font-bold font-heading text-sm border-t border-white/5 pt-1">US$ {(selectedOrderForInvoice.total_amount || 0).toFixed(2)}</span>
+                          </div>
+                        </div>
+
+                        {/* Shipping Address */}
+                        {selectedOrderForInvoice.shipping_address && (
+                          <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-2">
+                            <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Endereço de Envío</h4>
+                            <p className="text-[10px] text-white leading-relaxed">
+                              {selectedOrderForInvoice.shipping_address.first_name} {selectedOrderForInvoice.shipping_address.last_name}<br />
+                              {selectedOrderForInvoice.shipping_address.street}, {selectedOrderForInvoice.shipping_address.number || 'S/N'}<br />
+                              {selectedOrderForInvoice.shipping_address.city}, {selectedOrderForInvoice.shipping_address.state}, {selectedOrderForInvoice.shipping_address.country}<br />
+                              {selectedOrderForInvoice.shipping_address.postal_code && <>CEP: {selectedOrderForInvoice.shipping_address.postal_code}</>}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Invoice Preview */}
+                        <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-3">
+                          <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Commercial Invoice</h4>
+                          <div className="border border-white/10 bg-white p-3 rounded-xl text-black font-mono text-[8px] flex flex-col gap-2 leading-normal">
+                            <div className="text-center font-bold text-[10px] border-b border-black pb-1 uppercase">COMMERCIAL INVOICE</div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div><span className="font-bold">EXPORTER:</span> CHEOTNUN BEAUTY S.L.<br />Madrid, España</div>
+                              <div><span className="font-bold">IMPORTER:</span> {selectedOrderForInvoice.shipping_address?.first_name} {selectedOrderForInvoice.shipping_address?.last_name}<br />{selectedOrderForInvoice.shipping_address?.country}</div>
+                            </div>
+                            <div className="border-t border-b border-black py-1">
+                              <div className="grid grid-cols-4 font-bold text-[7px]"><span>PROD</span><span className="text-center">QTY</span><span className="text-right">PRICE</span><span className="text-right">TOTAL</span></div>
+                              <div className="grid grid-cols-4 text-[7px] mt-1">
+                                <span className="truncate">K-Beauty (3304.99.90)</span>
+                                <span className="text-center">1</span>
+                                <span className="text-right">US$ {selectedOrderForInvoice.subtotal?.toFixed(2)}</span>
+                                <span className="text-right">US$ {selectedOrderForInvoice.subtotal?.toFixed(2)}</span>
+                              </div>
+                            </div>
+                            <div className="text-right text-[7px]">
+                              <div>Total: <span className="font-bold text-[9px]">US$ {selectedOrderForInvoice.total_amount?.toFixed(2)}</span></div>
+                            </div>
+                          </div>
+                          <a href={selectedOrderForInvoice.commercial_invoice_url} target="_blank" rel="noreferrer">
+                            <Button className="w-full bg-accent hover:bg-accentHover text-background font-bold text-[9px] py-2 h-8 rounded-lg mt-1">
+                              <FileText className="h-3.5 w-3.5 mr-1" />
+                              DESCARGAR INVOICE PDF
+                            </Button>
+                          </a>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="border border-dashed border-white/10 rounded-2xl p-10 text-center">
+                        <ShoppingCart className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+                        <p className="text-xs text-muted-foreground">Selecione um pedido na lista ao lado para visualizar os detalhes, alterar o status, adicionar transportadora/rastreio ou imprimir a invoice.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
