@@ -22,7 +22,8 @@ interface DbState {
 }
 
 const STORAGE_KEY = 'cheotnun_db_state';
-const SEED_VERSION = 'v2'; // incremente quando seed data mudar
+const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
+const SEED_VERSION = 'v2';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -417,12 +418,9 @@ function persistToLocalStorage() {
 function loadFromLocalStorage(): boolean {
   if (typeof window === 'undefined') return false;
   try {
-    const savedVersion = localStorage.getItem('cheotnun_db_version');
-    if (savedVersion !== SEED_VERSION) {
-      localStorage.removeItem(STORAGE_KEY);
+    // Apenas marca versao, nunca destrói dados do usuario
+    if (!localStorage.getItem('cheotnun_db_version')) {
       localStorage.setItem('cheotnun_db_version', SEED_VERSION);
-      memoryDb = deepClone(DEFAULT_STATE);
-      return true;
     }
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -461,18 +459,38 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
   } catch { return {}; }
 }
 
+let supabaseReady = false;
+
+// IDs deletados localmente que nao devem ser ressuscitados pelo Supabase
+function loadDeletedIds(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = localStorage.getItem(DELETED_IDS_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch { return new Set(); }
+}
+
+function saveDeletedId(id: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const ids = loadDeletedIds();
+    ids.add(id);
+    localStorage.setItem(DELETED_IDS_KEY, JSON.stringify([...ids]));
+  } catch {}
+}
+
 function mergeTableData(table: string, incoming: any[]) {
   const local = (memoryDb as any)[table] || [];
   const localIds = new Set(local.map((r: any) => r.id));
-  const novos = incoming.filter((r: any) => !localIds.has(r.id));
+  const deletedIds = loadDeletedIds();
+  // Filtra registros do Supabase que foram deletados localmente
+  const novos = incoming.filter((r: any) => !localIds.has(r.id) && !deletedIds.has(r.id));
   if (novos.length > 0) {
     (memoryDb as any)[table] = [...local, ...novos];
     return true;
   }
   return false;
 }
-
-let supabaseReady = false;
 
 async function tryLoadFromSupabase() {
   try {
@@ -602,6 +620,7 @@ export const db = {
     memoryDb = { ...DEFAULT_STATE, site_content: deepClone(DEFAULT_STATE.site_content), system_settings: deepClone(DEFAULT_STATE.system_settings) };
   },
 
+  markDeleted: (id: string) => saveDeletedId(id),
   getDefault,
   mergeTranslations: (base: any, translation: any) => mergeTranslations(base, translation),
   getTranslatedRecord: (record: any, locale: string) => getTranslatedRecord(record, locale),

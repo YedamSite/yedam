@@ -1270,9 +1270,19 @@ export default function AdminDashboard() {
                               size="sm"
                               onClick={async () => {
                                 if (!confirm(`Tem certeza que deseja excluir o pedido #${selectedOrderForInvoice.id.substring(0, 8)} permanentemente?`)) return;
-                                await deleteOrderFromSupabase(selectedOrderForInvoice.id);
-                                const allOrders = db.get('orders').filter((o: any) => o.id !== selectedOrderForInvoice.id);
+                                const result = await deleteOrderFromSupabase(selectedOrderForInvoice.id);
+                                if (!result.success) {
+                                  alert('Erro ao excluir do Supabase: ' + (result.error || 'desconhecido'));
+                                  return;
+                                }
+                                const orderId = selectedOrderForInvoice.id;
+                                db.markDeleted(orderId);
+                                const allOrders = db.get('orders').filter((o: any) => o.id !== orderId);
+                                const allTracking = db.get('order_tracking').filter((t: any) => t.order_id !== orderId);
+                                const allLogs = db.get('communication_logs').filter((l: any) => l.order_id !== orderId);
                                 db.save('orders', allOrders);
+                                db.save('order_tracking', allTracking);
+                                db.save('communication_logs', allLogs);
                                 setSelectedOrderForInvoice(null);
                                 loadData();
                               }}

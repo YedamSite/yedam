@@ -215,11 +215,13 @@ export async function deleteOrderFromSupabase(orderId: string) {
   if (!supabaseUrl || !supabaseServiceKey) return { success: false, error: 'Supabase not configured' };
   try {
     const client = createClient(supabaseUrl, supabaseServiceKey);
-    const tables = ['cheotnun_orders', 'cheotnun_order_tracking', 'cheotnun_communication_logs'];
-    for (const table of tables) {
-      const { error } = await client.from(table).delete().eq('id', orderId);
-      if (error) console.error(`deleteOrderFromSupabase(${table}):`, error);
-    }
+    // orders: delete by id; tracking & logs: delete by order_id
+    const { error: err1 } = await client.from('cheotnun_orders').delete().eq('id', orderId);
+    if (err1) { console.error('deleteOrder orders:', err1); return { success: false, error: err1.message }; }
+    const { error: err2 } = await client.from('cheotnun_order_tracking').delete().eq('order_id', orderId);
+    if (err2) console.error('deleteOrder tracking:', err2);
+    const { error: err3 } = await client.from('cheotnun_communication_logs').delete().eq('order_id', orderId);
+    if (err3) console.error('deleteOrder logs:', err3);
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e?.message || 'Unknown error' };
