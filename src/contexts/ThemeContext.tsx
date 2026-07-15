@@ -68,7 +68,7 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
   };
 
   useEffect(() => {
-    db.init();
+    (async () => { await db.init(); })();
 
     const settings = db.get('system_settings');
     const dbTheme = settings?.visual_theme;

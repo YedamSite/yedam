@@ -183,6 +183,14 @@ export default function AdminDashboard() {
     loadData();
     // Carregar do Supabase ao iniciar (se configurado)
     syncWithSupabase();
+    // Aguardar Supabase ficar pronto e recarregar (evita flash de dados antigos)
+    (async () => {
+      while (!db.isSupabaseReady()) {
+        await new Promise(r => setTimeout(r, 100));
+      }
+      await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
+      loadData();
+    })();
     
     // Listener para atualizar quando o db mudar em outras abas/páginas
     const handleStorageChange = () => loadData();

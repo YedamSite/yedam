@@ -534,10 +534,12 @@ function setMemoryAndPersist(table: string, data: any) {
 }
 
 export const db = {
-  init: () => {
+  init: async () => {
     loadFromLocalStorage();
-    tryLoadFromSupabase();
+    await tryLoadFromSupabase();
   },
+
+  isSupabaseReady: () => supabaseReady,
 
   reloadFromSupabase: async (tables?: string[]): Promise<void> => {
     try {
