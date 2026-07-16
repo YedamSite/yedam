@@ -117,8 +117,9 @@ export default function ClienteDashboard() {
     }
     loadData();
 
-    // Real-time polling: re-read orders every 5 seconds to catch status changes
-    const interval = setInterval(() => {
+    // Real-time polling: sync from Supabase and re-read orders every 5 seconds
+    const interval = setInterval(async () => {
+      await db.reloadFromSupabase(['orders']);
       const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
       const allOrders = db.get('orders') || [];
       const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
