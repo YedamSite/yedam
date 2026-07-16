@@ -299,26 +299,26 @@ export default function ClienteDashboard() {
                           }
                           return (
                             <div className="grid grid-cols-4 gap-2 text-center text-[9px] font-bold uppercase text-muted-foreground">
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 1 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 1 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 1 ? 'text-green-400' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 1 ? 'bg-green-500 text-white' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Clock className="h-3 w-3" />
                                 </span>
                                 <span>{t('Confirmación')}</span>
                               </div>
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 2 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 2 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 2 ? 'text-green-400' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 2 ? 'bg-green-500 text-white' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Package className="h-3 w-3" />
                                 </span>
                                 <span>{t('Preparación')}</span>
                               </div>
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 3 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 3 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 3 ? 'text-green-400' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 3 ? 'bg-green-500 text-white' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Truck className="h-3 w-3" />
                                 </span>
                                 <span>{t('Enviado')}</span>
                               </div>
-                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 4 ? 'text-accent' : ''}`}>
-                                <span className={`p-1 rounded-full ${currentStep >= 4 ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}>
+                              <div className={`flex flex-col items-center gap-1 ${currentStep >= 4 ? 'text-green-400' : ''}`}>
+                                <span className={`p-1 rounded-full ${currentStep >= 4 ? 'bg-green-500 text-white' : 'bg-white/5 text-muted-foreground'}`}>
                                   <Check className="h-3 w-3" />
                                 </span>
                                 <span>{t('Entregado')}</span>
