@@ -35,26 +35,51 @@ export default function ClienteDashboard() {
     localStorage.setItem('cheotnun_sub', JSON.stringify(updated));
   };
 
-  const handleReactivateSub = () => {
-    const updated = { ...subscription, status: 'active' };
-    setSubscription(updated);
-    localStorage.setItem('cheotnun_sub', JSON.stringify(updated));
+  const handleReactivateSub = async () => {
+    if (!subscription) return;
+    const user = authService.getCurrentUser();
+    if (!user) return;
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'subscription',
+          planName: subscription.plan,
+          planPrice: subscription.price,
+          customerEmail: user.email,
+          customerName: user.name || 'Cheotnun Member',
+          customerId: user.id,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (e) {
+      console.error('Reactivate subscription error:', e);
+    }
   };
 
-  const handleSubscribe = (planName: string, price: number) => {
-    const nextDate = new Date();
-    nextDate.setMonth(nextDate.getMonth() + 1);
-    const newSub = {
-      plan: planName,
-      price: price,
-      status: 'active',
-      next_billing: nextDate.toISOString().split('T')[0],
-      history: [
-        { date: new Date().toISOString().split('T')[0], amount: price, status: 'paid' }
-      ]
-    };
-    setSubscription(newSub);
-    localStorage.setItem('cheotnun_sub', JSON.stringify(newSub));
+  const handleSubscribe = async (planName: string, price: number) => {
+    const user = authService.getCurrentUser();
+    if (!user) return;
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'subscription',
+          planName,
+          planPrice: price,
+          customerEmail: user.email,
+          customerName: user.name || 'Cheotnun Member',
+          customerId: user.id,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (e) {
+      console.error('Subscription checkout error:', e);
+    }
   };
 
   const loadData = useCallback(async () => {
@@ -94,18 +119,10 @@ export default function ClienteDashboard() {
     const allLogs = db.get('communication_logs') || [];
     setLogs(allLogs.filter((l: any) => l.recipient === userEmail));
 
-    // Load subscription
+    // Load subscription (null = not subscribed, must activate via Stripe)
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('cheotnun_sub');
-      setSubscription(saved ? JSON.parse(saved) : {
-        plan: 'Premium Box',
-        price: 29.90,
-        status: 'active',
-        next_billing: '2026-08-11',
-        history: [
-          { date: '2026-07-11', amount: 29.90, status: 'paid' }
-        ]
-      });
+      setSubscription(saved ? JSON.parse(saved) : null);
     }
   }, []);
 
@@ -126,12 +143,32 @@ export default function ClienteDashboard() {
       setOrders(userOrders);
     }, 5000);
 
-    // Support tab direct navigation query parameter
+    // Handle URL params
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const tab = urlParams.get('tab');
       if (tab === 'favorites') {
         setActiveTab('favorites');
+      }
+      // Subscription success after Stripe Checkout
+      if (urlParams.get('subscription') === 'success') {
+        setActiveTab('suscripciones');
+        const plan = urlParams.get('plan') || 'Premium Box';
+        const price = parseFloat(urlParams.get('price') || '29.90');
+        const nextDate = new Date();
+        nextDate.setMonth(nextDate.getMonth() + 1);
+        const newSub = {
+          plan,
+          price,
+          status: 'active',
+          next_billing: nextDate.toISOString().split('T')[0],
+          history: [
+            { date: new Date().toISOString().split('T')[0], amount: price, status: 'paid' }
+          ]
+        };
+        setSubscription(newSub);
+        localStorage.setItem('cheotnun_sub', JSON.stringify(newSub));
+        window.history.replaceState({}, '', '/dashboard/cliente');
       }
     }
 

@@ -23,22 +23,30 @@ export async function POST(req: NextRequest) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const orderId = session.metadata?.order_id;
+    const type = session.metadata?.type;
 
-    if (orderId && supabaseUrl && supabaseServiceKey) {
-      try {
-        const supabase = createClient(supabaseUrl, supabaseServiceKey);
-        await supabase
-          .from('cheotnun_orders')
-          .update({
-            status: 'aguardando_confirmacao',
-            stripe_session_id: session.id,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', orderId);
-      } catch (e) {
-        console.error('Webhook: failed to update order in Supabase:', e);
+    // Product purchase - update order with Stripe session ID
+    if (type === 'product_purchase') {
+      const orderId = session.metadata?.order_id;
+      if (orderId && supabaseUrl && supabaseServiceKey) {
+        try {
+          const supabase = createClient(supabaseUrl, supabaseServiceKey);
+          await supabase
+            .from('cheotnun_orders')
+            .update({
+              stripe_session_id: session.id,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', orderId);
+        } catch (e) {
+          console.error('Webhook: failed to update order:', e);
+        }
       }
+    }
+
+    // Club subscription - log it (client handles activation via success_url params)
+    if (type === 'club_subscription') {
+      console.log(`Club subscription activated: ${session.metadata?.plan_name} for ${session.customer_email}`);
     }
   }
 

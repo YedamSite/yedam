@@ -1,19 +1,51 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
 
 export async function POST(req: NextRequest) {
   try {
-    const { orderId, customerEmail, customerName, totalAmount, items } = await req.json();
+    const body = await req.json();
+    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
+    // === SUBSCRIPTION FLOW (Club Cheotnun) ===
+    if (body.mode === 'subscription') {
+      const { planName, planPrice, customerEmail, customerName, customerId } = body;
+      if (!planName || !planPrice) {
+        return NextResponse.json({ error: 'Missing plan info' }, { status: 400 });
+      }
+
+      const session = await getStripe().checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: planName,
+              description: `Assinatura mensal - ${planName}`,
+            },
+            unit_amount: Math.round(planPrice * 100),
+            recurring: { interval: 'month' },
+          },
+          quantity: 1,
+        }],
+        mode: 'subscription',
+        success_url: `${origin}/dashboard/cliente?tab=suscripciones&subscription=success&plan=${encodeURIComponent(planName)}&price=${planPrice}`,
+        cancel_url: `${origin}/dashboard/cliente?tab=suscripciones`,
+        customer_email: customerEmail,
+        metadata: {
+          type: 'club_subscription',
+          plan_name: planName,
+          customer_id: customerId || '',
+        },
+      });
+
+      return NextResponse.json({ url: session.url });
+    }
+
+    // === ONE-TIME PAYMENT FLOW (Product purchase) ===
+    const { orderId, totalAmount, customerEmail, customerName, items } = body;
     if (!orderId || !totalAmount) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
     const session = await getStripe().checkout.sessions.create({
       payment_method_types: ['card'],
@@ -35,6 +67,7 @@ export async function POST(req: NextRequest) {
       cancel_url: `${origin}/tienda/carrinho?canceled=true`,
       customer_email: customerEmail,
       metadata: {
+        type: 'product_purchase',
         order_id: orderId,
         customer_name: customerName || '',
       },
