@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText } from 'lucide-react';
+import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText, CreditCard } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -28,9 +28,7 @@ export default function CheckoutWizard() {
   const [city, setCity] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [phone, setPhone] = useState('');
-  const [gateway, setGateway] = useState('stripe');
-  const [dlocalSubMethod, setDlocalSubMethod] = useState('card');
-  const [cashNetwork, setCashNetwork] = useState('pago_movil');
+  const [stripeLoading, setStripeLoading] = useState(false);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState('');
@@ -47,15 +45,9 @@ export default function CheckoutWizard() {
 
   // Sync document type requirements when country changes
   useEffect(() => {
-    if (country === 'España') {
-      setDocType('nif');
-    } else if (country === 'Uruguay') {
-      setDocType('rut');
-      setCashNetwork('abitab');
-    } else if (country === 'Paraguay') {
-      setDocType('ruc');
-      setCashNetwork('pago_movil');
-    }
+    if (country === 'España') setDocType('nif');
+    else if (country === 'Uruguay') setDocType('rut');
+    else if (country === 'Paraguay') setDocType('ruc');
   }, [country]);
 
   // Load cart from localStorage on mount
@@ -95,6 +87,23 @@ export default function CheckoutWizard() {
   const subtotal = cartItems.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0);
   const total = Math.max(0, subtotal + 15.00 - discount); // subtotal + shipping - discount
 
+  // Check for Stripe success/cancel redirect on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('success') === 'true') {
+        setStep(4);
+        const orderId = params.get('order_id');
+        if (orderId) {
+          setOrderSuccess({ id: orderId });
+          localStorage.removeItem('cheotnun_cart');
+          setCartItems([]);
+        }
+        window.history.replaceState({}, '', '/tienda/carrinho');
+      }
+    }
+  }, []);
+
   const handleCheckoutSubmit = async () => {
     if (!firstName || !lastName || !street || !city || !zipCode || !docNumber) return;
     setLoading(true);
@@ -113,7 +122,9 @@ export default function CheckoutWizard() {
     };
 
     const customerId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
+    const customerEmail = currentUser ? currentUser.email : 'cliente@example.com';
 
+    // 1. Create the order in local DB + Supabase
     const res = await submitOrderAction({
       customerId,
       items: cartItems,
@@ -121,26 +132,55 @@ export default function CheckoutWizard() {
       billingAddress: address,
       documentType: docType as any,
       documentNumber: docNumber,
-      gateway
+      gateway: 'stripe'
     });
 
-    setLoading(false);
-    if (res.success) {
-      setOrderSuccess(res.order);
-      localStorage.removeItem('cheotnun_cart');
-      setCartItems([]);
-      // Salvar pedido no localStorage do cliente para aparecer no dashboard
-      try {
-        const raw = localStorage.getItem('cheotnun_db_state');
-        const state = raw ? JSON.parse(raw) : {};
-        if (!state.orders) state.orders = [];
-        const exists = state.orders.some((o: any) => o.id === res.order!.id);
-        if (!exists) {
-          state.orders.push(res.order!);
-          localStorage.setItem('cheotnun_db_state', JSON.stringify(state));
-        }
-      } catch {}
-      setStep(4);
+    if (!res.success || !res.order) {
+      setLoading(false);
+      return;
+    }
+
+    // 2. Save order locally for dashboard
+    try {
+      const raw = localStorage.getItem('cheotnun_db_state');
+      const state = raw ? JSON.parse(raw) : {};
+      if (!state.orders) state.orders = [];
+      const exists = state.orders.some((o: any) => o.id === res.order!.id);
+      if (!exists) {
+        state.orders.push(res.order!);
+        localStorage.setItem('cheotnun_db_state', JSON.stringify(state));
+      }
+    } catch {}
+
+    // 3. Create Stripe Checkout Session and redirect
+    try {
+      setStripeLoading(true);
+      const checkoutRes = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: res.order.id,
+          customerEmail,
+          customerName: `${firstName} ${lastName}`,
+          totalAmount: total,
+          items: cartItems,
+        }),
+      });
+
+      const data = await checkoutRes.json();
+      if (data.url) {
+        localStorage.removeItem('cheotnun_cart');
+        setCartItems([]);
+        window.location.href = data.url;
+      } else {
+        console.error('Stripe checkout failed:', data.error);
+        setLoading(false);
+        setStripeLoading(false);
+      }
+    } catch (error) {
+      console.error('Stripe checkout error:', error);
+      setLoading(false);
+      setStripeLoading(false);
     }
   };
 
@@ -297,86 +337,25 @@ export default function CheckoutWizard() {
             </div>
           )}
 
-          {/* STEP 3: PAYMENT GATEWAYS */}
+          {/* STEP 3: STRIPE PAYMENT */}
           {step === 3 && (
             <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-heading text-2xl font-light text-white mb-6">{t('Método de Pago')}</h2>
               
               <div className="flex flex-col gap-4">
-                {[
-                  { id: 'stripe', name: t('Stripe Checkout'), desc: t('Tarjetas de crédito, débito internacionales y Apple Pay') },
-                  { id: 'paypal', name: t('PayPal Integration'), desc: t('Paga de forma rápida y segura con tu cuenta PayPal') },
-                  { id: 'mercadopago', name: t('Mercado Pago LatAm'), desc: t('Tarjetas de crédito locales y transferencias') },
-                  { id: 'dlocal', name: t('dLocal Payments'), desc: t('Medios de pago locales para Uruguay, Paraguay y otros') }
-                ].map((gatewayOption) => (
-                  <div key={gatewayOption.id} className="flex flex-col gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setGateway(gatewayOption.id)}
-                      className={`w-full text-left p-5 border rounded-2xl transition-all flex flex-col ${
-                        gateway === gatewayOption.id
-                          ? 'border-accent bg-accent/5 text-accent'
-                          : 'border-white/10 hover:bg-white/5 text-white'
-                      }`}
-                    >
-                      <span className="text-sm font-bold uppercase tracking-wider">{gatewayOption.name}</span>
-                      <span className="text-[10px] text-muted-foreground mt-1">{gatewayOption.desc}</span>
-                    </button>
-                    
-                    {gateway === 'dlocal' && gatewayOption.id === 'dlocal' && (country === 'Paraguay' || country === 'Uruguay') && (
-                      <div className="border border-white/10 rounded-2xl p-4 bg-black/20 ml-4 flex flex-col gap-3">
-                        <span className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Selecciona la modalidad dLocal:')}</span>
-                        <div className="flex gap-4">
-                          <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
-                            <input
-                              type="radio"
-                              name="dlocalSub"
-                              value="card"
-                              checked={dlocalSubMethod === 'card'}
-                              onChange={() => setDlocalSubMethod('card')}
-                              className="accent-accent"
-                            />
-                            {t('Tarjeta de Crédito Internacional')}
-                          </label>
-                          <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
-                            <input
-                              type="radio"
-                              name="dlocalSub"
-                              value="cash"
-                              checked={dlocalSubMethod === 'cash'}
-                              onChange={() => setDlocalSubMethod('cash')}
-                              className="accent-accent"
-                            />
-                            {t('Pago en Efectivo (Redes Locales)')}
-                          </label>
-                        </div>
-                        
-                        {dlocalSubMethod === 'cash' && (
-                          <div className="flex flex-col gap-2 mt-2">
-                            <span className="text-[9px] text-muted-foreground uppercase font-bold">{t('Red de Cobranza:')}</span>
-                            <select
-                              value={cashNetwork}
-                              onChange={(e) => setCashNetwork(e.target.value)}
-                              className="flex h-9 w-full rounded-md border border-white/10 bg-background px-3 py-1 text-xs text-white"
-                            >
-                              {country === 'Paraguay' ? (
-                                <>
-                                  <option value="pago_movil">Pago Móvil</option>
-                                  <option value="aqui_pago">Aquí Pago</option>
-                                </>
-                              ) : (
-                                <>
-                                  <option value="abitab">Abitab</option>
-                                  <option value="redpagos">Redpagos</option>
-                                </>
-                              )}
-                            </select>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                <div className="border border-white/10 rounded-2xl p-6 bg-black/20 flex items-start gap-4">
+                  <span className="p-3 bg-accent/10 border border-accent/20 rounded-full text-accent shrink-0">
+                    <CreditCard className="h-6 w-6" />
+                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-bold text-white uppercase tracking-wider">Stripe</span>
+                    <span className="text-[10px] text-muted-foreground">{t('Paga de forma segura con tarjeta de crédito, débito o Apple Pay')}</span>
+                    <div className="flex gap-3 mt-2">
+                      <ShieldCheck className="h-4 w-4 text-green-400" />
+                      <span className="text-[9px] text-green-400 font-semibold">{t('Pago 100% seguro procesado por Stripe')}</span>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           )}
@@ -384,109 +363,40 @@ export default function CheckoutWizard() {
           {/* STEP 4: SUCCESS CONGRATS */}
           {step === 4 && orderSuccess && (
             <div className="lg:col-span-3 bg-card border border-white/5 rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-4 max-w-xl mx-auto shadow-2xl">
-              <span className="p-4 bg-accent/20 border border-accent/40 rounded-full text-accent">
+              <span className="p-4 bg-green-500/20 border border-green-500/40 rounded-full text-green-400">
                 <Check className="h-10 w-10" />
               </span>
               <h2 className="font-heading text-3xl font-light text-white uppercase tracking-wider">{t('¡Gracias por tu compra!')}</h2>
               
-              {gateway === 'dlocal' && dlocalSubMethod === 'cash' ? (
-                <div className="w-full flex flex-col gap-4 mt-2">
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {t('Hemos registrado tu pedido')} **#{orderSuccess.id.substring(0, 8)}**. {t('Para completar el pago, utiliza el siguiente cupón de cobranza local:')}
-                  </p>
-                  
-                  {/* Visual Barcode Voucher Card */}
-                  <div className="bg-white text-black font-mono text-left p-6 rounded-2xl border border-gray-200 flex flex-col gap-4 shadow-lg text-xs leading-normal">
-                    <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-                      <div>
-                        <span className="text-[9px] uppercase font-bold text-gray-500 block">{t('Red de Cobranza')}</span>
-                        <span className="text-sm font-bold uppercase text-accent">
-                          {cashNetwork === 'pago_movil' && t('Pago Móvil (Paraguay)')}
-                          {cashNetwork === 'aqui_pago' && t('Aquí Pago (Paraguay)')}
-                          {cashNetwork === 'abitab' && t('Abitab (Uruguay)')}
-                          {cashNetwork === 'redpagos' && t('Redpagos (Uruguay)')}
-                        </span>
-                      </div>
-                      <span className="text-lg font-bold font-heading text-accent">US$ {total.toFixed(2)}</span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 text-[10px]">
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase block text-[8px]">{t('Referencia de Pago')}</span>
-                        <span className="font-bold text-black select-all">1029-4820-{orderSuccess.id.substring(0, 4).toUpperCase()}</span>
-                      </div>
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase block text-[8px]">{t('Fecha de Vencimiento')}</span>
-                        <span className="font-bold text-black">
-                          {(() => {
-                            const date = new Date();
-                            date.setDate(date.getDate() + 3);
-                            return date.toLocaleDateString('es-ES');
-                          })()}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Visual Barcode lines */}
-                    <div className="flex flex-col items-center gap-1 bg-gray-50 p-4 rounded-xl border border-gray-200 mt-2">
-                      <div className="flex h-12 w-full justify-between items-stretch max-w-xs px-2 bg-white border border-gray-300">
-                        {Array.from({ length: 45 }).map((_, idx) => {
-                          const isSpace = idx % 3 === 0 || idx % 7 === 0;
-                          const thickness = idx % 5 === 0 ? 'w-1.5' : idx % 2 === 0 ? 'w-[1px]' : 'w-0.5';
-                          return (
-                            <div
-                              key={idx}
-                              className={`${isSpace ? 'bg-transparent' : 'bg-black'} ${thickness}`}
-                            />
-                          );
-                        })}
-                      </div>
-                      <span className="text-[9px] tracking-[6px] text-gray-600 font-bold mt-1">10294820{orderSuccess.id.substring(0, 4).toUpperCase()}</span>
-                    </div>
-
-                    <div className="text-[8px] text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
-                      <span className="font-bold block uppercase text-[9px] text-gray-600 mb-1">{t('Instrucciones de pago:')}</span>
-                      {t('1. Presenta este cupón impreso o en tu celular en cualquier sucursal de la red seleccionada.')}<br />
-                      {t('2. O bien, ingresa a la aplicación de tu banco o billetera digital y digita el número de referencia.')}<br />
-                      {t('3. Guarda el recibo. Tu pedido será procesado inmediatamente una vez confirmada la compensación.')}
-                    </div>
-                  </div>
-                  
-                  <Button onClick={() => window.print()} variant="outline" className="border-white/10 text-white hover:bg-white/5 py-2 px-6 rounded-xl text-xs w-fit mx-auto mt-2">
-                    {t('IMPRIMIR VOUCHER')}
-                  </Button>
+              <div className="flex flex-col gap-4 items-center w-full">
+                <p className="text-sm text-white leading-relaxed">
+                  {t('Hemos recibido tu pedido con el ID')} <strong className="text-accent">#{orderSuccess.id.substring(0, 8)}</strong>.
+                </p>
+                
+                <div className="bg-orange-500/10 border border-orange-500/30 text-orange-200 text-xs p-5 rounded-2xl text-left w-full shadow-inner mt-2">
+                  <strong className="block mb-2 text-orange-400 text-sm flex items-center gap-2">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
+                    </span>
+                    {t('Importante: Validación de Pedido (48-72h)')}
+                  </strong>
+                  <p className="opacity-90">{t('Como operamos con envíos directos desde Corea del Sur hacia Latinoamérica, tu pedido ha entrado en la fase de validación de disponibilidad y documentación de exportación (48-72 horas).')}</p>
+                  <p className="opacity-90 mt-2">{t('Una vez confirmado el stock y el pago, emitiremos tu Commercial Invoice final y prepararemos el paquete para envío.')}</p>
                 </div>
-              ) : (
-                <div className="flex flex-col gap-4 items-center w-full">
-                  <p className="text-sm text-white leading-relaxed">
-                    {t('Hemos recibido tu pedido con el ID')} <strong className="text-accent">#{orderSuccess.id.substring(0, 8)}</strong>.
-                  </p>
-                  
-                  <div className="bg-orange-500/10 border border-orange-500/30 text-orange-200 text-xs p-5 rounded-2xl text-left w-full shadow-inner mt-2">
-                    <strong className="block mb-2 text-orange-400 text-sm flex items-center gap-2">
-                      <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
-                      </span>
-                      {t('Importante: Validación de Pedido (48-72h)')}
-                    </strong>
-                    <p className="opacity-90">{t('Como operamos con envíos directos desde Corea del Sur hacia Latinoamérica, tu pedido ha entrado en la fase de validación de disponibilidad y documentación de exportación (48-72 horas).')}</p>
-                    <p className="opacity-90 mt-2">{t('Una vez confirmado el stock y el pago, emitiremos tu Commercial Invoice final y prepararemos el paquete para envío.')}</p>
-                  </div>
 
-                  <div className="flex flex-col items-center mt-4 p-4 border border-white/5 rounded-2xl w-full bg-black/20">
-                    <p className="text-xs text-muted-foreground mb-3">
-                      {t('Tu orden ha sido registrada. Puedes descargar la factura proforma (Invoice preliminar) aquí:')}
-                    </p>
-                    <a href={`/invoices/cheotnun-inv-${orderSuccess.id}.pdf`} target="_blank" rel="noreferrer">
-                      <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-black py-2 px-6 rounded-xl text-xs flex gap-2 transition-all">
-                        <FileText className="h-4 w-4" />
-                        {t('DESCARGAR COMMERCIAL INVOICE')}
-                      </Button>
-                    </a>
-                  </div>
+                <div className="flex flex-col items-center mt-4 p-4 border border-white/5 rounded-2xl w-full bg-black/20">
+                  <p className="text-xs text-muted-foreground mb-3">
+                    {t('Tu orden ha sido registrada. Puedes descargar la factura proforma (Invoice preliminar) aquí:')}
+                  </p>
+                  <a href={`/invoices/cheotnun-inv-${orderSuccess.id}.pdf`} target="_blank" rel="noreferrer">
+                    <Button variant="outline" className="border-accent text-accent hover:bg-accent hover:text-black py-2 px-6 rounded-xl text-xs flex gap-2 transition-all">
+                      <FileText className="h-4 w-4" />
+                      {t('DESCARGAR COMMERCIAL INVOICE')}
+                    </Button>
+                  </a>
                 </div>
-              )}
+              </div>
               
               <div className="h-px bg-white/10 w-full my-4" />
 
@@ -573,11 +483,14 @@ export default function CheckoutWizard() {
                   <div className="flex flex-col gap-2">
                     <Button
                       onClick={handleCheckoutSubmit}
-                      disabled={loading}
+                      disabled={loading || stripeLoading}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
-                      {loading ? t('Procesando...') : t('COMPLETAR PEDIDO')}
+                      {loading || stripeLoading ? t('Procesando...') : t('PAGAR CON STRIPE')}
                     </Button>
+                    {stripeLoading && (
+                      <span className="text-[9px] text-center text-muted-foreground animate-pulse">{t('Redirigiendo a Stripe...')}</span>
+                    )}
                     <Button variant="ghost" onClick={() => setStep(2)} className="text-xs text-muted-foreground">
                       {t('Volver al envío')}
                     </Button>
