@@ -175,6 +175,8 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
         msg = t('Este teléfono ya está registrado.');
       } else if (msg.includes('idx_cheotnun_users_unique_document') || msg.includes('cheotnun_users_document_number_key')) {
         msg = t('Este documento ya está registrado.');
+      } else if (lowercaseMsg.includes('rate limit') || lowercaseMsg.includes('email rate limit') || lowercaseMsg.includes('too many requests')) {
+        msg = t('Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.');
       }
       setErrorMsg(msg);
     } finally {
