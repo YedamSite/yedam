@@ -57,10 +57,17 @@ export default function ClienteDashboard() {
     localStorage.setItem('cheotnun_sub', JSON.stringify(newSub));
   };
 
-  const loadData = () => {
+  const loadData = useCallback(async () => {
     const user = authService.getCurrentUser();
     const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
     const userEmail = user ? user.email : 'cliente@example.com';
+
+    // Try to load orders from Supabase first, then merge with localStorage
+    try {
+      await db.reloadFromSupabase(['orders']);
+    } catch (e) {
+      console.error('Failed to reload from Supabase:', e);
+    }
 
     // Load orders
     const allOrders = db.get('orders') || [];
@@ -100,7 +107,7 @@ export default function ClienteDashboard() {
         ]
       });
     }
-  };
+  }, []);
 
   useEffect(() => {
     const user = authService.getCurrentUser();
