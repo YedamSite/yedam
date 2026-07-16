@@ -481,15 +481,22 @@ function saveDeletedId(id: string) {
 
 function mergeTableData(table: string, incoming: any[]) {
   const local = (memoryDb as any)[table] || [];
-  const localIds = new Set(local.map((r: any) => r.id));
+  const localMap = new Map(local.map((r: any) => [r.id, r]));
   const deletedIds = loadDeletedIds();
-  // Filtra registros do Supabase que foram deletados localmente
-  const novos = incoming.filter((r: any) => !localIds.has(r.id) && !deletedIds.has(r.id));
-  if (novos.length > 0) {
-    (memoryDb as any)[table] = [...local, ...novos];
-    return true;
+  let changed = false;
+  for (const record of incoming) {
+    if (deletedIds.has(record.id)) continue;
+    const localRecord = localMap.get(record.id);
+    if (!localRecord) {
+      local.push(record);
+      changed = true;
+    } else if (new Date(record.updated_at || 0) > new Date(localRecord.updated_at || 0)) {
+      Object.assign(localRecord, record);
+      changed = true;
+    }
   }
-  return false;
+  (memoryDb as any)[table] = local;
+  return changed;
 }
 
 async function tryLoadFromSupabase() {
