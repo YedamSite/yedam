@@ -36,6 +36,14 @@ export default function CheckoutWizard() {
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
 
+  // Auth state
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authName, setAuthName] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+
   // Success state
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -107,8 +115,7 @@ export default function CheckoutWizard() {
       phone
     };
 
-    const user = authService.getCurrentUser();
-    const customerId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
+    const customerId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
 
     const res = await submitOrderAction({
       customerId,
@@ -136,7 +143,7 @@ export default function CheckoutWizard() {
           localStorage.setItem('cheotnun_db_state', JSON.stringify(state));
         }
       } catch {}
-      setStep(4);
+      setStep(5);
     }
   };
 
@@ -149,11 +156,13 @@ export default function CheckoutWizard() {
         <div className="flex justify-between items-center max-w-lg mx-auto mb-10 text-[9px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wider">
           <span className={step >= 1 ? 'text-accent' : ''}>{t('1. Carrito')}</span>
           <span>→</span>
-          <span className={step >= 2 ? 'text-accent' : ''}>{t('2. Identificación')}</span>
+          <span className={step >= 2 ? 'text-accent' : ''}>{t('2. Cuenta')}</span>
           <span>→</span>
-          <span className={step >= 3 ? 'text-accent' : ''}>{t('3. Pago')}</span>
+          <span className={step >= 3 ? 'text-accent' : ''}>{t('3. Envío')}</span>
           <span>→</span>
-          <span className={step >= 4 ? 'text-accent' : ''}>{t('4. Confirmación')}</span>
+          <span className={step >= 4 ? 'text-accent' : ''}>{t('4. Pago')}</span>
+          <span>→</span>
+          <span className={step >= 5 ? 'text-accent' : ''}>{t('5. Confirmación')}</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -211,8 +220,86 @@ export default function CheckoutWizard() {
             </div>
           )}
 
-          {/* STEP 2: ADDRESS & DOCUMENT AUTO REQUIREMENTS */}
+          {/* STEP 2: LOGIN / SIGNUP */}
           {step === 2 && (
+            <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
+              <h2 className="font-heading text-2xl font-light text-white mb-6">
+                {authMode === 'signup' ? t('Crear tu Cuenta') : t('Iniciar Sesión')}
+              </h2>
+              {currentUser ? (
+                <div className="flex flex-col gap-4">
+                  <div className="border border-green-500/30 bg-green-500/10 rounded-2xl p-4 text-center">
+                    <p className="text-green-400 text-sm font-bold">{t('✓ Conectado como')} {currentUser.email}</p>
+                  </div>
+                  <Button onClick={() => setStep(3)} className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl">
+                    {t('CONTINUAR AL ENVÍO')}
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-2 mb-2">
+                    <button
+                      onClick={() => { setAuthMode('signup'); setAuthError(''); }}
+                      className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${authMode === 'signup' ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}
+                    >
+                      {t('Crear Cuenta')}
+                    </button>
+                    <button
+                      onClick={() => { setAuthMode('login'); setAuthError(''); }}
+                      className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${authMode === 'login' ? 'bg-accent text-background' : 'bg-white/5 text-muted-foreground'}`}
+                    >
+                      {t('Iniciar Sesión')}
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <Input
+                      value={authEmail}
+                      onChange={e => setAuthEmail(e.target.value)}
+                      placeholder={t('Tu correo electrónico')}
+                      className="bg-black/30 border-white/10 text-white rounded-xl text-sm"
+                    />
+                    {authMode === 'signup' && (
+                      <Input
+                        value={authName}
+                        onChange={e => setAuthName(e.target.value)}
+                        placeholder={t('Tu nombre completo')}
+                        className="bg-black/30 border-white/10 text-white rounded-xl text-sm"
+                      />
+                    )}
+                    {authError && <p className="text-red-400 text-xs">{authError}</p>}
+                    <Button
+                      onClick={async () => {
+                        if (!authEmail) { setAuthError(t('Ingresa un correo')); return; }
+                        if (authMode === 'signup' && !authName) { setAuthError(t('Ingresa tu nombre')); return; }
+                        setAuthLoading(true);
+                        setAuthError('');
+                        try {
+                          if (authMode === 'signup') {
+                            await authService.signUp(authEmail, authName);
+                          } else {
+                            await authService.signIn(authEmail);
+                          }
+                          setCurrentUser(authService.getCurrentUser());
+                        } catch (e: any) {
+                          setAuthError(e?.message || t('Error al autenticar'));
+                        } finally {
+                          setAuthLoading(false);
+                        }
+                      }}
+                      disabled={authLoading}
+                      className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl"
+                    >
+                      {authLoading ? t('Procesando...') : authMode === 'signup' ? t('CREAR CUENTA') : t('INICIAR SESIÓN')}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* STEP 3: ADDRESS & DOCUMENT AUTO REQUIREMENTS */}
+          {step === 3 && (
             <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-heading text-2xl font-light text-white mb-6">{t('Información de Envío')}</h2>
               
@@ -293,8 +380,8 @@ export default function CheckoutWizard() {
             </div>
           )}
 
-          {/* STEP 3: PAYMENT GATEWAYS */}
-          {step === 3 && (
+          {/* STEP 4: PAYMENT GATEWAYS */}
+          {step === 4 && (
             <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <h2 className="font-heading text-2xl font-light text-white mb-6">{t('Método de Pago')}</h2>
               
@@ -377,8 +464,8 @@ export default function CheckoutWizard() {
             </div>
           )}
 
-          {/* STEP 4: SUCCESS CONGRATS */}
-          {step === 4 && orderSuccess && (
+          {/* STEP 5: SUCCESS CONGRATS */}
+          {step === 5 && orderSuccess && (
             <div className="lg:col-span-3 bg-card border border-white/5 rounded-3xl p-8 md:p-12 text-center flex flex-col items-center gap-4 max-w-xl mx-auto shadow-2xl">
               <span className="p-4 bg-accent/20 border border-accent/40 rounded-full text-accent">
                 <Check className="h-10 w-10" />
@@ -501,8 +588,8 @@ export default function CheckoutWizard() {
             </div>
           )}
 
-          {/* Checkout Right Summary Column (Always visible, except step 4) */}
-          {step !== 4 && (
+          {/* Checkout Right Summary Column (Always visible, except step 5) */}
+          {step !== 5 && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 shadow-xl h-fit flex flex-col justify-between">
               <div>
                 <h3 className="text-xs font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-3 mb-4">{t('Resumen del Pedido')}</h3>
@@ -538,26 +625,36 @@ export default function CheckoutWizard() {
                     disabled={cartItems.length === 0}
                     className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                   >
-                    {t('CONTINUAR AL ENVÍO')}
+                    {t('CONTINUAR A MI CUENTA')}
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 )}
-                {step === 2 && (
+                {step === 2 && !currentUser && null}
+                {step === 2 && currentUser && (
+                  <Button
+                    onClick={() => setStep(3)}
+                    className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl"
+                  >
+                    {t('CONTINUAR AL ENVÍO')}
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                )}
+                {step === 3 && (
                   <div className="flex flex-col gap-2">
                     <Button
-                      onClick={() => setStep(3)}
+                      onClick={() => setStep(4)}
                       disabled={!firstName || !lastName || !street || !city || !zipCode || !docNumber}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
                       {t('CONTINUAR AL PAGO')}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" onClick={() => setStep(1)} className="text-xs text-muted-foreground">
-                      {t('Volver al carrito')}
+                    <Button variant="ghost" onClick={() => setStep(2)} className="text-xs text-muted-foreground">
+                      {t('Volver a mi cuenta')}
                     </Button>
                   </div>
                 )}
-                {step === 3 && (
+                {step === 4 && (
                   <div className="flex flex-col gap-2">
                     <Button
                       onClick={handleCheckoutSubmit}
@@ -566,7 +663,7 @@ export default function CheckoutWizard() {
                     >
                       {loading ? t('Procesando...') : t('COMPLETAR PEDIDO')}
                     </Button>
-                    <Button variant="ghost" onClick={() => setStep(2)} className="text-xs text-muted-foreground">
+                    <Button variant="ghost" onClick={() => setStep(3)} className="text-xs text-muted-foreground">
                       {t('Volver al envío')}
                     </Button>
                   </div>
