@@ -142,27 +142,35 @@ export const authService = {
       if (error) throw error;
 
       if (data.user) {
-        const { error: dbError } = await supabase
-          .from('cheotnun_users')
-          .insert({
-            id: data.user.id,
-            email: cleanEmail,
-            name,
-            phone: cleanPhone || null,
-            country: profileData?.country || null,
-            document_type: profileData?.documentType || null,
-            document_number: cleanDoc || null,
-            postal_code: profileData?.postalCode || null,
-            street: profileData?.street || null,
-            number: profileData?.number || null,
-            complement: profileData?.complement || null,
-            neighborhood: profileData?.neighborhood || null,
-            city: profileData?.city || null,
-            state: profileData?.state || null,
-          });
-        if (dbError) {
-          console.error('Error inserting user profile in database:', dbError);
-          throw new Error(dbError.message || 'Error inserting user profile in database');
+        // Use server endpoint with service_role_key to bypass RLS
+        const insertResp = await fetch('/api/supabase-reload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'upsert',
+            table: 'users',
+            records: [{
+              id: data.user.id,
+              email: cleanEmail,
+              name,
+              phone: cleanPhone || null,
+              country: profileData?.country || null,
+              document_type: profileData?.documentType || null,
+              document_number: cleanDoc || null,
+              postal_code: profileData?.postalCode || null,
+              street: profileData?.street || null,
+              number: profileData?.number || null,
+              complement: profileData?.complement || null,
+              neighborhood: profileData?.neighborhood || null,
+              city: profileData?.city || null,
+              state: profileData?.state || null,
+            }]
+          }),
+        });
+        const insertResult = await insertResp.json();
+        if (!insertResult.success) {
+          console.error('Error inserting user profile via API:', insertResult.error);
+          throw new Error(insertResult.error || 'Error inserting user profile');
         } else {
           saveToRegistry({ email: cleanEmail, phone: cleanPhone, document_number: cleanDoc });
         }
