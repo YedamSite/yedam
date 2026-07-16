@@ -451,7 +451,7 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
     const resp = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tables }),
+      body: JSON.stringify({ action: 'get', tables }),
     });
     if (!resp.ok) return {};
     const json = await resp.json();
