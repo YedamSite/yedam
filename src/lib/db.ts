@@ -490,7 +490,7 @@ function mergeTableData(table: string, incoming: any[]) {
     if (!localRecord) {
       local.push(record);
       changed = true;
-    } else if (new Date(record.updated_at || 0) > new Date(localRecord.updated_at || 0)) {
+    } else if (new Date((record as any).updated_at || 0) > new Date((localRecord as any).updated_at || 0)) {
       Object.assign(localRecord, record);
       changed = true;
     }
