@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { db } from '@/lib/db';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MessageCircle, X, Send, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,8 +15,19 @@ export default function LiveChat() {
   const [unread, setUnread] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const loadMessages = useCallback(async (id: string) => {
+    try {
+      const res = await fetch(`/api/chat?sessionId=${encodeURIComponent(id)}`);
+      const data = await res.json();
+      if (data.messages) {
+        setMessages(data.messages);
+      }
+    } catch (e) {
+      console.error('Chat: failed to load messages', e);
+    }
+  }, []);
+
   useEffect(() => {
-    // Generate a unique session ID for the guest or use existing
     let sid = localStorage.getItem('cheotnun_chat_id');
     if (!sid) {
       sid = 'chat-' + Math.random().toString(36).substring(2, 9);
@@ -25,62 +35,40 @@ export default function LiveChat() {
     }
     setChatId(sid);
     loadMessages(sid);
-    
-    // Poll for new messages (simulate real-time)
+
     const interval = setInterval(() => loadMessages(sid), 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [loadMessages]);
 
-  const loadMessages = (id: string) => {
-    const logs = db.get('communication_logs') || [];
-    const chatMsgs = logs.filter((l: any) => l.type === 'chat' && l.order_id === id);
-    // order by created_at
-    chatMsgs.sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    
-    // Auto-reply logic (simulate admin if there's only user messages and the last one is from user)
-    if (chatMsgs.length > 0 && chatMsgs[chatMsgs.length - 1].sender === 'client') {
-      const lastClientMsgTime = new Date(chatMsgs[chatMsgs.length - 1].created_at).getTime();
-      const now = new Date().getTime();
-      if (now - lastClientMsgTime > 15000 && chatMsgs.filter(m => m.sender === 'admin').length === 0) {
-        // Automatically reply after 15 seconds if admin hasn't
-        sendAutoReply(id, logs);
-      }
-    }
-    
-    setMessages(chatMsgs);
-  };
-
-  const sendAutoReply = (id: string, logs: any[]) => {
-    const reply = {
-      id: crypto.randomUUID(),
-      order_id: id,
-      type: 'chat',
-      sender: 'admin',
-      content: t('Hola! En este momento todos nuestros asesores están ocupados. Deja tu consulta y correo electrónico y te responderemos a la brevedad.'),
-      created_at: new Date().toISOString()
-    };
-    db.save('communication_logs', [...logs, reply]);
-    setMessages(prev => [...prev, reply]);
-  };
-
-  const sendMessage = (e: React.FormEvent) => {
+  const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
+    if (!message.trim() || !chatId) return;
 
-    const newMsg = {
-      id: crypto.randomUUID(),
+    const content = message;
+    setMessage('');
+
+    // Optimistic update
+    const optimisticMsg = {
+      id: 'temp-' + Date.now(),
       order_id: chatId,
       type: 'chat',
       sender: 'client',
-      content: message,
-      created_at: new Date().toISOString()
+      content,
+      created_at: new Date().toISOString(),
     };
+    setMessages(prev => [...prev, optimisticMsg]);
 
-    const logs = db.get('communication_logs') || [];
-    db.save('communication_logs', [...logs, newMsg]);
-    
-    setMessages([...messages, newMsg]);
-    setMessage('');
+    try {
+      await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: chatId, sender: 'client', content }),
+      });
+      // Reload to get the server-assigned order
+      loadMessages(chatId);
+    } catch (e) {
+      console.error('Chat: failed to send message', e);
+    }
   };
 
   const prevMessagesLength = useRef(0);
@@ -103,7 +91,6 @@ export default function LiveChat() {
 
   return (
     <>
-      {/* Floating Chat Button */}
       <button
         onClick={() => { setIsOpen(true); setUnread(0); }}
         className={`fixed bottom-6 z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen ? '-right-20 scale-0' : 'right-6 scale-100'}`}
@@ -116,9 +103,7 @@ export default function LiveChat() {
         )}
       </button>
 
-      {/* Chat Window */}
       <div className={`fixed bottom-6 right-6 z-50 w-80 sm:w-96 bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen ? 'scale-100 opacity-100 visible' : 'scale-0 opacity-0 invisible'}`}>
-        {/* Header */}
         <div className="bg-accent text-background p-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-background/20 p-2 rounded-full">
@@ -134,7 +119,6 @@ export default function LiveChat() {
           </button>
         </div>
 
-        {/* Messages Area */}
         <div className="h-80 bg-background/50 p-4 overflow-y-auto flex flex-col gap-3">
           {messages.length === 0 ? (
             <div className="text-center text-xs text-muted-foreground my-auto flex flex-col items-center gap-2">
@@ -159,7 +143,6 @@ export default function LiveChat() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Area */}
         <form onSubmit={sendMessage} className="p-3 bg-secondary/50 border-t border-white/5 flex gap-2">
           <Input
             value={message}

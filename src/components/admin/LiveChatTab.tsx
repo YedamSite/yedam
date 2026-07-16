@@ -1,66 +1,78 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { db } from '@/lib/db';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Send, User, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-export default function LiveChatTab() {
+export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: number) => void }) {
   const { t } = useLanguage();
   const [chats, setChats] = useState<any[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const loadChats = useCallback(async () => {
+    try {
+      const res = await fetch('/api/chat');
+      const data = await res.json();
+      if (!data.messages) return;
+
+      const grouped: Record<string, any[]> = {};
+      data.messages.forEach((m: any) => {
+        if (!grouped[m.order_id]) grouped[m.order_id] = [];
+        grouped[m.order_id].push(m);
+      });
+
+      const chatList = Object.keys(grouped).map(id => {
+        const msgs = grouped[id].sort(
+          (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+        return { id, messages: msgs, lastMessage: msgs[msgs.length - 1] };
+      }).sort(
+        (a, b) => new Date(b.lastMessage.created_at).getTime() - new Date(a.lastMessage.created_at).getTime()
+      );
+
+      setChats(prev => {
+        // Notify parent about unread conversations with new client messages
+        if (onNewMessage && prev.length > 0) {
+          const prevIds = new Set(prev.map(c => c.id));
+          const newChats = chatList.filter(c => !prevIds.has(c.id));
+          if (newChats.length > 0) {
+            onNewMessage(newChats.length);
+          }
+        }
+        return chatList;
+      });
+    } catch (e) {
+      console.error('LiveChatTab: failed to load chats', e);
+    }
+  }, [onNewMessage]);
+
   useEffect(() => {
     loadChats();
     const interval = setInterval(loadChats, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [loadChats]);
 
-  const loadChats = () => {
-    const logs = db.get('communication_logs') || [];
-    const chatLogs = logs.filter((l: any) => l.type === 'chat');
-    
-    // Group by chat_id (order_id)
-    const grouped: Record<string, any[]> = {};
-    chatLogs.forEach((l: any) => {
-      if (!grouped[l.order_id]) grouped[l.order_id] = [];
-      grouped[l.order_id].push(l);
-    });
-
-    const chatList = Object.keys(grouped).map(id => {
-      const msgs = grouped[id].sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-      return {
-        id,
-        messages: msgs,
-        lastMessage: msgs[msgs.length - 1]
-      };
-    }).sort((a, b) => new Date(b.lastMessage.created_at).getTime() - new Date(a.lastMessage.created_at).getTime());
-
-    setChats(chatList);
-  };
-
-  const sendMessage = (e: React.FormEvent) => {
+  const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim() || !activeChatId) return;
 
-    const newMsg = {
-      id: crypto.randomUUID(),
-      order_id: activeChatId,
-      type: 'chat',
-      sender: 'admin',
-      content: message,
-      created_at: new Date().toISOString()
-    };
-
-    const logs = db.get('communication_logs') || [];
-    db.save('communication_logs', [...logs, newMsg]);
-    
+    const content = message;
     setMessage('');
-    loadChats();
+
+    try {
+      await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: activeChatId, sender: 'admin', content }),
+      });
+      loadChats();
+    } catch (err) {
+      console.error('LiveChatTab: failed to send', err);
+    }
   };
 
   const activeChat = chats.find(c => c.id === activeChatId);
@@ -74,7 +86,6 @@ export default function LiveChatTab() {
   return (
     <div className="flex flex-col h-[600px] border border-white/5 rounded-3xl bg-card overflow-hidden">
       <div className="flex h-full">
-        {/* Chat List Sidebar */}
         <div className="w-1/3 border-r border-white/5 flex flex-col bg-secondary/20">
           <div className="p-4 border-b border-white/5">
             <h2 className="font-heading text-lg text-white">{t('Conversas')} ({chats.length})</h2>
@@ -107,11 +118,9 @@ export default function LiveChatTab() {
           </div>
         </div>
 
-        {/* Chat Area */}
         <div className="w-2/3 flex flex-col bg-background/50">
           {activeChat ? (
             <>
-              {/* Header */}
               <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-secondary/30">
                 <div className="bg-white/10 p-2 rounded-full">
                   <User className="h-5 w-5 text-accent" />
@@ -122,7 +131,6 @@ export default function LiveChatTab() {
                 </div>
               </div>
 
-              {/* Messages Area */}
               <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
                 {activeChat.messages.map((msg: any) => (
                   <div key={msg.id} className={`max-w-[80%] rounded-2xl px-4 py-3 text-xs ${msg.sender === 'admin' ? 'bg-accent text-background self-end rounded-tr-sm' : 'bg-secondary border border-white/5 text-white self-start rounded-tl-sm'}`}>
@@ -135,7 +143,6 @@ export default function LiveChatTab() {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Input */}
               <form onSubmit={sendMessage} className="p-4 bg-secondary/30 border-t border-white/5 flex gap-2">
                 <Input
                   value={message}

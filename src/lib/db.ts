@@ -483,21 +483,31 @@ function saveDeletedId(id: string) {
 
 function mergeTableData(table: string, incoming: any[]) {
   const local = (memoryDb as any)[table] || [];
-  const localMap = new Map(local.map((r: any) => [r.id, r]));
+  const incomingIds = new Set(incoming.map((r: any) => r.id));
   const deletedIds = loadDeletedIds();
   let changed = false;
+
+  // Remove local records that no longer exist on server (deleted by admin)
+  const kept = local.filter((r: any) => incomingIds.has(r.id) || deletedIds.has(r.id));
+  if (kept.length !== local.length) changed = true;
+
+  // Build a map of kept records for fast lookup
+  const localMap = new Map(kept.map((r: any) => [r.id, r]));
+
+  // Add new records or update existing ones
   for (const record of incoming) {
     if (deletedIds.has(record.id)) continue;
     const localRecord = localMap.get(record.id);
     if (!localRecord) {
-      local.push(record);
+      kept.push(record);
       changed = true;
     } else if (new Date((record as any).updated_at || 0) > new Date((localRecord as any).updated_at || 0)) {
       Object.assign(localRecord, record);
       changed = true;
     }
   }
-  (memoryDb as any)[table] = local;
+
+  (memoryDb as any)[table] = kept;
   return changed;
 }
 

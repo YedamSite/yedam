@@ -63,14 +63,16 @@ export default function ClienteDashboard() {
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
+      else if (data.error) alert(t('Error') + ': ' + data.error);
     } catch (e) {
       console.error('Reactivate subscription error:', e);
+      alert(t('Error al reactivar la suscripción. Intenta de nuevo.'));
     }
   };
 
   const handleSubscribe = async (planName: string, price: number) => {
     const user = authService.getCurrentUser();
-    if (!user) return;
+    if (!user) { alert(t('Debes iniciar sesión para suscribirte.')); return; }
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -86,8 +88,10 @@ export default function ClienteDashboard() {
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
+      else if (data.error) alert(t('Error') + ': ' + data.error);
     } catch (e) {
       console.error('Subscription checkout error:', e);
+      alert(t('Error al procesar la suscripción. Intenta de nuevo.'));
     }
   };
 

@@ -37,6 +37,9 @@ export default function AdminDashboard() {
   const [bgColor, setBgColor] = useState(theme.colors.background);
   const [visualSaved, setVisualSaved] = useState(false);
 
+  // Chat notification state
+  const [chatUnread, setChatUnread] = useState(0);
+
   // Data States
   const [blocks, setBlocks] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
@@ -598,7 +601,10 @@ export default function AdminDashboard() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveSubTab(tab.id)}
+                onClick={() => {
+                  setActiveSubTab(tab.id);
+                  if (tab.id === 'chat') setChatUnread(0);
+                }}
                 className={`flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all min-w-max ${
                   activeSubTab === tab.id
                     ? 'border-accent text-accent'
@@ -607,6 +613,11 @@ export default function AdminDashboard() {
               >
                 <Icon className="h-4 w-4" />
                 {tab.label}
+                {tab.id === 'chat' && chatUnread > 0 && (
+                  <span className="bg-red-500 text-white text-[8px] font-bold h-4 w-4 rounded-full flex items-center justify-center ml-1 animate-pulse">
+                    {chatUnread}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -2069,7 +2080,7 @@ export default function AdminDashboard() {
 
           {/* TAB: GENERAL SETTINGS, SMTP & SEO */}
           {activeSubTab === 'shipping' && <ShippingTab />}
-          {activeSubTab === 'chat' && <LiveChatTab />}
+          {activeSubTab === 'chat' && <LiveChatTab onNewMessage={(count) => setChatUnread(prev => prev + count)} />}
 
           {activeSubTab === 'settings' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
