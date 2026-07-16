@@ -44,9 +44,34 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Club subscription - log it (client handles activation via success_url params)
+    // Club subscription - save to Supabase
     if (type === 'club_subscription') {
-      console.log(`Club subscription activated: ${session.metadata?.plan_name} for ${session.customer_email}`);
+      const planName = session.metadata?.plan_name || 'Premium Box';
+      const customerId = session.metadata?.customer_id;
+      const subscriptionId = session.subscription as string;
+      if (customerId && supabaseUrl && supabaseServiceKey) {
+        try {
+          const supabase = createClient(supabaseUrl, supabaseServiceKey);
+          const nextDate = new Date();
+          nextDate.setMonth(nextDate.getMonth() + 1);
+          await supabase.from('cheotnun_subscriptions').upsert({
+            user_id: customerId,
+            plan_name: planName,
+            price: (session.amount_total || 2990) / 100,
+            status: 'active',
+            next_billing: nextDate.toISOString().split('T')[0],
+            stripe_subscription_id: subscriptionId,
+            history: JSON.stringify([{
+              date: new Date().toISOString().split('T')[0],
+              amount: (session.amount_total || 2990) / 100,
+              status: 'paid'
+            }]),
+            updated_at: new Date().toISOString(),
+          }, { onConflict: 'stripe_subscription_id' });
+        } catch (e) {
+          console.error('Webhook: failed to save subscription:', e);
+        }
+      }
     }
   }
 

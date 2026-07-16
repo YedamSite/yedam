@@ -16,6 +16,7 @@ const TABLE_MAP: Record<string, string> = {
   routines: 'cheotnun_routines',
   users: 'cheotnun_users',
   newsletter_subscribers: 'cheotnun_newsletter_subscribers',
+  subscriptions: 'cheotnun_subscriptions',
 };
 
 export async function POST(req: Request) {

@@ -33,6 +33,15 @@ export default function ClienteDashboard() {
     const updated = { ...subscription, status: 'cancelled' };
     setSubscription(updated);
     localStorage.setItem('cheotnun_sub', JSON.stringify(updated));
+    const user = authService.getCurrentUser();
+    if (user) {
+      const existing = db.get('subscriptions') || [];
+      const idx = existing.findIndex((s: any) => s.user_id === user.id && s.status === 'active');
+      if (idx >= 0) {
+        existing[idx] = { ...existing[idx], status: 'cancelled', updated_at: new Date().toISOString() };
+        db.save('subscriptions', [...existing]);
+      }
+    }
   };
 
   const handleReactivateSub = async () => {
@@ -87,9 +96,9 @@ export default function ClienteDashboard() {
     const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
     const userEmail = user ? user.email : 'cliente@example.com';
 
-    // Try to load orders from Supabase first, then merge with localStorage
+    // Try to load orders and subscriptions from Supabase first, then merge with localStorage
     try {
-      await db.reloadFromSupabase(['orders']);
+      await db.reloadFromSupabase(['orders', 'subscriptions']);
     } catch (e) {
       console.error('Failed to reload from Supabase:', e);
     }
@@ -119,8 +128,18 @@ export default function ClienteDashboard() {
     const allLogs = db.get('communication_logs') || [];
     setLogs(allLogs.filter((l: any) => l.recipient === userEmail));
 
-    // Load subscription (null = not subscribed, must activate via Stripe)
-    if (typeof window !== 'undefined') {
+    // Load subscription from Supabase first, fallback to localStorage
+    const allSubs = db.get('subscriptions') || [];
+    const userSub = allSubs.find((s: any) => s.user_id === userId && s.status === 'active');
+    if (userSub) {
+      setSubscription({
+        plan: userSub.plan_name,
+        price: userSub.price,
+        status: userSub.status,
+        next_billing: userSub.next_billing,
+        history: userSub.history || [],
+      });
+    } else if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('cheotnun_sub');
       setSubscription(saved ? JSON.parse(saved) : null);
     }
@@ -136,11 +155,22 @@ export default function ClienteDashboard() {
 
     // Real-time polling: sync from Supabase and re-read orders every 5 seconds
     const interval = setInterval(async () => {
-      await db.reloadFromSupabase(['orders']);
+      await db.reloadFromSupabase(['orders', 'subscriptions']);
       const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
       const allOrders = db.get('orders') || [];
       const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
       setOrders(userOrders);
+      const allSubs = db.get('subscriptions') || [];
+      const userSub = allSubs.find((s: any) => s.user_id === userId && s.status === 'active');
+      if (userSub) {
+        setSubscription({
+          plan: userSub.plan_name,
+          price: userSub.price,
+          status: userSub.status,
+          next_billing: userSub.next_billing,
+          history: userSub.history || [],
+        });
+      }
     }, 5000);
 
     // Handle URL params
@@ -168,6 +198,8 @@ export default function ClienteDashboard() {
         };
         setSubscription(newSub);
         localStorage.setItem('cheotnun_sub', JSON.stringify(newSub));
+        // Reload from Supabase (webhook should have saved it already)
+        db.reloadFromSupabase(['subscriptions']).catch(() => {});
         window.history.replaceState({}, '', '/dashboard/cliente');
       }
     }

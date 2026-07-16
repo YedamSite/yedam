@@ -19,6 +19,7 @@ interface DbState {
   coupons: any[];
   blog_posts: any[];
   newsletter_subscribers: any[];
+  subscriptions: any[];
 }
 
 const STORAGE_KEY = 'cheotnun_db_state';
@@ -397,7 +398,8 @@ const DEFAULT_STATE: DbState = {
     { id: '1', title: '5 Secretos del Skincare Coreano para una Piel Radiante', slug: '5-secretos-skincare-coreano', subtitle: 'Descubre los principios fundamentales de la rutina coreana que transformarán tu piel.', content: '<p>El skincare coreano no es solo una moda, es una filosofía de cuidado. Aquí te revelamos los 5 secretos mejor guardados que toda rutina K-Beauty debe incluir para lograr una piel luminosa y saludable.</p><h3>1. Doble Limpieza</h3><p>El primer paso y el más importante. Consiste en usar primero un limpiador a base de aceite para eliminar maquillaje y protector solar, seguido de un limpiador a base de agua para limpiar profundamente los poros.</p><h3>2. Exfoliación Suave</h3><p>Olvídate de los exfoliantes agresivos. En Corea se prefiere la exfoliación química suave con ingredientes como ácido láctico o PHA que renuevan la piel sin dañarla.</p><h3>3. Esencias y Sérums</h3><p>Las esencias son el corazón de la rutina coreana. Aplicadas después del tónico, preparan la piel para absorber mejor los sérums y tratamientos posteriores.</p><h3>4. Hidratación en Capas</h3><p>La clave está en aplicar múltiples capas ligeras de hidratación en lugar de una sola crema pesada. Esto permite que cada producto penetre mejor.</p><h3>5. Protección Solar Diaria</h3><p>El paso más importante. Un buen protector solar coreano no solo protege, sino que también cuida y nutre la piel mientras la defiende de los rayos UV.</p>', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1200', author: 'Dr. Park', seo_title: '5 Secretos del Skincare Coreano | K-Beauty Tips', seo_description: 'Descubre los 5 secretos fundamentales del skincare coreano para transformar tu rutina de belleza. Aprende sobre doble limpieza, sérums y más.', created_at: '2026-07-08', status: 'published' },
     { id: '2', title: 'Cómo Aplicar el Dokdo Cleanser de Round Lab', slug: 'como-aplicar-dokdo-cleanser-round-lab', subtitle: 'Guía paso a paso para usar correctamente el limpiador facial más popular de Round Lab.', content: '<p>El Dokdo Cleanser de Round Lab se ha convertido en un producto imprescindible en muchas rutinas coreanas. Te enseñamos cómo aplicarlo correctamente para obtener los mejores resultados.</p><h3>¿Por qué es tan especial?</h3><p>Formulado con agua del mar profundo de la isla Dokdo, este limpiador elimina impurezas mientras mantiene la hidratación natural de la piel gracias a sus ingredientes minerales.</p><h3>Paso a Paso</h3><p><strong>Paso 1:</strong> Humedece tu rostro con agua tibia para abrir los poros.</p><p><strong>Paso 2:</strong> Aplica una pequeña cantidad de producto en la palma de tu mano.</p><p><strong>Paso 3:</strong> Masajea suavemente en círculos durante 30-60 segundos.</p><p><strong>Paso 4:</strong> Enjuaga con agua tibia y seca suavemente con una toalla limpia.</p><h3>Consejos Extra</h3><p>Utilízalo tanto en tu rutina de mañana como de noche. Por la mañana eliminará el exceso de grasa nocturna, y por la noche retirará las impurezas acumuladas durante el día.</p>', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=1200', author: 'Kim Min-seo', seo_title: 'Cómo Aplicar Dokdo Cleanser | Guía Round Lab', seo_description: 'Aprende a aplicar correctamente el Dokdo Cleanser de Round Lab. Guía paso a paso con consejos profesionales para maximizar sus beneficios.', created_at: '2026-07-09', status: 'published' }
   ],
-  newsletter_subscribers: []
+  newsletter_subscribers: [],
+  subscriptions: []
 };
 
 let memoryDb: DbState = { ...DEFAULT_STATE, site_content: JSON.parse(JSON.stringify(DEFAULT_STATE.site_content)), system_settings: JSON.parse(JSON.stringify(DEFAULT_STATE.system_settings)) };
@@ -443,8 +445,8 @@ function getDefault<K extends keyof DbState>(table: K): DbState[K] {
   return deepClone(DEFAULT_STATE[table]);
 }
 
-const SYNC_TABLES: (keyof DbState)[] = ['categories', 'brands', 'products', 'blog_posts', 'routines', 'cms_blocks', 'orders', 'order_tracking', 'communication_logs'];
-const MERGE_TABLES = new Set(['orders', 'order_tracking', 'communication_logs']);
+const SYNC_TABLES: (keyof DbState)[] = ['categories', 'brands', 'products', 'blog_posts', 'routines', 'cms_blocks', 'orders', 'order_tracking', 'communication_logs', 'subscriptions'];
+const MERGE_TABLES = new Set(['orders', 'order_tracking', 'communication_logs', 'subscriptions']);
 
 async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
   try {
