@@ -92,8 +92,8 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      `${baseUrl}/api/sitemap`,
-      `${baseUrl}/api/sitemap-images`,
+      `${baseUrl}/sitemap.xml`,
+      `${baseUrl}/sitemap-images.xml`,
     ],
     host: baseUrl,
   }

@@ -112,10 +112,19 @@ const nextConfig: NextConfig = {
         destination: '/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp',
         permanent: true,
       },
+    ];
+  },
+  
+  // Rewrites para manter a URL limpa para sitemaps
+  async rewrites() {
+    return [
       {
         source: '/sitemap.xml',
         destination: '/api/sitemap',
-        permanent: true,
+      },
+      {
+        source: '/sitemap-images.xml',
+        destination: '/api/sitemap-images',
       },
     ];
   },
