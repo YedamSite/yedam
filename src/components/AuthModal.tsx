@@ -159,8 +159,10 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
           documentType, documentNumber
         });
         
-        // Verificar se precisa confirmar e-mail
-        if (signUpResult.requiresEmailConfirmation) {
+        // Verificar se precisa confirmar e-mail (type-safe)
+        const requiresConfirmation = (signUpResult as any).requiresEmailConfirmation === true;
+        
+        if (requiresConfirmation) {
           setSuccessMsg(t('✓ ¡Cuenta creada! Por favor, verifica tu e-mail para continuar.'));
           setLoading(false);
           

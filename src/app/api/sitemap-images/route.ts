@@ -1,6 +1,36 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
+// Função para escapar caracteres especiais em XML
+function escapeXml(str: string): string {
+  if (!str) return str;
+  return str
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
+    .replace(/'/g, '&apos;');
+}
+
+// Função para validar URL
+function isValidUrl(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Função para formatar data ISO-8601
+function formatLastMod(date: string | number | Date): string {
+  try {
+    return new Date(date).toISOString();
+  } catch {
+    return new Date().toISOString();
+  }
+}
+
 export async function GET() {
   const baseUrl = 'https://www.cheotnun.com'
   
@@ -16,9 +46,11 @@ export async function GET() {
   products
     .filter((p: any) => p.status === 'active' && p.image)
     .forEach((product: any) => {
-      // Se a imagem ainda não tem nome SEO, usar URL direta
       if (product.image && !imageUrls.includes(product.image)) {
-        imageUrls.push(product.image)
+        const escapedUrl = escapeXml(product.image);
+        if (isValidUrl(escapedUrl) && !imageUrls.includes(escapedUrl)) {
+          imageUrls.push(escapedUrl);
+        }
       }
     })
 
@@ -27,8 +59,11 @@ export async function GET() {
   categories
     .filter((c: any) => c.image)
     .forEach((category: any) => {
-      if (category.image && !imageUrls.includes(category.image)) {
-        imageUrls.push(category.image)
+      if (category.image) {
+        const escapedUrl = escapeXml(category.image);
+        if (isValidUrl(escapedUrl) && !imageUrls.includes(escapedUrl)) {
+          imageUrls.push(escapedUrl);
+        }
       }
     })
 
@@ -37,34 +72,41 @@ export async function GET() {
   blogPosts
     .filter((post: any) => post.status === 'published' && post.image)
     .forEach((post: any) => {
-      if (post.image && !imageUrls.includes(post.image)) {
-        imageUrls.push(post.image)
+      if (post.image) {
+        const escapedUrl = escapeXml(post.image);
+        if (isValidUrl(escapedUrl) && !imageUrls.includes(escapedUrl)) {
+          imageUrls.push(escapedUrl);
+        }
       }
     })
+
+  // Filtrar URLs inválidas ou vazias
+  const validImageUrls = imageUrls.filter(url => url && url !== '' && url !== 'undefined' && isValidUrl(url));
 
   // Gera o XML do sitemap de imagens otimizado para Google Images
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-${imageUrls.map((url) => {
-  const imageName = url.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ') || 'imagem'
+${validImageUrls.map((url) => {
+  const imageName = escapeXml(url.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ') || 'imagem');
+  const lastMod = formatLastMod(new Date());
   return `  <url>
-    <loc>${url}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
+    <loc>${escapeXml(url)}</loc>
+    <lastmod>${lastMod}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>${url}</image:loc>
+      <image:loc>${escapeXml(url)}</image:loc>
       <image:title>${imageName}</image:title>
       <image:caption>CHEOTNUN K-BEAUTY - ${imageName}</image:caption>
     </image:image>
-  </url>`
+  </url>`;
 }).join('\n')}
 </urlset>`
 
   return new NextResponse(xml, {
     headers: {
-      'Content-Type': 'application/xml',
+      'Content-Type': 'application/xml; charset=utf-8',
       'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
     },
   })

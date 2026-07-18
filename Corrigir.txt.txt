@@ -108,3 +108,30 @@ Não aplique correções paliativas.
 Localize a verdadeira origem do problema na geração do sitemap e corrija a implementação para que o XML produzido seja completamente válido segundo o padrão oficial do Sitemap Protocol.
 
 Ao finalizar, revise todo o sitemap gerado e confirme que ele passa na validação XML sem qualquer erro e é totalmente compatível com o Google Search Console.
+
+
+E corrija esse erro também:
+
+16:46:16.947 
+Type error: Property 'requiresEmailConfirmation' does not exist on type '{ user: User | null; session: Session | null; } | { user: User; requiresEmailConfirmation: boolean; } | { user: { state?: string | undefined; city?: string | undefined; ... 12 more ...; role: string; }; requiresEmailConfirmation?: undefined; }'.
+16:46:16.948 
+  Property 'requiresEmailConfirmation' does not exist on type '{ user: User | null; session: Session | null; }'.
+16:46:16.948 
+16:46:16.948 
+  161 |         
+16:46:16.948 
+  162 |         // Verificar se precisa confirmar e-mail
+16:46:16.949 
+> 163 |         if (signUpResult.requiresEmailConfirmation) {
+16:46:16.949 
+      |                          ^
+16:46:16.949 
+  164 |           setSuccessMsg(t('✓ ¡Cuenta creada! Por favor, verifica tu e-mail para continuar...
+16:46:16.950 
+  165 |           setLoading(false);
+16:46:16.950 
+  166 |           
+16:46:16.997 
+Next.js build worker exited with code: 1 and signal: null
+16:46:17.051 
+Error: Command "npm run build" exited with 1
