@@ -159,13 +159,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = (await import('@/lib/db')).db.get('categories') || []
   const blogPostsList = (await import('@/lib/db')).db.get('blog_posts') || []
   
-  const imageUrls = [
+  const rawImageUrls = [
     `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`,
     `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`,
-    ...productsList.filter((p: any) => p.status === 'active' && p.image).map((p: any) => escapeXml(p.image)),
-    ...categories.filter((c: any) => c.image).map((c: any) => escapeXml(c.image)),
-    ...blogPostsList.filter((post: any) => post.status === 'published' && post.image).map((post: any) => escapeXml(post.image)),
+    ...productsList.filter((p: any) => p.status === 'active' && p.image).map((p: any) => p.image),
+    ...categories.filter((c: any) => c.image).map((c: any) => c.image),
+    ...blogPostsList.filter((post: any) => post.status === 'published' && post.image).map((post: any) => post.image),
   ]
+  
+  // Escapar todas as URLs e filtrar
+  const imageUrls = rawImageUrls
+    .map((url: string) => escapeXml(url))
     .filter((url: string): url is NonNullable<typeof url> => url !== null && url !== '' && url !== 'undefined')
     .filter((url: string, index: number, self: string[]) => self.indexOf(url) === index) // Remove duplicates
     .filter((url: string) => isValidUrl(url)) // Apenas URLs válidas
