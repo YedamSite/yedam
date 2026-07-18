@@ -15,17 +15,17 @@ const shippingInfo = [
   {
     icon: Clock,
     title: 'Tiempo de Entrega',
-    desc: 'España: 2-4 días hábiles | Latinoamérica: 7-15 días hábiles | Resto del mundo: 10-20 días hábiles'
+    desc: 'España Peninsular: 2-4 días hábiles | España Islas: 4-7 días | Latinoamérica: 7-15 días hábiles | Resto del mundo: 10-20 días hábiles'
   },
   {
     icon: Package,
     title: 'Procesamiento',
-    desc: 'Todos los pedidos se procesan en 24-48 horas hábiles. Recibirás un email de confirmación.'
+    desc: 'Todos los pedidos se procesan en 24-48 horas hábiles. Recibirás un email de confirmación con el número de seguimiento.'
   },
   {
     icon: Globe,
     title: 'Aduanas e Impuestos',
-    desc: 'Los precios incluyen IVA español. Los impuestos de importación locales son responsabilidad del comprador.'
+    desc: 'Los precios NO incluyen IVA español para envíos fuera de la UE. Los impuestos de importación locales son responsabilidad del comprador.'
   }
 ];
 
@@ -33,8 +33,8 @@ const shippingRates = [
   { region: 'España Peninsular', time: '2-4 días', cost: 'US$ 5.90', free: 'US$ 50+' },
   { region: 'España Islas (Canarias, Baleares)', time: '4-7 días', cost: 'US$ 12.90', free: 'US$ 80+' },
   { region: 'Portugal', time: '3-5 días', cost: 'US$ 8.90', free: 'US$ 60+' },
+  { region: 'Unión Europea', time: '5-10 días', cost: 'US$ 12.90', free: 'US$ 80+' },
   { region: 'América Latina', time: '7-15 días', cost: 'US$ 15.90', free: 'US$ 100+' },
-  { region: 'Resto de Europa', time: '5-10 días', cost: 'US$ 12.90', free: 'US$ 80+' },
   { region: 'Estados Unidos y Canadá', time: '7-12 días', cost: 'US$ 18.90', free: 'US$ 120+' },
   { region: 'Otros Países', time: '10-20 días', cost: 'US$ 22.90', free: 'US$ 150+' }
 ];
@@ -62,7 +62,7 @@ export default function EnviosPage() {
             {shippingInfo.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <div key={idx} className="bg-card border border-white/5 rounded-2xl p-6 hover:border-accent/30 transition-all">
+                <div key={idx} className="bg-card border border-white/5 rounded-2xl p-6">
                   <Icon className="h-8 w-8 text-accent mb-4" />
                   <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-2">{item.title}</h3>
                   <p className="text-xs text-foreground/60 leading-relaxed">{item.desc}</p>

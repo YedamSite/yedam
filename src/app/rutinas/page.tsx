@@ -2,18 +2,30 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Sparkles, ArrowRight, Play, BookOpen } from 'lucide-react';
+import { Sparkles, ArrowRight, Play, BookOpen, MessageCircle } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/LanguageContext';
+import LiveChat from '@/components/LiveChat';
 
 export default function RutinasPage() {
   const { t, locale } = useLanguage();
   const [routines, setRoutines] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [selectedSkinType, setSelectedSkinType] = useState('Piel Sensible');
+  const [chatOpen, setChatOpen] = useState(false);
+  const [skinTestStarted, setSkinTestStarted] = useState(false);
+
+  const handleStartSkinTest = () => {
+    setSkinTestStarted(true);
+    setChatOpen(true);
+  };
+
+  const handleChatWithExpert = () => {
+    setChatOpen(true);
+  };
 
   const loadData = () => {
     const rawRoutines = db.get('routines') || [];
@@ -139,8 +151,18 @@ export default function RutinasPage() {
                     {t('Haz nuestro test de piel rápido o chatea directamente con una experta en cosmetología.')}
                   </p>
                 </div>
-                <Button className="w-full bg-accent hover:bg-accentHover text-background text-xs font-bold py-2.5 rounded-xl mt-6">
-                  {t('INICIAR EVALUACIÓN GRATUITA')}
+                <Button 
+                  onClick={skinTestStarted ? handleChatWithExpert : handleStartSkinTest}
+                  className="w-full bg-accent hover:bg-accentHover text-background text-xs font-bold py-2.5 rounded-xl mt-6"
+                >
+                  {skinTestStarted ? (
+                    <>
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      {t('CHAT COM ESPECIALISTA')}
+                    </>
+                  ) : (
+                    t('INICIAR EVALUACIÓN GRATUITA')
+                  )}
                 </Button>
               </div>
             </div>
@@ -153,6 +175,9 @@ export default function RutinasPage() {
       </main>
 
       <Footer />
+      
+      {/* Live Chat Widget */}
+      <LiveChat externalOpen={chatOpen} onOpenChange={(open) => setChatOpen(open)} />
     </div>
   );
 }

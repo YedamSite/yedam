@@ -1,18 +1,56 @@
-Membresía VIP
-Club Cheotnun K-Beauty
-Premium Box
-Facturación mensual de US$ 29.90 • Próximo cobro: 2026-08-11
+Olá! Fiz uma primeira revisão da Cheotnun e encontrei alguns pontos que precisam ser ajustados:
+Home
+Corrigir o logo do cabeçalho, pois a imagem não está carregando.
+Verificar se o logo aparece corretamente em todas as páginas.
+Reserva de experiências
+O botão "Reservar Plaza" abre apenas uma mensagem simples ("Reservando..."). É necessário concluir corretamente o fluxo da reserva (loading, modal ou redirecionamento para a próxima etapa).
+Teste de Pele / Consultoria
+A seção:
+¿Dudas sobre tu rutina?
+Haz nuestro test de piel rápido o chatea directamente con una experta en cosmetología.
+não está funcionando. Os botões/links não executam nenhuma ação.
+Cadastro de usuários
+Ao criar uma conta, o e-mail de confirmação está sendo enviado pelo Supabase.
+É necessário:
+Configurar o envio pelo e-mail oficial da Cheotnun.
+Alterar o remetente para Cheotnun Beauty.
+Personalizar o template com a identidade visual da marca.
+Traduzir o e-mail para espanhol.
+Personalizar o assunto.
+Aplicar esse padrão também aos e-mails de recuperação de senha e demais e-mails automáticos.
+Página "Envíos"
+Revisar toda a página conforme a operação real da Cheotnun.
+Em especial:
+Revisar a informação sobre IVA espanhol.
+Confirmar os países atendidos.
+Atualizar valores de frete.
+Atualizar prazos de entrega.
+Revisar todas as informações institucionais apresentadas na página.
+Além disso:
+Os cards Envíos Internacionales, Tiempo de Entrega, Procesamiento e Aduanas e Impuestos não executam nenhuma ação ao clicar. Caso sejam apenas informativos, remover o comportamento de clique. Caso devam abrir algum conteúdo, implementar a funcionalidade.
+Rodapé
 
-Activa
-Beneficios Incluidos
-✓ Box mensual con lo último en cosmética coreana
-✓ Envíos 100% gratuitos en todos tus pedidos
-✓ 15% de descuento adicional en toda la tienda
-✓ Acceso prioritario a lanzamientos y novedades
-Historial de Pagos
-Fecha
-Monto
-Estado
-2026-07-11
-US$ 29.90
-Aprobado
+Revisar todas as informações institucionais.
+Remover o crédito "Desarrollado orgullosamente por Voltris" e collab com maeum'''
+Painel Administrativo
+Gostaria de confirmar também quais informações poderão ser alteradas pelo painel administrativo.
+A página Envíos (textos, países atendidos, prazos, valores de frete e demais informações) deverá ser totalmente gerenciável pelo painel, sem necessidade de alterações em código.
+Revisão Geral
+Peço também uma revisão completa do site para verificar:
+Imagens quebradas.
+Links sem funcionamento.
+Botões sem ação.
+Campos de formulário.
+Newsletter.
+Login.
+Cadastro.
+Recuperação de senha.
+Busca.
+Favoritos.
+Carrinho.
+Instagram.
+YouTube.
+Menus.
+Links do rodapé.
+Responsividade (celular, tablet e desktop).
+Assim conseguimos garantir que todas as funcionalidades estejam funcionando corretamente antes da entrega.

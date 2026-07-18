@@ -14,6 +14,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/ayuda/devoluciones',
     '/politica-de-privacidad',
     '/terminos',
+    '/dashboard/cliente',
+    '/dashboard/admin',
   ]
 
   // Generate sitemap entries with hreflang alternatives
@@ -82,8 +84,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPostsList = (await import('@/lib/db')).db.get('blog_posts') || []
   
   const imageUrls = [
-    `${baseUrl}/images/cheotnun-logo.webp`,
-    `${baseUrl}/images/banner.webp`,
+    `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`,
+    `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`,
     ...productsList.filter((p: any) => p.status === 'active' && p.image).map((p: any) => p.image),
     ...categories.filter((c: any) => c.image).map((c: any) => c.image),
     ...blogPostsList.filter((post: any) => post.status === 'published' && post.image).map((post: any) => post.image),

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { authService } from '@/lib/supabaseAuth';
 import { useLanguage } from '@/context/LanguageContext';
 import { COUNTRIES, DIAL_CODES, getDocumentTypes, getDefaultDocumentType, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
+import { sendConfirmationEmail } from '@/lib/emailService';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -156,7 +157,12 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
           country, phone, postalCode, street, number, complement, neighborhood, city, state,
           documentType, documentNumber
         });
-        setSuccessMsg(t('✓ ¡Cuenta creada con éxito!'));
+        
+        // Enviar e-mail de confirmação personalizado
+        const locale = (typeof window !== 'undefined' && localStorage.getItem('cheotnun_locale')) || 'es';
+        await sendConfirmationEmail(email, name, locale);
+        
+        setSuccessMsg(t('✓ ¡Cuenta creada con éxito! ¡Te hemos enviado un correo de bienvenida!'));
       } else {
         // Recovery
         setSuccessMsg(t('✓ Correo de recuperación enviado si la dirección existe.'));

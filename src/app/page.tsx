@@ -80,7 +80,7 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative min-h-[95vh] flex flex-col justify-between pt-8 overflow-hidden border-b border-white/5 bg-cover bg-[position:75%_center] md:bg-center bg-no-repeat"
-        style={{ backgroundImage: c?.hero?.bgImage ? `url('${c.hero.bgImage}')` : "url('/images/banner.webp')" }}
+        style={{ backgroundImage: c?.hero?.bgImage ? `url('${c.hero.bgImage}')` : "url('/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent z-0" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-0" />

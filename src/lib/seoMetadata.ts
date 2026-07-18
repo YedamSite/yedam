@@ -54,10 +54,10 @@ export function generateHomeMetadata(locale: string = 'es'): Metadata {
       description: descriptions[locale as keyof typeof descriptions],
       images: [
         {
-          url: '/images/banner.webp',
+          url: '/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp',
           width: 1200,
           height: 630,
-          alt: 'CHEOTNUN K-BEAUTY - Cosméticos Coreanos Premium',
+          alt: 'CHEOTNUN K-BEAUTY - Cosméticos Coreanos Premium | Skincare Coreano Autêntico',
         },
       ],
     },
@@ -65,7 +65,7 @@ export function generateHomeMetadata(locale: string = 'es'): Metadata {
       card: 'summary_large_image',
       title: titles[locale as keyof typeof titles],
       description: descriptions[locale as keyof typeof descriptions],
-      images: ['/images/banner.webp'],
+      images: ['/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp'],
     },
   };
 }

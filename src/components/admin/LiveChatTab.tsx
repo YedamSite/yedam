@@ -6,12 +6,29 @@ import { Input } from '@/components/ui/input';
 import { Send, User, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: number) => void }) {
+interface ChatMessage {
+  id: string;
+  order_id: string;
+  type: string;
+  sender: 'client' | 'admin';
+  content: string;
+  created_at: string;
+}
+
+interface ChatGroup {
+  id: string;
+  messages: ChatMessage[];
+  lastMessage: ChatMessage;
+}
+
+export default function LiveChatTab() {
   const { t } = useLanguage();
-  const [chats, setChats] = useState<any[]>([]);
+  const [chats, setChats] = useState<ChatGroup[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const prevMsgCountPerChat = useRef<Record<string, number>>({});
+  const prevTotalChats = useRef(0);
 
   const loadChats = useCallback(async () => {
     try {
@@ -19,36 +36,26 @@ export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: n
       const data = await res.json();
       if (!data.messages) return;
 
-      const grouped: Record<string, any[]> = {};
-      data.messages.forEach((m: any) => {
+      const grouped: Record<string, ChatMessage[]> = {};
+      data.messages.forEach((m: ChatMessage) => {
         if (!grouped[m.order_id]) grouped[m.order_id] = [];
         grouped[m.order_id].push(m);
       });
 
-      const chatList = Object.keys(grouped).map(id => {
+      const chatList: ChatGroup[] = Object.keys(grouped).map(id => {
         const msgs = grouped[id].sort(
-          (a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         );
         return { id, messages: msgs, lastMessage: msgs[msgs.length - 1] };
       }).sort(
         (a, b) => new Date(b.lastMessage.created_at).getTime() - new Date(a.lastMessage.created_at).getTime()
       );
 
-      setChats(prev => {
-        // Notify parent about unread conversations with new client messages
-        if (onNewMessage && prev.length > 0) {
-          const prevIds = new Set(prev.map(c => c.id));
-          const newChats = chatList.filter(c => !prevIds.has(c.id));
-          if (newChats.length > 0) {
-            onNewMessage(newChats.length);
-          }
-        }
-        return chatList;
-      });
+      setChats(chatList);
     } catch (e) {
       console.error('LiveChatTab: failed to load chats', e);
     }
-  }, [onNewMessage]);
+  }, []);
 
   useEffect(() => {
     loadChats();
@@ -77,11 +84,26 @@ export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: n
 
   const activeChat = chats.find(c => c.id === activeChatId);
 
+  // Auto-scroll only when NEW messages arrive (length increases)
+  const scrollLockRef = useRef(false);
   useEffect(() => {
-    if (messagesEndRef.current) {
+    if (messagesEndRef.current && !scrollLockRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [activeChat?.messages?.length, activeChatId]);
+  }, [activeChat?.messages?.length]);
+
+  // Track user scrolling: if user scrolls up, lock auto-scroll
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const isAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    scrollLockRef.current = !isAtBottom;
+  };
+
+  // When sending a message, unlock scroll and go to bottom
+  const handleSendAndScroll = async (e: React.FormEvent) => {
+    scrollLockRef.current = false;
+    await sendMessage(e);
+  };
 
   return (
     <div className="flex flex-col h-[600px] border border-white/5 rounded-3xl bg-card overflow-hidden">
@@ -99,7 +121,7 @@ export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: n
               chats.map((chat) => (
                 <button
                   key={chat.id}
-                  onClick={() => setActiveChatId(chat.id)}
+                  onClick={() => { setActiveChatId(chat.id); scrollLockRef.current = false; }}
                   className={`w-full text-left p-4 border-b border-white/5 hover:bg-white/5 transition-colors ${activeChatId === chat.id ? 'bg-white/10' : ''}`}
                 >
                   <div className="flex justify-between items-start mb-1">
@@ -131,8 +153,8 @@ export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: n
                 </div>
               </div>
 
-              <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4">
-                {activeChat.messages.map((msg: any) => (
+              <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4" onScroll={handleScroll}>
+                {activeChat.messages.map((msg) => (
                   <div key={msg.id} className={`max-w-[80%] rounded-2xl px-4 py-3 text-xs ${msg.sender === 'admin' ? 'bg-accent text-background self-end rounded-tr-sm' : 'bg-secondary border border-white/5 text-white self-start rounded-tl-sm'}`}>
                     <p>{msg.content}</p>
                     <span className={`text-[9px] mt-1 block ${msg.sender === 'admin' ? 'text-background/70 text-right' : 'text-muted-foreground'}`}>
@@ -143,7 +165,7 @@ export default function LiveChatTab({ onNewMessage }: { onNewMessage?: (count: n
                 <div ref={messagesEndRef} />
               </div>
 
-              <form onSubmit={sendMessage} className="p-4 bg-secondary/30 border-t border-white/5 flex gap-2">
+              <form onSubmit={handleSendAndScroll} className="p-4 bg-secondary/30 border-t border-white/5 flex gap-2">
                 <Input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}

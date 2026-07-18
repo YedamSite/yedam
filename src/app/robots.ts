@@ -10,10 +10,15 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: [
           '/dashboard/',
+          '/dashboard/admin/',
+          '/dashboard/cliente/',
           '/admin/',
           '/api/',
           '/auth/',
           '/invoices/',
+          '/api/webhook/',
+          '/api/supabase-',
+          '/api/sync-test',
         ],
       },
       {
@@ -28,6 +33,21 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
+        userAgent: 'Googlebot-Image',
+        allow: [
+          '/',
+          '/tienda/',
+          '/blog/',
+          '/rutinas/',
+          '/experiencias/',
+          '/images/',
+        ],
+        disallow: [
+          '/dashboard/',
+          '/admin/',
+        ],
+      },
+      {
         userAgent: 'bingbot',
         allow: '/',
         disallow: [
@@ -39,7 +59,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        userAgent: 'Googlebot-Image',
+        userAgent: 'Slurp', // Yahoo
         allow: '/',
         disallow: [
           '/dashboard/',
@@ -47,7 +67,23 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
       {
-        userAgent: 'bingbot',
+        userAgent: 'DuckDuckBot',
+        allow: '/',
+        disallow: [
+          '/dashboard/',
+          '/admin/',
+        ],
+      },
+      {
+        userAgent: 'Baiduspider',
+        allow: '/',
+        disallow: [
+          '/dashboard/',
+          '/admin/',
+        ],
+      },
+      {
+        userAgent: 'YandexBot',
         allow: '/',
         disallow: [
           '/dashboard/',
@@ -59,5 +95,6 @@ export default function robots(): MetadataRoute.Robots {
       `${baseUrl}/sitemap.xml`,
       `${baseUrl}/api/sitemap-images`,
     ],
+    host: baseUrl,
   }
 }

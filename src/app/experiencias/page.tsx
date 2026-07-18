@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
 import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 import { useLanguage } from '@/context/LanguageContext';
+import ReservationModal from '@/components/ReservationModal';
 
 const EXPERIENCES = [
   {
@@ -74,6 +75,13 @@ export default function ExperienciasPage() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [reservationModalOpen, setReservationModalOpen] = useState(false);
+  const [selectedExperience, setSelectedExperience] = useState<any>(null);
+
+  const handleReserve = (experience: any) => {
+    setSelectedExperience(experience);
+    setReservationModalOpen(true);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -208,7 +216,7 @@ export default function ExperienciasPage() {
                       <span className="text-[9px] uppercase text-muted-foreground block font-semibold">{t('Inversión')}</span>
                       <span className="text-sm font-bold text-accent font-heading">{exp.price}</span>
                     </div>
-                    <Button onClick={() => alert(`${t('Reservando')} ${exp.title}`)} className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] py-1.5 h-8 px-4 rounded-xl">
+                    <Button onClick={() => handleReserve(exp)} className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] py-1.5 h-8 px-4 rounded-xl">
                       {t('RESERVAR PLAZA')}
                     </Button>
                   </div>
@@ -449,6 +457,18 @@ export default function ExperienciasPage() {
       </main>
 
       <Footer />
+      
+      {/* Modal de Reserva */}
+      {selectedExperience && (
+        <ReservationModal
+          isOpen={reservationModalOpen}
+          onClose={() => {
+            setReservationModalOpen(false);
+            setSelectedExperience(null);
+          }}
+          experience={selectedExperience}
+        />
+      )}
     </div>
   );
 }

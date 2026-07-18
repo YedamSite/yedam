@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import {
   Settings, Palette, Layers, Database, Users, Shield,
@@ -14,6 +14,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { db } from '@/lib/db';
 import SiteContentTab from '@/components/admin/SiteContentTab';
 import CategoriesTab from '@/components/admin/CategoriesTab';
@@ -21,6 +22,7 @@ import BrandsTab from '@/components/admin/BrandsTab';
 import ImageUpload from '@/components/ImageUpload';
 import ShippingTab from '@/components/admin/ShippingTab';
 import LiveChatTab from '@/components/admin/LiveChatTab';
+import EmailTab from '@/components/admin/EmailTab';
 import { MessageCircle } from 'lucide-react';
 import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
 import { deleteOrderFromSupabase } from '@/actions/shopActions';
@@ -29,6 +31,7 @@ export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('dashboard');
   const [authorized, setAuthorized] = useState(false);
   const { theme, updateTheme } = useTheme();
+  const { t } = useLanguage();
 
   // Color inputs state
   const [primaryColor, setPrimaryColor] = useState(theme.colors.primary);
@@ -39,6 +42,8 @@ export default function AdminDashboard() {
 
   // Chat notification state
   const [chatUnread, setChatUnread] = useState(0);
+  const knownChatIds = useRef<Set<string>>(new Set());
+  const knownMsgCountPerChat = useRef<Record<string, number>>({});
 
   // Data States
   const [blocks, setBlocks] = useState<any[]>([]);
@@ -219,6 +224,49 @@ export default function AdminDashboard() {
       clearInterval(poll);
     };
   }, []);
+
+  // Chat notification polling (always active, even before first chat tab visit)
+  useEffect(() => {
+    const checkChatNotifications = async () => {
+      if (activeSubTab === 'chat') return;
+      try {
+        const res = await fetch('/api/chat');
+        const data = await res.json();
+        if (!data.messages) return;
+
+        const currentChatIds = new Set<string>();
+        const currentMsgCount: Record<string, number> = {};
+
+        for (const m of data.messages) {
+          currentChatIds.add(m.order_id);
+          currentMsgCount[m.order_id] = (currentMsgCount[m.order_id] || 0) + 1;
+        }
+
+        let notify = 0;
+
+        for (const id of currentChatIds) {
+          if (!knownChatIds.current.has(id)) notify++;
+        }
+
+        for (const [chatId, count] of Object.entries(currentMsgCount)) {
+          const prevCount = knownMsgCountPerChat.current[chatId] || 0;
+          if (count > prevCount && knownChatIds.current.has(chatId)) {
+            const msgs = data.messages.filter((m: any) => m.order_id === chatId);
+            const newMsgs = msgs.slice(prevCount);
+            if (newMsgs.some((m: any) => m.sender === 'client')) notify++;
+          }
+        }
+
+        if (notify > 0) setChatUnread(prev => prev + notify);
+
+        knownChatIds.current = currentChatIds;
+        knownMsgCountPerChat.current = currentMsgCount;
+      } catch {}
+    };
+
+    const interval = setInterval(checkChatNotifications, 3000);
+    return () => clearInterval(interval);
+  }, [activeSubTab]);
 
   const handleSaveTheme = (e: React.FormEvent) => {
     e.preventDefault();
@@ -540,11 +588,11 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!authorized) {
+if (!authorized) {
     return (
       <div className="min-h-screen bg-[#020617] flex flex-col items-center justify-center text-xs text-muted-foreground gap-3">
         <Loader2 className="h-6 w-6 text-accent animate-spin" />
-        <span>Verificando autorização administrativa...</span>
+        <span>{t('Verificando autorización administrativa...')}</span>
       </div>
     );
   }
@@ -595,7 +643,7 @@ export default function AdminDashboard() {
             { id: 'chat', label: 'Live Chat', icon: MessageCircle },
             { id: 'settings', label: 'APIs, SMTP & SEO', icon: Globe },
             { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
-            { id: 'emails', label: 'Transaccionales & Auditoría', icon: Mail }
+            { id: 'emails', label: 'E-mails & Templates', icon: Mail }
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -2080,7 +2128,8 @@ export default function AdminDashboard() {
 
           {/* TAB: GENERAL SETTINGS, SMTP & SEO */}
           {activeSubTab === 'shipping' && <ShippingTab />}
-          {activeSubTab === 'chat' && <LiveChatTab onNewMessage={(count) => setChatUnread(prev => prev + count)} />}
+          {activeSubTab === 'chat' && <LiveChatTab />}
+          {activeSubTab === 'emails' && <EmailTab />}
 
           {activeSubTab === 'settings' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
@@ -2228,25 +2277,6 @@ export default function AdminDashboard() {
                   </div>
                 );
               })()}
-            </div>
-          )}
-
-          {/* TAB: TRANSACCIONALES & AUDITORIA */}
-          {activeSubTab === 'emails' && (
-            <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Logs de Correos Transaccionales</h2>
-              <div className="flex flex-col gap-4">
-                {emailLogs.map((log) => (
-                  <div key={log.id} className="border border-white/5 rounded-2xl p-4 bg-secondary/30 text-xs">
-                    <div className="flex justify-between items-center text-[10px] text-accent font-bold uppercase tracking-wider mb-2">
-                      <span>Destinatario: {log.recipient}</span>
-                      <span>{new Date(log.created_at).toLocaleString('es-ES')}</span>
-                    </div>
-                    <h4 className="font-bold text-white mb-1">{log.subject}</h4>
-                    <p className="text-muted-foreground">{log.content}</p>
-                  </div>
-                ))}
-              </div>
             </div>
           )}
         </div>

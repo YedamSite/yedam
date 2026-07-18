@@ -11,7 +11,7 @@ export function generateOrganizationSchema() {
     "name": "Cheotnun K-Beauty",
     "alternateName": "CHEOTNUN",
     "url": "https://www.cheotnun.com",
-    "logo": "https://www.cheotnun.com/images/cheotnun-logo.webp",
+    "logo": "https://www.cheotnun.com/images/cheotnun-k-beauty-logo-oficial.webp",
     "description": "Cosméticos coreanos autênticos selecionados para cada etapa do seu cuidado facial e corporal. K-Beauty premium com envios internacionais.",
     "foundingDate": "2024",
     "founders": [
@@ -171,7 +171,7 @@ export function generateBlogPostingSchema(post: any) {
       "name": "Cheotnun K-Beauty",
       "logo": {
         "@type": "ImageObject",
-        "url": `${baseUrl}/images/cheotnun-logo.webp`
+        "url": `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`
       }
     },
     "url": `${baseUrl}/blog/${post.slug}`,
@@ -222,7 +222,7 @@ export function generateLocalBusinessSchema() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Cheotnun K-Beauty",
-    "image": "https://www.cheotnun.com/images/cheotnun-logo.webp",
+    "image": "https://www.cheotnun.com/images/cheotnun-k-beauty-logo-oficial.webp",
     "telephone": "+34-600-111-222",
     "email": "hola@cheotnun.com",
     "url": "https://www.cheotnun.com",

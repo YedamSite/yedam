@@ -4,18 +4,19 @@ import { db } from '@/lib/db'
 export async function GET() {
   const baseUrl = 'https://www.cheotnun.com'
   
-  // URLs de todas as imagens
+  // URLs de todas as imagens otimizadas para SEO
   const imageUrls: string[] = [
-    // Imagens estáticas
-    `${baseUrl}/images/cheotnun-logo.webp`,
-    `${baseUrl}/images/banner.webp`,
+    // Imagens estáticas otimizadas
+    `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`,
+    `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`,
   ]
 
-  // Imagens dos produtos
+  // Imagens dos produtos com nomes SEO-friendly
   const products = db.get('products') || []
   products
     .filter((p: any) => p.status === 'active' && p.image)
     .forEach((product: any) => {
+      // Se a imagem ainda não tem nome SEO, usar URL direta
       if (product.image && !imageUrls.includes(product.image)) {
         imageUrls.push(product.image)
       }
@@ -41,21 +42,30 @@ export async function GET() {
       }
     })
 
-  // Gera o XML do sitemap de imagens
+  // Gera o XML do sitemap de imagens otimizado para Google Images
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${imageUrls.map((url) => `  <url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${imageUrls.map((url) => {
+  const imageName = url.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ') || 'imagem'
+  return `  <url>
     <loc>${url}</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>`).join('\n')}
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>${url}</image:loc>
+      <image:title>${imageName}</image:title>
+      <image:caption>CHEOTNUN K-BEAUTY - ${imageName}</image:caption>
+    </image:image>
+  </url>`
+}).join('\n')}
 </urlset>`
 
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, s-maxage=3600',
+      'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
     },
   })
 }

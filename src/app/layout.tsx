@@ -30,10 +30,10 @@ const baseUrl = "https://www.cheotnun.com";
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium",
+    default: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium - Skincare Coreano Autêntico",
     template: "%s | CHEOTNUN K-BEAUTY",
   },
-  description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial. Fórmulas botânicas que revelam sua luminosidade natural. Envios para toda América Latina e Espanha.",
+  description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial. K-Beauty premium com envios para América Latina e Espanha. Rotinas de skincare coreano, produtos autênticos e consultoria especializada.",
   keywords: [
     "K-Beauty",
     "Cosméticos Coreanos",
@@ -46,6 +46,12 @@ export const metadata: Metadata = {
     "Korean Skincare",
     "Cuidado Facial",
     "Skincare Internacional",
+    "K-Beauty España",
+    "K-Beauty Brasil",
+    "Skincare Latino América",
+    "Productos Coreanos Originales",
+    "Belleza K",
+    "Cosmética Natural Coreana",
   ],
   authors: [{ name: "Cheotnun K-Beauty", url: baseUrl }],
   creator: "Cheotnun K-Beauty",
@@ -67,14 +73,14 @@ export const metadata: Metadata = {
     alternateLocale: ["pt_BR", "en_US"],
     url: baseUrl,
     siteName: "CHEOTNUN K-BEAUTY",
-    title: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium",
+    title: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium - Skincare Coreano",
     description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial. Envios internacionais.",
     images: [
       {
-        url: "/images/og-image.jpg",
+        url: "/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp",
         width: 1200,
         height: 630,
-        alt: "CHEOTNUN K-BEAUTY - Cosméticos Coreanos Premium",
+        alt: "CHEOTNUN K-BEAUTY - Cosméticos Coreanos Premium | Skincare Coreano Autêntico",
       },
     ],
   },
@@ -82,7 +88,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CHEOTNUN K-BEAUTY | Cosméticos Coreanos Premium",
     description: "Cosméticos coreanos autênticos para cada etapa do seu cuidado facial.",
-    images: ["/images/twitter-image.jpg"],
+    images: ["/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp"],
+    creator: "@cheotnun",
   },
   robots: {
     index: true,
@@ -96,6 +103,14 @@ export const metadata: Metadata = {
     },
   },
   category: "beauty",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "CHEOTNUN K-BEAUTY",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({

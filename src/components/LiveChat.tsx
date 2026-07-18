@@ -6,7 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/context/LanguageContext';
 
-export default function LiveChat() {
+interface LiveChatProps {
+  externalOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps = {}) {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
@@ -14,6 +19,19 @@ export default function LiveChat() {
   const [chatId, setChatId] = useState<string>('');
   const [unread, setUnread] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Controlar abertura externa
+  useEffect(() => {
+    if (externalOpen !== undefined && externalOpen !== isOpen) {
+      setIsOpen(externalOpen);
+    }
+  }, [externalOpen, isOpen]);
+
+  const handleToggle = (open: boolean) => {
+    setIsOpen(open);
+    if (open) setUnread(0);
+    onOpenChange?.(open);
+  };
 
   const loadMessages = useCallback(async (id: string) => {
     try {
@@ -92,18 +110,18 @@ export default function LiveChat() {
   return (
     <>
       <button
-        onClick={() => { setIsOpen(true); setUnread(0); }}
-        className={`fixed bottom-6 z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen ? '-right-20 scale-0' : 'right-6 scale-100'}`}
+        onClick={() => handleToggle(true)}
+        className={`fixed bottom-6 z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen || externalOpen ? '-right-20 scale-0' : 'right-6 scale-100'}`}
       >
         <MessageCircle className="h-6 w-6" />
-        {unread > 0 && !isOpen && (
+        {unread > 0 && !isOpen && !externalOpen && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-5 w-5 rounded-full flex items-center justify-center animate-bounce">
             {unread}
           </span>
         )}
       </button>
 
-      <div className={`fixed bottom-6 right-6 z-50 w-80 sm:w-96 bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen ? 'scale-100 opacity-100 visible' : 'scale-0 opacity-0 invisible'}`}>
+      <div className={`fixed bottom-6 right-6 z-50 w-80 sm:w-96 bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen || externalOpen ? 'scale-100 opacity-100 visible' : 'scale-0 opacity-0 invisible'}`}>
         <div className="bg-accent text-background p-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-background/20 p-2 rounded-full">
@@ -114,7 +132,7 @@ export default function LiveChat() {
               <span className="text-[10px] opacity-80">{t('Respondemos enseguida')}</span>
             </div>
           </div>
-          <button onClick={() => setIsOpen(false)} className="hover:bg-background/20 p-1 rounded-lg transition-colors">
+          <button onClick={() => handleToggle(false)} className="hover:bg-background/20 p-1 rounded-lg transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>

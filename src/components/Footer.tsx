@@ -34,7 +34,7 @@ export default function Footer() {
   const settings = db.get('system_settings');
   const company = settings?.company_details || {};
 
-  const logoUrl = content?.logoUrl || '/images/cheotnun-logo.webp';
+  const logoUrl = content?.logoUrl || '/images/cheotnun-k-beauty-logo-oficial.webp';
   const description = content?.description || '';
   const social = content?.social || {};
   const columns = content?.columns || [];
@@ -100,12 +100,8 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] text-muted-foreground gap-4">
-<p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
-        <div className="flex items-center gap-1">
-          <span>{t('Orgulhosamente desenvolvido por')}</span>
-          <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">Voltris</a>
-        </div>
-        <p className="mt-2 sm:mt-0">
+        <p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
+        <p>
           {t('En colaboración con')}{' '}
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
             Maeum Global Agency
