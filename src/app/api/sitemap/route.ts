@@ -134,33 +134,7 @@ export async function GET() {
   </url>`)
     })
 
-  // Images
-  const productsList = db.get('products') || []
-  const categories = db.get('categories') || []
-  const blogPostsList = db.get('blog_posts') || []
-  
-  const rawImageUrls = [
-    `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`,
-    `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`,
-    ...productsList.filter((p: any) => p.status === 'active' && p.image).map((p: any) => p.image),
-    ...categories.filter((c: any) => c.image).map((c: any) => c.image),
-    ...blogPostsList.filter((post: any) => post.status === 'published' && post.image).map((post: any) => post.image),
-  ]
-  
-  const imageUrls = rawImageUrls
-    .map((url: string) => escapeXml(url))
-    .filter((url: string) => url && url !== '' && url !== 'undefined')
-    .filter((url: string, index: number, self: string[]) => self.indexOf(url) === index)
-    .filter((url: string) => isValidUrl(url))
-
-  imageUrls.forEach((url: string) => {
-    xmlEntries.push(`  <url>
-    <loc>${url}</loc>
-    <lastmod>${formatLastMod(new Date())}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>`)
-  })
+  // As imagens foram movidas para sitemap-images.xml
 
   // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

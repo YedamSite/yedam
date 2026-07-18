@@ -34,74 +34,97 @@ function formatLastMod(date: string | number | Date): string {
 export async function GET() {
   const baseUrl = 'https://www.cheotnun.com'
   
-  // URLs de todas as imagens otimizadas para SEO
-  const imageUrls: string[] = [
-    // Imagens estáticas otimizadas
-    `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`,
-    `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`,
-  ]
+  // Mapear cada imagem para a URL da página onde ela aparece (exigência do Google)
+  const imageEntries: { pageUrl: string, imageUrl: string }[] = []
 
-  // Imagens dos produtos com nomes SEO-friendly
+  // Imagens estáticas (Home)
+  imageEntries.push({
+    pageUrl: `${baseUrl}/`,
+    imageUrl: `${baseUrl}/images/cheotnun-k-beauty-logo-oficial.webp`
+  });
+  imageEntries.push({
+    pageUrl: `${baseUrl}/`,
+    imageUrl: `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`
+  });
+
+  // Imagens dos produtos
   const products = db.get('products') || []
   products
-    .filter((p: any) => p.status === 'active' && p.image)
+    .filter((p: any) => p.status === 'active' && p.image && p.slug)
     .forEach((product: any) => {
-      if (product.image && !imageUrls.includes(product.image)) {
-        const escapedUrl = escapeXml(product.image);
-        if (isValidUrl(escapedUrl) && !imageUrls.includes(escapedUrl)) {
-          imageUrls.push(escapedUrl);
-        }
-      }
+      imageEntries.push({
+        pageUrl: `${baseUrl}/tienda/produto/${product.slug.trim()}`,
+        imageUrl: product.image
+      });
     })
 
   // Imagens das categorias
   const categories = db.get('categories') || []
   categories
-    .filter((c: any) => c.image)
+    .filter((c: any) => c.image && c.slug)
     .forEach((category: any) => {
-      if (category.image) {
-        const escapedUrl = escapeXml(category.image);
-        if (isValidUrl(escapedUrl) && !imageUrls.includes(escapedUrl)) {
-          imageUrls.push(escapedUrl);
-        }
-      }
+      imageEntries.push({
+        pageUrl: `${baseUrl}/tienda`, // Pode ser uma página de categoria se houver, ou tienda
+        imageUrl: category.image
+      });
     })
 
   // Imagens dos posts do blog
   const blogPosts = db.get('blog_posts') || []
   blogPosts
-    .filter((post: any) => post.status === 'published' && post.image)
+    .filter((post: any) => post.status === 'published' && post.image && post.slug)
     .forEach((post: any) => {
-      if (post.image) {
-        const escapedUrl = escapeXml(post.image);
-        if (isValidUrl(escapedUrl) && !imageUrls.includes(escapedUrl)) {
-          imageUrls.push(escapedUrl);
-        }
-      }
+      imageEntries.push({
+        pageUrl: `${baseUrl}/blog/${post.slug.trim()}`,
+        imageUrl: post.image
+      });
     })
 
-  // Filtrar URLs inválidas ou vazias
-  const validImageUrls = imageUrls.filter(url => url && url !== '' && url !== 'undefined' && isValidUrl(url));
+  // Filtrar duplicatas e URLs inválidas
+  const uniqueEntries = new Map<string, { pageUrl: string, imageUrl: string }>();
+  
+  imageEntries.forEach(entry => {
+    if (entry.imageUrl && isValidUrl(entry.imageUrl) && isValidUrl(entry.pageUrl)) {
+      uniqueEntries.set(entry.imageUrl, entry); // Garante uma imagem por página no sitemap (ou agrupa por imagem única)
+    }
+  });
+
+  // Agrupar imagens por pageUrl (o formato ideal do sitemap de imagens é uma <url> por página, com várias <image:image> dentro)
+  const groupedByPage = new Map<string, string[]>();
+  Array.from(uniqueEntries.values()).forEach(entry => {
+    if (!groupedByPage.has(entry.pageUrl)) {
+      groupedByPage.set(entry.pageUrl, []);
+    }
+    groupedByPage.get(entry.pageUrl)?.push(entry.imageUrl);
+  });
 
   // Gera o XML do sitemap de imagens otimizado para Google Images
+  const xmlEntries: string[] = [];
+  
+  groupedByPage.forEach((images, pageUrl) => {
+    let imagesXml = '';
+    images.forEach(imgUrl => {
+      const imageName = escapeXml(imgUrl.split('/').pop()?.replace(/\.(webp|jpg|jpeg|png)/, '').replace(/-/g, ' ') || 'imagem');
+      imagesXml += `
+    <image:image>
+      <image:loc>${escapeXml(imgUrl)}</image:loc>
+      <image:title>${imageName}</image:title>
+      <image:caption>CHEOTNUN K-BEAUTY - ${imageName}</image:caption>
+    </image:image>`;
+    });
+
+    xmlEntries.push(`  <url>
+    <loc>${escapeXml(pageUrl)}</loc>
+    <lastmod>${formatLastMod(new Date())}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>${imagesXml}
+  </url>`);
+  });
+
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-${validImageUrls.map((url) => {
-  const imageName = escapeXml(url.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ') || 'imagem');
-  const lastMod = formatLastMod(new Date());
-  return `  <url>
-    <loc>${escapeXml(url)}</loc>
-    <lastmod>${lastMod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>${escapeXml(url)}</image:loc>
-      <image:title>${imageName}</image:title>
-      <image:caption>CHEOTNUN K-BEAUTY - ${imageName}</image:caption>
-    </image:image>
-  </url>`;
-}).join('\n')}
+${xmlEntries.join('\n')}
 </urlset>`
 
   return new NextResponse(xml, {
