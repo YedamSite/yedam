@@ -92,7 +92,7 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      `${baseUrl}/sitemap.xml`,
+      `${baseUrl}/api/sitemap`,
       `${baseUrl}/api/sitemap-images`,
     ],
     host: baseUrl,
