@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
+// Forçar renderização dinâmica (não pré-renderizar)
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 // Função para escapar caracteres especiais em XML
 function escapeXml(str: string): string {
   if (!str) return str;
