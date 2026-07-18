@@ -1,56 +1,110 @@
-Olá! Fiz uma primeira revisão da Cheotnun e encontrei alguns pontos que precisam ser ajustados:
-Home
-Corrigir o logo do cabeçalho, pois a imagem não está carregando.
-Verificar se o logo aparece corretamente em todas as páginas.
-Reserva de experiências
-O botão "Reservar Plaza" abre apenas uma mensagem simples ("Reservando..."). É necessário concluir corretamente o fluxo da reserva (loading, modal ou redirecionamento para a próxima etapa).
-Teste de Pele / Consultoria
-A seção:
-¿Dudas sobre tu rutina?
-Haz nuestro test de piel rápido o chatea directamente con una experta en cosmetología.
-não está funcionando. Os botões/links não executam nenhuma ação.
-Cadastro de usuários
-Ao criar uma conta, o e-mail de confirmação está sendo enviado pelo Supabase.
-É necessário:
-Configurar o envio pelo e-mail oficial da Cheotnun.
-Alterar o remetente para Cheotnun Beauty.
-Personalizar o template com a identidade visual da marca.
-Traduzir o e-mail para espanhol.
-Personalizar o assunto.
-Aplicar esse padrão também aos e-mails de recuperação de senha e demais e-mails automáticos.
-Página "Envíos"
-Revisar toda a página conforme a operação real da Cheotnun.
-Em especial:
-Revisar a informação sobre IVA espanhol.
-Confirmar os países atendidos.
-Atualizar valores de frete.
-Atualizar prazos de entrega.
-Revisar todas as informações institucionais apresentadas na página.
-Além disso:
-Os cards Envíos Internacionales, Tiempo de Entrega, Procesamiento e Aduanas e Impuestos não executam nenhuma ação ao clicar. Caso sejam apenas informativos, remover o comportamento de clique. Caso devam abrir algum conteúdo, implementar a funcionalidade.
-Rodapé
+# Correção definitiva do Sitemap XML
 
-Revisar todas as informações institucionais.
-Remover o crédito "Desarrollado orgullosamente por Voltris" e collab com maeum'''
-Painel Administrativo
-Gostaria de confirmar também quais informações poderão ser alteradas pelo painel administrativo.
-A página Envíos (textos, países atendidos, prazos, valores de frete e demais informações) deverá ser totalmente gerenciável pelo painel, sem necessidade de alterações em código.
-Revisão Geral
-Peço também uma revisão completa do site para verificar:
-Imagens quebradas.
-Links sem funcionamento.
-Botões sem ação.
-Campos de formulário.
-Newsletter.
-Login.
-Cadastro.
-Recuperação de senha.
-Busca.
-Favoritos.
-Carrinho.
-Instagram.
-YouTube.
-Menus.
-Links do rodapé.
-Responsividade (celular, tablet e desktop).
-Assim conseguimos garantir que todas as funcionalidades estejam funcionando corretamente antes da entrega.
+Analise toda a implementação responsável pela geração do sitemap (Next.js App Router, Pages Router ou qualquer outro método utilizado) e corrija todos os problemas de compatibilidade com o padrão oficial do protocolo Sitemap XML.
+
+## Problema atual
+
+O Google Search Console informa:
+
+* O sitemap pode ser lido, mas contém erros.
+* Erro na análise.
+* Linha 130: **EntityRef: expecting ';'**
+
+Isso indica que o XML gerado é inválido.
+
+## Objetivo
+
+Gerar um sitemap 100% válido segundo a especificação XML e aceito pelo Google Search Console, Bing Webmaster Tools e demais mecanismos de busca.
+
+## Corrigir obrigatoriamente
+
+1. Localizar qualquer caractere XML inválido, principalmente:
+
+   * &
+   * <
+   * >
+   * "
+   * '
+
+2. Escapar corretamente todos os caracteres especiais utilizando:
+
+* & → &
+* < → <
+* > → >
+* " → "
+* ' → '
+
+3. Garantir que nenhuma URL contendo parâmetros de consulta (`?`, `&`, etc.) seja escrita diretamente no XML sem a devida codificação.
+
+4. Validar todos os slugs vindos do banco de dados.
+
+5. Garantir que nenhum título, descrição ou texto seja utilizado dentro das tags `<loc>`.
+
+6. Garantir que apenas URLs válidas sejam inseridas.
+
+7. Remover qualquer URL nula, vazia ou inválida.
+
+8. Garantir que todas as tags XML estejam corretamente abertas e fechadas:
+
+* `<urlset>`
+* `<url>`
+* `<loc>`
+* `<lastmod>`
+* `<changefreq>`
+* `<priority>`
+
+9. Validar o namespace oficial:
+
+```xml
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+```
+
+10. Garantir que o arquivo inicie exatamente com:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+```
+
+11. Garantir codificação UTF-8 sem caracteres invisíveis (BOM).
+
+12. Validar que nenhuma URL seja duplicada.
+
+13. Remover URLs que não devem ser indexadas, como:
+
+* /dashboard/*
+* /admin/*
+* /login
+* /register
+* /api/*
+* páginas privadas
+* páginas temporárias
+
+14. Garantir que apenas páginas públicas apareçam no sitemap.
+
+15. Validar que todos os valores de `<priority>` estejam entre 0.0 e 1.0.
+
+16. Validar que `<changefreq>` utilize apenas valores permitidos:
+
+* always
+* hourly
+* daily
+* weekly
+* monthly
+* yearly
+* never
+
+17. Garantir que `<lastmod>` utilize o padrão ISO-8601:
+
+```
+2026-07-18T18:52:15.964Z
+```
+
+18. Validar o XML final utilizando um parser XML antes de retorná-lo, assegurando que nenhum erro como **"EntityRef: expecting ';'"** ou qualquer outro erro de análise permaneça.
+
+## Importante
+
+Não aplique correções paliativas.
+
+Localize a verdadeira origem do problema na geração do sitemap e corrija a implementação para que o XML produzido seja completamente válido segundo o padrão oficial do Sitemap Protocol.
+
+Ao finalizar, revise todo o sitemap gerado e confirme que ele passa na validação XML sem qualquer erro e é totalmente compatível com o Google Search Console.

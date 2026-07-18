@@ -505,6 +505,11 @@ export default function Header() {
           onClose={() => setIsAuthModalOpen(false)}
           onSuccess={handleAuthSuccess}
           defaultMode={authModalMode}
+          onEmailVerificationRequired={() => {
+            if (typeof window !== 'undefined') {
+              window.location.href = '/verify-email';
+            }
+          }}
         />
       </header>
     </div>

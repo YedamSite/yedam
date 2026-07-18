@@ -136,13 +136,21 @@ export const authService = {
             ...profileData,
             phone: cleanPhone || null,
             documentNumber: cleanDoc || null
-          }
+          },
+          emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined
         }
       });
       if (error) throw error;
 
-      if (data.user) {
-        // Use server endpoint with service_role_key to bypass RLS
+      // Verificar se o usuário precisa confirmar e-mail
+      if (data.user && !data.session) {
+        // Usuário criado mas precisa confirmar e-mail - NÃO criar sessão
+        console.log('Usuário criado, aguardando confirmação de e-mail:', data.user.email);
+        return { user: data.user, requiresEmailConfirmation: true };
+      }
+
+      if (data.user && data.session) {
+        // Usuário já confirmado (caso raro em produção)
         const insertResp = await fetch('/api/supabase-reload', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -184,6 +192,7 @@ export const authService = {
           phone: cleanPhone || null,
           document_type: profileData?.documentType || null,
           document_number: cleanDoc || null,
+          email_confirmed_at: data.user.email_confirmed_at || null,
         }));
       }
       return data;
@@ -218,6 +227,13 @@ export const authService = {
       if (error) throw error;
 
       if (data.user) {
+        // Verificar se o e-mail está confirmado
+        if (!data.user.email_confirmed_at) {
+          // E-mail não confirmado - fazer logout e lançar erro
+          await supabase.auth.signOut();
+          throw new Error('EMAIL_NOT_CONFIRMED');
+        }
+
         const { data: dbUser } = await supabase
           .from('cheotnun_users')
           .select('name, phone, country, document_type, document_number, postal_code, street, number, complement, neighborhood, city, state')
@@ -242,6 +258,7 @@ export const authService = {
           neighborhood: dbUser?.neighborhood || null,
           city: dbUser?.city || null,
           state: dbUser?.state || null,
+          email_confirmed_at: data.user.email_confirmed_at,
         }));
       }
       return data;
@@ -283,6 +300,36 @@ export const authService = {
     if (typeof window === 'undefined') return null;
     const saved = localStorage.getItem('cheotnun_session');
     return saved ? JSON.parse(saved) : null;
-  }
+  },
+
+  async getCurrentUserFromSupabase() {
+    if (!supabase) return null;
+    
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (error || !user) {
+        return null;
+      }
+      
+      return {
+        id: user.id,
+        email: user.email,
+        email_confirmed_at: user.email_confirmed_at,
+        user_metadata: user.user_metadata,
+      };
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    }
+  },
+
+  isEmailConfirmed() {
+    const user = this.getCurrentUser();
+    if (!user) return false;
+    
+    // Verificar se email_confirmed_at existe e é válido
+    return !!(user.email_confirmed_at && user.email_confirmed_at !== null);
+  },
 };
 

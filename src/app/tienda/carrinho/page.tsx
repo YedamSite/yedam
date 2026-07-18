@@ -510,6 +510,11 @@ export default function CheckoutWizard() {
           setAuthModalOpen(false);
           setStep(2);
         }}
+        onEmailVerificationRequired={() => {
+          if (typeof window !== 'undefined') {
+            window.location.href = '/verify-email';
+          }
+        }}
       />
 
       <Footer />

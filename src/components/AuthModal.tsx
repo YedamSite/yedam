@@ -14,9 +14,10 @@ interface AuthModalProps {
   onClose: () => void;
   onSuccess: () => void;
   defaultMode?: 'login' | 'register';
+  onEmailVerificationRequired?: () => void;
 }
 
-export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'login' }: AuthModalProps) {
+export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'login', onEmailVerificationRequired }: AuthModalProps) {
   const { t } = useLanguage();
   const [mode, setMode] = useState<'login' | 'register' | 'recovery'>(defaultMode);
   const [email, setEmail] = useState('');
@@ -153,10 +154,30 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
           setLoading(false);
           return;
         }
-        await authService.signUp(email, name, {
+        const signUpResult = await authService.signUp(email, name, {
           country, phone, postalCode, street, number, complement, neighborhood, city, state,
           documentType, documentNumber
         });
+        
+        // Verificar se precisa confirmar e-mail
+        if (signUpResult.requiresEmailConfirmation) {
+          setSuccessMsg(t('✓ ¡Cuenta creada! Por favor, verifica tu e-mail para continuar.'));
+          setLoading(false);
+          
+          // Fechar modal e redirecionar para página de verificação
+          setTimeout(() => {
+            onClose();
+            if (onEmailVerificationRequired) {
+              onEmailVerificationRequired();
+            } else {
+              // Fallback: redirecionar manualmente
+              if (typeof window !== 'undefined') {
+                window.location.href = '/verify-email';
+              }
+            }
+          }, 2000);
+          return;
+        }
         
         // Enviar e-mail de confirmação personalizado
         const locale = (typeof window !== 'undefined' && localStorage.getItem('cheotnun_locale')) || 'es';
@@ -174,6 +195,23 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
       }, 1500);
     } catch (err: any) {
       let msg = err.message || t('Ocurrió un error en el envío de datos.');
+      
+      // Verificar se é erro de e-mail não confirmado
+      if (msg === 'EMAIL_NOT_CONFIRMED') {
+        msg = t('Por favor, confirma tu e-mail antes de iniciar sesión. Revisa tu bandeja de entrada o spam.');
+        // Redirecionar para página de verificação
+        setTimeout(() => {
+          onClose();
+          if (onEmailVerificationRequired) {
+            onEmailVerificationRequired();
+          } else {
+            if (typeof window !== 'undefined') {
+              window.location.href = '/verify-email';
+            }
+          }
+        }, 2000);
+      }
+      
       const lowercaseMsg = msg.toLowerCase();
       if (msg.includes('cheotnun_users_email_key') || lowercaseMsg.includes('user already exists') || lowercaseMsg.includes('email address has already been registered')) {
         msg = t('Este correo electrónico ya está registrado.');
@@ -183,6 +221,8 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
         msg = t('Este documento ya está registrado.');
       } else if (lowercaseMsg.includes('rate limit') || lowercaseMsg.includes('email rate limit') || lowercaseMsg.includes('too many requests')) {
         msg = t('Demasiadas solicitudes. Espera unos minutos e inténtalo de nuevo.');
+      } else if (lowercaseMsg.includes('invalid credentials') || lowercaseMsg.includes('invalid login credentials')) {
+        msg = t('Correo electrónico o contraseña incorrectos.');
       }
       setErrorMsg(msg);
     } finally {
