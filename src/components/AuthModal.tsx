@@ -4,7 +4,7 @@ import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { X, Mail, Lock, User, Shield, AlertCircle, Globe, Phone, MapPin, Search, Loader2, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { authService } from '@/lib/supabaseAuth';
+import { authService, supabase } from '@/lib/supabaseAuth';
 import { useLanguage } from '@/context/LanguageContext';
 import { COUNTRIES, DIAL_CODES, getDocumentTypes, getDefaultDocumentType, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
 import { sendConfirmationEmail } from '@/lib/emailService';
@@ -192,7 +192,13 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
         
         setSuccessMsg(t('✓ ¡Cuenta creada con éxito! ¡Te hemos enviado un correo de bienvenida!'));
       } else {
-        // Recovery
+        // Recovery - usar Supabase para enviar email de redefinição
+        if (supabase) {
+          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/auth/update-password'
+          });
+          if (error) throw error;
+        }
         setSuccessMsg(t('✓ Correo de recuperación enviado si la dirección existe.'));
       }
       

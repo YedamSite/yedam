@@ -352,6 +352,13 @@ const translations: Record<Language, Record<string, string>> = {
     'Completar Registro': 'Completar Registro',
     '✓ Registro completado!': '✓ Registro completado!',
     'Erro ao salvar dados.': 'Error al guardar los datos.',
+    // Recovery password
+    'Nueva Contraseña': 'Nueva Contraseña',
+    'Elige una nueva contraseña para tu cuenta.': 'Elige una nueva contraseña para tu cuenta.',
+    '✓ Contraseña actualizada. Redireccionando...': '✓ Contraseña actualizada. Redireccionando...',
+    'Actualizando...': 'Actualizando...',
+    'CAMBIAR CONTRASEÑA': 'CAMBIAR CONTRASEÑA',
+    'Error al actualizar la contraseña.': 'Error al actualizar la contraseña.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Aguardando Confirmación de la Tienda',
     'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Su pedido fue recibido y el pago fue confirmado. Estamos dentro del plazo operativo de hasta 48 horas hábiles (72 horas en feriados coreanos) para preparar y enviar su producto. Recibirá una notificación cuando el pedido esté siendo preparado para envío.',
@@ -539,6 +546,13 @@ const translations: Record<Language, Record<string, string>> = {
     'Completar Registro': 'Completar Cadastro',
     '✓ Registro completado!': '✓ Cadastro concluído!',
     'Erro ao salvar dados.': 'Erro ao salvar dados.',
+    // Recovery password
+    'Nueva Contraseña': 'Nova Senha',
+    'Elige una nueva contraseña para tu cuenta.': 'Escolha uma nova senha para sua conta.',
+    '✓ Contraseña actualizada. Redireccionando...': '✓ Senha atualizada. Redirecionando...',
+    'Actualizando...': 'Atualizando...',
+    'CAMBIAR CONTRASEÑA': 'ALTERAR SENHA',
+    'Error al actualizar la contraseña.': 'Erro ao atualizar a senha.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Aguardando Confirmação da Loja',
     'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Seu pedido foi recebido e o pagamento foi confirmado. Estamos dentro do prazo operacional de até 48 horas úteis (72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.',
@@ -726,6 +740,13 @@ const translations: Record<Language, Record<string, string>> = {
     'Completar Registro': 'Complete Registration',
     '✓ Registro completado!': '✓ Registration complete!',
     'Erro ao salvar dados.': 'Error saving data.',
+    // Recovery password
+    'Nueva Contraseña': 'New Password',
+    'Elige una nueva contraseña para tu cuenta.': 'Choose a new password for your account.',
+    '✓ Contraseña actualizada. Redireccionando...': '✓ Password updated. Redirecting...',
+    'Actualizando...': 'Updating...',
+    'CAMBIAR CONTRASEÑA': 'CHANGE PASSWORD',
+    'Error al actualizar la contraseña.': 'Error updating password.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Awaiting Store Confirmation',
     'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Your order has been received and payment confirmed. We are within the operational period of up to 48 business hours (72 hours on Korean holidays) to pick, prepare and ship your product. You will receive a notification as soon as your order is being prepared for shipping.',
