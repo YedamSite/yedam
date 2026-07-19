@@ -23,16 +23,16 @@ const FlagES = () => (
 );
 
 const FlagPT = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="Português">
-    <rect width="9.6" height="18" fill="#006600"/>
-    <rect x="9.6" width="14.4" height="18" fill="#FF0000"/>
-    <g transform="translate(9.6,9)">
-      <circle r="4" fill="#FFCC00"/>
-      <circle r="3.2" fill="#FFFFFF"/>
-      <path d="M-0.8,-2 Q0,-3.2 0.8,-2 Q1.6,-1 1.2,0 Q1.6,1 0.8,2 Q0,3.2 -0.8,2 Q-1.6,1 -1.2,0 Q-1.6,-1 -0.8,-2 Z" fill="#FF0000" stroke="#FF0000" strokeWidth="0.3"/>
-      <circle r="1.6" fill="#006600"/>
-      <path d="M-1.2,2 L0.8,1 M-1,1.2 L0.6,0.6 M-0.8,0.4 L0.4,0.2" stroke="#006600" strokeWidth="0.4" fill="none"/>
-    </g>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="Português (Brasil)">
+    <rect width="24" height="18" fill="#009739"/>
+    <polygon points="12,1 23,9 12,17 1,9" fill="#FFD700"/>
+    <circle cx="12" cy="9" r="4.5" fill="#002776"/>
+    <path d="M9,9 Q12,11 15,9" stroke="#FFFFFF" strokeWidth="0.8" fill="none"/>
+    <circle cx="11" cy="8.5" r="0.4" fill="#FFFFFF"/>
+    <circle cx="13" cy="8.5" r="0.4" fill="#FFFFFF"/>
+    <circle cx="12" cy="7.5" r="0.35" fill="#FFFFFF"/>
+    <circle cx="10.5" cy="9.5" r="0.3" fill="#FFFFFF"/>
+    <circle cx="13.5" cy="9.5" r="0.3" fill="#FFFFFF"/>
   </svg>
 );
 
