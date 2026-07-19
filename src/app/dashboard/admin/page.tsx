@@ -6,10 +6,10 @@ import {
   Settings, Palette, Layers, Database, Users, Shield,
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
   TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
-  Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar, Loader2
+  Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar, Loader2,
+  Menu, X
 } from 'lucide-react';
 import Image from 'next/image';
-import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,6 +30,7 @@ import { deleteOrderFromSupabase } from '@/actions/shopActions';
 export default function AdminDashboard() {
   const [activeSubTab, setActiveSubTab] = useState('dashboard');
   const [authorized, setAuthorized] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, updateTheme } = useTheme();
   const { t } = useLanguage();
 
@@ -598,34 +599,30 @@ if (!authorized) {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Header />
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar overlay (mobile) */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/60 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
 
-      <main className="flex-1 max-w-7xl mx-auto w-full py-12 px-4 md:px-8">
-        <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-8">
-          <div className="flex items-center gap-4">
-            <span className="p-3 bg-accent/10 rounded-2xl">
-              <Settings className="h-6 w-6 text-accent" />
-            </span>
-            <div>
-              <span className="text-[10px] font-bold text-accent uppercase tracking-widest">CMS & Sales Enterprise</span>
-              <h1 className="font-heading text-3xl font-light text-white uppercase">Panel Administrativo Cheotnun</h1>
-            </div>
+      {/* Sidebar */}
+      <aside className={`fixed lg:sticky top-0 left-0 z-50 lg:z-30 h-screen w-64 bg-secondary/90 backdrop-blur-xl border-r border-white/10 flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        {/* Logo */}
+        <div className="h-16 flex items-center gap-3 px-5 border-b border-white/10 shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+            <Settings className="h-4 w-4 text-accent" />
           </div>
-          <Button
-            onClick={() => {
-              document.cookie = "cheotnun_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-              window.location.href = '/dashboard/admin/login';
-            }}
-            variant="outline"
-            className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"
-          >
-            Sair do Painel
-          </Button>
+          <div>
+            <p className="text-[7px] font-bold text-accent uppercase tracking-widest leading-tight">CMS & Sales</p>
+            <p className="text-sm font-bold text-white leading-tight">Cheotnun</p>
+          </div>
+          <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-muted-foreground hover:text-white">
+            <X className="h-4 w-4" />
+          </button>
         </div>
 
-        {/* Tab Selection Area */}
-        <div className="flex gap-4 border-b border-white/10 mb-8 overflow-x-auto pb-2">
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-0.5 custom-scrollbar">
           {[
             { id: 'dashboard', label: 'Dashboard Geral', icon: BarChart3 },
             { id: 'visual', label: 'Estilo Visual', icon: Palette },
@@ -652,29 +649,59 @@ if (!authorized) {
                 onClick={() => {
                   setActiveSubTab(tab.id);
                   if (tab.id === 'chat') setChatUnread(0);
+                  setSidebarOpen(false);
                 }}
-                className={`flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all min-w-max ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                   activeSubTab === tab.id
-                    ? 'border-accent text-accent'
-                    : 'border-transparent text-muted-foreground hover:text-white'
+                    ? 'bg-accent/10 text-accent border border-accent/20'
+                    : 'text-muted-foreground hover:text-white hover:bg-white/5 border border-transparent'
                 }`}
               >
-                <Icon className="h-4 w-4" />
-                {tab.label}
+                <Icon className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{tab.label}</span>
                 {tab.id === 'chat' && chatUnread > 0 && (
-                  <span className="bg-red-500 text-white text-[8px] font-bold h-4 w-4 rounded-full flex items-center justify-center ml-1 animate-pulse">
+                  <span className="ml-auto bg-red-500 text-white text-[8px] font-bold h-4 w-4 rounded-full flex items-center justify-center animate-pulse shrink-0">
                     {chatUnread}
                   </span>
                 )}
               </button>
             );
           })}
+        </nav>
+      </aside>
+
+      {/* Main Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Bar */}
+        <div className="sticky top-0 z-20 bg-background/80 backdrop-blur-xl border-b border-white/10">
+          <div className="flex items-center justify-between h-16 px-4 md:px-8">
+            <div className="flex items-center gap-3">
+              <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-muted-foreground hover:text-white">
+                <Menu className="h-5 w-5" />
+              </button>
+              <div>
+                <span className="text-[9px] font-bold text-accent uppercase tracking-widest">Panel Administrativo</span>
+                <h1 className="font-heading text-lg md:text-xl font-light text-white">Cheotnun</h1>
+              </div>
+            </div>
+            <Button
+              onClick={() => {
+                document.cookie = "cheotnun_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                window.location.href = '/dashboard/admin/login';
+              }}
+              variant="outline"
+              className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"
+            >
+              Sair do Painel
+            </Button>
+          </div>
         </div>
 
-        {/* Content Area */}
-        <div className="min-h-[400px]">
-          {/* TAB: SITE CONTENT */}
-          {activeSubTab === 'sitecontent' && <SiteContentTab />}
+        {/* Content */}
+        <main className="flex-1 p-4 md:p-8">
+          <div className="min-h-[400px]">
+            {/* TAB: SITE CONTENT */}
+            {activeSubTab === 'sitecontent' && <SiteContentTab />}
 
           {/* TAB: CATEGORIES */}
           {activeSubTab === 'categories' && <CategoriesTab />}
@@ -2283,6 +2310,7 @@ if (!authorized) {
       </main>
 
       <Footer />
+      </div>
     </div>
   );
 }
