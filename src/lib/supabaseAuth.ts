@@ -72,11 +72,17 @@ if (typeof window !== 'undefined' && supabase) {
       const currentUser = saved ? JSON.parse(saved) : null;
       
       if (!currentUser || currentUser.id !== session.user.id) {
-        const { data: dbUser } = await supabase
-          .from('cheotnun_users')
-          .select('name, phone, country, document_type, document_number, postal_code, street, number, complement, neighborhood, city, state')
-          .eq('id', session.user.id)
-          .single();
+        let dbUser: any = null;
+        try {
+          const { data } = await supabase
+            .from('cheotnun_users')
+            .select('name, phone, country, document_type, document_number, postal_code, street, number, complement, neighborhood, city, state')
+            .eq('id', session.user.id)
+            .maybeSingle();
+          dbUser = data;
+        } catch {
+          // User not found in DB (e.g. first Google OAuth login) — use metadata from provider
+        }
 
         const name = dbUser?.name || session.user.user_metadata?.name || email.split('@')[0];
 
