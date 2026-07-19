@@ -10,6 +10,44 @@ import { db } from '@/lib/db';
 import AuthModal from './AuthModal';
 import { useLanguage } from '@/context/LanguageContext';
 
+const FlagES = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="Español">
+    <rect width="24" height="18" fill="#C60B1E"/>
+    <rect y="4" width="24" height="10" fill="#FFC400"/>
+    <g transform="translate(12,9)">
+      <path d="M-1.5,-2 Q0,-4 1.5,-2 L1.5,2 Q0,4 -1.5,2 Z" fill="#C60B1E" stroke="#AA151B" strokeWidth="0.3"/>
+      <rect x="-1.5" y="-2" width="3" height="4" fill="#AA151B" rx="0.5"/>
+      <rect x="-0.5" y="2" width="1" height="2" fill="#C60B1E"/>
+    </g>
+  </svg>
+);
+
+const FlagPT = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="Português">
+    <rect width="9.6" height="18" fill="#006600"/>
+    <rect x="9.6" width="14.4" height="18" fill="#FF0000"/>
+    <g transform="translate(9.6,9)">
+      <circle r="4" fill="#FFCC00"/>
+      <circle r="3.2" fill="#FFFFFF"/>
+      <path d="M-0.8,-2 Q0,-3.2 0.8,-2 Q1.6,-1 1.2,0 Q1.6,1 0.8,2 Q0,3.2 -0.8,2 Q-1.6,1 -1.2,0 Q-1.6,-1 -0.8,-2 Z" fill="#FF0000" stroke="#FF0000" strokeWidth="0.3"/>
+      <circle r="1.6" fill="#006600"/>
+      <path d="M-1.2,2 L0.8,1 M-1,1.2 L0.6,0.6 M-0.8,0.4 L0.4,0.2" stroke="#006600" strokeWidth="0.4" fill="none"/>
+    </g>
+  </svg>
+);
+
+const FlagEN = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="English">
+    <rect width="24" height="18" fill="#012169"/>
+    <path d="M0,0 L24,18 M24,0 L0,18" stroke="#FFFFFF" strokeWidth="2.4"/>
+    <path d="M0,0 L24,18 M24,0 L0,18" stroke="#C8102E" strokeWidth="1"/>
+    <rect y="7.2" width="24" height="3.6" fill="#FFFFFF"/>
+    <rect y="8.1" width="24" height="1.8" fill="#C8102E"/>
+    <rect x="10.2" width="3.6" height="18" fill="#FFFFFF"/>
+    <rect x="11.1" width="1.8" height="18" fill="#C8102E"/>
+  </svg>
+);
+
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
@@ -130,11 +168,12 @@ export default function Header() {
           <div className="relative">
             <button 
               onClick={() => setIsModalOpen(!isModalOpen)}
-              className="flex items-center gap-1 text-white hover:text-accent transition-colors"
+              className="flex items-center gap-1.5 text-white hover:text-accent transition-colors"
               data-language-selector
             >
-              {locale === 'es' ? 'ES' : locale === 'pt' ? 'PT' : 'EN'}
-              <span className="text-[10px]">▾</span>
+              {locale === 'es' ? <FlagES /> : locale === 'pt' ? <FlagPT /> : <FlagEN />}
+              <span className="text-[10px] font-bold">{locale === 'es' ? 'ES' : locale === 'pt' ? 'PT' : 'EN'}</span>
+              <span className="text-[8px] opacity-60">▾</span>
             </button>
             
             {/* Language Modal */}
@@ -143,24 +182,27 @@ export default function Header() {
                 <div className="flex flex-col gap-1">
                   <button
                     onClick={() => setLocale('es')}
-                    className={`flex items-center justify-between w-full px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors ${locale === 'es' ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center gap-2.5 w-full px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors ${locale === 'es' ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                   >
+                    <FlagES />
                     <span>{t('Español')}</span>
-                    {locale === 'es' && <Check className="h-3.5 w-3.5" />}
+                    {locale === 'es' && <Check className="h-3.5 w-3.5 ml-auto" />}
                   </button>
                   <button
                     onClick={() => setLocale('pt')}
-                    className={`flex items-center justify-between w-full px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors ${locale === 'pt' ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center gap-2.5 w-full px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors ${locale === 'pt' ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                   >
+                    <FlagPT />
                     <span>{t('Portugués')}</span>
-                    {locale === 'pt' && <Check className="h-3.5 w-3.5" />}
+                    {locale === 'pt' && <Check className="h-3.5 w-3.5 ml-auto" />}
                   </button>
                   <button
                     onClick={() => setLocale('en')}
-                    className={`flex items-center justify-between w-full px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors ${locale === 'en' ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center gap-2.5 w-full px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-colors ${locale === 'en' ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
                   >
+                    <FlagEN />
                     <span>{t('Inglés')}</span>
-                    {locale === 'en' && <Check className="h-3.5 w-3.5" />}
+                    {locale === 'en' && <Check className="h-3.5 w-3.5 ml-auto" />}
                   </button>
                 </div>
               </div>
@@ -466,11 +508,12 @@ export default function Header() {
                   <button
                     key={lang}
                     onClick={() => { setLocale(lang); setMobileMenuOpen(false); }}
-                    className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-colors ${
+                    className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-colors ${
                       locale === lang ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    {lang === 'es' ? 'ES' : lang === 'pt' ? 'PT' : 'EN'}
+                    {lang === 'es' ? <FlagES /> : lang === 'pt' ? <FlagPT /> : <FlagEN />}
+                    <span>{lang === 'es' ? 'ES' : lang === 'pt' ? 'PT' : 'EN'}</span>
                   </button>
                 ))}
               </div>

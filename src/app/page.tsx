@@ -79,37 +79,37 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative min-h-[95vh] flex flex-col justify-between pt-8 overflow-hidden border-b border-white/5 bg-cover bg-[position:75%_center] md:bg-center bg-no-repeat"
+      <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center overflow-hidden border-b border-white/5 bg-cover bg-[position:70%_center] md:bg-center bg-no-repeat"
         style={{ backgroundImage: c?.hero?.bgImage ? `url('${c.hero.bgImage}')` : "url('/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent z-0" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-0" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent z-0" />
 
-        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 py-16 lg:py-24">
-          <div className="lg:col-span-12 flex flex-col items-start gap-8 text-left max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5">
-              <span className="text-[9px] font-bold text-accent uppercase tracking-[0.2em]">
+        <div className="max-w-7xl mx-auto w-full px-4 md:px-8 relative z-10 py-12 md:py-20">
+          <div className="flex flex-col items-start gap-5 md:gap-6 text-left max-w-2xl">
+            <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-3 py-1 md:px-4 md:py-1.5">
+              <span className="text-[8px] md:text-[9px] font-bold text-accent uppercase tracking-[0.2em] whitespace-nowrap">
                 {t('CHEOTNUN — Tu tienda online de cosmética coreana K-Beauty')}
               </span>
             </div>
-            <h1 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-white">
+            <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight leading-[0.95] text-white">
               {t(c?.hero?.titleLine1 || 'Tu belleza.')}<br />
               <span className="text-accent italic font-serif">{t(c?.hero?.titleLine2 || 'Tu ritual.')}</span><br />
               {t(c?.hero?.titleLine3 || 'Tu momento.')}
             </h1>
 
-            <p className="text-sm sm:text-base text-gray-200 max-w-lg font-normal leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <p className="text-xs sm:text-sm md:text-base text-gray-200 max-w-lg font-normal leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               {t(c?.hero?.subtitle || 'Cheotnun es tu tienda online de cosmética coreana K-Beauty. Compra productos auténticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda América Latina.')}
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-2">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto mt-1">
               <Link href={c?.hero?.btnBuyLink || '/tienda'}>
-                <Button className="w-full sm:w-auto bg-accent hover:bg-accentHover text-background font-bold text-xs tracking-[0.1em] py-6 px-10 rounded-full shadow-xl shadow-accent/15 transition-all hover:-translate-y-0.5 duration-300">
+                <Button className="w-full sm:w-auto bg-accent hover:bg-accentHover text-background font-bold text-xs tracking-[0.1em] py-5 md:py-6 px-8 md:px-10 rounded-full shadow-xl shadow-accent/15 transition-all hover:-translate-y-0.5 duration-300">
                   {t(c?.hero?.btnBuyText || 'COMPRAR AHORA')}
                 </Button>
               </Link>
               <Link href={c?.hero?.btnRoutineLink || '/rutinas'}>
-                <Button variant="outline" className="w-full sm:w-auto text-white border-white/20 hover:bg-white/5 hover:border-accent/40 font-bold text-xs tracking-[0.1em] py-6 px-10 rounded-full backdrop-blur transition-all hover:-translate-y-0.5 duration-300">
+                <Button variant="outline" className="w-full sm:w-auto text-white border-white/20 hover:bg-white/5 hover:border-accent/40 font-bold text-xs tracking-[0.1em] py-5 md:py-6 px-8 md:px-10 rounded-full backdrop-blur transition-all hover:-translate-y-0.5 duration-300">
                   {t(c?.hero?.btnRoutineText || 'DESCUBRIR RUTINAS')}
                 </Button>
               </Link>
