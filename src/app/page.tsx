@@ -87,10 +87,15 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 py-16 lg:py-24">
           <div className="lg:col-span-12 flex flex-col items-start gap-8 text-left max-w-2xl">
+            <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5">
+              <span className="text-[9px] font-bold text-accent uppercase tracking-[0.2em]">
+                {t('CHEOTNUN — Tu tienda online de cosmética coreana K-Beauty')}
+              </span>
+            </div>
             <h1 className="font-heading text-5xl sm:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-white">
-              <span className="text-accent">{t(c?.hero?.titleLine1 || 'CHEOTNUN')}</span><br />
-              {t(c?.hero?.titleLine2 || 'Tu tienda de cosmética coreana')}<br />
-              <span className="text-accent italic font-serif">{t(c?.hero?.titleLine3 || 'K-Beauty auténtico')}</span>
+              {t(c?.hero?.titleLine1 || 'Tu belleza.')}<br />
+              <span className="text-accent italic font-serif">{t(c?.hero?.titleLine2 || 'Tu ritual.')}</span><br />
+              {t(c?.hero?.titleLine3 || 'Tu momento.')}
             </h1>
 
             <p className="text-sm sm:text-base text-gray-200 max-w-lg font-normal leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
