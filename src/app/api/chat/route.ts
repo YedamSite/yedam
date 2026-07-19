@@ -101,16 +101,15 @@ export async function POST(req: NextRequest) {
           ? `💬 Nova mensagem de ${clientName} — ${sessionId.substring(0, 8)}...`
           : `💬 Nova mensagem no chat — ${sessionId.substring(0, 8)}...`;
 
-        sendEmail({
+        const emailResult = await sendEmail({
           to: adminEmail,
           subject: emailSubject,
           html: buildChatNotificationHtml(sessionId, orderedMsgs),
           replyTo: adminEmail,
-        }).then(result => {
-          if (!result.success) {
-            console.error('[chat] Failed to send notification email:', result.error);
-          }
         });
+        if (!emailResult.success) {
+          console.error('[chat] Failed to send notification email:', emailResult.error);
+        }
       }
     }
 
