@@ -71,7 +71,7 @@ export async function sendEmail(options: SendEmailOptions) {
     return { success: false, error: 'SMTP not configured — missing SMTP_HOST, SMTP_USER, SMTP_PASS' };
   }
 
-  const from = process.env.SMTP_FROM || 'no-reply@cheotnun.com';
+  const from = process.env.SMTP_FROM || process.env.SMTP_USER || 'no-reply@cheotnun.com';
   const fromName = process.env.SMTP_FROM_NAME || 'Cheotnun K-Beauty';
 
   try {

@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         success: false,
         error: result.error,
-        hint: 'Check your SMTP_HOST, SMTP_USER, SMTP_PASS environment variables in Vercel. For Hostinger, common settings: SMTP_HOST=smtp.hostinger.com, SMTP_PORT=465, SMTP_USER=sac@cheotnun.com',
+        hint: 'Check Vercel env vars. SMTP_FROM must be an email owned by the SMTP_USER (e.g. SMTP_FROM=sac@cheotnun.com). Hostinger: SMTP_HOST=smtp.hostinger.com, SMTP_PORT=465, SMTP_USER=sac@cheotnun.com.',
       }, { status: 500 });
     }
   } catch (e: any) {
