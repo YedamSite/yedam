@@ -35,6 +35,33 @@ function saveToRegistry(entry: { email: string; phone?: string; document_number?
   } catch { /* ignore */ }
 }
 
+const SESSION_COOKIE_NAME = 'cheotnun_session';
+
+function setSessionCookie(data: any) {
+  if (typeof window === 'undefined') return;
+  try {
+    const cookieValue = encodeURIComponent(JSON.stringify(data));
+    document.cookie = `${SESSION_COOKIE_NAME}=${cookieValue}; path=/; max-age=86400; SameSite=Lax`;
+  } catch { /* ignore */ }
+}
+
+function clearSessionCookie() {
+  if (typeof window === 'undefined') return;
+  try {
+    document.cookie = `${SESSION_COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
+  } catch { /* ignore */ }
+}
+
+function saveSession(data: any) {
+  localStorage.setItem(SESSION_COOKIE_NAME, JSON.stringify(data));
+  setSessionCookie(data);
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_COOKIE_NAME);
+  clearSessionCookie();
+}
+
 // Auth listener on client side to sync session to localStorage
 if (typeof window !== 'undefined' && supabase) {
   supabase.auth.onAuthStateChange(async (event, session) => {
@@ -53,7 +80,7 @@ if (typeof window !== 'undefined' && supabase) {
 
         const name = dbUser?.name || session.user.user_metadata?.name || email.split('@')[0];
 
-        localStorage.setItem('cheotnun_session', JSON.stringify({
+        saveSession({
           id: session.user.id,
           email,
           name,
@@ -69,10 +96,15 @@ if (typeof window !== 'undefined' && supabase) {
           neighborhood: dbUser?.neighborhood || null,
           city: dbUser?.city || null,
           state: dbUser?.state || null,
-        }));
+          email_confirmed_at: session.user.email_confirmed_at || null,
+        });
+      } else if (currentUser && session.user.email_confirmed_at && !currentUser.email_confirmed_at) {
+        // Email was just confirmed - update session with confirmation status
+        const updated = { ...currentUser, email_confirmed_at: session.user.email_confirmed_at };
+        saveSession(updated);
       }
     } else if (event === 'SIGNED_OUT') {
-      localStorage.removeItem('cheotnun_session');
+      clearSession();
     }
   });
 }
@@ -137,7 +169,7 @@ export const authService = {
             phone: cleanPhone || null,
             documentNumber: cleanDoc || null
           },
-          emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined
+          emailRedirectTo: typeof window !== 'undefined' ? window.location.origin + '/auth/callback' : undefined
         }
       });
       if (error) throw error;
@@ -183,7 +215,7 @@ export const authService = {
           saveToRegistry({ email: cleanEmail, phone: cleanPhone, document_number: cleanDoc });
         }
 
-        localStorage.setItem('cheotnun_session', JSON.stringify({
+        saveSession({
           id: data.user.id,
           email: cleanEmail,
           name,
@@ -193,7 +225,7 @@ export const authService = {
           document_type: profileData?.documentType || null,
           document_number: cleanDoc || null,
           email_confirmed_at: data.user.email_confirmed_at || null,
-        }));
+        });
       }
       return data;
     } else {
@@ -211,7 +243,7 @@ export const authService = {
         ...(profileData?.city && { city: profileData.city }),
         ...(profileData?.state && { state: profileData.state }),
       };
-      localStorage.setItem('cheotnun_session', JSON.stringify(newUser));
+      saveSession(newUser);
       saveToRegistry({ email: cleanEmail, phone: cleanPhone, document_number: cleanDoc });
       return { user: newUser };
     }
@@ -242,7 +274,7 @@ export const authService = {
 
         const name = dbUser?.name || data.user.user_metadata?.name || cleanEmail.split('@')[0];
 
-        localStorage.setItem('cheotnun_session', JSON.stringify({
+        saveSession({
           id: data.user.id,
           email: cleanEmail,
           name,
@@ -259,14 +291,14 @@ export const authService = {
           city: dbUser?.city || null,
           state: dbUser?.state || null,
           email_confirmed_at: data.user.email_confirmed_at,
-        }));
+        });
       }
       return data;
     } else {
       // Local fallback search matching seed list
       const matched = MOCK_USERS_CHEOTNUN.find(u => u.email.toLowerCase() === cleanEmail);
       const userSession = matched ? { ...matched, role: 'customer' } : { id: crypto.randomUUID(), email: cleanEmail, name: cleanEmail.split('@')[0], role: 'customer' };
-      localStorage.setItem('cheotnun_session', JSON.stringify(userSession));
+      saveSession(userSession);
       return { user: userSession };
     }
   },
@@ -276,7 +308,7 @@ export const authService = {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: window.location.origin + '/auth/callback'
         }
       });
       if (error) throw error;
@@ -284,7 +316,7 @@ export const authService = {
     } else {
       // Local fallback simulator for Google OAuth button
       const googleUser = { id: crypto.randomUUID(), email: 'google.user@gmail.com', name: 'Google Client User', role: 'customer' };
-      localStorage.setItem('cheotnun_session', JSON.stringify(googleUser));
+      saveSession(googleUser);
       return { user: googleUser };
     }
   },
@@ -293,7 +325,7 @@ export const authService = {
     if (supabase) {
       await supabase.auth.signOut();
     }
-    localStorage.removeItem('cheotnun_session');
+    clearSession();
   },
 
   getCurrentUser() {

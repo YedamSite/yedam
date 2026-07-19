@@ -166,6 +166,11 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
           setSuccessMsg(t('✓ ¡Cuenta creada! Por favor, verifica tu e-mail para continuar.'));
           setLoading(false);
           
+          // Salvar email para reenvio na página verify-email
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('cheotnun_pending_email', email);
+          }
+
           // Fechar modal e redirecionar para página de verificação
           setTimeout(() => {
             onClose();
@@ -201,6 +206,10 @@ export default function AuthModal({ isOpen, onClose, onSuccess, defaultMode = 'l
       // Verificar se é erro de e-mail não confirmado
       if (msg === 'EMAIL_NOT_CONFIRMED') {
         msg = t('Por favor, confirma tu e-mail antes de iniciar sesión. Revisa tu bandeja de entrada o spam.');
+        // Salvar email para reenvio na página verify-email
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('cheotnun_pending_email', email);
+        }
         // Redirecionar para página de verificação
         setTimeout(() => {
           onClose();
