@@ -99,7 +99,16 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] text-muted-foreground gap-4">
+      <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-10 flex flex-col items-center text-center text-[10px] text-muted-foreground gap-4">
+        <p>
+          Orgulhosamente desenvolvido por{' '}
+          <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">
+            VOLTRIS
+          </a>
+        </p>
+      </div>
+
+      <div className="mx-auto max-w-7xl mt-6 pt-6 flex flex-col sm:flex-row items-center justify-between text-[10px] text-muted-foreground gap-4">
         <p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
         <p>
           {t('En colaboración con')}{' '}
