@@ -342,6 +342,8 @@ const translations: Record<Language, Record<string, string>> = {
     'éxito': 'éxito',
     'Bienvenido': 'Bienvenido',
     'Club': 'Club',
+    // Data transparency (Google OAuth)
+    'Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.': 'Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Aguardando Confirmación de la Tienda',
     'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Su pedido fue recibido y el pago fue confirmado. Estamos dentro del plazo operativo de hasta 48 horas hábiles (72 horas en feriados coreanos) para preparar y enviar su producto. Recibirá una notificación cuando el pedido esté siendo preparado para envío.',
@@ -519,6 +521,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Producto eliminado del carrito': 'Produto removido do carrinho',
     'Producto agregado a favoritos': 'Produto adicionado aos favoritos',
     'Producto eliminado de favoritos': 'Produto removido dos favoritos',
+    // Data transparency (Google OAuth)
+    'Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.': 'Ao se registrar na Cheotnun, seus dados (nome, e-mail) são usados para processar seus pedidos, personalizar sua experiência de compra e enviar informações relevantes sobre suas compras. Seus dados estão seguros e nunca são compartilhados sem seu consentimento.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Aguardando Confirmação da Loja',
     'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Seu pedido foi recebido e o pagamento foi confirmado. Estamos dentro do prazo operacional de até 48 horas úteis (72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.',
@@ -696,6 +700,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Producto eliminado del carrito': 'Product removed from cart',
     'Producto agregado a favoritos': 'Product added to favorites',
     'Producto eliminado de favoritos': 'Product removed from favorites',
+    // Data transparency (Google OAuth)
+    'Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.': 'When you register at Cheotnun, your data (name, email) is used to process your orders, personalize your shopping experience, and send you relevant information about your purchases. Your data is safe and never shared without your consent.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Awaiting Store Confirmation',
     'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Your order has been received and payment confirmed. We are within the operational period of up to 48 business hours (72 hours on Korean holidays) to pick, prepare and ship your product. You will receive a notification as soon as your order is being prepared for shipping.',

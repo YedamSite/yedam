@@ -401,6 +401,15 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Data Transparency Notice */}
+      <section className="py-12 bg-[#030712] border-t border-white/5 w-full">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <p className="text-[10px] text-muted-foreground leading-relaxed">
+            {t('Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.')}
+          </p>
+        </div>
+      </section>
+
       <Footer />
       
       {/* Structured Data for SEO */}

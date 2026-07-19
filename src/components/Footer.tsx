@@ -108,6 +108,11 @@ export default function Footer() {
         </p>
         <p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
         <p>
+          <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
+            {t('Política de Privacidad')}
+          </Link>
+        </p>
+        <p>
           {t('En colaboración con')}{' '}
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
             Maeum Global Agency
