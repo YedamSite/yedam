@@ -6,17 +6,22 @@ export function middleware(request: NextRequest) {
 
   // Proteger todas as rotas do dashboard (admin e cliente)
   if (path.startsWith('/dashboard')) {
-    // Permitir acesso à página de verify-email
-    if (path === '/verify-email') {
+    // Permitir acesso à página de verify-email e login admin
+    if (path === '/verify-email' || path === '/dashboard/admin/login') {
       return NextResponse.next();
     }
 
     // Verificar sessão do usuário
     const sessionCookie = request.cookies.get('cheotnun_session');
+    const adminCookie = request.cookies.get('cheotnun_admin_session');
 
     // Se não houver sessão, redirecionar para login
     if (!sessionCookie) {
       if (path.startsWith('/dashboard/admin')) {
+        // Se tem admin cookie mas não session cookie, deixa passar mesmo assim
+        if (adminCookie) {
+          return NextResponse.next();
+        }
         const loginUrl = new URL('/dashboard/admin/login', request.url);
         return NextResponse.redirect(loginUrl);
       } else {
