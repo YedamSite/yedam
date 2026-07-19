@@ -65,12 +65,28 @@ export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps =
     const content = message;
     setMessage('');
 
+    // Get logged-in user info if available
+    let userName = '';
+    let userEmail = '';
+    let userId = '';
+    try {
+      const saved = localStorage.getItem('cheotnun_session');
+      if (saved) {
+        const user = JSON.parse(saved);
+        userName = user.name || '';
+        userEmail = user.email || '';
+        userId = user.id || '';
+      }
+    } catch { /* ignore */ }
+
     // Optimistic update
     const optimisticMsg = {
       id: 'temp-' + Date.now(),
       order_id: chatId,
       type: 'chat',
       sender: 'client',
+      sender_name: userName,
+      sender_email: userEmail,
       content,
       created_at: new Date().toISOString(),
     };
@@ -80,7 +96,14 @@ export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps =
       await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: chatId, sender: 'client', content }),
+        body: JSON.stringify({
+          sessionId: chatId,
+          sender: 'client',
+          content,
+          senderName: userName,
+          senderEmail: userEmail,
+          userId,
+        }),
       });
       // Reload to get the server-assigned order
       loadMessages(chatId);

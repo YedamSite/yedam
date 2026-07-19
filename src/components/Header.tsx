@@ -456,6 +456,26 @@ export default function Header() {
               ))}
             </div>
 
+            {/* Language selector for Mobile */}
+            <div className="border-t border-white/5 pt-4">
+              <span className="text-[8px] font-bold text-accent uppercase tracking-widest block text-center mb-2">
+                {t('Idioma')}
+              </span>
+              <div className="flex gap-2 justify-center">
+                {(['es', 'pt', 'en'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => { setLocale(lang); setMobileMenuOpen(false); }}
+                    className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-colors ${
+                      locale === lang ? 'bg-accent/20 text-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    }`}
+                  >
+                    {lang === 'es' ? 'ES' : lang === 'pt' ? 'PT' : 'EN'}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="h-px bg-white/5" />
 
             {/* User actions on Mobile */}

@@ -297,6 +297,13 @@ export default function Home() {
             })}
           </div>
 
+          {/* Mobile-only link to /rutinas */}
+          <div className="mt-8 text-center sm:hidden">
+            <Link href="/rutinas" className="text-xs font-bold text-accent hover:underline uppercase tracking-[0.15em]">
+              {t(c?.routines?.buttonText || 'VER TODAS LAS RUTINAS')} →
+            </Link>
+          </div>
+
           <div className="w-full bg-[#0b1329] border border-white/10 rounded-2xl md:rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-5 gap-6 text-xs text-muted-foreground shadow-2xl mt-16">
             {(c?.routines?.badges || []).map((badge: any, idx: number) => {
               const Icon = ICON_MAP[badge.icon] || ShieldCheck;

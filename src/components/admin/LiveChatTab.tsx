@@ -13,6 +13,9 @@ interface ChatMessage {
   sender: 'client' | 'admin';
   content: string;
   created_at: string;
+  sender_name?: string;
+  sender_email?: string;
+  user_id?: string;
 }
 
 interface ChatGroup {
@@ -125,11 +128,18 @@ export default function LiveChatTab() {
                   className={`w-full text-left p-4 border-b border-white/5 hover:bg-white/5 transition-colors ${activeChatId === chat.id ? 'bg-white/10' : ''}`}
                 >
                   <div className="flex justify-between items-start mb-1">
-                    <span className="font-bold text-xs text-white uppercase tracking-wider">{chat.id.substring(0, 13)}</span>
-                    <span className="text-[9px] text-muted-foreground">
+                    <span className="font-bold text-xs text-white uppercase tracking-wider truncate max-w-[180px]">
+                      {chat.messages.find(m => m.sender_name)?.sender_name || chat.messages.find(m => m.sender_email)?.sender_email || chat.id.substring(0, 13)}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground shrink-0 ml-2">
                       {new Date(chat.lastMessage.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
+                  {chat.messages.find(m => m.sender_email) && (
+                    <p className="text-[8px] text-accent/60 uppercase tracking-wider mb-1 truncate">
+                      {chat.messages.find(m => m.sender_email)?.sender_email}
+                    </p>
+                  )}
                   <p className="text-[10px] text-muted-foreground line-clamp-1">
                     <strong className="text-accent">{chat.lastMessage.sender === 'admin' ? 'Tu: ' : 'Cliente: '}</strong>
                     {chat.lastMessage.content}
@@ -143,15 +153,22 @@ export default function LiveChatTab() {
         <div className="w-2/3 flex flex-col bg-background/50">
           {activeChat ? (
             <>
-              <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-secondary/30">
-                <div className="bg-white/10 p-2 rounded-full">
-                  <User className="h-5 w-5 text-accent" />
+                <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-secondary/30">
+                  <div className="bg-white/10 p-2 rounded-full">
+                    <User className="h-5 w-5 text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-white uppercase tracking-wider">
+                      {activeChat.messages.find(m => m.sender_name)?.sender_name || t('Visitante')}
+                    </h3>
+                    {(activeChat.messages.find(m => m.sender_email)?.sender_email) && (
+                      <span className="text-[10px] text-accent/70 block">
+                        {activeChat.messages.find(m => m.sender_email)?.sender_email}
+                      </span>
+                    )}
+                    <span className="text-[10px] text-green-400">{t('Online')}</span>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-bold text-sm text-white uppercase tracking-wider">{t('Visitante')} - {activeChat.id.substring(0, 8)}</h3>
-                  <span className="text-[10px] text-green-400">{t('Online')}</span>
-                </div>
-              </div>
 
               <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4" onScroll={handleScroll}>
                 {activeChat.messages.map((msg) => (
