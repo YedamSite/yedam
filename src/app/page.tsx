@@ -94,7 +94,7 @@ export default function Home() {
             </h1>
 
             <p className="text-sm sm:text-base text-gray-200 max-w-lg font-normal leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              {t(c?.hero?.subtitle || 'Cosméticos coreanos auténticos seleccionados para cada etapa de tu cuidado facial. Fórmulas botánicas que revelan tu luminosidad natural.')}
+              {t(c?.hero?.subtitle || 'Cheotnun es tu tienda online de cosmética coreana K-Beauty. Compra productos auténticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda América Latina.')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto mt-2">
