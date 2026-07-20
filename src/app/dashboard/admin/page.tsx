@@ -6,7 +6,7 @@ import {
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
   TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
   Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar, Loader2,
-  Menu, X
+  Menu, X, Eye
 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from '@/components/Footer';
@@ -1060,34 +1060,76 @@ if (!authorized) {
           {/* TAB: PAGE BUILDER */}
           {activeSubTab === 'builder' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">Page Builder - Secciones de la Homepage</h2>
+              <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">🧱 Page Builder - Secciones de la Homepage</h2>
+
+              {/* Explanation Card */}
+              <div className="bg-accent/5 border border-accent/10 rounded-2xl p-5 mb-8 flex flex-col gap-3">
+                <div className="flex items-start gap-3">
+                  <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                  <div>
+                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider mb-1">¿Qué es el Page Builder?</h3>
+                    <p className="text-[11px] text-foreground/70 leading-relaxed">
+                      El <strong>Page Builder</strong> controla la <strong>estructura</strong> de la página principal de Cheotnun.
+                      Cada sección (Hero, Features, etc.) aparece como un bloque que puedes:
+                    </p>
+                    <ul className="text-[11px] text-foreground/60 list-disc pl-5 mt-2 flex flex-col gap-1">
+                      <li><strong>Reordenar</strong> — cambia el orden de las secciones con las flechas ↑↓.</li>
+                      <li><strong>Activar / Desactivar</strong> — el toggle prende/apaga la sección del sitio.</li>
+                    </ul>
+                    <p className="text-[10px] text-foreground/40 mt-2 italic">
+                      Los textos, imágenes y botones de cada sección se editan en la pestaña <strong>"Conteúdo do Site"</strong>.
+                    </p>
+                  </div>
+                </div>
+              </div>
               
-              <div className="flex flex-col gap-4">
-                {blocks.map((block, idx) => (
-                  <div key={block.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="flex flex-col gap-1 shrink-0">
-                        <button onClick={() => moveBlock(idx, 'up')} className="text-muted-foreground hover:text-accent"><ArrowUp className="h-4 w-4" /></button>
-                        <button onClick={() => moveBlock(idx, 'down')} className="text-muted-foreground hover:text-accent"><ArrowDown className="h-4 w-4" /></button>
+              <div className="flex flex-col gap-3">
+                {blocks.length === 0 ? (
+                  <div className="border border-dashed border-white/5 rounded-xl p-10 text-center">
+                    <Layers className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
+                    <p className="text-xs text-foreground/40">Nenhum bloco encontrado. Os blocos aparecerão aqui quando forem criados no Conteúdo do Site.</p>
+                  </div>
+                ) : (
+                  blocks.map((block, idx) => (
+                    <div key={block.id} className="border border-white/5 rounded-2xl p-4 bg-secondary/30 flex items-center justify-between gap-4 hover:border-white/10 transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className="flex flex-col gap-0.5 shrink-0">
+                          <button onClick={() => moveBlock(idx, 'up')} disabled={idx === 0} className={`p-0.5 rounded transition-all ${idx === 0 ? 'text-foreground/20 cursor-not-allowed' : 'text-muted-foreground hover:text-accent'}`}>
+                            <ArrowUp className="h-3.5 w-3.5" />
+                          </button>
+                          <button onClick={() => moveBlock(idx, 'down')} disabled={idx === blocks.length - 1} className={`p-0.5 rounded transition-all ${idx === blocks.length - 1 ? 'text-foreground/20 cursor-not-allowed' : 'text-muted-foreground hover:text-accent'}`}>
+                            <ArrowDown className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                        <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                          {block.section_id === 'hero' ? <Eye className="h-4 w-4 text-accent" /> : <Layout className="h-4 w-4 text-accent" />}
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-white capitalize">{block.section_id === 'hero' ? 'Hero (Banner Principal)' : block.section_id} </h4>
+                          <span className="text-[9px] text-muted-foreground">Orden {idx + 1}</span>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-white uppercase tracking-wide">{block.section_id} SECTION</h4>
-                        <span className="text-[10px] text-muted-foreground uppercase">{block.block_type} Block • Orden: {idx + 1}</span>
+
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[9px] font-bold uppercase tracking-wider transition-all ${
+                          block.active ? 'text-green-400' : 'text-red-400'
+                        }`}>
+                          {block.active ? 'Activo' : 'Inactivo'}
+                        </span>
+                        <button
+                          onClick={() => toggleBlockActive(idx)}
+                          className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
+                            block.active ? 'bg-green-500' : 'bg-foreground/20'
+                          }`}
+                        >
+                          <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
+                            block.active ? 'translate-x-[18px]' : 'translate-x-[3px]'
+                          }`} />
+                        </button>
                       </div>
                     </div>
-
-                    <button
-                      onClick={() => toggleBlockActive(idx)}
-                      className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${
-                        block.active
-                          ? 'bg-green-500/10 text-green-400 border-green-500/20'
-                          : 'bg-red-500/10 text-red-400 border-red-500/20'
-                      }`}
-                    >
-                      {block.active ? 'Habilitado' : 'Deshabilitado'}
-                    </button>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           )}
