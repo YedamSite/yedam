@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
 import {
   Settings, Palette, Layers, Database, Users, Shield,
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
@@ -108,6 +107,7 @@ export default function AdminDashboard() {
   const [stripeKey, setStripeKey] = useState('pk_live_51M3c...');
   const [smtpServer, setSmtpServer] = useState('smtp.mailgun.org');
   const [smtpUser, setSmtpUser] = useState('no-reply@cheotnun.com');
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState('');
   const [configSaved, setConfigSaved] = useState(false);
 
   // Invoice Preview Modal
@@ -709,8 +709,6 @@ if (!authorized) {
           {/* TAB: BRANDS */}
           {activeSubTab === 'brands' && <BrandsTab />}
 
-          {activeSubTab === 'brands' && <BrandsTab />}
-
           {/* TAB: DASHBOARD GERAL */}
           {activeSubTab === 'dashboard' && (
             <div className="flex flex-col gap-6">
@@ -937,7 +935,7 @@ if (!authorized) {
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-4">
                           <h3 className="text-xs font-bold text-white uppercase tracking-wider">Últimos Pedidos</h3>
-                          <Link href="/dashboard/admin?tab=orders" className="text-[9px] text-accent hover:underline font-bold">VER TODOS →</Link>
+                          <button onClick={() => setActiveSubTab('orders')} className="text-[9px] text-accent hover:underline font-bold">VER TODOS →</button>
                         </div>
                         <div className="overflow-x-auto">
                           <table className="w-full text-xs">
@@ -2179,8 +2177,8 @@ if (!authorized) {
 
               <form onSubmit={(e) => {
                 e.preventDefault();
-                const settings = db.get('system_settings');
-                settings.seo = { titleSuffix: seoTitleSuffix, metaDescription: seoDescription, googleAnalyticsId: settings.seo?.googleAnalyticsId || '' };
+                const settings = db.get('system_settings') || {};
+                settings.seo = { titleSuffix: seoTitleSuffix, metaDescription: seoDescription, googleAnalyticsId };
                 settings.smtp = { server: smtpServer, email: smtpUser, user: smtpUser };
                 settings.payments = { stripePublicKey: stripeKey };
                 db.save('system_settings', settings);
@@ -2226,7 +2224,7 @@ if (!authorized) {
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-bold uppercase text-white">Google Analytics Tracking ID</label>
-                    <Input placeholder="G-XXXXXXXXXX" />
+                    <Input value={googleAnalyticsId} onChange={e => setGoogleAnalyticsId(e.target.value)} placeholder="G-XXXXXXXXXX" />
                   </div>
                   
                   <div className="mt-8 pt-4 border-t border-white/5 flex flex-col gap-2">
@@ -2277,7 +2275,7 @@ if (!authorized) {
                 const avgTicket = allOrders.length > 0 ? totalBilled / allOrders.length : 0;
                 const totalStock = allProducts.reduce((sum: number, p: any) => sum + (p.stock || 0), 0);
                 const totalProducts = allProducts.length;
-                const pendingOrders = allOrders.filter((o: any) => o.status === 'pending' || o.status === 'preparing').length;
+                const pendingOrders = allOrders.filter((o: any) => o.status === 'aguardando_confirmacao' || o.status === 'preparando_envio').length;
 
                 return (
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
