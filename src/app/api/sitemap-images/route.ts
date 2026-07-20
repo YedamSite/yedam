@@ -46,6 +46,10 @@ export async function GET() {
     pageUrl: `${baseUrl}/`,
     imageUrl: `${baseUrl}/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp`
   });
+  imageEntries.push({
+    pageUrl: `${baseUrl}/`,
+    imageUrl: `${baseUrl}/images/cheotnun-k-beauty-banner-mobile-skincare-coreano.webp`
+  });
 
   // Imagens dos produtos
   const products = db.get('products') || []

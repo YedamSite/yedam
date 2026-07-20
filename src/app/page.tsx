@@ -79,9 +79,14 @@ export default function Home() {
       <Header />
 
       {/* Hero Section — Full viewport */}
-      <section className="relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden border-b border-white/5 bg-cover bg-[position:65%_center] md:bg-center bg-no-repeat"
-        style={{ backgroundImage: c?.hero?.bgImage ? `url('${c.hero.bgImage}')` : "url('/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp')" }}
-      >
+      <section className="relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden border-b border-white/5">
+        {/* Responsive background images */}
+        <div className="absolute inset-0 bg-cover bg-[position:65%_center] bg-no-repeat md:hidden"
+          style={{ backgroundImage: c?.hero?.bgImageMobile ? `url('${c.hero.bgImageMobile}')` : "url('/images/cheotnun-k-beauty-banner-mobile-skincare-coreano.webp')" }}
+        />
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+          style={{ backgroundImage: c?.hero?.bgImage ? `url('${c.hero.bgImage}')` : "url('/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp')" }}
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent z-0" />
         <div className="absolute inset-0 bg-gradient-to-t from-background/20 via-transparent to-background/40 z-0" />
 
