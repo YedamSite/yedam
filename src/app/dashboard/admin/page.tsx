@@ -625,6 +625,7 @@ if (!authorized) {
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-0.5 custom-scrollbar">
           {[
             { id: 'dashboard', label: 'Dashboard Geral', icon: BarChart3 },
+            { id: 'chat', label: 'Live Chat', icon: MessageCircle },
             { id: 'visual', label: 'Estilo Visual', icon: Palette },
             { id: 'builder', label: 'Page Builder (Home)', icon: Layers },
             { id: 'sitecontent', label: 'Conteúdo do Site', icon: PenTool },
@@ -637,7 +638,6 @@ if (!authorized) {
             { id: 'coupons', label: 'Cupones & Promos', icon: Tag },
             { id: 'blog', label: 'Blog & Artículos', icon: BookOpen },
             { id: 'shipping', label: 'Fretes e Zonas', icon: Globe },
-            { id: 'chat', label: 'Live Chat', icon: MessageCircle },
             { id: 'settings', label: 'APIs, SMTP & SEO', icon: Globe },
             { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
             { id: 'emails', label: 'E-mails & Templates', icon: Mail }
