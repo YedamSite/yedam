@@ -1063,22 +1063,33 @@ if (!authorized) {
               <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">🧱 Page Builder - Secciones de la Homepage</h2>
 
               {/* Explanation Card */}
-              <div className="bg-accent/5 border border-accent/10 rounded-2xl p-5 mb-8 flex flex-col gap-3">
+              <div className="bg-accent/5 border border-accent/10 rounded-2xl p-5 md:p-6 mb-8">
                 <div className="flex items-start gap-3">
                   <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider mb-1">¿Qué es el Page Builder?</h3>
-                    <p className="text-[11px] text-foreground/70 leading-relaxed">
-                      El <strong>Page Builder</strong> controla la <strong>estructura</strong> de la página principal de Cheotnun.
-                      Cada sección (Hero, Features, etc.) aparece como un bloque que puedes:
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider">O que é o Page Builder?</h3>
+                    <p className="text-[12px] text-foreground/80 leading-relaxed">
+                      O <strong>Page Builder</strong> é a ferramenta que define <strong>quais seções aparecem</strong> na página inicial do site e <strong>em qual ordem</strong> elas são exibidas.
                     </p>
-                    <ul className="text-[11px] text-foreground/60 list-disc pl-5 mt-2 flex flex-col gap-1">
-                      <li><strong>Reordenar</strong> — cambia el orden de las secciones con las flechas ↑↓.</li>
-                      <li><strong>Activar / Desactivar</strong> — el toggle prende/apaga la sección del sitio.</li>
-                    </ul>
-                    <p className="text-[10px] text-foreground/40 mt-2 italic">
-                      Los textos, imágenes y botones de cada sección se editan en la pestaña <strong>"Conteúdo do Site"</strong>.
-                    </p>
+                    <div className="bg-background/40 border border-white/5 rounded-xl p-4 flex flex-col gap-2">
+                      <p className="text-[11px] text-foreground/70 font-bold uppercase tracking-wider text-accent">Exemplos práticos:</p>
+                      <ul className="text-[11px] text-foreground/60 flex flex-col gap-1.5">
+                        <li className="flex items-start gap-2">
+                          <span className="text-green-400 mt-0.5">✓</span>
+                          <span>Se você <strong>desativar</strong> o bloco "Hero (Banner Principal)", o banner grande do topo da homepage <strong>desaparece</strong>.</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-green-400 mt-0.5">✓</span>
+                          <span>Se você <strong>mover</strong> o bloco "Features" para cima, a barra de ícones (frete, pagamento seguro) aparece <strong>antes</strong> do banner.</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-3">
+                      <p className="text-[10px] text-blue-300 leading-relaxed">
+                        💡 <strong>Dica:</strong> O Page Builder mexe apenas na <strong>estrutura</strong> (quais seções e em que ordem). 
+                        Para editar os <strong>textos, imagens e botões</strong> de cada seção, vá até a aba <strong>"Conteúdo do Site"</strong>.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
