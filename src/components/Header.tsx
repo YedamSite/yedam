@@ -152,8 +152,9 @@ export default function Header() {
   const navItems = [
     { label: t('Inicio'), href: '/' },
     { label: t('Tienda'), href: '/tienda' },
+    { label: t('Categorías'), href: '/tienda?category=cuidado-facial' },
     { label: t('Rutinas'), href: '/rutinas' },
-    { label: t('Blog'), href: '/blog' },
+    { label: t('Marcas'), href: '/marcas' },
     { label: t('Experiencias'), href: '/experiencias' }
   ];
 
@@ -216,14 +217,7 @@ export default function Header() {
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between relative z-10">
           {/* Logo - Left */}
           <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <Image
-              src={headerContent.logoUrl || '/images/cheotnun-k-beauty-logo-oficial.webp'}
-              alt="Cheotnun"
-              width={140}
-              height={40}
-              priority
-              className="h-14 md:h-16 w-auto object-contain"
-            />
+
             <div className="flex flex-col items-center justify-center md:hidden">
               <span className="font-heading text-lg font-light text-white uppercase tracking-wider leading-none">
                 Cheotnun

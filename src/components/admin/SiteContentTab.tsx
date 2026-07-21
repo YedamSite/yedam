@@ -31,8 +31,8 @@ export default function SiteContentTab() {
         root = updated.translations[activeLang];
       }
 
-      const isGlobalSec = section === 'header' || section === 'footer';
-      if (isGlobalSec) {
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      if (isRootSec) {
         if (!root[section]) root[section] = {};
         let obj = root[section];
         for (let i = 0; i < parts.length - 1; i++) {
@@ -67,14 +67,18 @@ export default function SiteContentTab() {
         root = updated.translations[activeLang];
       }
 
-      if (!root.home) root.home = {};
-      if (!root.home[section]) root.home[section] = {};
-      if (!root.home[section][arrayField]) {
-        const baseArr = updated.home?.[section]?.[arrayField] || [];
-        root.home[section][arrayField] = JSON.parse(JSON.stringify(baseArr));
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const parentObj = isRootSec ? root : root.home;
+
+      if (!isRootSec && !root.home) root.home = {};
+      if (!parentObj[section]) parentObj[section] = {};
+      if (!parentObj[section][arrayField]) {
+        const baseParent = isRootSec ? updated : updated.home;
+        const baseArr = baseParent?.[section]?.[arrayField] || [];
+        parentObj[section][arrayField] = JSON.parse(JSON.stringify(baseArr));
       }
 
-      const arr = root.home[section][arrayField];
+      const arr = parentObj[section][arrayField];
       if (arr) {
         // Ensure index exists
         while (arr.length <= index) {
@@ -106,12 +110,15 @@ export default function SiteContentTab() {
     // Adding array item always modifies the base structure (ES) first to maintain length consistency
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
-      if (!updated.home) updated.home = {};
-      if (!updated.home[section]) updated.home[section] = {};
-      if (!updated.home[section][arrayField]) {
-        updated.home[section][arrayField] = [];
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const parentObj = isRootSec ? updated : updated.home;
+
+      if (!isRootSec && !updated.home) updated.home = {};
+      if (!parentObj[section]) parentObj[section] = {};
+      if (!parentObj[section][arrayField]) {
+        parentObj[section][arrayField] = [];
       }
-      updated.home[section][arrayField].push(JSON.parse(JSON.stringify(template)));
+      parentObj[section][arrayField].push(JSON.parse(JSON.stringify(template)));
       return updated;
     });
   };
@@ -120,14 +127,18 @@ export default function SiteContentTab() {
     // Removing array item modifies base structure and deletes index from all translations
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
-      if (updated.home?.[section]?.[arrayField]) {
-        updated.home[section][arrayField].splice(index, 1);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const parentObj = isRootSec ? updated : updated.home;
+
+      if (parentObj?.[section]?.[arrayField]) {
+        parentObj[section][arrayField].splice(index, 1);
       }
       // Remove from translations as well
       if (updated.translations) {
         Object.keys(updated.translations).forEach(lang => {
-          if (updated.translations[lang]?.home?.[section]?.[arrayField]) {
-            updated.translations[lang].home[section][arrayField].splice(index, 1);
+          const tParentObj = isRootSec ? updated.translations[lang] : updated.translations[lang]?.home;
+          if (tParentObj?.[section]?.[arrayField]) {
+            tParentObj[section][arrayField].splice(index, 1);
           }
         });
       }
@@ -149,8 +160,8 @@ export default function SiteContentTab() {
       root = content.translations?.[activeLang];
     }
     if (!root) return '';
-    const isGlobalSec = section === 'header' || section === 'footer';
-    let obj = isGlobalSec ? root[section] : root.home?.[section];
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    let obj = isRootSec ? root[section] : root.home?.[section];
     if (!obj) return '';
     let current = obj;
     for (let i = 0; i < parts.length; i++) {
@@ -162,8 +173,8 @@ export default function SiteContentTab() {
 
   const getBaseValue = (section: string, field: string): string => {
     const parts = field.split('.');
-    const isGlobalSec = section === 'header' || section === 'footer';
-    let obj = isGlobalSec ? content[section] : content.home?.[section];
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    let obj = isRootSec ? content[section] : content.home?.[section];
     if (!obj) return '';
     let current = obj;
     for (let i = 0; i < parts.length; i++) {
@@ -178,10 +189,13 @@ export default function SiteContentTab() {
     if (activeLang !== 'es') {
       root = content.translations?.[activeLang];
     }
-    if (!root || !root.home || !root.home[section] || !root.home[section][arrayField] || !root.home[section][arrayField][index]) {
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    const parentObj = isRootSec ? root : root?.home;
+
+    if (!parentObj || !parentObj[section] || !parentObj[section][arrayField] || !parentObj[section][arrayField][index]) {
       return '';
     }
-    const item = root.home[section][arrayField][index];
+    const item = parentObj[section][arrayField][index];
     if (field === '') {
       return typeof item === 'string' ? item : '';
     }
@@ -196,10 +210,13 @@ export default function SiteContentTab() {
   };
 
   const getBaseArrayValue = (section: string, arrayField: string, index: number, field: string): string => {
-    if (!content.home || !content.home[section] || !content.home[section][arrayField] || !content.home[section][arrayField][index]) {
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    const parentObj = isRootSec ? content : content.home;
+
+    if (!parentObj || !parentObj[section] || !parentObj[section][arrayField] || !parentObj[section][arrayField][index]) {
       return '';
     }
-    const item = content.home[section][arrayField][index];
+    const item = parentObj[section][arrayField][index];
     if (field === '') {
       return typeof item === 'string' ? item : '';
     }
@@ -301,6 +318,10 @@ export default function SiteContentTab() {
     { id: 'newsletter', label: 'Newsletter' },
     { id: 'header', label: 'Header / Topo' },
     { id: 'footer', label: 'Footer / Rodapé' },
+    { id: 'marcas', label: 'Página: Marcas' },
+    { id: 'comoFunciona', label: 'Página: Como Funciona' },
+    { id: 'contacto', label: 'Página: Contacto' },
+    { id: 'envios', label: 'Página: Envíos' },
   ];
 
   // Base lengths for loop consistency in translation tab
@@ -667,6 +688,75 @@ export default function SiteContentTab() {
             <div className="border-t border-white/5 pt-4">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Colunas do Footer</h4>
               <p className="text-[10px] text-muted-foreground">As colunas, links e ícones do footer são editáveis através do código fonte em src/components/Footer.tsx para maior flexibilidade.</p>
+            </div>
+          </div>
+        )}
+
+        {/* MARCAS */}
+        {activeSection === 'marcas' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Marcas</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título do Hero', 'marcas', 'hero.title')}
+              {renderInput('Subtítulo do Hero', 'marcas', 'hero.subtitle')}
+              {renderInput('Texto do Botão Hero', 'marcas', 'hero.buttonText')}
+            </div>
+          </div>
+        )}
+
+        {/* COMO FUNCIONA */}
+        {activeSection === 'comoFunciona' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Como Funciona</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título do Hero', 'comoFunciona', 'hero.title')}
+              {renderInput('Subtítulo do Hero', 'comoFunciona', 'hero.subtitle')}
+              {renderInput('Título da Qualidade', 'comoFunciona', 'qualityInfo.title')}
+              {renderInput('Subtítulo da Qualidade', 'comoFunciona', 'qualityInfo.subtitle')}
+              {renderInput('Título de Pagamentos', 'comoFunciona', 'paymentsInfo.title')}
+              {renderInput('Subtítulo de Pagamentos', 'comoFunciona', 'paymentsInfo.subtitle')}
+              {renderInput('Título de Envíos', 'comoFunciona', 'shippingInfo.title')}
+              {renderInput('Subtítulo de Envíos', 'comoFunciona', 'shippingInfo.subtitle')}
+            </div>
+          </div>
+        )}
+
+        {/* CONTACTO */}
+        {activeSection === 'contacto' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Contacto</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título do Hero', 'contacto', 'hero.title', { rows: 2 })}
+              {renderInput('Subtítulo do Hero', 'contacto', 'hero.subtitle', { rows: 3 })}
+              {renderInput('Título de FAQ', 'contacto', 'faq.title')}
+            </div>
+            
+            <div className="border-t border-white/5 pt-4">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Informações de Contato</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Número do WhatsApp', 'contacto', 'contactMethods.whatsapp.value')}
+                {renderInput('Horário de Atendimento', 'contacto', 'contactMethods.whatsapp.time')}
+                {renderInput('Endereço de E-mail', 'contacto', 'contactMethods.email.value')}
+                {renderInput('Endereço Físico', 'contacto', 'contactMethods.address.value')}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ENVIOS */}
+        {activeSection === 'envios' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Envíos</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título do Hero', 'envios', 'hero.title')}
+              {renderInput('Subtítulo do Hero', 'envios', 'hero.subtitle')}
+              {renderInput('Texto do Hero', 'envios', 'hero.text', { rows: 3 })}
+              {renderInput('Título de Como Funciona', 'envios', 'shipping.title')}
+              {renderInput('Texto Adicional de Como Funciona', 'envios', 'shipping.text')}
+              {renderInput('Título Tabela Internacional', 'envios', 'shipping.tableTitle')}
+              {renderInput('Subtítulo Tabela Internacional', 'envios', 'shipping.tableSubtitle')}
+              {renderInput('Título Pagamentos Seguros', 'envios', 'payments.title')}
+              {renderInput('Subtítulo Pagamentos Seguros', 'envios', 'payments.subtitle')}
             </div>
           </div>
         )}

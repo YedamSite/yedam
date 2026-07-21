@@ -1,4 +1,122 @@
-This page contains the following errors:
-error on line 118 at column 77: EntityRef: expecting ';'
-Below is a rendering of the page up to the first error.
-https://www.cheotnun.com 2026-07-18T20:10:52.675Z daily 1.0 https://www.cheotnun.com/tienda 2026-07-18T20:10:52.675Z daily 0.9 https://www.cheotnun.com/rutinas 2026-07-18T20:10:52.675Z monthly 0.8 https://www.cheotnun.com/blog 2026-07-18T20:10:52.675Z weekly 0.8 https://www.cheotnun.com/experiencias 2026-07-18T20:10:52.675Z monthly 0.8 https://www.cheotnun.com/ayuda/envios 2026-07-18T20:10:52.675Z monthly 0.8 https://www.cheotnun.com/ayuda/devoluciones 2026-07-18T20:10:52.675Z monthly 0.8 https://www.cheotnun.com/politica-de-privacidad 2026-07-18T20:10:52.675Z monthly 0.8 https://www.cheotnun.com/terminos 2026-07-18T20:10:52.675Z monthly 0.8 https://www.cheotnun.com/tienda/produto/1025-dokdo-cleanser 2026-07-18T20:10:52.675Z weekly 0.7 https://www.cheotnun.com/tienda/produto/glow-deep-serum-rice-alpha-arbutin 2026-07-18T20:10:52.675Z weekly 0.7 https://www.cheotnun.com/tienda/produto/advanced-snail-96-mucin-power-essence 2026-07-18T20:10:52.675Z weekly 0.7 https://www.cheotnun.com/tienda/produto/heartleaf-77-soothing-toner 2026-07-18T20:10:52.675Z weekly 0.7 https://www.cheotnun.com/tienda/produto/madagascar-centella-ampoule 2026-07-18T20:10:52.675Z weekly 0.7 https://www.cheotnun.com/blog/5-secretos-skincare-coreano 2026-07-08T00:00:00.000Z weekly 0.8 https://www.cheotnun.com/blog/como-aplicar-dokdo-cleanser-round-lab 2026-07-09T00:00:00.000Z weekly 0.8 https://www.cheotnun.com/rutinas/rutina-hidratante-calmante 2026-07-18T20:10:52.675Z monthly 0.7 https://www.cheotnun.com/images/cheotnun-k-beauty-logo-oficial.webp 2026-07-18T20:10:52.675Z monthly 0.5 https://www.cheotnun.com/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp 2026-07-18T20:10:52.675Z monthly 0.5
+O problema está aqui:
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+
+e depois:
+
+echo '<urlset ...>';
+
+Você está enviando o XML manualmente com vários echo.
+
+Isso por si só não é um problema, porém o erro que você mostrou anteriormente indica que alguma coisa foi enviada antes do XML, ou o XML está sendo montado de forma incorreta.
+
+O maior suspeito é este trecho
+$xml = new XMLWriter();
+
+Mas ele nunca é utilizado.
+
+Você cria o XMLWriter, porém continua usando apenas:
+
+echo ...
+
+Ou seja, alguém começou a migrar para XMLWriter e abandonou no meio.
+
+Outro problema
+
+Você faz:
+
+header('Content-Type: application/xml; charset=UTF-8');
+
+Mas não faz:
+
+ob_clean();
+flush();
+
+Se existir:
+
+um espaço antes do <?php
+um BOM UTF-8
+qualquer echo
+qualquer var_dump
+qualquer warning
+
+o XML quebra.
+
+Outro problema importante
+
+Vi isto:
+
+echo '</urlset>';
+
+Depois não existe:
+
+exit;
+
+O correto é:
+
+echo '</urlset>';
+exit;
+
+Caso contrário o framework pode continuar renderizando alguma View.
+
+O que MAIS me chamou atenção
+
+Logo no começo:
+
+$xml = new XMLWriter();
+
+Depois ele nunca faz:
+
+$xml->openMemory();
+
+nem
+
+$xml->startDocument();
+
+nem
+
+$xml->startElement();
+
+Isso mostra que o código ficou pela metade.
+
+Minha recomendação
+
+Não use echo para gerar XML.
+
+Use somente XMLWriter.
+
+Exemplo:
+
+$xml = new XMLWriter();
+$xml->openMemory();
+
+$xml->startDocument('1.0', 'UTF-8');
+
+$xml->startElement('urlset');
+$xml->writeAttribute('xmlns','http://www.sitemaps.org/schemas/sitemap/0.9');
+
+foreach ($urls as $url){
+
+    $xml->startElement('url');
+
+    $xml->writeElement('loc',$url['loc']);
+    $xml->writeElement('lastmod',$url['lastmod']);
+    $xml->writeElement('changefreq',$url['changefreq']);
+    $xml->writeElement('priority',$url['priority']);
+
+    $xml->endElement();
+
+}
+
+$xml->endElement();
+
+header('Content-Type: application/xml; charset=UTF-8');
+
+echo $xml->outputMemory();
+
+exit;
+
+É muito mais seguro e elimina problemas de formatação.
+
+Pela saída que você mostrou anteriormente ("https://muvoltris.com.br/pt-BR2026-07-20..."), eu diria que há 95% de chance de o problema estar em outro ponto do método sitemapLocale(), principalmente dentro do foreach que imprime as URLs. Esse trecho não aparece na captura que você enviou.
+
+Se você me enviar o método sitemapLocale() completo (ou o arquivo SitemapController.php inteiro), consigo apontar exatamente a linha responsável pelo XML estar sendo gerado dessa forma.

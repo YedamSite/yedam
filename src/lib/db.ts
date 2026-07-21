@@ -287,6 +287,7 @@ const DEFAULT_STATE: DbState = {
             { label: 'Todos los productos', href: '/tienda' },
             { label: 'Cuidado Facial', href: '/tienda?category=cuidado-facial' },
             { label: 'Protección Solar', href: '/tienda?category=proteccion-solar' },
+            { label: 'Cómo funciona', href: '/como-funciona' },
             { label: 'Rutinas Recomendadas', href: '/rutinas' },
             { label: 'Blog', href: '/blog' }
           ]
@@ -296,6 +297,7 @@ const DEFAULT_STATE: DbState = {
           links: [
             { label: 'Envíos y Entregas', href: '/ayuda/envios' },
             { label: 'Cambios y Devoluciones', href: '/ayuda/devoluciones' },
+            { label: 'Contacto', href: '/contacto' },
             { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
             { label: 'Términos y Condiciones', href: '/terminos' }
           ]
@@ -309,6 +311,103 @@ const DEFAULT_STATE: DbState = {
           ]
         }
       ]
+          ]
+        }
+      ],
+      marcas: {
+        hero: {
+          title: 'Marcas Coreanas',
+          subtitle: 'Trabajamos con las mejores marcas de Corea del Sur para ofrecerte lo mejor en cuidado de la piel.',
+          image: '/images/marcas-coreanas.webp'
+        },
+        features: [
+          { title: 'Marcas auténticas', text: 'Productos 100% originales comprados directamente en Corea del Sur.', icon: 'Award' },
+          { title: 'Innovación y calidad', text: 'Marcas reconocidas por su tecnología avanzada y resultados comprobados.', icon: 'Beaker' },
+          { title: 'Belleza consciente', text: 'Fórmulas seguras, ingredientes eficaces y respeto por tu piel y el medio ambiente.', icon: 'Heart' }
+        ],
+        whyChooseUs: {
+          title: '¿Por qué elegir Cheotnun?',
+          items: [
+            { title: 'Productos 100% originales', text: 'Garantizamos autenticidad en cada producto.', icon: 'ShieldCheck' },
+            { title: 'Compra directa en Corea', text: 'Seleccionamos y compramos personalmente para ti.', icon: 'ShoppingBag' },
+            { title: 'Atención personalizada', text: 'Te acompañamos en todo el proceso de compra.', icon: 'Headset' },
+            { title: 'Selección exclusiva', text: 'Productos elegidos con criterio y mucho cariño.', icon: 'Gift' }
+          ],
+          conclusionTitle: 'Seleccionamos con amor, entregamos con confianza.',
+          conclusionText: 'Nuestro compromiso es que vivas la mejor experiencia de K-Beauty, desde Corea hasta ti.',
+          image: '/images/why-choose-us.webp'
+        }
+      },
+      comoFunciona: {
+        hero: {
+          title: 'Cómo funciona',
+          subtitle: 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, práctica y confiable.',
+          image: '/images/como-funciona-hero.webp'
+        },
+        steps: [
+          { number: '01', title: 'Eliges\ntus productos', text: 'Explora nuestra tienda\ny selecciona tus favoritos.' },
+          { number: '02', title: 'Procesamos\ntu pedido', text: 'Preparamos todo con\nmucho cuidado desde Corea.' },
+          { number: '03', title: 'Enviamos\na tu país', text: 'Envío internacional\nseguro y con seguimiento.' },
+          { number: '04', title: 'Recibes\ny disfrutas', text: 'Tu rutina de K-Beauty\nlista para usar.' }
+        ],
+        paymentsInfo: {
+          title: 'Formas de pago',
+          subtitle: 'Seguridad y flexibilidad para ti.',
+          logos: ['Visa', 'Mastercard', 'Amex', 'PayPal']
+        },
+        shippingInfo: {
+          title: 'Envíos internacionales',
+          subtitle: 'Llegamos a toda América Latina.',
+          items: [
+            { title: 'Envíos seguros y rastreables', text: 'Trabajamos con transportadoras confiables para que tu pedido llegue hasta ti.' },
+            { title: 'Tiempo estimado de entrega', text: 'De 7 a 20 días hábiles, dependiendo de tu país.' },
+            { title: 'Te mantenemos informada', text: 'Recibirás tu número de seguimiento para acompañar cada paso de tu pedido.' }
+          ]
+        }
+      },
+      contacto: {
+        hero: {
+          title: 'Estamos aquí\npara ti',
+          subtitle: '¿Tienes preguntas, necesitas ayuda con tu pedido o quieres más información sobre nuestros productos? Nuestro equipo está listo para ayudarte.'
+        },
+        contactMethods: {
+          title: 'Formas de contacto',
+          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00' },
+          email: { label: 'Envíanos un correo', value: 'hola@cheotnun.com', time: 'Respuesta en menos de 24h' },
+          address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur' }
+        },
+        faq: {
+          title: '¿En qué podemos ayudarte?',
+          subtitle: 'Preguntas frecuentes rápidas',
+          buttonText: 'VER TODAS LAS PREGUNTAS FRECUENTES'
+        }
+      },
+      envios: {
+        hero: {
+          title: 'Envíos y Pagos',
+          subtitle: 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.',
+          text: 'Realizamos envíos internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada país destino, para que tu experiencia sea segura y sin complicaciones.'
+        },
+        features: [
+          { text: 'Envíos seguros a\ntoda América Latina y Europa', icon: 'PlaneTakeoff' },
+          { text: 'Pagos protegidos\ny múltiples opciones', icon: 'ShieldCheck' }
+        ],
+        shipping: {
+          title: 'Cómo funciona el envío',
+          text: 'Te proporcionamos un número de seguimiento para que puedas rastrear tu pedido en todo momento.',
+          tableTitle: 'Envíos internacionales',
+          tableSubtitle: 'Realizamos envíos a todos estos países y más.'
+        },
+        payments: {
+          title: 'Pagos seguros',
+          subtitle: 'Ofrecemos múltiples opciones de pago para tu comodidad.',
+          methods: [
+            { name: 'Tarjetas de crédito', desc: 'Aceptamos Visa, Mastercard, American Express y más.' },
+            { name: 'PayPal', desc: 'Paga de forma rápida y segura con tu cuenta de PayPal.' },
+            { name: 'Transferencia bancaria', desc: 'Disponibles para algunos países. Contáctanos para más información.' }
+          ]
+        }
+      }
     }
   },
   system_settings: {

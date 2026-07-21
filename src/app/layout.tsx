@@ -121,7 +121,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${manrope.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased overflow-x-hidden`}
+      className={`${manrope.variable} ${cormorant.variable} ${playfair.variable} antialiased`}
     >
       <head>
         <meta name="msvalidate.01" content="BE206678019BB93C1BF74506BE356F3D" />
@@ -131,7 +131,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans overflow-x-hidden">
+      <body className="min-h-screen flex flex-col bg-background text-foreground font-sans">
         <ThemeProvider>
           <LanguageProvider>
             {children}
