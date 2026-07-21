@@ -201,9 +201,12 @@ export default function EnviosYPagosPage() {
                           className="object-cover rounded-sm shadow-sm"
                           unoptimized={false}
                         />
-                      ) : (
-                        <country.flagIcon className="w-6 h-6 text-[#1c2838]" strokeWidth={1.5} />
-                      )}
+                      ) : country.flagIcon ? (
+                        (() => {
+                          const Icon = country.flagIcon;
+                          return <Icon className="w-6 h-6 text-[#1c2838]" strokeWidth={1.5} />;
+                        })()
+                      ) : null}
                     </div>
                     <div>
                       <h4 className="text-[11px] font-bold text-[#1c2838] mb-1 whitespace-pre-line">{t(country.name)}</h4>
@@ -241,9 +244,12 @@ export default function EnviosYPagosPage() {
                             height={16}
                             className="object-cover rounded-sm shadow-sm"
                           />
-                        ) : (
-                          <row.flagIcon className="w-5 h-5 text-[#1c2838]/80" strokeWidth={1.5} />
-                        )}
+                        ) : row.flagIcon ? (
+                          (() => {
+                            const Icon = row.flagIcon;
+                            return <Icon className="w-5 h-5 text-[#1c2838]/80" strokeWidth={1.5} />;
+                          })()
+                        ) : null}
                       </div>
                       <span className="whitespace-pre-line leading-tight">{t(row.name)}</span>
                     </div>

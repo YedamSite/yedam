@@ -310,9 +310,6 @@ const DEFAULT_STATE: DbState = {
             { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
           ]
         }
-      ]
-          ]
-        }
       ],
       marcas: {
         hero: {

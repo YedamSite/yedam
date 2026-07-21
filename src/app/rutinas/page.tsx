@@ -17,7 +17,8 @@ import {
   FlaskConical,
   Target,
   Sparkle,
-  Atom
+  Atom,
+  Mail
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
