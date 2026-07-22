@@ -24,6 +24,8 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/context/LanguageContext';
+import { db } from '@/lib/db';
+import { useState, useEffect } from 'react';
 
 const BranchBlossom = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 200 200" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +63,16 @@ const BranchBlossom = ({ className }: { className?: string }) => (
 );
 
 export default function RutinasPage() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const [content, setContent] = useState<any>(null);
+
+  useEffect(() => {
+    const siteContent = db.get('site_content');
+    const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
+    setContent(translatedContent.rutinasPage || null);
+  }, [locale]);
+
+  const c = content || db.get('site_content')?.rutinasPage || {};
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
@@ -72,16 +83,16 @@ export default function RutinasPage() {
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 lg:py-0 min-h-[calc(100vh-80px)] grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl">
             <h1 className="text-6xl md:text-7xl font-heading font-light text-white mb-6">
-              {t('Rutinas')}
+              {t(c?.hero?.title || 'Rutinas')}
             </h1>
             <h2 className="text-2xl md:text-3xl text-white mb-6 font-light">
-              {t('Cada piel es única, cada rutina también.')}
-            </h2>
+              {t(c?.hero?.subtitle || 'Cada piel es única, cada rutina también.')
+            }</h2>
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-10">
               {t('Encuentra la rutina ideal para tu tipo de piel y objetivos. Productos auténticos, combinados de forma inteligente para resultados visibles.')}
             </p>
             <Link href="/tienda" className="bg-accent hover:bg-white text-background font-bold text-sm tracking-widest px-8 py-4 rounded-md uppercase flex items-center gap-3 transition-colors inline-flex w-fit">
-              {t('ENCONTRAR MI RUTINA')} <ArrowRight className="w-4 h-4" />
+              {t(c?.hero?.buttonText || 'ENCONTRAR MI RUTINA')} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           
@@ -89,7 +100,7 @@ export default function RutinasPage() {
             {/* The arched/circular image style */}
             <div className="relative w-full md:w-4/5 h-full rounded-tl-full rounded-bl-full overflow-hidden border-4 border-white/5 shadow-2xl">
               <Image 
-                src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1600" 
+                src={c?.hero?.image || "https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1600"} 
                 alt="Skincare Routine Products"
                 fill
                 className="object-cover object-center"

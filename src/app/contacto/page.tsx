@@ -108,7 +108,7 @@ export default function ContactoPage() {
           <div className="relative w-full h-[40vh] min-h-[350px] max-h-[500px]">
              <div className="absolute inset-0 right-0 h-full w-full rounded-l-full overflow-hidden border border-white/10 shadow-2xl">
                 <Image 
-                  src="https://images.unsplash.com/photo-1629367494173-c78a56567877?q=80&w=1200" 
+                  src={c?.hero?.image || "https://images.unsplash.com/photo-1629367494173-c78a56567877?q=80&w=1200"} 
                   alt="Contacto"
                   fill
                   className="object-cover object-center"

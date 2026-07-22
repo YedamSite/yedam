@@ -21,6 +21,8 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/context/LanguageContext';
+import { db } from '@/lib/db';
+import { useState, useEffect } from 'react';
 
 const BranchBlossom = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 200 200" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +60,16 @@ const BranchBlossom = ({ className }: { className?: string }) => (
 );
 
 export default function ExperienciasPage() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const [content, setContent] = useState<any>(null);
+
+  useEffect(() => {
+    const siteContent = db.get('site_content');
+    const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
+    setContent(translatedContent.experienciasPage || null);
+  }, [locale]);
+
+  const c = content || db.get('site_content')?.experienciasPage || {};
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
@@ -69,13 +80,13 @@ export default function ExperienciasPage() {
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 lg:py-0 min-h-[calc(100vh-80px)] grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl relative">
             <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
-              {t('Experiencias Yedam')}
+              {t(c?.hero?.title || 'Experiencias Yedam')}
             </h1>
             <h2 className="text-xl md:text-2xl text-accent mb-6 font-light">
-              {t('Mucho más que productos, vivencias que transforman.')}
+              {t(c?.hero?.subtitle || 'Mucho más que productos, vivencias que transforman.')}
             </h2>
             <p className="text-muted-foreground text-sm leading-relaxed mb-10 max-w-sm">
-              {t('Conecta con la cultura coreana, descubre nuevos rituales de belleza y vive momentos únicos que te inspirarán.')}
+              {t(c?.hero?.buttonText || 'Conecta con la cultura coreana, descubre nuevos rituales de belleza y vive momentos únicos que te inspirarán.')}
             </p>
             {/* Floral graphic */}
             <div className="mt-8 -ml-8">
@@ -86,7 +97,7 @@ export default function ExperienciasPage() {
           <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[75vh] min-h-[400px] max-h-[700px] flex justify-end">
             <div className="relative w-full md:w-[85%] h-full rounded-tl-[10rem] rounded-bl-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
               <Image 
-                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1600" 
+                src={c?.hero?.image || "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1600"} 
                 alt="Experiencias Yedam"
                 fill
                 className="object-cover object-center"

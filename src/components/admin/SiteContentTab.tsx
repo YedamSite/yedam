@@ -322,6 +322,8 @@ export default function SiteContentTab() {
     { id: 'comoFunciona', label: 'Página: Como Funciona' },
     { id: 'contacto', label: 'Página: Contacto' },
     { id: 'envios', label: 'Página: Envíos' },
+    { id: 'rutinasPage', label: 'Página: Rutinas' },
+    { id: 'experienciasPage', label: 'Página: Experiencias' },
   ];
 
   // Base lengths for loop consistency in translation tab
@@ -701,6 +703,14 @@ export default function SiteContentTab() {
               {renderInput('Subtítulo do Hero', 'marcas', 'hero.subtitle')}
               {renderInput('Texto do Botão Hero', 'marcas', 'hero.buttonText')}
             </div>
+            {activeLang === 'es' && (
+              <ImageUpload
+                currentUrl={getBaseValue('marcas', 'hero.image')}
+                onUrlChange={v => handleChange('marcas', 'hero.image', v)}
+                folder="marcas"
+                label="Imagem Hero (Marcas)"
+              />
+            )}
           </div>
         )}
 
@@ -718,6 +728,14 @@ export default function SiteContentTab() {
               {renderInput('Título de Envíos', 'comoFunciona', 'shippingInfo.title')}
               {renderInput('Subtítulo de Envíos', 'comoFunciona', 'shippingInfo.subtitle')}
             </div>
+            {activeLang === 'es' && (
+              <ImageUpload
+                currentUrl={getBaseValue('comoFunciona', 'hero.image')}
+                onUrlChange={v => handleChange('comoFunciona', 'hero.image', v)}
+                folder="como-funciona"
+                label="Imagem Hero (Como Funciona)"
+              />
+            )}
           </div>
         )}
 
@@ -730,6 +748,14 @@ export default function SiteContentTab() {
               {renderInput('Subtítulo do Hero', 'contacto', 'hero.subtitle', { rows: 3 })}
               {renderInput('Título de FAQ', 'contacto', 'faq.title')}
             </div>
+            {activeLang === 'es' && (
+              <ImageUpload
+                currentUrl={getBaseValue('contacto', 'hero.image')}
+                onUrlChange={v => handleChange('contacto', 'hero.image', v)}
+                folder="contacto"
+                label="Imagem Hero (Contacto)"
+              />
+            )}
             
             <div className="border-t border-white/5 pt-4">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Informações de Contato</h4>
@@ -758,6 +784,54 @@ export default function SiteContentTab() {
               {renderInput('Título Pagamentos Seguros', 'envios', 'payments.title')}
               {renderInput('Subtítulo Pagamentos Seguros', 'envios', 'payments.subtitle')}
             </div>
+            {activeLang === 'es' && (
+              <ImageUpload
+                currentUrl={getBaseValue('envios', 'hero.image')}
+                onUrlChange={v => handleChange('envios', 'hero.image', v)}
+                folder="envios"
+                label="Imagem Hero (Envíos)"
+              />
+            )}
+          </div>
+        )}
+
+        {/* RUTINAS PAGE */}
+        {activeSection === 'rutinasPage' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Rutinas</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título do Hero', 'rutinasPage', 'hero.title')}
+              {renderInput('Subtítulo do Hero', 'rutinasPage', 'hero.subtitle')}
+              {renderInput('Texto do Botão Hero', 'rutinasPage', 'hero.buttonText')}
+            </div>
+            {activeLang === 'es' && (
+              <ImageUpload
+                currentUrl={getBaseValue('rutinasPage', 'hero.image')}
+                onUrlChange={v => handleChange('rutinasPage', 'hero.image', v)}
+                folder="rutinas"
+                label="Imagem Hero (Rutinas)"
+              />
+            )}
+          </div>
+        )}
+
+        {/* EXPERIENCIAS PAGE */}
+        {activeSection === 'experienciasPage' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Experiencias</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título do Hero', 'experienciasPage', 'hero.title')}
+              {renderInput('Subtítulo do Hero', 'experienciasPage', 'hero.subtitle')}
+              {renderInput('Texto do Botão Hero', 'experienciasPage', 'hero.buttonText')}
+            </div>
+            {activeLang === 'es' && (
+              <ImageUpload
+                currentUrl={getBaseValue('experienciasPage', 'hero.image')}
+                onUrlChange={v => handleChange('experienciasPage', 'hero.image', v)}
+                folder="experiencias"
+                label="Imagem Hero (Experiencias)"
+              />
+            )}
           </div>
         )}
       </div>
