@@ -774,6 +774,8 @@ export const additionalTranslations = {
     'Selecciona tu tipo de piel o tu objetivo principal.': 'Selecione seu tipo de pele ou seu objetivo principal.',
     'Rutina completa para cuidar tu piel en cada paso del día.': 'Rotina completa para cuidar da sua pele em cada momento do dia.',
     'VER RUTINA': 'VER ROTINA',
+    'Nuestro equipo te ayuda a encontrar la rutina perfecta para tu piel.': 'Nossa equipe ajuda você a encontrar a rotina perfeita para a sua pele.',
+    'HABLAR CON UN ASESOR': 'FALAR COM UM ATENDENTE',
 },
   en: {
     // Header
@@ -1548,5 +1550,7 @@ export const additionalTranslations = {
     'Selecciona tu tipo de piel o tu objetivo principal.': 'Select your skin type or your main goal.',
     'Rutina completa para cuidar tu piel en cada paso del día.': 'Complete routine to care for your skin at every step of the day.',
     'VER RUTINA': 'VIEW ROUTINE',
+    'Nuestro equipo te ayuda a encontrar la rutina perfecta para tu piel.': 'Our team helps you find the perfect routine for your skin.',
+    'HABLAR CON UN ASESOR': 'SPEAK TO AN ADVISOR',
 },
 }

@@ -251,8 +251,8 @@ export default function RutinasPage() {
                  <p className="text-[11px] text-[#1c2838]/70 mb-6 leading-relaxed">
                    {t('Nuestro equipo te ayuda a encontrar la rutina perfecta para tu piel.')}
                  </p>
-                 <Link href="/tienda" className="border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#EAE4DC] font-bold text-[9px] tracking-widest px-6 py-3 rounded uppercase flex items-center justify-center gap-2 transition-colors w-fit inline-block text-center">
-                    {t('HACER MI DIAGNÓSTICO')} <ArrowRight className="w-3 h-3" />
+                 <Link href="/contacto" className="border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#EAE4DC] font-bold text-[9px] tracking-widest px-6 py-3 rounded uppercase flex items-center justify-center gap-2 transition-colors w-fit inline-block text-center">
+                    {t('HABLAR CON UN ASESOR')} <ArrowRight className="w-3 h-3" />
                  </Link>
                </div>
                <div className="relative w-full sm:w-1/2 h-48 sm:h-full min-h-[250px]">
