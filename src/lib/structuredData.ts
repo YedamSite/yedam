@@ -36,7 +36,7 @@ export function generateOrganizationSchema() {
     },
     "sameAs": [
       "https://www.instagram.com/cheotnun.kbeauty",
-      "https://www.youtube.com/cheotnun.kbeauty",
+      "https://www.youtube.com/@enquantoaconteceoficial/featured",
       "https://www.facebook.com/cheotnun.kbeauty",
       "https://www.tiktok.com/@cheotnun.kbeauty"
     ],

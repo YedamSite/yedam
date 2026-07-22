@@ -278,7 +278,7 @@ const DEFAULT_STATE: DbState = {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
       social: {
         instagram: 'https://instagram.com/cheotnun.kbeauty',
-        youtube: 'https://youtube.com/cheotnun.kbeauty'
+        youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured'
       },
       columns: [
         {
@@ -434,7 +434,7 @@ const DEFAULT_STATE: DbState = {
       address: 'Calle Gran Vía 12, Madrid, España',
       social: {
         instagram: 'https://instagram.com/cheotnun.kbeauty',
-        youtube: 'https://youtube.com/cheotnun.kbeauty'
+        youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured'
       }
     },
     seo: {
