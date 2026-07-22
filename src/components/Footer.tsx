@@ -44,6 +44,13 @@ export default function Footer() {
   const description = content?.description || '';
   const social = content?.social || {};
   const columns = content?.columns || [];
+  
+  // Ensure Contacto is present in the help column just in case it's missing from DB
+  const renderColumns = JSON.parse(JSON.stringify(columns));
+  const helpColumn = renderColumns.find((c: any) => c.title === 'Ayuda & Políticas' || c.title === 'Ayuda');
+  if (helpColumn && !helpColumn.links.some((l: any) => l.href === '/contacto')) {
+    helpColumn.links.splice(2, 0, { label: 'Contacto', href: '/contacto' });
+  }
 
   return (
     <footer className="w-full border-t border-white/10 bg-secondary text-foreground py-16 px-4 md:px-8 mt-auto">
@@ -88,7 +95,7 @@ export default function Footer() {
         </div>
 
         {/* Dynamic Columns */}
-        {columns.map((col: any, idx: number) => (
+        {renderColumns.map((col: any, idx: number) => (
           <div key={idx} className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
             <h3 className="text-xs font-bold uppercase tracking-wider text-accent">{t(col.title)}</h3>
             <ul className="flex flex-col gap-2.5 text-xs text-muted-foreground items-center md:items-start">

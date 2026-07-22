@@ -152,7 +152,7 @@ export default function Header() {
   const navItems = [
     { label: t('Inicio'), href: '/' },
     { label: t('Tienda'), href: '/tienda' },
-    { label: t('Categorías'), href: '/tienda?category=cuidado-facial' },
+    { label: t('Categorías'), href: '/tienda' },
     { label: t('Rutinas'), href: '/rutinas' },
     { label: t('Marcas'), href: '/marcas' },
     { label: t('Experiencias'), href: '/experiencias' }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star, Heart, ShoppingCart, Search, ArrowRight } from 'lucide-react';
@@ -12,9 +12,14 @@ import { authService } from '@/lib/supabaseAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSearchParams } from 'next/navigation';
 
-export default function TiendaPage() {
+function TiendaContent() {
   const { t, locale } = useLanguage();
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category');
+  const searchParam = searchParams.get('search');
+
   const [products, setProducts] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -34,7 +39,19 @@ export default function TiendaPage() {
     setBrands(rawBrands.map((b: any) => db.getTranslatedRecord(b, locale)));
 
     const rawCategories = db.get('categories') || [];
-    setCategories(rawCategories.map((c: any) => db.getTranslatedRecord(c, locale)));
+    const translatedCategories = rawCategories.map((c: any) => db.getTranslatedRecord(c, locale));
+    setCategories(translatedCategories);
+
+    if (categoryParam) {
+      const cat = translatedCategories.find((c: any) => c.slug === categoryParam);
+      if (cat) setSelectedCategory(cat.id);
+    } else {
+      setSelectedCategory('ALL');
+    }
+
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
 
     if (typeof window !== 'undefined') {
       const savedFavs = localStorage.getItem('cheotnun_favorites');
@@ -44,7 +61,7 @@ export default function TiendaPage() {
 
   useEffect(() => {
     loadData();
-  }, [locale]);
+  }, [locale, categoryParam, searchParam]);
 
   const handleToggleFavorite = async (productId: string) => {
     const user = authService.getCurrentUser();
@@ -265,5 +282,17 @@ export default function TiendaPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function TiendaPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen bg-background items-center justify-center text-white">
+        Cargando tienda...
+      </div>
+    }>
+      <TiendaContent />
+    </Suspense>
   );
 }
