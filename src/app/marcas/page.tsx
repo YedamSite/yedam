@@ -232,9 +232,9 @@ export default function MarcasPage() {
             ))}
           </div>
 
-          <button className="mt-12 px-8 py-3 rounded-full border border-white/20 text-xs font-bold tracking-widest uppercase hover:bg-white/5 transition-colors">
+          <a href="https://www.instagram.com/lacheotnun" target="_blank" rel="noopener noreferrer" className="mt-12 px-8 py-3 rounded-full border border-white/20 text-xs font-bold tracking-widest uppercase hover:bg-white/5 transition-colors">
             {t('VER MÁS OPINIONES')}
-          </button>
+          </a>
         </section>
 
         {/* 5. TRUST BADGES BAR */}
