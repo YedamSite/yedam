@@ -376,21 +376,23 @@ export default function Header() {
                   <User strokeWidth={1.8} className="h-3.5 w-3.5 text-accent" />
                   <span className="max-w-[100px] truncate">{currentUser.name}</span>
                 </button>
-                <div className="absolute right-0 top-full mt-1.5 w-52 rounded-md border border-white/10 bg-secondary p-1 shadow-2xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150">
-                  <Link
-                    href={currentUser.role === 'super_admin' || currentUser.role === 'admin' ? '/dashboard/admin' : '/dashboard/cliente'}
-                    className="w-full text-left px-2.5 py-2 text-xs rounded hover:bg-white/5 hover:text-accent transition-colors flex items-center gap-2 text-foreground/80"
-                  >
-                    <LayoutDashboard className="h-4 w-4 text-accent" />
-                    <span>{t('Mi Panel')}</span>
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-2.5 py-2 text-xs rounded hover:bg-red-500/5 hover:text-red-400 transition-colors flex items-center gap-2 text-red-500 border-t border-white/5 mt-1"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>{t('Cerrar Sesión')}</span>
-                  </button>
+                <div className="absolute right-0 top-full pt-1.5 w-52 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 z-50">
+                  <div className="rounded-md border border-white/10 bg-secondary p-1 shadow-2xl">
+                    <Link
+                      href={currentUser.role === 'super_admin' || currentUser.role === 'admin' ? '/dashboard/admin' : '/dashboard/cliente'}
+                      className="w-full text-left px-2.5 py-2 text-xs rounded hover:bg-white/5 hover:text-accent transition-colors flex items-center gap-2 text-foreground/80"
+                    >
+                      <LayoutDashboard className="h-4 w-4 text-accent" />
+                      <span>{t('Mi Panel')}</span>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-2.5 py-2 text-xs rounded hover:bg-red-500/5 hover:text-red-400 transition-colors flex items-center gap-2 text-red-500 border-t border-white/5 mt-1"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>{t('Cerrar Sesión')}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (
