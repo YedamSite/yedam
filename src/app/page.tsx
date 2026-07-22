@@ -384,9 +384,19 @@ export default function Home() {
                         db.save('newsletter_subscribers', subs);
                         // Salvar também no Supabase (async, não bloqueia a UI)
                         saveNewsletterSubscriberToSupabase(newsletterEmail, '', 'homepage')
-                          .then(result => {
+                          .then(async result => {
                             if (result.success) {
                               console.log('✓ Newsletter subscriber saved to Supabase');
+                              // Enviar email de notificação
+                              try {
+                                await fetch('/api/email/newsletter', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ email: newsletterEmail })
+                                });
+                              } catch (e) {
+                                console.error('Failed to notify admin:', e);
+                              }
                             } else {
                               console.error('✗ Failed to save to Supabase:', result.error);
                             }

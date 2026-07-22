@@ -194,9 +194,9 @@ export default function ExperienciasPage() {
                    </li>
                  ))}
               </ul>
-              <Link href="/contacto" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
+              <a href="https://www.maeumglobal.com.br" target="_blank" rel="noopener noreferrer" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
                  {t('EXPLORAR VIAJES')} <ArrowRight className="w-3 h-3" />
-              </Link>
+              </a>
             </div>
             
             {/* Right Cards */}

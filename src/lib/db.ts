@@ -306,7 +306,7 @@ const DEFAULT_STATE: DbState = {
           title: 'Atención al Cliente',
           links: [
             { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
-            { label: 'hola@cheotnun.com', href: 'mailto:hola@cheotnun.com', icon: 'Mail' },
+            { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
             { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
           ]
         }
@@ -370,7 +370,7 @@ const DEFAULT_STATE: DbState = {
         contactMethods: {
           title: 'Formas de contacto',
           whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00' },
-          email: { label: 'Envíanos un correo', value: 'hola@cheotnun.com', time: 'Respuesta en menos de 24h' },
+          email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h' },
           address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur' }
         },
         faq: {
@@ -430,7 +430,7 @@ const DEFAULT_STATE: DbState = {
       name: 'Cheotnun K-Beauty S.L.',
       phone: '+34 912 345 678',
       whatsapp: '+34600000000',
-      email: 'hola@cheotnun.com',
+      email: 'sac@cheotnun.com',
       address: 'Calle Gran Vía 12, Madrid, España',
       social: {
         instagram: 'https://instagram.com/cheotnun.kbeauty',

@@ -19,12 +19,14 @@ import {
   Target,
   Sparkle,
   Atom,
-  Mail
+  Mail,
+  CheckCircle2
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useLanguage } from '@/context/LanguageContext';
 import { db } from '@/lib/db';
+import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 import { useState, useEffect } from 'react';
 
 const BranchBlossom = ({ className }: { className?: string }) => (
@@ -65,6 +67,8 @@ const BranchBlossom = ({ className }: { className?: string }) => (
 export default function RutinasPage() {
   const { t, locale } = useLanguage();
   const [content, setContent] = useState<any>(null);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
 
   useEffect(() => {
     const siteContent = db.get('site_content');
@@ -270,16 +274,66 @@ export default function RutinasPage() {
                 {t('Sé la primera en descubrir nuevas rutinas y promociones exclusivas.')}
               </h4>
               
-              <div className="flex relative z-10 h-12 w-full max-w-sm mt-4 border border-white/20 rounded-md overflow-hidden">
-                <input 
-                  type="email" 
-                  placeholder={t('Tu correo electrónico')} 
-                  className="flex-1 bg-white text-[#1c2838] border-none px-4 text-xs focus:outline-none placeholder:text-gray-400"
-                />
-                <button type="submit" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-6 uppercase transition-colors h-full">
-                  {t('SUSCRIBIRME')}
-                </button>
-              </div>
+              {newsletterSubscribed ? (
+                <div className="flex relative z-10 w-full max-w-sm mt-4 bg-accent/10 border border-accent/20 rounded-md p-4 items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-accent" />
+                  <span className="text-xs font-bold text-white uppercase tracking-wider">{t('✓ ¡Te has suscrito con éxito! Recibirás los eventos del blog en tu correo.')}</span>
+                </div>
+              ) : (
+                <form 
+                  onSubmit={(e) => { 
+                    e.preventDefault(); 
+                    if (newsletterEmail) {
+                      const currentSubs = db.get('newsletter_subscribers') || [];
+                      if (!currentSubs.some((s: any) => s.email === newsletterEmail)) {
+                        const subs = [...currentSubs];
+                        subs.push({
+                          id: crypto.randomUUID(),
+                          email: newsletterEmail,
+                          source: 'rutinas',
+                          status: 'active',
+                          created_at: new Date().toISOString().split('T')[0]
+                        });
+                        db.save('newsletter_subscribers', subs);
+                        
+                        saveNewsletterSubscriberToSupabase(newsletterEmail, '', 'rutinas')
+                          .then(async result => {
+                            if (result.success) {
+                              try {
+                                await fetch('/api/email/newsletter', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ email: newsletterEmail })
+                                });
+                              } catch (err) {
+                                console.error('Failed to notify admin:', err);
+                              }
+                            }
+                          });
+                          
+                        if (typeof window !== 'undefined') {
+                          window.dispatchEvent(new Event('storage'));
+                          window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table: 'newsletter_subscribers' } }));
+                        }
+                      }
+                      setNewsletterSubscribed(true);
+                    }
+                  }} 
+                  className="flex relative z-10 h-12 w-full max-w-sm mt-4 border border-white/20 rounded-md overflow-hidden"
+                >
+                  <input 
+                    type="email" 
+                    required
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    placeholder={t('Tu correo electrónico')} 
+                    className="flex-1 bg-white text-[#1c2838] border-none px-4 text-xs focus:outline-none placeholder:text-gray-400"
+                  />
+                  <button type="submit" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-6 uppercase transition-colors h-full">
+                    {t('SUSCRIBIRME')}
+                  </button>
+                </form>
+              )}
               <p className="text-[9px] text-muted-foreground mt-3 relative z-10">
                 {t('Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.')}
               </p>

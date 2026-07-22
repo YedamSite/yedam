@@ -274,7 +274,7 @@ export const additionalTranslations = {
     'CHEOTNUN K-BEAUTY': 'CHEOTNUN K-BEAUTY',
     'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.': 'Importamos os cosméticos coreanos mais exclusivos e premiados internacionalmente para transformar sua rotina diária de skincare em um ritual de luxo.',
     'WhatsApp: +34 600 111 222': 'WhatsApp: +34 600 111 222',
-    'hola@cheotnun.com': 'hola@cheotnun.com',
+    'sac@cheotnun.com': 'sac@cheotnun.com',
     'Calle Gran Vía 12, Madrid, España': 'Calle Gran Vía 12, Madri, Espanha',
     // Shop / Tienda
     'K-Beauty Shop': 'K-Beauty Shop',
@@ -1011,7 +1011,7 @@ export const additionalTranslations = {
     'CHEOTNUN K-BEAUTY': 'CHEOTNUN K-BEAUTY',
     'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.': 'We import the most exclusive and award-winning Korean cosmetics internationally to transform your daily skincare routine into a luxury ritual.',
     'WhatsApp: +34 600 111 222': 'WhatsApp: +34 600 111 222',
-    'hola@cheotnun.com': 'hola@cheotnun.com',
+    'sac@cheotnun.com': 'sac@cheotnun.com',
     'Calle Gran Vía 12, Madrid, España': 'Gran Via 12, Madrid, Spain',
     // Shop / Tienda
     'K-Beauty Shop': 'K-Beauty Shop',
