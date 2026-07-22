@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   Droplet, 
   Sparkles, 
@@ -79,9 +80,9 @@ export default function RutinasPage() {
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-10">
               {t('Encuentra la rutina ideal para tu tipo de piel y objetivos. Productos auténticos, combinados de forma inteligente para resultados visibles.')}
             </p>
-            <button className="bg-accent hover:bg-white text-background font-bold text-sm tracking-widest px-8 py-4 rounded-md uppercase flex items-center gap-3 transition-colors">
+            <Link href="/tienda" className="bg-accent hover:bg-white text-background font-bold text-sm tracking-widest px-8 py-4 rounded-md uppercase flex items-center gap-3 transition-colors inline-flex w-fit">
               {t('ENCONTRAR MI RUTINA')} <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
           
           <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[75vh] min-h-[400px] max-h-[700px] flex justify-end">
@@ -124,9 +125,9 @@ export default function RutinasPage() {
                 <item.icon className={`w-8 h-8 ${item.color} mb-4 group-hover:scale-110 transition-transform`} strokeWidth={1.5} />
                 <h4 className="text-white text-[13px] font-medium mb-3">{t(item.title)}</h4>
                 <p className="text-[11px] text-muted-foreground leading-relaxed flex-1 mb-6">{t(item.desc)}</p>
-                <button className={`text-[9px] border px-4 py-2 rounded-full uppercase tracking-widest font-bold transition-colors w-full mt-auto ${item.btn}`}>
+                <Link href={`/tienda?category=cuidado-facial`} className={`text-[9px] border px-4 py-2 rounded-full uppercase tracking-widest font-bold transition-colors w-full mt-auto inline-block text-center ${item.btn}`}>
                   {t('VER RUTINA')}
-                </button>
+                </Link>
               </div>
             ))}
           </div>
@@ -136,9 +137,9 @@ export default function RutinasPage() {
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
           <div className="flex justify-between items-end mb-10">
             <h3 className="text-2xl md:text-3xl font-heading text-white">{t('Rutinas recomendadas para ti')}</h3>
-            <button className="text-[10px] font-bold text-accent uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
+            <Link href="/tienda" className="text-[10px] font-bold text-accent uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
               {t('VER TODAS LAS RUTINAS')} <ArrowRight className="w-3 h-3" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -164,9 +165,9 @@ export default function RutinasPage() {
                   <p className="text-[11px] text-center text-[#1c2838]/90 leading-relaxed mb-6 flex-1">
                     {t(card.desc)}
                   </p>
-                  <button className="w-full py-2.5 text-[9px] uppercase tracking-widest font-bold border border-[#1c2838]/20 rounded-md hover:bg-[#1c2838] hover:text-[#FDF9F4] transition-colors">
+                  <Link href="/tienda" className="w-full py-2.5 text-[9px] uppercase tracking-widest font-bold border border-[#1c2838]/20 rounded-md hover:bg-[#1c2838] hover:text-[#FDF9F4] transition-colors inline-block text-center">
                     {t('VER RUTINA COMPLETA')}
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -235,9 +236,9 @@ export default function RutinasPage() {
                  <p className="text-[11px] text-[#1c2838]/70 mb-6 leading-relaxed">
                    {t('Nuestro equipo te ayuda a encontrar la rutina perfecta para tu piel.')}
                  </p>
-                 <button className="border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#EAE4DC] font-bold text-[9px] tracking-widest px-6 py-3 rounded uppercase flex items-center justify-center gap-2 transition-colors w-fit">
+                 <Link href="/tienda" className="border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#EAE4DC] font-bold text-[9px] tracking-widest px-6 py-3 rounded uppercase flex items-center justify-center gap-2 transition-colors w-fit inline-block text-center">
                     {t('HACER MI DIAGNÓSTICO')} <ArrowRight className="w-3 h-3" />
-                 </button>
+                 </Link>
                </div>
                <div className="relative w-full sm:w-1/2 h-48 sm:h-full min-h-[250px]">
                   <Image 
@@ -258,13 +259,13 @@ export default function RutinasPage() {
                 {t('Sé la primera en descubrir nuevas rutinas y promociones exclusivas.')}
               </h4>
               
-              <div className="flex relative z-10 h-12 w-full max-w-sm mt-4">
+              <div className="flex relative z-10 h-12 w-full max-w-sm mt-4 border border-white/20 rounded-md overflow-hidden">
                 <input 
                   type="email" 
                   placeholder={t('Tu correo electrónico')} 
-                  className="flex-1 bg-white text-[#1c2838] border-none rounded-l-md px-4 text-xs focus:outline-none placeholder:text-gray-400"
+                  className="flex-1 bg-white text-[#1c2838] border-none px-4 text-xs focus:outline-none placeholder:text-gray-400"
                 />
-                <button className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-6 rounded-r-md uppercase transition-colors">
+                <button type="submit" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-6 uppercase transition-colors h-full">
                   {t('SUSCRIBIRME')}
                 </button>
               </div>

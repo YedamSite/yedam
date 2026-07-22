@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   Award, 
   Beaker, 
@@ -118,9 +119,9 @@ export default function MarcasPage() {
               </div>
             </div>
 
-            <button className="mt-16 px-8 py-3 rounded-full border border-white/20 text-xs font-bold tracking-widest uppercase hover:bg-white/5 transition-colors">
+            <Link href="/tienda" className="mt-16 px-8 py-3 rounded-full border border-white/20 text-xs font-bold tracking-widest uppercase hover:bg-white/5 transition-colors inline-block text-center">
               {t('VER TODAS LAS MARCAS')}
-            </button>
+            </Link>
           </div>
         </section>
 

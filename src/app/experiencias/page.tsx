@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   ArrowRight, 
   Plane, 
@@ -145,9 +146,9 @@ export default function ExperienciasPage() {
                 <div className="p-6 pt-10 flex flex-col flex-1 text-center items-center">
                   <h4 className="font-heading font-medium text-sm mb-3">{t(item.title)}</h4>
                   <p className="text-[10px] text-gray-600 leading-relaxed mb-6 flex-1">{t(item.desc)}</p>
-                  <button className="text-[10px] font-bold border border-[#1c2838]/20 px-6 py-2 rounded-full uppercase tracking-wider hover:bg-[#1c2838] hover:text-[#FDF9F4] transition-colors flex items-center gap-2">
+                  <Link href="/tienda" className="text-[10px] font-bold border border-[#1c2838]/20 px-6 py-2 rounded-full uppercase tracking-wider hover:bg-[#1c2838] hover:text-[#FDF9F4] transition-colors flex items-center gap-2">
                     {t('VER MÁS')} <ArrowRight className="w-3 h-3" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -182,9 +183,9 @@ export default function ExperienciasPage() {
                    </li>
                  ))}
               </ul>
-              <button className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
+              <Link href="/contacto" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
                  {t('EXPLORAR VIAJES')} <ArrowRight className="w-3 h-3" />
-              </button>
+              </Link>
             </div>
             
             {/* Right Cards */}
@@ -245,9 +246,9 @@ export default function ExperienciasPage() {
                  <div className="flex-1 my-4">
                    <BranchBlossom className="w-32 h-32 text-[#1c2838]/20" />
                  </div>
-                 <button className="border border-[#1c2838] text-[10px] font-bold uppercase tracking-widest px-6 py-2.5 rounded hover:bg-[#1c2838] hover:text-[#EAE4DC] transition-colors w-fit">
+                 <Link href="/contacto" className="border border-[#1c2838] text-[10px] font-bold uppercase tracking-widest px-6 py-2.5 rounded hover:bg-[#1c2838] hover:text-[#EAE4DC] transition-colors w-fit inline-block">
                     {t('VER MÁS TESTIMONIOS')}
-                 </button>
+                 </Link>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -310,13 +311,9 @@ export default function ExperienciasPage() {
              </div>
 
              <div className="w-full max-w-md z-10 flex flex-col items-end">
-               <div className="flex h-12 w-full mb-3">
-                  <input 
-                    type="email" 
-                    placeholder={t('Tu correo electrónico')} 
-                    className="flex-1 bg-white/5 border border-white/20 rounded-l-md px-4 text-xs text-white focus:outline-none focus:border-accent placeholder:text-gray-400"
-                  />
-                  <button className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors">
+               <div className="flex h-12 w-full mb-3 bg-white/5 border border-white/20 rounded-md">
+                  <input type="email" placeholder="tu@email.com" className="flex-1 bg-transparent px-4 py-2 text-[11px] text-white placeholder:text-gray-400 outline-none" />
+                  <button type="submit" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors h-full">
                     {t('SUSCRIBIRME')}
                   </button>
                </div>

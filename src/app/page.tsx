@@ -261,9 +261,11 @@ export default function Home() {
                     <h3 className="font-heading text-2xl font-light text-white mt-6">{t(card.title)}</h3>
                     <p className="text-xs text-gray-400 mt-3 leading-relaxed">{t(card.text)}</p>
                   </div>
-                  <Button variant="outline" className="border-white/20 text-white hover:bg-white/5 hover:border-accent/40 font-bold text-[9px] px-6 py-4.5 rounded-full uppercase tracking-wider w-fit mt-6 transition-all hover:-translate-y-0.5 duration-300">
-                    {t(card.buttonText || 'SABER MÁS')}
-                  </Button>
+                  <Link href="/experiencias">
+                    <Button variant="outline" className="border-white/20 text-white hover:bg-white/5 hover:border-accent/40 font-bold text-[9px] px-6 py-4.5 rounded-full uppercase tracking-wider w-fit mt-6 transition-all hover:-translate-y-0.5 duration-300">
+                      {t(card.buttonText || 'SABER MÁS')}
+                    </Button>
+                  </Link>
                 </div>
                 <div className="w-full md:w-[45%] h-[200px] md:h-auto relative shrink-0 border-t md:border-t-0 md:border-l border-white/5">
                   <Image src={card.image} fill unoptimized alt={card.title} className="object-cover group-hover:scale-102 transition-transform duration-500" />

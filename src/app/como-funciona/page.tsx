@@ -345,16 +345,20 @@ export default function ComoFuncionaPage() {
              </div>
 
              <div className="w-full max-w-md z-10 flex flex-col items-end">
-               <div className="flex h-12 w-full mb-3">
+               <form 
+                  onSubmit={(e) => { e.preventDefault(); alert(t('¡Suscrito con éxito!')); }} 
+                  className="flex h-12 w-full mb-3"
+               >
                   <input 
                     type="email" 
+                    required
                     placeholder={t('Tu correo electrónico')} 
                     className="flex-1 bg-transparent border border-white/20 rounded-l-md px-4 text-xs text-white focus:outline-none focus:border-accent placeholder:text-gray-500"
                   />
-                  <button className="bg-[#c5a173] hover:bg-[#d6b78e] text-[#1c2838] font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors">
+                  <button type="submit" className="bg-[#c5a173] hover:bg-[#d6b78e] text-[#1c2838] font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors">
                     {t('SUSCRIBIRME')}
                   </button>
-               </div>
+               </form>
                <p className="text-[9px] text-white/40 w-full text-left">
                   {t('Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.')}
                </p>

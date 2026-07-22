@@ -94,9 +94,9 @@ export default function ContactoPage() {
             <p className="text-white/80 text-[13px] leading-relaxed mb-8 max-w-sm">
               {t(c?.hero?.subtitle || '¿Tienes preguntas, necesitas ayuda con tu pedido o quieres más información sobre nuestros productos? Nuestro equipo está listo para ayudarte.')}
             </p>
-            <button className="border border-[#c5a173] text-[#c5a173] hover:bg-[#c5a173] hover:text-[#1c2838] font-bold text-[10px] tracking-widest px-8 py-3 rounded-md uppercase transition-colors w-fit flex items-center gap-2 mb-10">
+            <a href="#contacto-form" className="border border-[#c5a173] text-[#c5a173] hover:bg-[#c5a173] hover:text-[#1c2838] font-bold text-[10px] tracking-widest px-8 py-3 rounded-md uppercase transition-colors w-fit flex items-center gap-2 mb-10">
                <Headset className="w-4 h-4" /> {t('RESPUESTA RÁPIDA Y PERSONALIZADA')}
-            </button>
+            </a>
             
             <div className="flex flex-wrap gap-6 text-[10px] text-white/70">
                <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[#c5a173]" /> {t('Atención en español')}</span>
@@ -132,7 +132,7 @@ export default function ContactoPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               {[
-                { icon: 'MessageCircle', title: c?.contactMethods?.whatsapp?.label || 'WhatsApp', desc: 'La forma más rápida de\nhablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#', footer: c?.contactMethods?.whatsapp?.value || '+55 11 98765-4321' },
+                { icon: 'MessageCircle', title: c?.contactMethods?.whatsapp?.label || 'WhatsApp', desc: 'La forma más rápida de\nhablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form', footer: c?.contactMethods?.whatsapp?.value || '+55 11 98765-4321' },
                 { icon: 'Mail', title: c?.contactMethods?.email?.label || 'Correo electrónico', desc: 'Envíanos un e-mail y te\nresponderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:hola@yedambeauty.com', footer: c?.contactMethods?.email?.value || 'hola@yedambeauty.com' },
                 { icon: 'Instagram', title: 'Instagram', desc: 'Envíanos un mensaje directo\nen Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://instagram.com/yedam.kbeauty', footer: '@yedam.kbeauty' },
                 { icon: 'Clock', title: 'Horario de atención', desc: 'Lunes a viernes\n9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#', footer: c?.contactMethods?.whatsapp?.time || 'Excepto feriados' },
@@ -158,7 +158,7 @@ export default function ContactoPage() {
         </section>
 
         {/* ENVIANOS UN MENSAJE & EN QUE PODEMOS AYUDARTE */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
+        <section id="contacto-form" className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
            <div className="bg-[#FDF9F4] text-[#1c2838] rounded-3xl p-8 lg:p-12 shadow-lg grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 relative overflow-hidden">
               {/* Form */}
               <div className="flex flex-col relative z-10">
@@ -190,10 +190,10 @@ export default function ContactoPage() {
                     </div>
                     <div className="flex flex-col flex-1 min-h-[100px]">
                        <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t('Tu mensaje')}</label>
-                       <textarea className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#c5a173] text-sm h-full resize-none"></textarea>
+                       <textarea required className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#c5a173] text-sm h-full resize-none"></textarea>
                     </div>
                     
-                    <button type="button" className="bg-[#c5a173] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[10px] tracking-widest py-4 rounded-md uppercase transition-colors flex justify-center items-center gap-2 mt-4">
+                    <button type="submit" onClick={(e) => { e.preventDefault(); alert(t('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.')); }} className="bg-[#c5a173] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[10px] tracking-widest py-4 rounded-md uppercase transition-colors flex justify-center items-center gap-2 mt-4">
                       {t('ENVIAR MENSAJE')} <Send className="w-3.5 h-3.5" />
                     </button>
                     
