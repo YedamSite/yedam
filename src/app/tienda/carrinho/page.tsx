@@ -91,13 +91,26 @@ export default function CheckoutWizard() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
+      const orderId = params.get('order_id');
+      
       if (params.get('success') === 'true') {
         setStep(4);
-        const orderId = params.get('order_id');
         if (orderId) {
           setOrderSuccess({ id: orderId });
           localStorage.removeItem('cheotnun_cart');
           setCartItems([]);
+        }
+        window.history.replaceState({}, '', '/tienda/carrinho');
+      } else if (params.get('canceled') === 'true') {
+        if (orderId) {
+          // Restore stock and mark as cancelled
+          import('@/actions/shopActions').then(mod => {
+            mod.cancelOrderAction(orderId).then(res => {
+              if (res.success) {
+                console.log('Order cancelled and stock restored:', orderId);
+              }
+            });
+          });
         }
         window.history.replaceState({}, '', '/tienda/carrinho');
       }

@@ -227,3 +227,51 @@ export async function deleteOrderFromSupabase(orderId: string) {
     return { success: false, error: e?.message || 'Unknown error' };
   }
 }
+
+export async function cancelOrderAction(orderId: string) {
+  try {
+    const orders = db.get('orders');
+    const products = db.get('products');
+    
+    const oIdx = orders.findIndex((o: any) => o.id === orderId);
+    if (oIdx === -1) return { success: false, error: 'Order not found' };
+    
+    const order = orders[oIdx];
+    if (order.status === 'cancelado') return { success: true, message: 'Already cancelled' };
+
+    // Return stock
+    for (const item of order.items) {
+      const pIdx = products.findIndex((p: any) => p.id === item.product_id);
+      if (pIdx !== -1) {
+        products[pIdx].stock += item.quantity;
+      }
+    }
+    db.save('products', products);
+
+    // Update order status
+    orders[oIdx].status = 'cancelado';
+    orders[oIdx].updated_at = new Date().toISOString();
+    db.save('orders', orders);
+
+    // Sync to Supabase
+    await syncOrderWithSupabase('orders', orders);
+
+    // Add tracking log
+    const orderTracking = db.get('order_tracking') || [];
+    orderTracking.push({
+      id: crypto.randomUUID(),
+      order_id: orderId,
+      status: 'cancelado',
+      tracking_code: null,
+      carrier: null,
+      notes: 'Pedido cancelado pelo cliente ou sessão de pagamento expirada. Estoque retornado.',
+      updated_at: new Date().toISOString()
+    });
+    db.save('order_tracking', orderTracking);
+    await syncOrderWithSupabase('order_tracking', db.get('order_tracking'));
+
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}

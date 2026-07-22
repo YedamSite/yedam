@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
       }],
       mode: 'payment',
       success_url: `${origin}/tienda/carrinho?success=true&order_id=${orderId}`,
-      cancel_url: `${origin}/tienda/carrinho?canceled=true`,
+      cancel_url: `${origin}/tienda/carrinho?canceled=true&order_id=${orderId}`,
       customer_email: customerEmail,
       metadata: {
         type: 'product_purchase',
