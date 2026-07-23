@@ -77,7 +77,7 @@ export default function ExperienciasPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col justify-center">
+        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
@@ -94,7 +94,7 @@ export default function ExperienciasPage() {
               <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
                 {t(c?.hero?.title || 'Experiencias Yedam')}
               </h1>
-              <h2 className="text-xl md:text-2xl text-accent mb-6 font-light">
+              <h2 className="text-xl md:text-2xl text-[#C9C9C9] mb-6 font-light">
                 {t(c?.hero?.subtitle || 'Mucho más que productos, vivencias que transforman.')}
               </h2>
               <p className="text-muted-foreground text-sm leading-relaxed mb-10 max-w-sm">
@@ -102,7 +102,7 @@ export default function ExperienciasPage() {
               </p>
               {/* Floral graphic */}
               <div className="mt-8 -ml-8">
-                 <BranchBlossom className="w-48 h-48 text-accent/40" />
+                 <BranchBlossom className="w-48 h-48 text-[#C9C9C9]/40" />
               </div>
             </div>
             
@@ -115,11 +115,11 @@ export default function ExperienciasPage() {
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 border-t border-white/5">
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-4 mb-4">
-               <div className="h-[1px] bg-accent/30 flex-1 hidden sm:block"></div>
-               <BranchBlossom className="w-8 h-8 text-accent opacity-60" />
+               <div className="h-[1px] bg-[#C9C9C9]/30 flex-1 hidden sm:block"></div>
+               <BranchBlossom className="w-8 h-8 text-[#C9C9C9] opacity-60" />
                <h3 className="text-2xl md:text-3xl font-heading text-white">{t('Descubre nuestras experiencias')}</h3>
-               <BranchBlossom className="w-8 h-8 text-accent opacity-60 scale-x-[-1]" />
-               <div className="h-[1px] bg-accent/30 flex-1 hidden sm:block"></div>
+               <BranchBlossom className="w-8 h-8 text-[#C9C9C9] opacity-60 scale-x-[-1]" />
+               <div className="h-[1px] bg-[#C9C9C9]/30 flex-1 hidden sm:block"></div>
             </div>
           </div>
 
@@ -175,10 +175,10 @@ export default function ExperienciasPage() {
           <div className="border border-white/10 rounded-3xl p-8 md:p-12 grid grid-cols-1 lg:grid-cols-[1.5fr_3fr] gap-12 bg-card">
             {/* Left Info */}
             <div className="flex flex-col justify-center">
-              <span className="text-xs text-accent mb-1">{t('En colaboración con')}</span>
+              <span className="text-xs text-[#C9C9C9] mb-1">{t('En colaboración con')}</span>
               <div className="flex items-center gap-3 mb-4">
                  <h3 className="font-heading text-3xl md:text-4xl text-white tracking-wide">{t('MAEUM GLOBAL')}</h3>
-                 <Plane className="w-6 h-6 text-accent opacity-80 -rotate-45" strokeWidth={1.5} />
+                 <Plane className="w-6 h-6 text-[#C9C9C9] opacity-80 -rotate-45" strokeWidth={1.5} />
               </div>
               <h4 className="text-xl text-white font-light mb-4">{t('Viajes que transforman.')}</h4>
               <p className="text-[11px] text-muted-foreground mb-8 leading-relaxed max-w-[280px]">
@@ -193,12 +193,12 @@ export default function ExperienciasPage() {
                    'Acompañamiento en todo el viaje'
                  ].map((li, i) => (
                    <li key={i} className="flex items-center gap-3 text-xs text-white/90">
-                      <CheckCircle2 className="w-4 h-4 text-accent shrink-0" strokeWidth={1.5} />
+                      <CheckCircle2 className="w-4 h-4 text-[#C9C9C9] shrink-0" strokeWidth={1.5} />
                       {t(li)}
                    </li>
                  ))}
               </ul>
-              <a href="https://www.maeumglobal.com.br" target="_blank" rel="noopener noreferrer" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
+              <a href="https://www.maeumglobal.com.br" target="_blank" rel="noopener noreferrer" className="bg-[#C9C9C9] hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
                  {t('EXPLORAR VIAJES')} <ArrowRight className="w-3 h-3" />
               </a>
             </div>
@@ -243,10 +243,10 @@ export default function ExperienciasPage() {
           </div>
           {/* Slider Dots */}
           <div className="flex justify-center gap-2 mt-8">
-             <div className="w-1.5 h-1.5 rounded-full bg-accent/30"></div>
-             <div className="w-1.5 h-1.5 rounded-full bg-accent"></div>
-             <div className="w-1.5 h-1.5 rounded-full bg-accent/30"></div>
-             <div className="w-1.5 h-1.5 rounded-full bg-accent/30"></div>
+             <div className="w-1.5 h-1.5 rounded-full bg-[#C9C9C9]/30"></div>
+             <div className="w-1.5 h-1.5 rounded-full bg-[#C9C9C9]"></div>
+             <div className="w-1.5 h-1.5 rounded-full bg-[#C9C9C9]/30"></div>
+             <div className="w-1.5 h-1.5 rounded-full bg-[#C9C9C9]/30"></div>
           </div>
         </section>
 
@@ -290,7 +290,7 @@ export default function ExperienciasPage() {
                    <div key={idx} className="bg-[#FDF9F4] rounded-2xl p-6 shadow-sm flex flex-col justify-between border border-[#1c2838]/5">
                      <div>
                        <div className="flex gap-1 mb-4">
-                         {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-[#c5a173] text-[#c5a173]" />)}
+                         {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-[#c5a173] text-[#C9C9C9]" />)}
                        </div>
                        <p className="text-[10px] text-gray-700 leading-relaxed mb-6 italic">{t(test.quote)}</p>
                      </div>
@@ -316,7 +316,7 @@ export default function ExperienciasPage() {
              
              <div className="flex items-center gap-6 z-10">
                <div className="p-3 border border-white/20 rounded-md">
-                 <Mail className="w-6 h-6 text-accent" strokeWidth={1} />
+                 <Mail className="w-6 h-6 text-[#C9C9C9]" strokeWidth={1} />
                </div>
                <div>
                  <h4 className="text-xl md:text-2xl font-heading text-white font-light">
@@ -328,7 +328,7 @@ export default function ExperienciasPage() {
              <div className="w-full max-w-md z-10 flex flex-col items-end">
                <div className="flex h-12 w-full mb-3 bg-white/5 border border-white/20 rounded-md">
                   <input type="email" placeholder="tu@email.com" className="flex-1 bg-transparent px-4 py-2 text-[11px] text-white placeholder:text-gray-400 outline-none" />
-                  <button type="submit" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors h-full">
+                  <button type="submit" className="bg-[#C9C9C9] hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors h-full">
                     {t('SUSCRIBIRME')}
                   </button>
                </div>
@@ -338,7 +338,7 @@ export default function ExperienciasPage() {
              </div>
              
              {/* Decorative Flowers */}
-             <BranchBlossom className="absolute right-[25%] -bottom-10 w-48 h-48 text-accent/20" />
+             <BranchBlossom className="absolute right-[25%] -bottom-10 w-48 h-48 text-[#C9C9C9]/20" />
           </div>
         </section>
 

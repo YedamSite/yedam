@@ -36,13 +36,13 @@ export default function MarcasPage() {
   const c = content || db.get('site_content')?.marcas || {};
 
   return (
-    <div className="min-h-screen bg-[#07101E] flex flex-col font-body selection:bg-accent/30 text-white">
+    <div className="min-h-screen bg-[#07101E] flex flex-col font-body selection:bg-[#C9C9C9]/30 text-white">
       <Header />
 
       <main className="flex-1 w-full overflow-hidden">
         
         {/* 1. HERO SECTION */}
-        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -76,8 +76,8 @@ export default function MarcasPage() {
                   const Icon = IconMap[feat.icon] || Award;
                   return (
                     <div key={idx} className="flex items-start gap-5">
-                      <div className="w-12 h-12 rounded-full border border-[#D5A07D] flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-[#D5A07D] stroke-[1.5]" />
+                      <div className="w-12 h-12 rounded-full border border-[#C9C9C9] flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 text-[#C9C9C9] stroke-[1.5]" />
                       </div>
                       <div>
                         <h3 className="text-sm font-semibold text-white mb-1">{t(feat.title)}</h3>
@@ -97,7 +97,7 @@ export default function MarcasPage() {
         {/* 2. BRANDS LOGOS SECTION */}
         <section className="w-full px-4 lg:px-12 py-16 border-t border-b border-white/5 bg-[#030712]/50">
           <div className="max-w-[1400px] mx-auto flex flex-col items-center">
-            <h2 className="text-xl font-heading font-light text-[#D5A07D] mb-12 text-center">
+            <h2 className="text-xl font-heading font-light text-[#C9C9C9] mb-12 text-center">
               {t('Algunas de las marcas que ofrecemos')}
             </h2>
             
@@ -143,7 +143,7 @@ export default function MarcasPage() {
                 const Icon = IconMap[item.icon] || ShieldCheck;
                 return (
                   <div key={idx} className="border border-white/10 rounded-2xl p-6 flex flex-col gap-4 hover:bg-white/5 transition-colors">
-                    <Icon className="w-8 h-8 text-[#D5A07D] stroke-[1.2]" />
+                    <Icon className="w-8 h-8 text-[#C9C9C9] stroke-[1.2]" />
                     <div>
                       <h4 className="text-sm font-bold text-white mb-1.5">{t(item.title)}</h4>
                       <p className="text-xs text-gray-400 leading-relaxed">{t(item.text)}</p>
@@ -214,7 +214,7 @@ export default function MarcasPage() {
               <div key={idx} className="bg-[#EFE8DF] rounded-2xl p-8 flex flex-col justify-between min-h-[260px] text-[#1c2838]">
                 <div>
                   <div className="flex gap-1 mb-4">
-                    {[1,2,3,4,5].map(star => <Star key={star} className="w-3.5 h-3.5 fill-[#D5A07D] text-[#D5A07D]" />)}
+                    {[1,2,3,4,5].map(star => <Star key={star} className="w-3.5 h-3.5 fill-[#D5A07D] text-[#C9C9C9]" />)}
                   </div>
                   <p className="text-sm font-medium leading-relaxed mb-8">
                     "{test.text}"
@@ -250,7 +250,7 @@ export default function MarcasPage() {
                 { icon: Flower2, text: 'Inspirado en la tradición,\nmejorado por la ciencia' }
               ].map((badge, idx) => (
                 <div key={idx} className="flex items-center gap-3 flex-1 min-w-[200px]">
-                  <badge.icon className="w-6 h-6 text-[#D5A07D] stroke-[1.2] shrink-0" />
+                  <badge.icon className="w-6 h-6 text-[#C9C9C9] stroke-[1.2] shrink-0" />
                   <span className="text-[10px] text-gray-300 leading-tight whitespace-pre-line">
                     {t(badge.text)}
                   </span>

@@ -90,7 +90,7 @@ export default function EnviosYPagosPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
@@ -107,7 +107,7 @@ export default function EnviosYPagosPage() {
               <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
                 {t(c?.hero?.title || 'Envíos y Pagos')}
               </h1>
-              <h2 className="text-xl md:text-2xl text-accent mb-6 font-heading font-light">
+              <h2 className="text-xl md:text-2xl text-[#C9C9C9] mb-6 font-heading font-light">
                 {t(c?.hero?.subtitle || 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.')}
               </h2>
               <p className="text-muted-foreground text-[13px] leading-relaxed mb-10 max-w-lg">
@@ -122,8 +122,8 @@ export default function EnviosYPagosPage() {
                    const IconMap: any = { Truck, ShieldCheck, PlaneTakeoff };
                    const Icon = IconMap[feat.icon] || Truck;
                    return (
-                     <div key={idx} className="flex items-center gap-4 bg-transparent border border-accent/40 rounded-md px-6 py-4 flex-1 backdrop-blur-sm">
-                       <Icon className="w-6 h-6 text-accent shrink-0" strokeWidth={1.5} />
+                     <div key={idx} className="flex items-center gap-4 bg-transparent border border-[#C9C9C9]/40 rounded-md px-6 py-4 flex-1 backdrop-blur-sm">
+                       <Icon className="w-6 h-6 text-[#C9C9C9] shrink-0" strokeWidth={1.5} />
                        <span className="text-[11px] text-white leading-snug whitespace-pre-line">{t(feat.text)}</span>
                      </div>
                    );
@@ -141,7 +141,7 @@ export default function EnviosYPagosPage() {
           <div className="bg-[#FDF9F4] rounded-2xl p-8 lg:p-12 shadow-lg relative overflow-hidden">
             <div className="flex items-center gap-3 mb-10">
               <h3 className="text-2xl font-heading text-[#1c2838]">{t(c?.shipping?.title || 'Cómo funciona el envío')}</h3>
-              <FlowerDecoration className="w-6 h-6 text-[#c5a173] opacity-60" />
+              <FlowerDecoration className="w-6 h-6 text-[#C9C9C9] opacity-60" />
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 relative">
@@ -308,10 +308,10 @@ export default function EnviosYPagosPage() {
             </div>
 
             <div className="bg-[#0a111a] p-8 lg:p-10 flex flex-col justify-center relative overflow-hidden">
-              <BranchBlossom className="absolute -right-6 -bottom-6 w-32 h-32 text-accent/30 pointer-events-none" />
+              <BranchBlossom className="absolute -right-6 -bottom-6 w-32 h-32 text-[#C9C9C9]/30 pointer-events-none" />
               <div className="flex items-center gap-4 mb-4 relative z-10">
                 <div className="w-10 h-10 border border-white/20 rounded-lg flex items-center justify-center shrink-0">
-                  <Lock className="w-5 h-5 text-accent stroke-[1.5]" />
+                  <Lock className="w-5 h-5 text-[#C9C9C9] stroke-[1.5]" />
                 </div>
                 <h3 className="text-[20px] font-heading font-light text-white leading-tight">
                   {t('Tu seguridad es')}<br />{t('nuestra prioridad')}

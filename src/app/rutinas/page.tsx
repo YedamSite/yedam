@@ -75,7 +75,7 @@ export default function RutinasPage() {
       <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">
         
         {/* HERO SECTION */}
-        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 

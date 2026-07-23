@@ -86,7 +86,7 @@ export default function ContactoPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
@@ -106,14 +106,14 @@ export default function ContactoPage() {
               <p className="text-white/80 text-[13px] leading-relaxed mb-8 max-w-sm">
                 {t(c?.hero?.subtitle || '¿Tienes preguntas, necesitas ayuda con tu pedido o quieres más información sobre nuestros productos? Nuestro equipo está listo para ayudarte.')}
               </p>
-              <a href="#contacto-form" className="border border-[#c5a173] text-[#c5a173] hover:bg-[#c5a173] hover:text-[#1c2838] font-bold text-[10px] tracking-widest px-8 py-3 rounded-md uppercase transition-colors w-fit flex items-center gap-2 mb-10">
+              <a href="#contacto-form" className="border border-[#C9C9C9] text-[#C9C9C9] hover:bg-[#C9C9C9] hover:text-[#1c2838] font-bold text-[10px] tracking-widest px-8 py-3 rounded-md uppercase transition-colors w-fit flex items-center gap-2 mb-10">
                  <Headset className="w-4 h-4" /> {t('RESPUESTA RÁPIDA Y PERSONALIZADA')}
               </a>
               
               <div className="flex flex-wrap gap-6 text-[10px] text-white/70">
-                 <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[#c5a173]" /> {t('Atención en español')}</span>
-                 <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[#c5a173]" /> {t('Respuesta en menos de 24h')}</span>
-                 <span className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-[#c5a173]" /> {t('Tu satisfacción es nuestra prioridad')}</span>
+                 <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[#C9C9C9]" /> {t('Atención en español')}</span>
+                 <span className="flex items-center gap-2"><Clock className="w-3.5 h-3.5 text-[#C9C9C9]" /> {t('Respuesta en menos de 24h')}</span>
+                 <span className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-[#C9C9C9]" /> {t('Tu satisfacción es nuestra prioridad')}</span>
               </div>
             </div>
             
@@ -126,11 +126,11 @@ export default function ContactoPage() {
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16 border-t border-white/5 pt-12">
            <div className="text-center mb-10">
              <div className="flex items-center justify-center gap-4">
-                <div className="h-[1px] bg-accent/30 flex-1 hidden sm:block max-w-[200px]"></div>
-                <BranchBlossom className="w-8 h-8 text-accent opacity-60" />
+                <div className="h-[1px] bg-[#C9C9C9]/30 flex-1 hidden sm:block max-w-[200px]"></div>
+                <BranchBlossom className="w-8 h-8 text-[#C9C9C9] opacity-60" />
                 <h3 className="text-2xl md:text-3xl font-heading text-white">{t('Formas de contacto')}</h3>
-                <BranchBlossom className="w-8 h-8 text-accent opacity-60 scale-x-[-1]" />
-                <div className="h-[1px] bg-accent/30 flex-1 hidden sm:block max-w-[200px]"></div>
+                <BranchBlossom className="w-8 h-8 text-[#C9C9C9] opacity-60 scale-x-[-1]" />
+                <div className="h-[1px] bg-[#C9C9C9]/30 flex-1 hidden sm:block max-w-[200px]"></div>
              </div>
            </div>
 
@@ -167,7 +167,7 @@ export default function ContactoPage() {
               {/* Form */}
               <div className="flex flex-col relative z-10">
                  <div className="flex items-center gap-3 mb-6">
-                    <Mail className="w-5 h-5 text-[#c5a173] stroke-[1.5]" />
+                    <Mail className="w-5 h-5 text-[#C9C9C9] stroke-[1.5]" />
                     <h3 className="text-2xl font-heading">{t('Envíanos un mensaje')}</h3>
                  </div>
                  
@@ -175,16 +175,16 @@ export default function ContactoPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                        <div className="flex flex-col">
                           <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t('Nombre completo')}</label>
-                          <input type="text" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#c5a173] text-sm" />
+                          <input type="text" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm" />
                        </div>
                        <div className="flex flex-col">
                           <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t('E-mail')}</label>
-                          <input type="email" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#c5a173] text-sm" />
+                          <input type="email" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm" />
                        </div>
                     </div>
                     <div className="flex flex-col">
                        <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t('Asunto')}</label>
-                       <select className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#c5a173] text-sm text-[#1c2838]/70 appearance-none">
+                       <select className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm text-[#1c2838]/70 appearance-none">
                          <option>{t('Selecciona un asunto')}</option>
                          <option>Dudas sobre productos</option>
                          <option>Estado de mi pedido</option>
@@ -194,10 +194,10 @@ export default function ContactoPage() {
                     </div>
                     <div className="flex flex-col flex-1 min-h-[100px]">
                        <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t('Tu mensaje')}</label>
-                       <textarea required className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#c5a173] text-sm h-full resize-none"></textarea>
+                       <textarea required className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm h-full resize-none"></textarea>
                     </div>
                     
-                    <button type="submit" onClick={(e) => { e.preventDefault(); alert(t('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.')); }} className="bg-[#c5a173] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[10px] tracking-widest py-4 rounded-md uppercase transition-colors flex justify-center items-center gap-2 mt-4">
+                    <button type="submit" onClick={(e) => { e.preventDefault(); alert(t('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.')); }} className="bg-[#C9C9C9] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[10px] tracking-widest py-4 rounded-md uppercase transition-colors flex justify-center items-center gap-2 mt-4">
                       {t('ENVIAR MENSAJE')} <Send className="w-3.5 h-3.5" />
                     </button>
                     
@@ -222,18 +222,18 @@ export default function ContactoPage() {
                     ].map((topic, idx) => (
                       <div key={idx} className="flex items-start gap-4 group cursor-pointer">
                          <div className="w-10 h-10 rounded-full border border-[#1c2838]/20 flex items-center justify-center shrink-0 bg-white">
-                           <topic.icon className="w-4 h-4 stroke-[1.5] text-[#1c2838] group-hover:text-[#c5a173] transition-colors" />
+                           <topic.icon className="w-4 h-4 stroke-[1.5] text-[#1c2838] group-hover:text-[#C9C9C9] transition-colors" />
                          </div>
                          <div className="flex-1">
-                            <h4 className="text-[13px] font-bold text-[#1c2838] mb-0.5 group-hover:text-[#c5a173] transition-colors">{t(topic.title)}</h4>
+                            <h4 className="text-[13px] font-bold text-[#1c2838] mb-0.5 group-hover:text-[#C9C9C9] transition-colors">{t(topic.title)}</h4>
                             <p className="text-[10px] text-[#1c2838]/60 leading-relaxed">{t(topic.desc)}</p>
                          </div>
-                         <ChevronRight className="w-4 h-4 text-[#1c2838]/20 mt-1 group-hover:text-[#c5a173] transition-colors" />
+                         <ChevronRight className="w-4 h-4 text-[#1c2838]/20 mt-1 group-hover:text-[#C9C9C9] transition-colors" />
                       </div>
                     ))}
                  </div>
                  
-                 <BranchBlossom className="absolute -right-4 -bottom-4 w-40 h-40 text-[#c5a173]/20 pointer-events-none hidden lg:block" />
+                 <BranchBlossom className="absolute -right-4 -bottom-4 w-40 h-40 text-[#C9C9C9]/20 pointer-events-none hidden lg:block" />
               </div>
            </div>
         </section>
@@ -243,7 +243,7 @@ export default function ContactoPage() {
            <div className="text-left mb-8 flex flex-col md:flex-row justify-between md:items-end border-b border-white/10 pb-4">
              <div className="flex items-center gap-4">
                 <h3 className="text-2xl font-heading text-white">{t('Preguntas frecuentes rápidas')}</h3>
-                <BranchBlossom className="w-6 h-6 text-accent opacity-60" />
+                <BranchBlossom className="w-6 h-6 text-[#C9C9C9] opacity-60" />
              </div>
              <Link href="/ayuda/preguntas-frecuentes" className="bg-[#1c2838] hover:bg-white text-white hover:text-black font-bold text-[9px] tracking-widest px-6 py-2.5 rounded-md uppercase transition-colors border border-white/10 mt-4 md:mt-0">
                {t('VER TODAS LAS PREGUNTAS FRECUENTES')}
@@ -259,7 +259,7 @@ export default function ContactoPage() {
               ].map((q, idx) => (
                  <div key={idx} className="bg-white/5 border border-white/10 rounded-lg px-6 py-4 flex items-center justify-between cursor-pointer group hover:bg-white/10 transition-colors">
                     <span className="text-[11px] text-white/90 group-hover:text-white font-medium">{t(q)}</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-accent/50 group-hover:text-accent transition-colors" />
+                    <ChevronRight className="w-3.5 h-3.5 text-[#C9C9C9]/50 group-hover:text-[#C9C9C9] transition-colors" />
                  </div>
               ))}
            </div>
@@ -271,7 +271,7 @@ export default function ContactoPage() {
               <div className="flex-1 max-w-sm text-center xl:text-left text-[#1c2838]">
                  <div className="flex items-center justify-center xl:justify-start gap-3 mb-4">
                     <div className="w-12 h-12 rounded-full border border-[#1c2838]/20 flex items-center justify-center">
-                       <Instagram className="w-5 h-5 text-[#c5a173]" />
+                       <Instagram className="w-5 h-5 text-[#C9C9C9]" />
                     </div>
                     <h3 className="text-2xl font-heading font-light">{t('Únete a nuestra comunidad')}</h3>
                  </div>

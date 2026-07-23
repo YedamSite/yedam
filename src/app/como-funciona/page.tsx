@@ -90,7 +90,7 @@ export default function ComoFuncionaPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
@@ -119,10 +119,10 @@ export default function ComoFuncionaPage() {
 
         {/* TIMELINE STEPS */}
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-12 -mt-20 relative z-20">
-           <div className="border border-[#c5a173]/40 rounded-3xl p-8 lg:p-12 bg-[#0a111a]/80 backdrop-blur-md shadow-2xl relative overflow-hidden">
+           <div className="border border-[#C9C9C9]/40 rounded-3xl p-8 lg:p-12 bg-[#0a111a]/80 backdrop-blur-md shadow-2xl relative overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
                  {/* Connecting line */}
-                 <div className="absolute top-[35px] left-[12%] right-[12%] h-[1px] bg-[#c5a173]/30 hidden lg:block" />
+                 <div className="absolute top-[35px] left-[12%] right-[12%] h-[1px] bg-[#C9C9C9]/30 hidden lg:block" />
                  
                  {(c?.steps || [
                    { number: '1', icon: 'ShoppingBag', title: 'Eliges\ntus productos', text: 'Explora nuestra tienda\ny selecciona tus favoritos.' },
@@ -135,8 +135,8 @@ export default function ComoFuncionaPage() {
                    return (
                      <div key={idx} className="flex flex-col items-center text-center relative z-10 group">
                         <div className="relative mb-6">
-                          <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center bg-transparent group-hover:border-[#c5a173]/50 transition-colors">
-                             <Icon className="w-8 h-8 text-white stroke-[1.2] group-hover:text-accent transition-colors" />
+                          <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center bg-transparent group-hover:border-[#C9C9C9]/50 transition-colors">
+                             <Icon className="w-8 h-8 text-white stroke-[1.2] group-hover:text-[#C9C9C9] transition-colors" />
                           </div>
                           <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-[#EAE4DC] text-[#1c2838] text-[10px] font-bold flex items-center justify-center shadow-md">
                              {step.number}
@@ -278,7 +278,7 @@ export default function ComoFuncionaPage() {
                  <h3 className="text-2xl font-heading text-white font-light">{t('Preguntas frecuentes')}</h3>
                  <p className="text-[11px] text-white/60 mt-1">{t('Resolvemos tus dudas más comunes.')}</p>
               </div>
-              <Link href="/ayuda/preguntas-frecuentes" className="text-[9px] font-bold text-white uppercase tracking-widest hover:text-accent transition-colors flex items-center gap-2 mt-4 md:mt-0">
+              <Link href="/ayuda/preguntas-frecuentes" className="text-[9px] font-bold text-white uppercase tracking-widest hover:text-[#C9C9C9] transition-colors flex items-center gap-2 mt-4 md:mt-0">
                  {t('VER TODAS LAS PREGUNTAS')} <ArrowRight className="w-3 h-3" />
                </Link>
            </div>
@@ -292,9 +292,9 @@ export default function ComoFuncionaPage() {
                 '¿Qué métodos de pago aceptan?',
                 '¿Cómo sé el estado de mi pedido?'
               ].map((q, idx) => (
-                 <div key={idx} className="border-b border-white/10 py-5 flex items-center justify-between cursor-pointer group hover:border-accent/40 transition-colors">
-                    <span className="text-[12px] text-white/90 group-hover:text-accent transition-colors">{t(q)}</span>
-                    <Plus className="w-4 h-4 text-white/40 group-hover:text-accent transition-colors" />
+                 <div key={idx} className="border-b border-white/10 py-5 flex items-center justify-between cursor-pointer group hover:border-[#C9C9C9]/40 transition-colors">
+                    <span className="text-[12px] text-white/90 group-hover:text-[#C9C9C9] transition-colors">{t(q)}</span>
+                    <Plus className="w-4 h-4 text-white/40 group-hover:text-[#C9C9C9] transition-colors" />
                  </div>
               ))}
            </div>
@@ -337,8 +337,8 @@ export default function ComoFuncionaPage() {
         {/* NEWSLETTER */}
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
           <div className="border border-white/10 rounded-2xl py-10 px-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden bg-[#0a111a]">
-             <Mail className="absolute left-8 top-1/2 -translate-y-1/2 w-32 h-32 text-accent/10 pointer-events-none" strokeWidth={0.5} />
-             <BranchBlossom className="absolute -right-10 bottom-0 w-64 h-64 text-accent/20 pointer-events-none" />
+             <Mail className="absolute left-8 top-1/2 -translate-y-1/2 w-32 h-32 text-[#C9C9C9]/10 pointer-events-none" strokeWidth={0.5} />
+             <BranchBlossom className="absolute -right-10 bottom-0 w-64 h-64 text-[#C9C9C9]/20 pointer-events-none" />
              
              <div className="flex items-center gap-6 z-10 pl-4">
                <div>
@@ -350,8 +350,8 @@ export default function ComoFuncionaPage() {
                  </p>
                  <div className="w-full max-w-md z-10 flex flex-col items-end">
                 {newsletterSubscribed ? (
-                  <div className="bg-accent/10 border border-accent/20 rounded-md p-4 w-full flex items-center justify-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-accent" />
+                  <div className="bg-[#C9C9C9]/10 border border-[#C9C9C9]/20 rounded-md p-4 w-full flex items-center justify-center gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[#C9C9C9]" />
                     <span className="text-sm font-bold text-white uppercase tracking-wider">{t('✓ ¡Te has suscrito con éxito! Recibirás los eventos del blog en tu correo.')}</span>
                   </div>
                 ) : (
@@ -402,9 +402,9 @@ export default function ComoFuncionaPage() {
                       value={newsletterEmail}
                       onChange={(e) => setNewsletterEmail(e.target.value)}
                       placeholder={t('Tu correo electrónico')} 
-                      className="flex-1 bg-transparent border border-white/20 rounded-l-md px-4 text-xs text-white focus:outline-none focus:border-accent placeholder:text-gray-500"
+                      className="flex-1 bg-transparent border border-white/20 rounded-l-md px-4 text-xs text-white focus:outline-none focus:border-[#C9C9C9] placeholder:text-gray-500"
                     />
-                    <button type="submit" className="bg-[#c5a173] hover:bg-[#d6b78e] text-[#1c2838] font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors">
+                    <button type="submit" className="bg-[#C9C9C9] hover:bg-[#d6b78e] text-[#1c2838] font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors">
                       {t('SUSCRIBIRME')}
                     </button>
                   </form>
