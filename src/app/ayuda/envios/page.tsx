@@ -89,48 +89,17 @@ export default function EnviosYPagosPage() {
       <Header />
 
       <main className="flex-1 w-full flex flex-col items-center">
-        {/* HERO SECTION */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center min-h-[calc(100vh-115px)]">
-          <div className="flex flex-col relative z-10">
-            <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
-              {t(c?.hero?.title || 'Envíos y Pagos')}
-            </h1>
-            <h2 className="text-xl md:text-2xl text-accent mb-6 font-heading font-light">
-              {t(c?.hero?.subtitle || 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.')}
-            </h2>
-            <p className="text-muted-foreground text-[13px] leading-relaxed mb-10 max-w-lg">
-              {t(c?.hero?.text || 'Realizamos envíos internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada país destino, para que tu experiencia sea segura y sin complicaciones.')}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              {(c?.features || [
-                { text: 'Envíos seguros a\ntoda América Latina y Europa', icon: 'PlaneTakeoff' },
-                { text: 'Pagos protegidos\ny múltiples opciones', icon: 'ShieldCheck' }
-              ]).map((feat: any, idx: number) => {
-                 const IconMap: any = { Truck, ShieldCheck, PlaneTakeoff };
-                 const Icon = IconMap[feat.icon] || Truck;
-                 return (
-                   <div key={idx} className="flex items-center gap-4 bg-transparent border border-accent/40 rounded-md px-6 py-4 flex-1">
-                     <Icon className="w-6 h-6 text-accent shrink-0" strokeWidth={1.5} />
-                     <span className="text-[11px] text-white leading-snug whitespace-pre-line">{t(feat.text)}</span>
-                   </div>
-                 );
-              })}
-            </div>
-          </div>
-
-          <div className="relative w-full h-[350px] md:h-[450px]">
-            {/* Abstract background shape for image */}
-            <div className="absolute inset-0 bg-[#c5a173]/10 rounded-[10rem] rounded-tr-3xl overflow-hidden -right-10 translate-x-10 scale-110" />
-            <div className="absolute inset-0 right-0 h-full w-full rounded-l-full overflow-hidden border border-white/10 shadow-2xl">
-              <Image
-                src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200"
-                alt="Envíos"
-                fill
-                className="object-cover object-right"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
-            </div>
+        {/* HERO BANNER */}
+        <section className="w-full bg-[#020617]">
+          <div className="w-full max-w-[1920px] mx-auto relative">
+            <Image 
+              src="/images/cheotnun-k-beauty-politica-envios.webp" 
+              alt="Política de Envíos"
+              width={1920}
+              height={800}
+              className="w-full h-auto object-contain block"
+              priority
+            />
           </div>
         </section>
 

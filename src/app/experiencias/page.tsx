@@ -76,34 +76,17 @@ export default function ExperienciasPage() {
       <Header />
 
       <main className="flex-1 w-full flex flex-col items-center">
-        {/* HERO SECTION */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 lg:py-0 min-h-[calc(100vh-80px)] grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="max-w-xl relative">
-            <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
-              {t(c?.hero?.title || 'Experiencias Yedam')}
-            </h1>
-            <h2 className="text-xl md:text-2xl text-accent mb-6 font-light">
-              {t(c?.hero?.subtitle || 'Mucho más que productos, vivencias que transforman.')}
-            </h2>
-            <p className="text-muted-foreground text-sm leading-relaxed mb-10 max-w-sm">
-              {t(c?.hero?.buttonText || 'Conecta con la cultura coreana, descubre nuevos rituales de belleza y vive momentos únicos que te inspirarán.')}
-            </p>
-            {/* Floral graphic */}
-            <div className="mt-8 -ml-8">
-               <BranchBlossom className="w-48 h-48 text-accent/40" />
-            </div>
-          </div>
-          
-          <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[75vh] min-h-[400px] max-h-[700px] flex justify-end">
-            <div className="relative w-full md:w-[85%] h-full rounded-tl-[10rem] rounded-bl-3xl overflow-hidden border-2 border-white/10 shadow-2xl">
-              <Image 
-                src={c?.hero?.image || "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1600"} 
-                alt="Experiencias Yedam"
-                fill
-                className="object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent opacity-80" />
-            </div>
+        {/* HERO BANNER */}
+        <section className="w-full bg-[#020617]">
+          <div className="w-full max-w-[1920px] mx-auto relative">
+            <Image 
+              src="/images/cheotnun-k-beauty-experiencias-viagens.webp" 
+              alt="Experiências Yedam"
+              width={1920}
+              height={800}
+              className="w-full h-auto object-contain block"
+              priority
+            />
           </div>
         </section>
 

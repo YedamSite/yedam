@@ -89,32 +89,22 @@ export default function ComoFuncionaPage() {
       <Header />
 
       <main className="flex-1 w-full flex flex-col items-center">
-        {/* HERO SECTION */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative overflow-hidden min-h-[calc(100vh-115px)]">
-          <div className="flex flex-col relative z-10 max-w-xl">
-            <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-6">
-              {t(c?.hero?.title || 'Cómo funciona')}
-            </h1>
-            <p className="text-white/80 text-[13px] leading-relaxed mb-12 max-w-sm">
-              {t(c?.hero?.subtitle || 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, práctica y confiable.')}
-            </p>
-          </div>
-          
-          <div className="relative w-full h-[40vh] min-h-[300px] max-h-[450px]">
-             <div className="absolute inset-0 right-0 h-full w-full rounded-l-full overflow-hidden border border-white/10 shadow-2xl">
-                <Image 
-                  src={c?.hero?.image || "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200"} 
-                  alt="Productos"
-                  fill
-                  className="object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
-             </div>
+        {/* HERO BANNER */}
+        <section className="w-full bg-[#020617]">
+          <div className="w-full max-w-[1920px] mx-auto relative">
+            <Image 
+              src="/images/cheotnun-k-beauty-como-funciona-guia.webp" 
+              alt="Como Funciona"
+              width={1920}
+              height={800}
+              className="w-full h-auto object-contain block"
+              priority
+            />
           </div>
         </section>
 
         {/* TIMELINE STEPS */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-12 -mt-20 relative z-20">
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 relative z-20">
            <div className="border border-[#c5a173]/40 rounded-3xl p-8 lg:p-12 bg-[#0a111a]/80 backdrop-blur-md shadow-2xl relative overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
                  {/* Connecting line */}
