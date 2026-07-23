@@ -15,8 +15,26 @@ export default function SiteContentTab() {
 
   useEffect(() => {
     const c = db.get('site_content');
-    setContent(JSON.parse(JSON.stringify(c)));
+    const defaults = db.getDefault('site_content');
+    // Deep merge: fill empty/null/undefined fields with defaults
+    const merged = JSON.parse(JSON.stringify(defaults));
+    deepMerge(merged, JSON.parse(JSON.stringify(c || {})));
+    setContent(merged);
   }, []);
+
+  function deepMerge(target: any, source: any) {
+    if (!source || !target) return;
+    for (const key of Object.keys(source)) {
+      if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        if (!target[key]) target[key] = {};
+        deepMerge(target[key], source[key]);
+      } else {
+        if (source[key] !== undefined && source[key] !== null && source[key] !== '') {
+          target[key] = source[key];
+        }
+      }
+    }
+  }
 
   // Normal/Nested Fields Handlers
   const handleChange = (section: string, field: string, value: any) => {
