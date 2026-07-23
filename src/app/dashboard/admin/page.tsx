@@ -21,7 +21,6 @@ import BrandsTab from '@/components/admin/BrandsTab';
 import ImageUpload from '@/components/ImageUpload';
 import ShippingTab from '@/components/admin/ShippingTab';
 import LiveChatTab from '@/components/admin/LiveChatTab';
-import EmailTab from '@/components/admin/EmailTab';
 import { MessageCircle } from 'lucide-react';
 import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
 import { deleteOrderFromSupabase } from '@/actions/shopActions';
@@ -638,10 +637,8 @@ if (!authorized) {
             { id: 'coupons', label: 'Cupones & Promos', icon: Tag },
             { id: 'blog', label: 'Blog & Artículos', icon: BookOpen },
             { id: 'shipping', label: 'Fretes e Zonas', icon: Globe },
-            { id: 'settings', label: 'APIs, SMTP & SEO', icon: Globe },
-            { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
-            { id: 'emails', label: 'E-mails & Templates', icon: Mail }
-          ].map((tab) => {
+                        { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
+                      ].map((tab) => {
             const Icon = tab.icon;
             return (
               <button
@@ -2207,114 +2204,8 @@ if (!authorized) {
           {/* TAB: GENERAL SETTINGS, SMTP & SEO */}
           {activeSubTab === 'shipping' && <ShippingTab />}
           {activeSubTab === 'chat' && <LiveChatTab />}
-          {activeSubTab === 'emails' && <EmailTab />}
-
-          {activeSubTab === 'settings' && (
-            <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white border-b border-white/5 pb-4 mb-6">Configuración del Sistema, SMTP & SEO</h2>
-              
-              {syncMessage && (
-                <div className={`text-xs rounded-xl p-3.5 mb-4 ${
-                  syncMessage.type === 'success' ? 'bg-green-50/10 border border-green-50/20 text-green-400' :
-                  syncMessage.type === 'error' ? 'bg-red-50/10 border border-red-50/20 text-red-400' :
-                  'bg-blue-50/10 border border-blue-50/20 text-blue-400'
-                }`}>
-                  {syncMessage.text}
-                </div>
-              )}
-              {configSaved && (
-                <div className="bg-green-50/10 border border-green-50/20 text-green-400 text-xs rounded-xl p-3.5 mb-6">
-                  ✓ ¡Configuraciones generales de APIs, SMTP y SEO guardadas con éxito!
-                </div>
-              )}
-
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const settings = db.get('system_settings') || {};
-                settings.seo = { titleSuffix: seoTitleSuffix, metaDescription: seoDescription, googleAnalyticsId };
-                settings.smtp = { server: smtpServer, email: smtpUser, user: smtpUser };
-                settings.payments = { stripePublicKey: stripeKey };
-                db.save('system_settings', settings);
-                setConfigSaved(true);
-                setTimeout(() => setConfigSaved(false), 3000);
-              }} className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs text-muted-foreground">
-                <div className="flex flex-col gap-5">
-                  <h3 className="text-xs font-bold text-accent uppercase tracking-wider flex items-center gap-1.5 border-b border-white/5 pb-2">
-                    <Globe className="h-4.5 w-4.5" />
-                    SEO Global Config
-                  </h3>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-white">Sufijo de Títulos SEO</label>
-                    <Input value={seoTitleSuffix} onChange={e => setSeoTitleSuffix(e.target.value)} />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-white">Meta Descripción General</label>
-                    <Input value={seoDescription} onChange={e => setSeoDescription(e.target.value)} />
-                  </div>
-
-                  <h3 className="text-xs font-bold text-accent uppercase tracking-wider flex items-center gap-1.5 border-b border-white/5 pb-2 mt-4">
-                    <Mail className="h-4.5 w-4.5" />
-                    SMTP Email Transaccional
-                  </h3>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-white">Servidor SMTP Host</label>
-                    <Input value={smtpServer} onChange={e => setSmtpServer(e.target.value)} />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-white">E-mail de salida SMTP</label>
-                    <Input value={smtpUser} onChange={e => setSmtpUser(e.target.value)} />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-5">
-                  <h3 className="text-xs font-bold text-accent uppercase tracking-wider flex items-center gap-1.5 border-b border-white/5 pb-2">
-                    <Key className="h-4.5 w-4.5" />
-                    Pasarelas de Pago & Integraciones APIs
-                  </h3>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-white">Stripe Public Key</label>
-                    <Input value={stripeKey} onChange={e => setStripeKey(e.target.value)} />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold uppercase text-white">Google Analytics Tracking ID</label>
-                    <Input value={googleAnalyticsId} onChange={e => setGoogleAnalyticsId(e.target.value)} placeholder="G-XXXXXXXXXX" />
-                  </div>
-                  
-                  <div className="mt-8 pt-4 border-t border-white/5 flex flex-col gap-2">
-                    <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl">
-                      GUARDAR CONFIGURACIONES
-                    </Button>
-                    <Button variant="outline" type="button" onClick={() => alert('¡Generando backup completo del JSON DbState!')} className="border-white/10 text-white hover:bg-white/5 py-2.5 rounded-xl">
-                      DESCARGAR COPIA DE SEGURIDAD (BACKUP)
-                    </Button>
-                    <Button
-                      variant="outline"
-                      type="button"
-                      onClick={async () => {
-                        try {
-                          setSyncMessage({ type: 'info', text: 'Sincronizando con Supabase...' });
-                          const res = await fetch('/api/supabase-migrate');
-                          const data = await res.json();
-                          if (data.status === 'ready') {
-                            setSyncMessage({ type: 'success', text: '✓ Supabase conectado. Datos sincronizados.' });
-                          } else {
-                            setSyncMessage({ type: 'info', text: 'Ejecuta el SQL de migración en Supabase Dashboard. Ve a Settings → API para instrucciones.' });
-                          }
-                        } catch {
-                          setSyncMessage({ type: 'error', text: '✗ Error al conectar con Supabase' });
-                        }
-                        setTimeout(() => setSyncMessage(null), 5000);
-                      }}
-                      className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 py-2.5 rounded-xl"
-                    >
-                      <Database className="h-4 w-4 mr-1.5" />
-                      SINCRONIZAR CON SUPABASE
-                    </Button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          )}
+          
+          
 
           {/* TAB: SALES REPORTS */}
           {activeSubTab === 'stats' && (
