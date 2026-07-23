@@ -324,6 +324,9 @@ export default function SiteContentTab() {
     { id: 'envios', label: 'Página: Envíos' },
     { id: 'rutinasPage', label: 'Página: Rutinas' },
     { id: 'experienciasPage', label: 'Página: Experiencias' },
+    { id: 'terminos', label: 'Página: Términos' },
+    { id: 'privacidad', label: 'Página: Privacidad' },
+    { id: 'blog', label: 'Página: Blog' },
   ];
 
   // Base lengths for loop consistency in translation tab
@@ -832,6 +835,86 @@ export default function SiteContentTab() {
                 label="Imagem Hero (Experiencias)"
               />
             )}
+          </div>
+        )}
+        )}
+
+        {/* TERMINOS */}
+        {activeSection === 'terminos' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Términos y Condiciones</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Badge', 'terminos', 'hero.badge')}
+              {renderInput('Título', 'terminos', 'hero.title')}
+              {renderInput('Subtítulo', 'terminos', 'hero.subtitle', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Intro P1', 'terminos', 'intro.p1', { rows: 2 })}
+              {renderInput('Intro Brand', 'terminos', 'intro.brand')}
+              {renderInput('Intro P2', 'terminos', 'intro.p2', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Nome Empresa', 'terminos', 'company.name')}
+              {renderInput('NIF', 'terminos', 'company.nif')}
+              {renderInput('Endereço', 'terminos', 'company.address')}
+              {renderInput('Email', 'terminos', 'company.email')}
+              {renderInput('Telefone', 'terminos', 'company.phone')}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Título Idade', 'terminos', 'additional.ageTitle')}
+              {renderInput('Desc Idade', 'terminos', 'additional.ageDesc', { rows: 2 })}
+              {renderInput('Título Conta', 'terminos', 'additional.accountTitle')}
+              {renderInput('Desc Conta', 'terminos', 'additional.accountDesc', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Contato Título', 'terminos', 'contact.title')}
+              {renderInput('Contato Desc', 'terminos', 'contact.desc')}
+            </div>
+          </div>
+        )}
+
+        {/* PRIVACIDAD */}
+        {activeSection === 'privacidad' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Política de Privacidad</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Badge', 'privacidad', 'hero.badge')}
+              {renderInput('Título', 'privacidad', 'hero.title')}
+              {renderInput('Subtítulo', 'privacidad', 'hero.subtitle', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Intro P1', 'privacidad', 'intro.p1', { rows: 2 })}
+              {renderInput('Intro Brand', 'privacidad', 'intro.brand')}
+              {renderInput('Intro P2', 'privacidad', 'intro.p2', { rows: 2 })}
+              {renderInput('Intro P3', 'privacidad', 'intro.p3', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Segurança Título', 'privacidad', 'security.title')}
+              {renderInput('Segurança P1', 'privacidad', 'security.p1', { rows: 2 })}
+              {renderInput('Segurança P2', 'privacidad', 'security.p2', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Cookies Título', 'privacidad', 'cookies.title')}
+              {renderInput('Cookies P1', 'privacidad', 'cookies.p1', { rows: 2 })}
+              {renderInput('Cookies P2', 'privacidad', 'cookies.p2', { rows: 2 })}
+            </div>
+            <div className="border-t border-white/5 pt-4 grid grid-cols-2 gap-4">
+              {renderInput('Contato Título', 'privacidad', 'contact.title')}
+              {renderInput('Contato Desc', 'privacidad', 'contact.desc', { rows: 2 })}
+              {renderInput('Contato Email', 'privacidad', 'contact.email')}
+              {renderInput('Contato Endereço', 'privacidad', 'contact.address')}
+            </div>
+          </div>
+        )}
+
+        {/* BLOG */}
+        {activeSection === 'blog' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Blog</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Título da Página', 'blog', 'pageTitle')}
+              {renderInput('Subtítulo da Página', 'blog', 'pageSubtitle', { rows: 3 })}
+            </div>
           </div>
         )}
       </div>
