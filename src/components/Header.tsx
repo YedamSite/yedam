@@ -149,7 +149,7 @@ export default function Header() {
   const siteContent = db.get('site_content');
   const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
   const headerContent = translatedContent.header || {};
-  const navItems = [
+  const navItems: any[] = headerContent.navLinks || [
     { label: t('Inicio'), href: '/' },
     { label: t('Tienda'), href: '/tienda' },
     { label: t('Categorías'), href: '/tienda' },
@@ -157,7 +157,6 @@ export default function Header() {
     { label: t('Marcas'), href: '/marcas' },
     { label: t('Experiencias'), href: '/experiencias' }
   ];
-
   return (
     <div className="w-full flex flex-col sticky top-0 z-50">
       {/* Top Announcement Bar */}
@@ -238,7 +237,7 @@ export default function Header() {
 
           {/* Desktop Nav Centered - flex-1 to fill space */}
           <nav className="hidden md:flex items-center justify-center gap-10 flex-1">
-            {navItems.map((item) => (
+            {navItems.map((item: any) => (
               <Link
                 key={item.href}
                 href={item.href}

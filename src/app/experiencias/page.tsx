@@ -6,9 +6,42 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ArrowRight, FlaskConical, Award, Gift, Fan, Coffee, Plane, CheckCircle2, MapPin, Camera, Star, Mail } from 'lucide-react';
-import { BranchBlossom } from '@/components/ui/icons';
 import { useLanguage } from '@/context/LanguageContext';
 import { db } from '@/lib/db';
+
+
+const BranchBlossom = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 200 200" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 180 C 60 140 100 120 180 40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <path d="M60 140 C 90 150 120 160 150 140" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M100 120 C 110 90 130 70 160 60" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M140 80 C 150 100 160 110 180 110" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+    
+    <g transform="translate(180, 40) scale(1)">
+      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
+    </g>
+    <g transform="translate(160, 60) scale(0.8) rotate(30)">
+      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
+    </g>
+    <g transform="translate(150, 140) scale(1.1) rotate(-20)">
+      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
+    </g>
+    <g transform="translate(90, 110) scale(0.7) rotate(45)">
+      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
+    </g>
+
+    <circle cx="180" cy="110" r="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="140" cy="150" r="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="110" cy="70" r="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="50" cy="130" r="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+    
+    <path d="M60 140 Q 50 130 65 125 Z" fill="none" stroke="currentColor" strokeWidth="1" />
+  </svg>
+);
 
 export default function ExperienciasPage() {
   const { t, locale } = useLanguage();

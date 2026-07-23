@@ -31,7 +31,7 @@ export default function SiteContentTab() {
         root = updated.translations[activeLang];
       }
 
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       if (isRootSec) {
         if (!root[section]) root[section] = {};
         let obj = root[section];
@@ -67,7 +67,7 @@ export default function SiteContentTab() {
         root = updated.translations[activeLang];
       }
 
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? root : root.home;
 
       if (!isRootSec && !root.home) root.home = {};
@@ -110,7 +110,7 @@ export default function SiteContentTab() {
     // Adding array item always modifies the base structure (ES) first to maintain length consistency
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? updated : updated.home;
 
       if (!isRootSec && !updated.home) updated.home = {};
@@ -127,7 +127,7 @@ export default function SiteContentTab() {
     // Removing array item modifies base structure and deletes index from all translations
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? updated : updated.home;
 
       if (parentObj?.[section]?.[arrayField]) {
@@ -160,7 +160,7 @@ export default function SiteContentTab() {
       root = content.translations?.[activeLang];
     }
     if (!root) return '';
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     let obj = isRootSec ? root[section] : root.home?.[section];
     if (!obj) return '';
     let current = obj;
@@ -173,7 +173,7 @@ export default function SiteContentTab() {
 
   const getBaseValue = (section: string, field: string): string => {
     const parts = field.split('.');
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     let obj = isRootSec ? content[section] : content.home?.[section];
     if (!obj) return '';
     let current = obj;
@@ -189,7 +189,7 @@ export default function SiteContentTab() {
     if (activeLang !== 'es') {
       root = content.translations?.[activeLang];
     }
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     const parentObj = isRootSec ? root : root?.home;
 
     if (!parentObj || !parentObj[section] || !parentObj[section][arrayField] || !parentObj[section][arrayField][index]) {
@@ -210,7 +210,7 @@ export default function SiteContentTab() {
   };
 
   const getBaseArrayValue = (section: string, arrayField: string, index: number, field: string): string => {
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     const parentObj = isRootSec ? content : content.home;
 
     if (!parentObj || !parentObj[section] || !parentObj[section][arrayField] || !parentObj[section][arrayField][index]) {
@@ -335,6 +335,14 @@ export default function SiteContentTab() {
   const routinesItems = content.home?.routines?.items || [];
   const routinesBadges = content.home?.routines?.badges || [];
   const instagramImages = content.home?.instagram?.images || [];
+  const headerLinks = content.header?.navLinks || [];
+  const footerCols = content.footer?.columns || [];
+  const rutinasSteps = content.rutinasPage?.steps || [];
+  const expList = content.experienciasPage?.experiencesList || [];
+  const maeumCards = content.experienciasPage?.maeum?.cards || [];
+  const testList = content.experienciasPage?.testimonials?.list || [];
+  const termSections = content.terminos?.sections || [];
+  const privSections = content.privacidad?.sections || [];
 
   return (
     <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
@@ -815,6 +823,35 @@ export default function SiteContentTab() {
                 label="Imagem Hero (Rutinas)"
               />
             )}
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Passos da Rotina</h4>
+              {activeLang === 'es' && (
+                <Button onClick={() => addArrayItem('rutinasPage', 'steps', { step: '1', title: 'Novo', subtitle: '', description: '', icon: 'Droplet' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              )}
+            </div>
+            {rutinasSteps.map((item: any, idx: number) => (
+              <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-accent uppercase">Passo #{idx + 1}</span>
+                  {activeLang === 'es' && (
+                    <button onClick={() => removeArrayItem('rutinasPage', 'steps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {renderArrayInput('Número (Step)', 'rutinasPage', 'steps', idx, 'step')}
+                  {renderArrayInput('Ícone', 'rutinasPage', 'steps', idx, 'icon')}
+                  {renderArrayInput('Título', 'rutinasPage', 'steps', idx, 'title')}
+                  {renderArrayInput('Subtítulo', 'rutinasPage', 'steps', idx, 'subtitle')}
+                  <div className="col-span-2">
+                     {renderArrayInput('Descrição', 'rutinasPage', 'steps', idx, 'description', { rows: 2 })}
+                  </div>
+                </div>
+              </div>
+            ))}
+
           </div>
         )}
 
@@ -835,8 +872,86 @@ export default function SiteContentTab() {
                 label="Imagem Hero (Experiencias)"
               />
             )}
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Lista de Experiências</h4>
+              {activeLang === 'es' && (
+                <Button onClick={() => addArrayItem('experienciasPage', 'experiencesList', { title: 'Novo', desc: '', icon: 'Award', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              )}
+            </div>
+            {expList.map((item: any, idx: number) => (
+              <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-accent uppercase">Card #{idx + 1}</span>
+                  {activeLang === 'es' && (
+                    <button onClick={() => removeArrayItem('experienciasPage', 'experiencesList', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {renderArrayInput('Título', 'experienciasPage', 'experiencesList', idx, 'title')}
+                  {renderArrayInput('Ícone', 'experienciasPage', 'experiencesList', idx, 'icon')}
+                  <div className="col-span-2">
+                     {renderArrayInput('Descrição', 'experienciasPage', 'experiencesList', idx, 'desc', { rows: 2 })}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Maeum Global - Cards</h4>
+              {activeLang === 'es' && (
+                <Button onClick={() => addArrayItem('experienciasPage', 'maeum.cards', { title: 'Novo', desc: '', icon: 'Award', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              )}
+            </div>
+            {maeumCards.map((item: any, idx: number) => (
+              <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-accent uppercase">Maeum Card #{idx + 1}</span>
+                  {activeLang === 'es' && (
+                    <button onClick={() => removeArrayItem('experienciasPage', 'maeum.cards', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {renderArrayInput('Título', 'experienciasPage', 'maeum.cards', idx, 'title')}
+                  {renderArrayInput('Ícone', 'experienciasPage', 'maeum.cards', idx, 'icon')}
+                  <div className="col-span-2">
+                     {renderArrayInput('Descrição', 'experienciasPage', 'maeum.cards', idx, 'desc', { rows: 2 })}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Depoimentos</h4>
+              {activeLang === 'es' && (
+                <Button onClick={() => addArrayItem('experienciasPage', 'testimonials.list', { name: 'Nome', country: 'País', quote: '', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              )}
+            </div>
+            {testList.map((item: any, idx: number) => (
+              <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-accent uppercase">Depoimento #{idx + 1}</span>
+                  {activeLang === 'es' && (
+                    <button onClick={() => removeArrayItem('experienciasPage', 'testimonials.list', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {renderArrayInput('Nome', 'experienciasPage', 'testimonials.list', idx, 'name')}
+                  {renderArrayInput('País', 'experienciasPage', 'testimonials.list', idx, 'country')}
+                  <div className="col-span-2">
+                     {renderArrayInput('Citação (Quote)', 'experienciasPage', 'testimonials.list', idx, 'quote', { rows: 2 })}
+                  </div>
+                </div>
+              </div>
+            ))}
+
           </div>
-        )}
         )}
 
         {/* TERMINOS */}
@@ -870,6 +985,32 @@ export default function SiteContentTab() {
               {renderInput('Contato Título', 'terminos', 'contact.title')}
               {renderInput('Contato Desc', 'terminos', 'contact.desc')}
             </div>
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Seções e Regras</h4>
+              {activeLang === 'es' && (
+                <Button onClick={() => addArrayItem('terminos', 'sections', { title: 'Nova Seção', content: '', icon: 'FileText' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              )}
+            </div>
+            {termSections.map((item: any, idx: number) => (
+              <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-accent uppercase">Seção #{idx + 1}</span>
+                  {activeLang === 'es' && (
+                    <button onClick={() => removeArrayItem('terminos', 'sections', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {renderArrayInput('Ícone', 'terminos', 'sections', idx, 'icon')}
+                  {renderArrayInput('Título', 'terminos', 'sections', idx, 'title')}
+                  <div className="col-span-2">
+                     {renderArrayInput('Conteúdo', 'terminos', 'sections', idx, 'content', { rows: 3 })}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
@@ -904,6 +1045,32 @@ export default function SiteContentTab() {
               {renderInput('Contato Email', 'privacidad', 'contact.email')}
               {renderInput('Contato Endereço', 'privacidad', 'contact.address')}
             </div>
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Cláusulas</h4>
+              {activeLang === 'es' && (
+                <Button onClick={() => addArrayItem('privacidad', 'sections', { title: 'Nova Cláusula', content: '', icon: 'Shield' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              )}
+            </div>
+            {privSections.map((item: any, idx: number) => (
+              <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-accent uppercase">Cláusula #{idx + 1}</span>
+                  {activeLang === 'es' && (
+                    <button onClick={() => removeArrayItem('privacidad', 'sections', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {renderArrayInput('Ícone', 'privacidad', 'sections', idx, 'icon')}
+                  {renderArrayInput('Título', 'privacidad', 'sections', idx, 'title')}
+                  <div className="col-span-2">
+                     {renderArrayInput('Conteúdo', 'privacidad', 'sections', idx, 'content', { rows: 3 })}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

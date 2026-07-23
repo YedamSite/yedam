@@ -6,10 +6,31 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { ArrowRight, Droplet, Sparkles, LayoutGrid, Sun, Moon, HelpCircle, ChevronDown, Mail, Sparkle, Target, ShieldCheck } from 'lucide-react';
-import { OutlineCircle, FlowerOutline } from '@/components/ui/icons';
 import { useLanguage } from '@/context/LanguageContext';
 import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 import { db } from '@/lib/db';
+
+
+const FlowerOutline = () => (
+  <svg width="60" height="90" viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M30 85 C 30 50, 45 40, 45 10" stroke="#C9C9C9" strokeWidth="1" strokeLinecap="round" />
+    <path d="M30 65 C 20 60, 15 50, 15 40" stroke="#C9C9C9" strokeWidth="1" strokeLinecap="round" />
+    <path d="M45 10 C 50 15, 55 10, 50 5 C 45 0, 40 5, 45 10" stroke="#C9C9C9" strokeWidth="1" />
+    <path d="M15 40 C 20 45, 10 50, 5 45 C 0 40, 10 35, 15 40" stroke="#C9C9C9" strokeWidth="1" />
+    <circle cx="45" cy="10" r="1.5" fill="#C9C9C9" />
+    <circle cx="15" cy="40" r="1.5" fill="#C9C9C9" />
+    <path d="M35 50 C 45 55, 55 50, 50 40 C 45 30, 35 40, 35 50" stroke="#C9C9C9" strokeWidth="1" />
+    <circle cx="43" cy="45" r="1.5" fill="#C9C9C9" />
+    <path d="M25 25 C 20 15, 10 20, 15 30 C 20 40, 30 35, 25 25" stroke="#C9C9C9" strokeWidth="1" />
+    <circle cx="18" cy="25" r="1.5" fill="#C9C9C9" />
+  </svg>
+);
+
+const OutlineCircle = ({ children }: { children: React.ReactNode }) => (
+  <div className="w-5 h-5 rounded-full border border-[#C9C9C9] text-[#C9C9C9] flex items-center justify-center text-[9px]">
+    {children}
+  </div>
+);
 
 export default function RutinasPage() {
   const { t, locale } = useLanguage();
