@@ -41,17 +41,56 @@ export default function MarcasPage() {
 
       <main className="flex-1 w-full overflow-hidden">
         
-        {/* HERO BANNER */}
-        <section className="w-full bg-[#020617]">
-          <div className="w-full max-w-[1920px] mx-auto relative">
-            <Image 
-              src="/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp" 
-              alt="Marcas Coreanas Oficiais"
-              width={1920}
-              height={800}
-              className="w-full h-auto object-contain block"
-              priority
-            />
+        {/* 1. HERO SECTION */}
+        <section className="relative w-full px-4 lg:px-12 py-6 max-w-[1400px] mx-auto min-h-[calc(100vh-115px)] flex flex-col justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
+            {/* Text Content */}
+            <div className="flex flex-col gap-8 max-w-xl z-10 relative">
+              <div>
+                <h1 className="text-5xl lg:text-7xl font-heading font-light text-white mb-6 leading-[1.1]">
+                  {t(c?.hero?.title || 'Marcas Coreanas')}
+                </h1>
+                <p className="text-base text-gray-300 leading-relaxed max-w-md">
+                  {t(c?.hero?.subtitle || 'Trabajamos con las mejores marcas de Corea del Sur para ofrecerte lo mejor en cuidado de la piel.')}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-8 mt-4">
+                {(c?.features || [
+                  { title: 'Marcas auténticas', text: 'Productos 100% originales comprados directamente en Corea del Sur.', icon: 'Award' },
+                  { title: 'Innovación y calidad', text: 'Marcas reconocidas por su tecnología avanzada y resultados comprobados.', icon: 'Beaker' },
+                  { title: 'Belleza consciente', text: 'Fórmulas seguras, ingredientes eficaces y respeto por tu piel y el medio ambiente.', icon: 'Heart' }
+                ]).map((feat: any, idx: number) => {
+                  const IconMap: any = { Award, Beaker, Heart, ShieldCheck, ShoppingBag, Headset, Gift, Star, Leaf, FlaskConical, Rabbit, Recycle, Flower2 };
+                  const Icon = IconMap[feat.icon] || Award;
+                  return (
+                    <div key={idx} className="flex items-start gap-5">
+                      <div className="w-12 h-12 rounded-full border border-[#D5A07D] flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 text-[#D5A07D] stroke-[1.5]" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-white mb-1">{t(feat.title)}</h3>
+                        <p className="text-xs text-gray-400 leading-relaxed">{t(feat.text)}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Arch Image cutout */}
+            <div className="relative h-[40vh] min-h-[350px] max-h-[500px] w-full flex justify-end items-center">
+              <div className="absolute inset-0 right-0 w-[120%] h-[120%] bg-[#0f1d33] rounded-bl-[400px] -z-10 translate-x-[20%] -translate-y-[10%]" />
+              <div className="relative w-full max-w-[450px] h-[90%] rounded-t-full overflow-hidden border border-white/10 shadow-2xl mr-auto lg:mr-0">
+                <Image
+                  src="/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"
+                  alt="K-Beauty Products"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </section>
 

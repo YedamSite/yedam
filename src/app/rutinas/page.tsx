@@ -74,17 +74,39 @@ export default function RutinasPage() {
 
       <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">
         
-        {/* HERO BANNER */}
-        <section className="w-full bg-[#020617]">
-          <div className="w-full max-w-[1920px] mx-auto relative">
-            <Image 
-              src="/images/cheotnun-k-beauty-rutinas-skincare.webp" 
-              alt="Guia de Rotinas de Skincare Coreano"
-              width={1920}
-              height={800}
-              className="w-full h-auto object-contain block"
-              priority
-            />
+        {/* HERO SECTION */}
+        <section className="w-full max-w-[1200px] mx-auto px-6 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
+          <div className="max-w-xl z-10 relative">
+            <span className="text-[#C9C9C9] font-medium text-[10px] tracking-widest uppercase mb-4 block">
+              {t('GUIA DE SKINCARE COREANO')}
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-5xl font-serif text-white mb-6 leading-[1.1] font-light">
+              {t('Aprenda os passos do skincare coreano')}
+            </h1>
+            <p className="text-white/70 text-[13px] leading-relaxed mb-8 max-w-[400px]">
+              {t('Entenda a função de cada etapa, conheça os ingredientes do K-Beauty e descubra como utilizar os produtos corretamente para cuidar da sua pele todos os dias.')}
+            </p>
+            <Link href="/tienda?search=Rutina" className="bg-[#C9C9C9] hover:bg-[#E5E5E5] text-[#040914] font-bold text-[10px] tracking-widest px-6 py-3.5 rounded-sm uppercase inline-flex items-center gap-4 transition-colors">
+              {t('EXPLORAR PRODUTOS')} <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          
+          <div className="relative w-full h-[400px] lg:h-[500px] flex items-center justify-center lg:justify-end z-0">
+            {/* Glowing ring effect behind products */}
+            <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border-[2px] border-[#C9C9C9]/40 shadow-[0_0_100px_rgba(201,201,201,0.4)] flex items-center justify-center">
+            </div>
+            
+            {/* Products image overlay */}
+            <div className="relative z-10 w-full h-full scale-[1.1] origin-right">
+              <Image 
+                src="/images/cheotnun-k-beauty-rutinas-skincare.webp" 
+                alt="Skincare Products"
+                fill
+                className="object-contain object-right"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#040914] via-[#040914]/40 to-transparent w-1/3 left-0"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#040914] via-transparent to-transparent h-1/4 bottom-0"></div>
+            </div>
           </div>
         </section>
 
