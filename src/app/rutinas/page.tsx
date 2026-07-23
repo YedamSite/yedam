@@ -27,21 +27,21 @@ import { useState } from 'react';
 // Custom Icons to match image perfectly
 const FlowerOutline = () => (
   <svg width="60" height="90" viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M30 85 C 30 50, 45 40, 45 10" stroke="#E1B17A" strokeWidth="1" strokeLinecap="round" />
-    <path d="M30 65 C 20 60, 15 50, 15 40" stroke="#E1B17A" strokeWidth="1" strokeLinecap="round" />
-    <path d="M45 10 C 50 15, 55 10, 50 5 C 45 0, 40 5, 45 10" stroke="#E1B17A" strokeWidth="1" />
-    <path d="M15 40 C 20 45, 10 50, 5 45 C 0 40, 10 35, 15 40" stroke="#E1B17A" strokeWidth="1" />
-    <circle cx="45" cy="10" r="1.5" fill="#E1B17A" />
-    <circle cx="15" cy="40" r="1.5" fill="#E1B17A" />
-    <path d="M35 50 C 45 55, 55 50, 50 40 C 45 30, 35 40, 35 50" stroke="#E1B17A" strokeWidth="1" />
-    <circle cx="43" cy="45" r="1.5" fill="#E1B17A" />
-    <path d="M25 25 C 20 15, 10 20, 15 30 C 20 40, 30 35, 25 25" stroke="#E1B17A" strokeWidth="1" />
-    <circle cx="18" cy="25" r="1.5" fill="#E1B17A" />
+    <path d="M30 85 C 30 50, 45 40, 45 10" stroke="#C9C9C9" strokeWidth="1" strokeLinecap="round" />
+    <path d="M30 65 C 20 60, 15 50, 15 40" stroke="#C9C9C9" strokeWidth="1" strokeLinecap="round" />
+    <path d="M45 10 C 50 15, 55 10, 50 5 C 45 0, 40 5, 45 10" stroke="#C9C9C9" strokeWidth="1" />
+    <path d="M15 40 C 20 45, 10 50, 5 45 C 0 40, 10 35, 15 40" stroke="#C9C9C9" strokeWidth="1" />
+    <circle cx="45" cy="10" r="1.5" fill="#C9C9C9" />
+    <circle cx="15" cy="40" r="1.5" fill="#C9C9C9" />
+    <path d="M35 50 C 45 55, 55 50, 50 40 C 45 30, 35 40, 35 50" stroke="#C9C9C9" strokeWidth="1" />
+    <circle cx="43" cy="45" r="1.5" fill="#C9C9C9" />
+    <path d="M25 25 C 20 15, 10 20, 15 30 C 20 40, 30 35, 25 25" stroke="#C9C9C9" strokeWidth="1" />
+    <circle cx="18" cy="25" r="1.5" fill="#C9C9C9" />
   </svg>
 );
 
 const OutlineCircle = ({ children }: { children: React.ReactNode }) => (
-  <div className="w-5 h-5 rounded-full border border-[#E1B17A] text-[#E1B17A] flex items-center justify-center text-[9px]">
+  <div className="w-5 h-5 rounded-full border border-[#C9C9C9] text-[#C9C9C9] flex items-center justify-center text-[9px]">
     {children}
   </div>
 );
@@ -69,7 +69,7 @@ export default function RutinasPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#040914] text-white font-sans selection:bg-[#E1B17A] selection:text-[#040914]">
+    <div className="flex flex-col min-h-screen bg-[#040914] text-white font-sans selection:bg-[#C9C9C9] selection:text-[#040914]">
       <Header />
 
       <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">
@@ -77,7 +77,7 @@ export default function RutinasPage() {
         {/* HERO SECTION */}
         <section className="w-full max-w-[1200px] mx-auto px-6 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
           <div className="max-w-xl z-10 relative">
-            <span className="text-[#E1B17A] font-medium text-[10px] tracking-widest uppercase mb-4 block">
+            <span className="text-[#C9C9C9] font-medium text-[10px] tracking-widest uppercase mb-4 block">
               {t('GUIA DE SKINCARE COREANO')}
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-5xl font-serif text-white mb-6 leading-[1.1] font-light">
@@ -86,14 +86,14 @@ export default function RutinasPage() {
             <p className="text-white/70 text-[13px] leading-relaxed mb-8 max-w-[400px]">
               {t('Entenda a função de cada etapa, conheça os ingredientes do K-Beauty e descubra como utilizar os produtos corretamente para cuidar da sua pele todos os dias.')}
             </p>
-            <Link href="/tienda?search=Rutina" className="bg-[#E1B17A] hover:bg-[#F2D7B6] text-[#040914] font-bold text-[10px] tracking-widest px-6 py-3.5 rounded-sm uppercase inline-flex items-center gap-4 transition-colors">
+            <Link href="/tienda?search=Rutina" className="bg-[#C9C9C9] hover:bg-[#E5E5E5] text-[#040914] font-bold text-[10px] tracking-widest px-6 py-3.5 rounded-sm uppercase inline-flex items-center gap-4 transition-colors">
               {t('EXPLORAR PRODUTOS')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
           
           <div className="relative w-full h-[400px] lg:h-[500px] flex items-center justify-center lg:justify-end z-0">
             {/* Glowing ring effect behind products */}
-            <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border-[2px] border-[#E1B17A]/40 shadow-[0_0_100px_rgba(225,177,122,0.4)] flex items-center justify-center">
+            <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border-[2px] border-[#C9C9C9]/40 shadow-[0_0_100px_rgba(201,201,201,0.4)] flex items-center justify-center">
             </div>
             
             {/* Products image overlay */}
@@ -129,18 +129,18 @@ export default function RutinasPage() {
               { id: 'protetor', icon: Sun, title: 'Protetor Solar', desc: 'Etapa indispensável durante o dia para proteção contra os raios UV.' },
             ].map((step, idx) => (
               <div key={idx} className="border border-[#1A233A] bg-[#070D1C] rounded-sm p-6 flex flex-col items-center text-center group">
-                <step.icon className="w-7 h-7 text-[#E1B17A] mb-4" strokeWidth={1} />
-                <h3 className="text-[#E1B17A] font-serif text-[15px] mb-3 font-medium">{t(step.title)}</h3>
+                <step.icon className="w-7 h-7 text-[#C9C9C9] mb-4" strokeWidth={1} />
+                <h3 className="text-[#C9C9C9] font-serif text-[15px] mb-3 font-medium">{t(step.title)}</h3>
                 <p className="text-white/70 text-[10px] leading-relaxed mb-6 flex-1 px-1">{t(step.desc)}</p>
-                <Link href={`/tienda?search=${encodeURIComponent(step.title)}`} className="text-[8px] font-bold tracking-widest uppercase border border-[#1A233A] text-white hover:border-[#E1B17A] py-2.5 px-6 rounded-sm w-max transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                <Link href={`/tienda?search=${encodeURIComponent(step.title)}`} className="text-[8px] font-bold tracking-widest uppercase border border-[#1A233A] text-white hover:border-[#C9C9C9] py-2.5 px-6 rounded-sm w-max transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
                   {t('SAIBA MAIS')} <ArrowRight className="w-2.5 h-2.5" />
                 </Link>
               </div>
             ))}
           </div>
           
-          <div className="mt-6 flex items-center justify-center gap-2 text-[#E1B17A]/80 text-[10px]">
-             <Sparkle className="w-3.5 h-3.5 text-[#E1B17A]" strokeWidth={1.5} />
+          <div className="mt-6 flex items-center justify-center gap-2 text-[#C9C9C9]/80 text-[10px]">
+             <Sparkle className="w-3.5 h-3.5 text-[#C9C9C9]" strokeWidth={1.5} />
              {t('* Clique em cada etapa para entender melhor sobre os produtos e encontrar opções disponíveis na Yedam.')}
           </div>
         </section>
@@ -171,7 +171,7 @@ export default function RutinasPage() {
                 </div>
                 <h4 className="text-white text-[11px] font-bold mb-1 leading-tight">{t(ing.name)}</h4>
                 <p className="text-white/50 text-[8px] mb-3 flex-1 leading-[1.4]">{t(ing.desc)}</p>
-                <Link href={`/tienda?search=${encodeURIComponent(ing.name.split(" ")[0])}`} className="text-[7.5px] font-bold tracking-widest text-[#E1B17A] uppercase flex items-center gap-1 transition-colors">
+                <Link href={`/tienda?search=${encodeURIComponent(ing.name.split(" ")[0])}`} className="text-[7.5px] font-bold tracking-widest text-[#C9C9C9] uppercase flex items-center gap-1 transition-colors">
                   {t('VER PRODUTOS')} <ArrowRight className="w-2.5 h-2.5" />
                 </Link>
               </div>
@@ -201,13 +201,13 @@ export default function RutinasPage() {
                     <div className="mb-4">
                       <OutlineCircle>{step.num}</OutlineCircle>
                     </div>
-                    <step.icon className="w-6 h-6 text-[#E1B17A] mb-3" strokeWidth={1} />
+                    <step.icon className="w-6 h-6 text-[#C9C9C9] mb-3" strokeWidth={1} />
                     <span className="text-white text-[10px] text-center font-medium leading-tight">{t(step.title)}</span>
                     {step.sub && <span className="text-white/40 text-[8px] text-center mt-0.5">{t(step.sub)}</span>}
                   </div>
                   {idx < 5 && (
                     <div className="hidden md:flex flex-1 items-center justify-center mt-2.5 -mx-4 z-0">
-                       <ArrowRight className="w-3.5 h-3.5 text-[#E1B17A]/50" strokeWidth={1.5} />
+                       <ArrowRight className="w-3.5 h-3.5 text-[#C9C9C9]/50" strokeWidth={1.5} />
                     </div>
                   )}
                 </React.Fragment>
@@ -265,7 +265,7 @@ export default function RutinasPage() {
                   <Image src={tip.img} alt={tip.title} fill className="object-cover" />
                 </div>
                 <div className="flex-1 p-5 flex flex-col justify-center relative">
-                  <tip.icon className="absolute top-5 left-[-10px] w-5 h-5 text-[#E1B17A] bg-[#040914] rounded-full p-0.5" strokeWidth={1} />
+                  <tip.icon className="absolute top-5 left-[-10px] w-5 h-5 text-[#C9C9C9] bg-[#040914] rounded-full p-0.5" strokeWidth={1} />
                   <div className="pl-3">
                     <h4 className="text-white font-serif text-[14px] mb-2 font-medium">{t(tip.title)}</h4>
                     <p className="text-white/60 text-[9.5px] leading-relaxed mb-3">{t(tip.desc)}</p>
@@ -301,7 +301,7 @@ export default function RutinasPage() {
                 { name: 'Pincéis e acessórios', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=150' },
               ].map((item, idx) => (
                 <Link key={idx} href={`/tienda?search=${encodeURIComponent(item.name)}`} className="flex flex-col items-center gap-2 group cursor-pointer w-[50px]">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-[1.5px] border-white/20 group-hover:border-[#E1B17A] transition-colors relative">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-[1.5px] border-white/20 group-hover:border-[#C9C9C9] transition-colors relative">
                     <Image src={item.img} alt={item.name} fill className="object-cover" />
                   </div>
                   <span className="text-[7px] text-white/70 text-center leading-[1.2] group-hover:text-white">{t(item.name)}</span>
@@ -309,7 +309,7 @@ export default function RutinasPage() {
               ))}
             </div>
 
-            <Link href="/tienda?category=maquiagem" className="text-[8px] font-bold text-[#E1B17A] tracking-widest uppercase flex items-center gap-2 mt-8 w-fit">
+            <Link href="/tienda?category=maquiagem" className="text-[8px] font-bold text-[#C9C9C9] tracking-widest uppercase flex items-center gap-2 mt-8 w-fit">
               {t('VER TODAS AS CATEGORIAS DE MAQUIAGEM')} <ArrowRight className="w-2.5 h-2.5" />
             </Link>
           </div>
@@ -331,7 +331,7 @@ export default function RutinasPage() {
               ].map((cat, idx) => (
                 <Link key={idx} href={`/tienda?search=${encodeURIComponent(cat.name)}`} className="flex flex-col items-center gap-3 group">
                    <div className="w-8 h-8 flex items-center justify-center">
-                     <cat.icon className="w-6 h-6 text-[#E1B17A]" strokeWidth={1} />
+                     <cat.icon className="w-6 h-6 text-[#C9C9C9]" strokeWidth={1} />
                    </div>
                    <span className="text-[8px] text-white/60 text-center group-hover:text-white transition-colors">{t(cat.name)}</span>
                 </Link>
@@ -359,7 +359,7 @@ export default function RutinasPage() {
                   className="w-full p-5 flex items-start justify-between text-left gap-4 h-full min-h-[90px]"
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-4 h-4 rounded-full border border-[#E1B17A] text-[#E1B17A] flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-4 h-4 rounded-full border border-[#C9C9C9] text-[#C9C9C9] flex items-center justify-center shrink-0 mt-0.5">
                       <HelpCircle className="w-3 h-3" strokeWidth={1.5} />
                     </div>
                     <span className="text-[11px] text-white/90 leading-[1.4] font-medium pr-2">{t(faq.q)}</span>
@@ -389,14 +389,14 @@ export default function RutinasPage() {
                      <input 
                        type="email" 
                        placeholder={t('Seu melhor e-mail')} 
-                       className="w-[60%] bg-[#040914] border border-[#1A233A] text-white placeholder-white/30 px-4 py-3 rounded-sm text-[10px] focus:outline-none focus:border-[#E1B17A]"
+                       className="w-[60%] bg-[#040914] border border-[#1A233A] text-white placeholder-white/30 px-4 py-3 rounded-sm text-[10px] focus:outline-none focus:border-[#C9C9C9]"
                        value={newsletterEmail}
                        onChange={(e) => setNewsletterEmail(e.target.value)}
                        required
                      />
                      <button 
                        type="submit"
-                       className="w-[40%] bg-[#E1B17A] hover:bg-[#F2D7B6] text-[#040914] font-bold text-[9px] tracking-widest px-2 py-3 rounded-sm uppercase transition-colors"
+                       className="w-[40%] bg-[#C9C9C9] hover:bg-[#E5E5E5] text-[#040914] font-bold text-[9px] tracking-widest px-2 py-3 rounded-sm uppercase transition-colors"
                      >
                        {newsletterSubscribed ? t('CADASTRADO!') : t('QUERO RECEBER NOVIDADES')}
                      </button>
