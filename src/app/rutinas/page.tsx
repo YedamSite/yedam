@@ -91,23 +91,7 @@ export default function RutinasPage() {
             </Link>
           </div>
           
-          <div className="relative w-full h-[400px] lg:h-[500px] flex items-center justify-center lg:justify-end z-0">
-            {/* Glowing ring effect behind products */}
-            <div className="absolute right-10 lg:right-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border-[2px] border-[#C9C9C9]/40 shadow-[0_0_100px_rgba(201,201,201,0.4)] flex items-center justify-center">
-            </div>
-            
-            {/* Products image overlay */}
-            <div className="relative z-10 w-full h-full scale-[1.1] origin-right">
-              <Image 
-                src="https://images.unsplash.com/photo-1615397323136-1e075e7a2b9d?q=80&w=1200&auto=format&fit=crop" 
-                alt="Skincare Products"
-                fill
-                className="object-contain object-right"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#040914] via-[#040914]/40 to-transparent w-1/3 left-0"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#040914] via-transparent to-transparent h-1/4 bottom-0"></div>
-            </div>
-          </div>
+
         </section>
 
         <div className="w-full h-[1px] bg-[#1A233A] max-w-[1200px] mx-auto"></div>
