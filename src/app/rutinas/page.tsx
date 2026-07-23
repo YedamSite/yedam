@@ -86,7 +86,7 @@ export default function RutinasPage() {
             <p className="text-white/70 text-[13px] leading-relaxed mb-8 max-w-[400px]">
               {t('Entenda a função de cada etapa, conheça os ingredientes do K-Beauty e descubra como utilizar os produtos corretamente para cuidar da sua pele todos os dias.')}
             </p>
-            <Link href="/tienda" className="bg-[#E1B17A] hover:bg-[#F2D7B6] text-[#040914] font-bold text-[10px] tracking-widest px-6 py-3.5 rounded-sm uppercase inline-flex items-center gap-4 transition-colors">
+            <Link href="/tienda?search=Rutina" className="bg-[#E1B17A] hover:bg-[#F2D7B6] text-[#040914] font-bold text-[10px] tracking-widest px-6 py-3.5 rounded-sm uppercase inline-flex items-center gap-4 transition-colors">
               {t('EXPLORAR PRODUTOS')} <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -132,7 +132,7 @@ export default function RutinasPage() {
                 <step.icon className="w-7 h-7 text-[#E1B17A] mb-4" strokeWidth={1} />
                 <h3 className="text-[#E1B17A] font-serif text-[15px] mb-3 font-medium">{t(step.title)}</h3>
                 <p className="text-white/70 text-[10px] leading-relaxed mb-6 flex-1 px-1">{t(step.desc)}</p>
-                <Link href={`/tienda?step=${step.id}`} className="text-[8px] font-bold tracking-widest uppercase border border-[#1A233A] text-white hover:border-[#E1B17A] py-2.5 px-6 rounded-sm w-max transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                <Link href={`/tienda?search=${encodeURIComponent(step.title)}`} className="text-[8px] font-bold tracking-widest uppercase border border-[#1A233A] text-white hover:border-[#E1B17A] py-2.5 px-6 rounded-sm w-max transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
                   {t('SAIBA MAIS')} <ArrowRight className="w-2.5 h-2.5" />
                 </Link>
               </div>
@@ -171,7 +171,7 @@ export default function RutinasPage() {
                 </div>
                 <h4 className="text-white text-[11px] font-bold mb-1 leading-tight">{t(ing.name)}</h4>
                 <p className="text-white/50 text-[8px] mb-3 flex-1 leading-[1.4]">{t(ing.desc)}</p>
-                <Link href={`/tienda?ingredient=${encodeURIComponent(ing.name)}`} className="text-[7.5px] font-bold tracking-widest text-[#E1B17A] uppercase flex items-center gap-1 transition-colors">
+                <Link href={`/tienda?search=${encodeURIComponent(ing.name.split(" ")[0])}`} className="text-[7.5px] font-bold tracking-widest text-[#E1B17A] uppercase flex items-center gap-1 transition-colors">
                   {t('VER PRODUTOS')} <ArrowRight className="w-2.5 h-2.5" />
                 </Link>
               </div>
@@ -269,7 +269,7 @@ export default function RutinasPage() {
                   <div className="pl-3">
                     <h4 className="text-white font-serif text-[14px] mb-2 font-medium">{t(tip.title)}</h4>
                     <p className="text-white/60 text-[9.5px] leading-relaxed mb-3">{t(tip.desc)}</p>
-                    <Link href="/tienda" className="text-[8px] tracking-widest font-bold text-white/50 hover:text-white uppercase flex items-center gap-1.5 transition-colors w-fit">
+                    <Link href="/tienda?search=Rutina" className="text-[8px] tracking-widest font-bold text-white/50 hover:text-white uppercase flex items-center gap-1.5 transition-colors w-fit">
                       {t('SAIBA MAIS')} <ArrowRight className="w-2.5 h-2.5" />
                     </Link>
                   </div>
@@ -300,12 +300,12 @@ export default function RutinasPage() {
                 { name: 'Delineadores', img: 'https://images.unsplash.com/photo-1590159763121-6c3e944747eb?q=80&w=150' },
                 { name: 'Pincéis e acessórios', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=150' },
               ].map((item, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-2 group cursor-pointer w-[50px]">
+                <Link key={idx} href={`/tienda?search=${encodeURIComponent(item.name)}`} className="flex flex-col items-center gap-2 group cursor-pointer w-[50px]">
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-[1.5px] border-white/20 group-hover:border-[#E1B17A] transition-colors relative">
                     <Image src={item.img} alt={item.name} fill className="object-cover" />
                   </div>
                   <span className="text-[7px] text-white/70 text-center leading-[1.2] group-hover:text-white">{t(item.name)}</span>
-                </div>
+                </Link>
               ))}
             </div>
 
@@ -329,7 +329,7 @@ export default function RutinasPage() {
                 { icon: Target, name: 'Novidades' },
                 { icon: Target, name: 'Mais Vendidos' }, // Assuming Mais Vendidos is similar icon
               ].map((cat, idx) => (
-                <Link key={idx} href={`/tienda`} className="flex flex-col items-center gap-3 group">
+                <Link key={idx} href={`/tienda?search=${encodeURIComponent(cat.name)}`} className="flex flex-col items-center gap-3 group">
                    <div className="w-8 h-8 flex items-center justify-center">
                      <cat.icon className="w-6 h-6 text-[#E1B17A]" strokeWidth={1} />
                    </div>
