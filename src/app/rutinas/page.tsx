@@ -20,7 +20,10 @@ import {
   Sparkle,
   Atom,
   Mail,
-  CheckCircle2
+  CheckCircle2,
+  ChevronDown,
+  HelpCircle,
+  ShoppingBag
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -29,159 +32,132 @@ import { db } from '@/lib/db';
 import { saveNewsletterSubscriberToSupabase } from '@/lib/newsletterService';
 import { useState, useEffect } from 'react';
 
-const BranchBlossom = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 200 200" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M20 180 C 60 140 100 120 180 40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    <path d="M60 140 C 90 150 120 160 150 140" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M100 120 C 110 90 130 70 160 60" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <path d="M140 80 C 150 100 160 110 180 110" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-    
-    <g transform="translate(180, 40) scale(1)">
-      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
-    </g>
-    <g transform="translate(160, 60) scale(0.8) rotate(30)">
-      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
-    </g>
-    <g transform="translate(150, 140) scale(1.1) rotate(-20)">
-      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
-    </g>
-    <g transform="translate(90, 110) scale(0.7) rotate(45)">
-      <path d="M0 -5 C 5 -15 15 -10 10 0 C 20 5 20 15 10 15 C 5 25 -5 25 -10 15 C -20 15 -20 5 -10 0 C -15 -10 -5 -15 0 -5 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
-      <circle cx="0" cy="5" r="1.5" fill="currentColor" />
-    </g>
-
-    <circle cx="180" cy="110" r="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="140" cy="150" r="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="110" cy="70" r="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="50" cy="130" r="1.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    
-    <path d="M60 140 Q 50 130 65 125 Z" fill="none" stroke="currentColor" strokeWidth="1" />
-    <path d="M100 120 Q 90 100 115 105 Z" fill="none" stroke="currentColor" strokeWidth="1" />
-    <path d="M140 80 Q 135 65 150 70 Z" fill="none" stroke="currentColor" strokeWidth="1" />
-  </svg>
-);
-
 export default function RutinasPage() {
   const { t, locale } = useLanguage();
-  const [content, setContent] = useState<any>(null);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  useEffect(() => {
-    const siteContent = db.get('site_content');
-    const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
-    setContent(translatedContent.rutinasPage || null);
-  }, [locale]);
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+    try {
+      await saveNewsletterSubscriberToSupabase(newsletterEmail, 'rutinas');
+      setNewsletterSubscribed(true);
+      setNewsletterEmail('');
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  const c = content || db.get('site_content')?.rutinasPage || {};
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
+    <div className="flex flex-col min-h-screen bg-[#0A1128] text-white font-sans selection:bg-[#F2D7B6] selection:text-[#0A1128]">
       <Header />
 
-      <main className="flex-1 w-full flex flex-col items-center">
+      <main className="flex-1 w-full flex flex-col items-center overflow-x-hidden">
+        
         {/* HERO SECTION */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 lg:py-0 min-h-[calc(100vh-80px)] grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="max-w-xl">
-            <h1 className="text-6xl md:text-7xl font-heading font-light text-white mb-6">
-              {t(c?.hero?.title || 'Rutinas')}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative">
+          <div className="max-w-xl z-10 relative">
+            <span className="text-[#F2D7B6] font-bold text-xs tracking-widest uppercase mb-4 block">
+              {t('GUIA DE SKINCARE COREANO')}
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6 leading-tight">
+              {t('Aprenda os passos do skincare coreano')}
             </h1>
-            <h2 className="text-2xl md:text-3xl text-white mb-6 font-light">
-              {t(c?.hero?.subtitle || 'Cada piel es única, cada rutina también.')
-            }</h2>
-            <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-10">
-              {t('Encuentra la rutina ideal para tu tipo de piel y objetivos. Productos auténticos, combinados de forma inteligente para resultados visibles.')}
+            <p className="text-white/80 text-sm md:text-base leading-relaxed mb-10 max-w-md">
+              {t('Entenda a função de cada etapa, conheça os ingredientes do K-Beauty e descubra como utilizar os produtos corretamente para cuidar da sua pele todos os dias.')}
             </p>
-            <Link href="/tienda" className="bg-accent hover:bg-white text-background font-bold text-sm tracking-widest px-8 py-4 rounded-md uppercase flex items-center gap-3 transition-colors inline-flex w-fit">
-              {t(c?.hero?.buttonText || 'ENCONTRAR MI RUTINA')} <ArrowRight className="w-4 h-4" />
+            <Link href="/tienda" className="bg-[#E0B984] hover:bg-[#F2D7B6] text-[#0A1128] font-bold text-[10px] tracking-widest px-8 py-4 rounded-md uppercase inline-flex items-center gap-3 transition-colors">
+              {t('EXPLORAR PRODUTOS')} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           
-          <div className="relative w-full h-[50vh] md:h-[60vh] lg:h-[75vh] min-h-[400px] max-h-[700px] flex justify-end">
-            {/* The arched/circular image style */}
-            <div className="relative w-full md:w-4/5 h-full rounded-tl-full rounded-bl-full overflow-hidden border-4 border-white/5 shadow-2xl">
+          <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0">
+            {/* Glowing ring effect behind products */}
+            <div className="absolute right-0 lg:right-10 top-1/2 -translate-y-1/2 w-[250px] sm:w-[350px] lg:w-[450px] h-[250px] sm:h-[350px] lg:h-[450px] rounded-full border-[1px] border-[#E0B984]/30 shadow-[0_0_100px_rgba(224,185,132,0.15)] flex items-center justify-center">
+               <div className="w-[90%] h-[90%] rounded-full border-[3px] border-[#E0B984]/80 shadow-[0_0_50px_rgba(224,185,132,0.3)]"></div>
+            </div>
+            
+            {/* Products image overlay */}
+            <div className="relative z-10 w-[110%] md:w-full h-full lg:-mr-12 scale-[1.15] lg:scale-[1.2] origin-right">
               <Image 
-                src={c?.hero?.image || "https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1600"} 
-                alt="Skincare Routine Products"
+                src="https://images.unsplash.com/photo-1615397323136-1e075e7a2b9d?q=80&w=1200&auto=format&fit=crop" 
+                alt="Skincare Products"
                 fill
-                className="object-cover object-center"
+                className="object-contain object-right"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0A1128] via-transparent to-transparent md:w-1/3 left-0"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-transparent to-transparent h-1/4 bottom-0"></div>
             </div>
           </div>
         </section>
 
-        {/* ELIGE TU RUTINA IDEAL */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 border-t border-white/5">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-4 mb-4">
-               <div className="h-[1px] bg-accent/30 flex-1 hidden sm:block"></div>
-               <BranchBlossom className="w-8 h-8 text-accent opacity-60" />
-               <h3 className="text-3xl font-heading text-white">{t('Elige tu rutina ideal')}</h3>
-               <BranchBlossom className="w-8 h-8 text-accent opacity-60 scale-x-[-1]" />
-               <div className="h-[1px] bg-accent/30 flex-1 hidden sm:block"></div>
-            </div>
-            <p className="text-muted-foreground text-sm">{t('Selecciona tu tipo de piel o tu objetivo principal.')}</p>
+        {/* CONHEÇA CADA ETAPA DO SKINCARE */}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
+          <div className="mb-10">
+            <h2 className="text-3xl font-serif text-white mb-2">{t('Conheça cada etapa do skincare')}</h2>
+            <p className="text-white/60 text-sm">{t('Entenda a função de cada passo e descubra como eles trabalham juntos.')}</p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
-              { icon: Droplet, title: 'Piel Hidratada', desc: 'Para mantener tu piel suave, flexible y duraderamente hidratada.', color: 'text-sky-300', border: 'border-sky-300/30', btn: 'text-sky-300 border-sky-300/30 hover:bg-sky-300 hover:text-black' },
-              { icon: Sparkles, title: 'Piel Luminosa', desc: 'Para una piel más radiante, uniforme y llena de vitalidad.', color: 'text-rose-300', border: 'border-rose-300/30', btn: 'text-rose-300 border-rose-300/30 hover:bg-rose-300 hover:text-black' },
-              { icon: Leaf, title: 'Piel Sensible', desc: 'Para calmar, proteger y fortalecer tu piel sensible o reactiva.', color: 'text-green-400', border: 'border-green-400/30', btn: 'text-green-400 border-green-400/30 hover:bg-green-400 hover:text-black' },
-              { icon: AlertCircle, title: 'Antiacné', desc: 'Para equilibrar el exceso de grasa y reducir imperfecciones.', color: 'text-teal-400', border: 'border-teal-400/30', btn: 'text-teal-400 border-teal-400/30 hover:bg-teal-400 hover:text-black' },
-              { icon: Hourglass, title: 'Antiedad', desc: 'Para prevenir y tratar los signos del envejecimiento de la piel.', color: 'text-purple-400', border: 'border-purple-400/30', btn: 'text-purple-400 border-purple-400/30 hover:bg-purple-400 hover:text-black' },
-              { icon: LayoutGrid, title: 'Rutina Completa', desc: 'Rutina completa para cuidar tu piel en cada paso del día.', color: 'text-orange-300', border: 'border-orange-300/30', btn: 'text-orange-300 border-orange-300/30 hover:bg-orange-300 hover:text-black' },
-            ].map((item, idx) => (
-              <div key={idx} className={`flex flex-col items-center text-center border rounded-t-[4rem] rounded-b-xl p-6 pt-10 bg-transparent hover:bg-white/5 transition-all group ${item.border}`}>
-                <item.icon className={`w-8 h-8 ${item.color} mb-4 group-hover:scale-110 transition-transform`} strokeWidth={1.5} />
-                <h4 className="text-white text-[13px] font-medium mb-3">{t(item.title)}</h4>
-                <p className="text-[11px] text-muted-foreground leading-relaxed flex-1 mb-6">{t(item.desc)}</p>
-                <Link href={`/tienda?category=cuidado-facial`} className={`text-[9px] border px-4 py-2 rounded-full uppercase tracking-widest font-bold transition-colors w-full mt-auto inline-block text-center ${item.btn}`}>
-                  {t('VER RUTINA')}
+              { id: 'limpeza', icon: Droplet, title: 'Limpeza', desc: 'Remove impurezas, oleosidade, maquiagem e prepara a pele.' },
+              { id: 'tonico', icon: Sparkle, title: 'Tônico', desc: 'Ajuda a equilibrar a pele e melhora a absorção dos próximos produtos.' },
+              { id: 'essencia', icon: Sparkles, title: 'Essência', desc: 'Etapa tradicional do skincare coreano para complementar a hidratação da pele.' },
+              { id: 'serum', icon: FlaskConical, title: 'Sérum', desc: 'Produto concentrado com diferentes ingredientes e benefícios.' },
+              { id: 'hidratante', icon: LayoutGrid, title: 'Hidratante', desc: 'Ajuda a manter a hidratação e auxilia na proteção da barreira cutânea.' },
+              { id: 'protetor', icon: Sun, title: 'Protetor Solar', desc: 'Etapa indispensável durante o dia para proteção contra os raios UV.' },
+            ].map((step, idx) => (
+              <div key={idx} className="border border-[#1E2943] bg-[#0F1736] hover:border-[#E0B984]/50 transition-all rounded-lg p-6 flex flex-col items-center text-center group">
+                <step.icon className="w-8 h-8 text-[#E0B984] mb-4 group-hover:scale-110 transition-transform" strokeWidth={1} />
+                <h3 className="text-white font-serif text-lg mb-3">{t(step.title)}</h3>
+                <p className="text-white/60 text-[10px] leading-relaxed mb-6 flex-1">{t(step.desc)}</p>
+                <Link href={`/tienda?step=${step.id}`} className="text-[9px] font-bold tracking-widest uppercase border border-[#E0B984]/30 text-[#E0B984] hover:bg-[#E0B984] hover:text-[#0A1128] py-2 px-4 rounded w-full transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
+                  {t('SAIBA MAIS')} <ArrowRight className="w-3 h-3 shrink-0" />
                 </Link>
               </div>
             ))}
           </div>
+          
+          <div className="mt-8 flex items-center justify-center gap-2 text-white/50 text-[11px]">
+             <Flower className="w-4 h-4 text-[#E0B984]" />
+             {t('* Clique em cada etapa para entender melhor sobre os produtos e encontrar opções disponíveis na Yedam.')}
+          </div>
         </section>
 
-        {/* RUTINAS RECOMENDADAS PARA TI */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
-          <div className="flex justify-between items-end mb-10">
-            <h3 className="text-2xl md:text-3xl font-heading text-white">{t('Rutinas recomendadas para ti')}</h3>
-            <Link href="/tienda" className="text-[10px] font-bold text-accent uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2">
-              {t('VER TODAS LAS RUTINAS')} <ArrowRight className="w-3 h-3" />
-            </Link>
+        {/* INGREDIENTES DO K-BEAUTY */}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 bg-gradient-to-b from-[#0A1128] to-[#0A1128]">
+          <div className="mb-10">
+            <h2 className="text-3xl font-serif text-white mb-2">{t('Ingredientes do K-Beauty')}</h2>
+            <p className="text-white/60 text-sm">{t('Conheça alguns dos ingredientes mais utilizados na cosmética coreana.')}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="flex overflow-x-auto pb-6 -mx-6 px-6 lg:mx-0 lg:px-0 gap-4 snap-x scrollbar-hide">
             {[
-              { icon: Droplet, title: 'HIDRATADA', desc: 'Hidratación profunda y duradera para una piel saludable y luminosa.', img: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=600' },
-              { icon: Sparkles, title: 'LUMINOSA', desc: 'Ilumina, unifica el tono y revela la luminosidad natural de tu piel.', img: 'https://images.unsplash.com/photo-1608248593802-86a0300a202c?q=80&w=600' },
-              { icon: Leaf, title: 'SENSIBLE', desc: 'Calma, protege y fortalece la barrera natural de tu piel.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600' },
-              { icon: AlertCircle, title: 'ANTIACNÉ', desc: 'Equilibra el exceso de grasa y ayuda a reducir imperfecciones.', img: 'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=600' },
-              { icon: Hourglass, title: 'ANTIEDAD', desc: 'Mejora la elasticidad, firmeza y previene los signos del tiempo.', img: 'https://images.unsplash.com/photo-1571781926291-c477ebefa608?q=80&w=600' }
-            ].map((card, idx) => (
-              <div key={idx} className="flex flex-col bg-[#FDF9F4] text-[#1c2838] border border-transparent rounded-xl overflow-hidden hover:shadow-xl transition-all">
-                <div className="p-4 flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#1c2838]/80 border-b border-[#1c2838]/5">
-                  <card.icon className="w-4 h-4" strokeWidth={1.5} /> {t(card.title)}
+              { img: 'https://images.unsplash.com/photo-1620023023023-e18ec34237c1?q=80&w=400&auto=format&fit=crop', name: 'Centella Asiática', desc: 'Tradicional ingrediente vegetal presente em diversos cosméticos.' },
+              { img: 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400&auto=format&fit=crop', name: 'Ácido Hialurônico', desc: 'Ingrediente amplamente utilizado em produtos hidratantes.' },
+              { img: 'https://images.unsplash.com/photo-1608248593842-83b632008f51?q=80&w=400&auto=format&fit=crop', name: 'Niacinamida', desc: 'Encontrada em diferentes fórmulas para cuidados diários da pele.' },
+              { img: 'https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?q=80&w=400&auto=format&fit=crop', name: 'Chá Verde', desc: 'Ingrediente de origem vegetal muito utilizado na cosmética asiática.' },
+              { img: 'https://images.unsplash.com/photo-1586201375761-83865001e8ac?q=80&w=400&auto=format&fit=crop', name: 'Extrato de Arroz', desc: 'Conhecido por seu uso tradicional nos cuidados com a pele.' },
+              { img: 'https://images.unsplash.com/photo-1618331835717-801e976710b2?q=80&w=400&auto=format&fit=crop', name: 'Ceramidas', desc: 'Presentes em produtos voltados à hidratação e proteção da pele.' },
+              { img: 'https://images.unsplash.com/photo-1583516035272-35fa4ff8d80c?q=80&w=400&auto=format&fit=crop', name: 'Mucina de Caracol', desc: 'Ingrediente bastante popular no skincare coreano.' },
+              { img: 'https://images.unsplash.com/photo-1587049352847-81a56d773c15?q=80&w=400&auto=format&fit=crop', name: 'Própolis', desc: 'Ingrediente utilizado em diversas formulações.' },
+            ].map((ing, idx) => (
+              <div key={idx} className="min-w-[160px] md:min-w-[180px] snap-start bg-[#0F1736] border border-[#1E2943] rounded-lg overflow-hidden group hover:border-[#E0B984]/30 transition-colors flex flex-col">
+                <div className="h-32 w-full relative overflow-hidden">
+                  <Image src={ing.img} alt={ing.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0F1736] via-transparent to-transparent"></div>
                 </div>
-                <div className="relative h-48 w-full bg-white">
-                  <Image src={card.img} alt={card.title} fill className="object-cover" />
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <div className="flex justify-center gap-6 mb-4 text-[9px] text-[#1c2838]/60 font-bold tracking-widest">
-                    <span className="flex items-center gap-1.5"><Sun className="w-3.5 h-3.5 text-[#c5a173]" /> {t('DÍA')}</span>
-                    <span className="flex items-center gap-1.5"><Moon className="w-3.5 h-3.5 text-[#1c2838]/60" /> {t('NOCHE')}</span>
-                  </div>
-                  <p className="text-[11px] text-center text-[#1c2838]/90 leading-relaxed mb-6 flex-1">
-                    {t(card.desc)}
-                  </p>
-                  <Link href="/tienda" className="w-full py-2.5 text-[9px] uppercase tracking-widest font-bold border border-[#1c2838]/20 rounded-md hover:bg-[#1c2838] hover:text-[#FDF9F4] transition-colors inline-block text-center">
-                    {t('VER RUTINA COMPLETA')}
+                <div className="p-4 flex flex-col flex-1">
+                  <h4 className="text-white text-xs font-bold mb-2">{t(ing.name)}</h4>
+                  <p className="text-white/60 text-[9px] mb-4 flex-1 leading-relaxed">{t(ing.desc)}</p>
+                  <Link href={`/tienda?ingredient=${encodeURIComponent(ing.name)}`} className="text-[9px] font-bold text-[#E0B984] hover:text-white uppercase flex items-center gap-1 transition-colors">
+                    {t('VER PRODUTOS')} <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
               </div>
@@ -189,189 +165,237 @@ export default function RutinasPage() {
           </div>
         </section>
 
-        {/* LOS PASOS DE TU RUTINA */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 border-t border-white/5">
-          <div className="mb-12">
-            <h3 className="text-2xl md:text-3xl font-heading text-white">{t('Los pasos de tu rutina')}</h3>
-            <p className="text-muted-foreground text-sm mt-2">{t('Sigue este orden para obtener los mejores resultados.')}</p>
-          </div>
-
-          <div className="flex flex-col xl:flex-row gap-12 items-center xl:items-start">
-            <div className="flex-1 flex flex-wrap lg:flex-nowrap justify-center lg:justify-between items-start gap-4 lg:gap-2 relative w-full">
+        {/* COMO MONTAR SUA ROTINA */}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
+          <h2 className="text-3xl font-serif text-white mb-12">{t('Como montar sua rotina?')}</h2>
+          
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            {/* Timeline */}
+            <div className="flex-1 w-full flex items-center justify-between relative">
+              {/* Connecting line */}
+              <div className="absolute top-8 left-4 right-4 h-[1px] bg-[#1E2943] -z-10"></div>
+              
               {[
-                { num: 1, title: 'LIMPIEZA', desc: 'Elimina impurezas y prepara tu piel', img: 'https://images.unsplash.com/photo-1629367494173-c78a56567877?q=80&w=200' },
-                { num: 2, title: 'TÓNICO', desc: 'Equilibra el pH y prepara tu piel', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=200' },
-                { num: 3, title: 'TRATAMIENTO', desc: 'Aplica sérums o esencias según tu necesidad', img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=200' },
-                { num: 4, title: 'CONTORNO DE OJOS', desc: 'Cuida la piel delicada del contorno de ojos', img: 'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=200' },
-                { num: 5, title: 'HIDRATANTE', desc: 'Hidrata y sella los beneficios anteriores', img: 'https://images.unsplash.com/photo-1571781926291-c477ebefa608?q=80&w=200' },
-                { num: 6, title: 'PROTECTOR SOLAR', desc: 'Protege tu piel de los rayos UV todos los dias', img: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=200' }
+                { num: '1', title: 'Limpeza', icon: Droplet },
+                { num: '2', title: 'Tônico', icon: Sparkle },
+                { num: '3', title: 'Essência', icon: Sparkles, sub: '(Opcional)' },
+                { num: '4', title: 'Sérum', icon: FlaskConical },
+                { num: '5', title: 'Hidratante', icon: LayoutGrid },
+                { num: '6', title: 'Protetor Solar', icon: Sun, sub: '(Durante o dia)' },
               ].map((step, idx) => (
-                <React.Fragment key={step.num}>
-                  <div className="flex flex-col items-center text-center w-32 relative z-10">
-                    <div className="relative w-20 h-20 rounded-full border-2 border-white/10 mb-4 bg-card flex items-center justify-center p-2">
-                       <Image src={step.img} alt={step.title} fill className="rounded-full object-cover p-1" />
-                       <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-accent text-background text-xs font-bold flex items-center justify-center shadow-md">
-                         {step.num}
-                       </div>
-                    </div>
-                    <h5 className="text-[10px] font-bold text-white mb-2 tracking-wider">{t(step.title)}</h5>
-                    <p className="text-[9px] text-muted-foreground leading-snug">{t(step.desc)}</p>
+                <div key={idx} className="flex flex-col items-center group cursor-default">
+                  <div className="w-6 h-6 rounded-full bg-[#0A1128] border border-[#1E2943] text-white/50 flex items-center justify-center text-[10px] mb-2 group-hover:border-[#E0B984] group-hover:text-[#E0B984] transition-colors">
+                    {step.num}
                   </div>
-                  {idx < 5 && (
-                    <div className="hidden lg:flex items-center text-accent/50 mt-8">
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  )}
-                </React.Fragment>
+                  <div className="w-12 h-12 rounded-full border border-[#1E2943] bg-[#0F1736] flex items-center justify-center mb-3 group-hover:border-[#E0B984]/50 transition-colors">
+                     <step.icon className="w-5 h-5 text-white/70 group-hover:text-[#E0B984] transition-colors" strokeWidth={1.5} />
+                  </div>
+                  <span className="text-white text-[11px] text-center font-medium">{t(step.title)}</span>
+                  {step.sub && <span className="text-white/40 text-[9px] text-center mt-1">{t(step.sub)}</span>}
+                </div>
               ))}
             </div>
 
-            {/* CONSEJO YEDAM CARD */}
-            <div className="w-full xl:w-72 bg-card border border-white/10 rounded-2xl p-6 relative overflow-hidden flex flex-col justify-center shadow-lg">
-              <BranchBlossom className="absolute -right-4 -top-4 w-32 h-32 text-accent/20 pointer-events-none" />
-              <div className="flex items-center gap-2 mb-4 relative z-10">
-                <h4 className="text-[13px] font-bold text-white tracking-wider">{t('Consejo Yedam')}</h4>
-                <Flower className="w-4 h-4 text-accent" strokeWidth={1.5} />
-              </div>
-              <p className="text-[11px] text-muted-foreground leading-relaxed relative z-10">
-                {t('La constancia es la clave. Una rutina diaria, con los productos correctos, puede transformar tu piel.')}
-              </p>
+            {/* Info Box */}
+            <div className="w-full lg:w-1/3 bg-[#0F1736] border border-[#1E2943] rounded-lg p-8 relative overflow-hidden">
+               <h3 className="text-white font-serif text-xl mb-4 relative z-10">{t('Sua rotina pode ser única.')}</h3>
+               <p className="text-white/60 text-[11px] leading-relaxed relative z-10">
+                 {t('Nem todas as pessoas utilizam todas as etapas. A ordem acima representa uma sequência comum no skincare coreano, mas cada rotina pode variar conforme as preferências e os produtos escolhidos.')}
+               </p>
+               <Flower className="absolute right-4 bottom-4 w-24 h-24 text-[#E0B984]/10 pointer-events-none" strokeWidth={0.5} />
             </div>
           </div>
         </section>
 
-        {/* BOTTOM WIDGETS (HELP & NEWSLETTER) */}
+        {/* DICAS PARA APROVEITAR MELHOR */}
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            {/* Necesitas Ayuda */}
-            <div className="bg-[#EAE4DC] text-[#1c2838] border border-transparent rounded-2xl overflow-hidden flex flex-col sm:flex-row items-center relative shadow-lg">
-               <div className="p-8 sm:w-1/2 z-10 flex flex-col justify-center">
-                 <h4 className="text-2xl font-heading mb-3">{t('¿Necesitas ayuda para elegir?')}</h4>
-                 <p className="text-[11px] text-[#1c2838]/70 mb-6 leading-relaxed">
-                   {t('Nuestro equipo te ayuda a encontrar la rutina perfecta para tu piel.')}
-                 </p>
-                 <Link href="/contacto" className="border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#EAE4DC] font-bold text-[9px] tracking-widest px-6 py-3 rounded uppercase inline-flex items-center justify-center gap-2 transition-colors w-fit whitespace-nowrap">
-                    {t('HABLAR CON UN ASESOR')} <ArrowRight className="w-3 h-3 shrink-0" />
-                 </Link>
-               </div>
-               <div className="relative w-full sm:w-1/2 h-48 sm:h-full min-h-[250px]">
-                  <Image 
-                    src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=800"
-                    alt="Ayuda"
-                    fill
-                    className="object-cover"
-                  />
-               </div>
-            </div>
-
-            {/* Newsletter */}
-            <div className="bg-card border border-white/10 rounded-2xl p-8 lg:p-10 relative overflow-hidden flex flex-col justify-center shadow-lg">
-              <Mail className="absolute right-4 bottom-4 w-32 h-32 text-accent/10 pointer-events-none" strokeWidth={0.5} />
-              <BranchBlossom className="absolute -right-4 bottom-0 w-48 h-48 text-accent/30 pointer-events-none" />
-              
-              <h4 className="text-xl lg:text-2xl font-heading font-light text-white mb-6 relative z-10 max-w-[320px] leading-snug">
-                {t('Sé la primera en descubrir nuevas rutinas y promociones exclusivas.')}
-              </h4>
-              
-              {newsletterSubscribed ? (
-                <div className="flex relative z-10 w-full max-w-sm mt-4 bg-accent/10 border border-accent/20 rounded-md p-4 items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-accent" />
-                  <span className="text-xs font-bold text-white uppercase tracking-wider">{t('✓ ¡Te has suscrito con éxito! Recibirás los eventos del blog en tu correo.')}</span>
+          <h2 className="text-3xl font-serif text-white mb-8">{t('Dicas para aproveitar melhor seus produtos')}</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { 
+                title: 'Rotina da manhã', 
+                desc: 'Conheça uma sequência simples para iniciar o dia e proteger sua pele.', 
+                img: 'https://images.unsplash.com/photo-1556228578-8d89cb7acb5c?q=80&w=300&auto=format&fit=crop',
+                icon: Sun,
+                link: '/tienda'
+              },
+              { 
+                title: 'Rotina da noite', 
+                desc: 'Veja como organizar seus cuidados antes de dormir para uma pele saudável.', 
+                img: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=300&auto=format&fit=crop',
+                icon: Moon,
+                link: '/tienda'
+              },
+              { 
+                title: 'Antes da maquiagem', 
+                desc: 'Alguns cuidados ajudam a preparar melhor a pele antes da maquiagem.', 
+                img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=300&auto=format&fit=crop',
+                icon: Sparkles,
+                link: '/tienda'
+              },
+              { 
+                title: 'Removendo a maquiagem', 
+                desc: 'Uma limpeza adequada ajuda a remover resíduos e manter a pele equilibrada.', 
+                img: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=300&auto=format&fit=crop',
+                icon: Droplet,
+                link: '/tienda'
+              },
+            ].map((tip, idx) => (
+              <div key={idx} className="bg-[#0F1736] border border-[#1E2943] hover:border-[#E0B984]/30 transition-colors rounded-lg flex overflow-hidden h-40 group">
+                <div className="w-1/3 relative">
+                  <Image src={tip.img} alt={tip.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#0A1128]/60 backdrop-blur-sm flex items-center justify-center">
+                    <tip.icon className="w-3 h-3 text-[#E0B984]" />
+                  </div>
                 </div>
-              ) : (
-                <form 
-                  onSubmit={(e) => { 
-                    e.preventDefault(); 
-                    if (newsletterEmail) {
-                      const currentSubs = db.get('newsletter_subscribers') || [];
-                      if (!currentSubs.some((s: any) => s.email === newsletterEmail)) {
-                        const subs = [...currentSubs];
-                        subs.push({
-                          id: crypto.randomUUID(),
-                          email: newsletterEmail,
-                          source: 'rutinas',
-                          status: 'active',
-                          created_at: new Date().toISOString().split('T')[0]
-                        });
-                        db.save('newsletter_subscribers', subs);
-                        
-                        saveNewsletterSubscriberToSupabase(newsletterEmail, '', 'rutinas')
-                          .then(async result => {
-                            if (result.success) {
-                              try {
-                                await fetch('/api/email/newsletter', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({ email: newsletterEmail })
-                                });
-                              } catch (err) {
-                                console.error('Failed to notify admin:', err);
-                              }
-                            }
-                          });
-                          
-                        if (typeof window !== 'undefined') {
-                          window.dispatchEvent(new Event('storage'));
-                          window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table: 'newsletter_subscribers' } }));
-                        }
-                      }
-                      setNewsletterSubscribed(true);
-                    }
-                  }} 
-                  className="flex relative z-10 h-12 w-full max-w-sm mt-4 border border-white/20 rounded-md overflow-hidden"
-                >
-                  <input 
-                    type="email" 
-                    required
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    placeholder={t('Tu correo electrónico')} 
-                    className="flex-1 bg-white text-[#1c2838] border-none px-4 text-xs focus:outline-none placeholder:text-gray-400"
-                  />
-                  <button type="submit" className="bg-accent hover:bg-white text-background font-bold text-[10px] tracking-widest px-6 uppercase transition-colors h-full">
-                    {t('SUSCRIBIRME')}
-                  </button>
-                </form>
-              )}
-              <p className="text-[9px] text-muted-foreground mt-3 relative z-10">
-                {t('Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.')}
-              </p>
-            </div>
-
+                <div className="w-2/3 p-5 flex flex-col justify-center">
+                  <h4 className="text-white font-serif text-base mb-2">{t(tip.title)}</h4>
+                  <p className="text-white/60 text-[10px] leading-relaxed mb-4">{t(tip.desc)}</p>
+                  <Link href={tip.link} className="text-[9px] font-bold text-[#E0B984] hover:text-white uppercase flex items-center gap-1 transition-colors mt-auto">
+                    {t('SAIBA MAIS')} <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
-        {/* FEATURES FOOTER */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-10 border-t border-white/5">
-          <div className="flex flex-wrap justify-center md:justify-between items-center gap-8">
-             <div className="flex items-center gap-3">
-               <ShieldCheck className="w-6 h-6 text-accent" strokeWidth={1.5} />
-               <span className="text-[10px] text-white/80 uppercase tracking-wider w-24 leading-snug">{t('Ingredientes seguros y efectivos')}</span>
-             </div>
-             <div className="flex items-center gap-3">
-               <FlaskConical className="w-6 h-6 text-accent" strokeWidth={1.5} />
-               <span className="text-[10px] text-white/80 uppercase tracking-wider w-24 leading-snug">{t('Fórmulas probadas dermatológicamente')}</span>
-             </div>
-             <div className="flex items-center gap-3">
-               <Target className="w-6 h-6 text-accent" strokeWidth={1.5} />
-               <span className="text-[10px] text-white/80 uppercase tracking-wider w-24 leading-snug">{t('Resultados reales y visibles')}</span>
-             </div>
-             <div className="flex items-center gap-3">
-               <Sparkle className="w-6 h-6 text-accent" strokeWidth={1.5} />
-               <span className="text-[10px] text-white/80 uppercase tracking-wider w-24 leading-snug">{t('Inspirado en la tradición coreana')}</span>
-             </div>
-             <div className="flex items-center gap-3">
-               <Atom className="w-6 h-6 text-accent" strokeWidth={1.5} />
-               <span className="text-[10px] text-white/80 uppercase tracking-wider w-24 leading-snug">{t('Desarrollado con ciencia avanzada')}</span>
-             </div>
+        {/* UNIVERSO DA MAQUIAGEM COREANA & CATEGORIAS */}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          {/* Universo da Maquiagem */}
+          <div className="border border-[#1E2943] bg-[#0F1736] p-8 rounded-lg">
+            <h2 className="text-2xl font-serif text-white mb-2">{t('Universo da Maquiagem Coreana')}</h2>
+            <p className="text-white/60 text-sm mb-8">{t('Explore as categorias mais populares e realce sua beleza.')}</p>
+            
+            <div className="flex justify-between overflow-x-auto gap-4 pb-4 scrollbar-hide">
+              {[
+                { name: 'Cushion', img: 'https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=150' },
+                { name: 'Lip Tint', img: 'https://images.unsplash.com/photo-1586445580665-22d7d8e204c3?q=80&w=150' },
+                { name: 'Bases', img: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=150' },
+                { name: 'Sombras', img: 'https://images.unsplash.com/photo-1583241475880-083f84372725?q=80&w=150' },
+                { name: 'Blush', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=150' },
+                { name: 'Máscaras para olhos', img: 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?q=80&w=150' },
+                { name: 'Delineadores', img: 'https://images.unsplash.com/photo-1590159763121-6c3e944747eb?q=80&w=150' },
+                { name: 'Pincéis e acessórios', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=150' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-2 min-w-[60px] group cursor-pointer">
+                  <div className="w-14 h-14 rounded-full overflow-hidden border border-[#1E2943] group-hover:border-[#E0B984] transition-colors relative">
+                    <Image src={item.img} alt={item.name} fill className="object-cover" />
+                  </div>
+                  <span className="text-[9px] text-white/70 text-center leading-tight group-hover:text-white">{t(item.name)}</span>
+                </div>
+              ))}
+            </div>
+
+            <Link href="/tienda?category=maquiagem" className="text-[10px] font-bold text-[#E0B984] hover:text-white uppercase flex items-center gap-2 transition-colors mt-6">
+              {t('VER TODAS AS CATEGORIAS DE MAQUIAGEM')} <ArrowRight className="w-3 h-3" />
+            </Link>
           </div>
+
+          {/* Explore Categorias */}
+          <div className="border border-[#1E2943] bg-[#0F1736] p-8 rounded-lg">
+            <h2 className="text-2xl font-serif text-white mb-8">{t('Explore nossas categorias')}</h2>
+            
+            <div className="grid grid-cols-4 gap-y-6 gap-x-2">
+              {[
+                { icon: Droplet, name: 'Skincare' },
+                { icon: Sparkle, name: 'Maquiagem' },
+                { icon: Sun, name: 'Proteção Solar' },
+                { icon: Sparkles, name: 'Máscaras Faciais' },
+                { icon: ShieldCheck, name: 'Cuidados Labiais' },
+                { icon: LayoutGrid, name: 'Kits' },
+                { icon: AlertCircle, name: 'Novidades' },
+                { icon: Target, name: 'Mais Vendidos' },
+              ].map((cat, idx) => (
+                <Link key={idx} href={`/tienda`} className="flex flex-col items-center gap-3 group">
+                   <div className="w-10 h-10 flex items-center justify-center border border-[#1E2943] rounded bg-[#0A1128] group-hover:border-[#E0B984]/50 transition-colors">
+                     <cat.icon className="w-4 h-4 text-white/60 group-hover:text-[#E0B984] transition-colors" strokeWidth={1.5} />
+                   </div>
+                   <span className="text-[9px] text-white/60 text-center group-hover:text-white transition-colors">{t(cat.name)}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PERGUNTAS FREQUENTES */}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16">
+          <h2 className="text-3xl font-serif text-white mb-8">{t('Perguntas frequentes')}</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { q: 'O skincare coreano possui uma quantidade obrigatória de etapas?', a: 'Não, as rotinas podem ser adaptadas às necessidades da sua pele. As famosas "10 etapas" são apenas um guia.' },
+              { q: 'Posso utilizar apenas alguns produtos?', a: 'Sim! Você pode começar com os passos básicos: limpeza, hidratação e proteção solar.' },
+              { q: 'Como escolher um produto?', a: 'Sempre considere seu tipo de pele e as preocupações que deseja tratar, como acne, manchas ou ressecamento.' },
+              { q: 'A Yedam faz diagnóstico de pele?', a: 'Sim, entre em contato com nosso suporte e uma de nossas consultoras ajudará você a montar a rotina perfeita.' },
+            ].map((faq, idx) => (
+              <div key={idx} className="border border-[#1E2943] bg-[#0F1736] rounded-lg overflow-hidden">
+                <button 
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-4 flex items-start justify-between text-left hover:bg-white/5 transition-colors gap-4"
+                >
+                  <div className="flex items-start gap-3">
+                    <HelpCircle className="w-4 h-4 text-[#E0B984] shrink-0 mt-0.5" />
+                    <span className="text-[11px] text-white/90 leading-relaxed font-medium">{t(faq.q)}</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-white/40 shrink-0 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
+                </button>
+                {openFaq === idx && (
+                  <div className="p-4 pt-0 text-[10px] text-white/60 leading-relaxed border-t border-[#1E2943] ml-11">
+                    {t(faq.a)}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* NEWSLETTER */}
+        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-16 mb-8">
+           <div className="border border-[#1E2943] bg-[#0F1736] rounded-xl flex flex-col md:flex-row items-center overflow-hidden relative">
+              <div className="w-full md:w-1/2 p-10 lg:p-16 flex flex-col justify-center relative z-10">
+                 <h2 className="text-3xl font-serif text-white mb-3 max-w-sm">{t('Receba novidades sobre o universo do K-Beauty')}</h2>
+                 <p className="text-white/60 text-xs mb-8 max-w-sm leading-relaxed">{t('Lançamentos, tendências, dicas de beleza e promoções exclusivas diretamente no seu e-mail.')}</p>
+                 
+                 <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3 w-full max-w-md">
+                   <input 
+                     type="email" 
+                     placeholder={t('Seu melhor e-mail')} 
+                     className="w-full bg-[#0A1128] border border-[#1E2943] text-white placeholder-white/30 px-4 py-3 rounded text-xs focus:outline-none focus:border-[#E0B984]"
+                     value={newsletterEmail}
+                     onChange={(e) => setNewsletterEmail(e.target.value)}
+                     required
+                   />
+                   <button 
+                     type="submit"
+                     className="w-full bg-[#E0B984] hover:bg-[#F2D7B6] text-[#0A1128] font-bold text-[10px] tracking-widest px-4 py-3 rounded uppercase transition-colors"
+                   >
+                     {newsletterSubscribed ? t('CADASTRADO!') : t('QUERO RECEBER NOVIDADES')}
+                   </button>
+                   <p className="text-[9px] text-white/40 mt-1">{t('Prometemos não enviar spam. Só compartilhamos o melhor do K-Beauty.')}</p>
+                 </form>
+              </div>
+
+              {/* Decorative Envelope */}
+              <Mail className="absolute right-8 top-1/2 -translate-y-1/2 w-32 h-32 text-white/[0.02] pointer-events-none md:hidden lg:block z-0" strokeWidth={0.5} />
+
+              <div className="w-full md:w-1/2 h-64 md:h-full min-h-[300px] relative">
+                 <Image 
+                   src="https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=800&auto=format&fit=crop"
+                   alt="Newsletter"
+                   fill
+                   className="object-cover object-center"
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-r from-[#0F1736] via-transparent to-transparent"></div>
+              </div>
+           </div>
         </section>
 
       </main>
-      
+
       <Footer />
     </div>
   );
 }
-
