@@ -42,10 +42,21 @@ export default function MarcasPage() {
       <main className="flex-1 w-full overflow-hidden">
         
         {/* 1. HERO SECTION */}
-        <section className="relative w-full px-4 lg:px-12 py-6 max-w-[1400px] mx-auto min-h-[calc(100vh-115px)] flex flex-col justify-center">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
+        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"
+              alt="K-Beauty Products"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+          </div>
+
+          <div className="relative z-10 w-full px-4 lg:px-12 py-6 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
             {/* Text Content */}
-            <div className="flex flex-col gap-8 max-w-xl z-10 relative">
+            <div className="flex flex-col gap-8 max-w-xl">
               <div>
                 <h1 className="text-5xl lg:text-7xl font-heading font-light text-white mb-6 leading-[1.1]">
                   {t(c?.hero?.title || 'Marcas Coreanas')}
@@ -78,19 +89,8 @@ export default function MarcasPage() {
               </div>
             </div>
 
-            {/* Arch Image cutout */}
-            <div className="relative h-[40vh] min-h-[350px] max-h-[500px] w-full flex justify-end items-center">
-              <div className="absolute inset-0 right-0 w-[120%] h-[120%] bg-[#0f1d33] rounded-bl-[400px] -z-10 translate-x-[20%] -translate-y-[10%]" />
-              <div className="relative w-full max-w-[450px] h-[90%] rounded-t-full overflow-hidden border border-white/10 shadow-2xl mr-auto lg:mr-0">
-                <Image
-                  src="/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"
-                  alt="K-Beauty Products"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
+            {/* Right side left empty so the grid pushes text left and reveals the background image on right */}
+            <div className="hidden lg:block w-full h-full"></div>
           </div>
         </section>
 

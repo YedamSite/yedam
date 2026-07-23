@@ -90,26 +90,30 @@ export default function ComoFuncionaPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative overflow-hidden min-h-[calc(100vh-115px)]">
-          <div className="flex flex-col relative z-10 max-w-xl">
-            <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-6">
-              {t(c?.hero?.title || 'Cómo funciona')}
-            </h1>
-            <p className="text-white/80 text-[13px] leading-relaxed mb-12 max-w-sm">
-              {t(c?.hero?.subtitle || 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, práctica y confiable.')}
-            </p>
+        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image 
+              src="/images/cheotnun-k-beauty-como-funciona-guia.webp" 
+              alt="Productos"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </div>
-          
-          <div className="relative w-full h-[40vh] min-h-[300px] max-h-[450px]">
-             <div className="absolute inset-0 right-0 h-full w-full rounded-l-full overflow-hidden border border-white/10 shadow-2xl">
-                <Image 
-                  src="/images/cheotnun-k-beauty-como-funciona-guia.webp" 
-                  alt="Productos"
-                  fill
-                  className="object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
-             </div>
+
+          <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="flex flex-col max-w-xl">
+              <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-6">
+                {t(c?.hero?.title || 'Cómo funciona')}
+              </h1>
+              <p className="text-white/80 text-[13px] leading-relaxed mb-12 max-w-sm">
+                {t(c?.hero?.subtitle || 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, práctica y confiable.')}
+              </p>
+            </div>
+            
+            {/* Right side empty */}
+            <div className="hidden lg:block w-full h-full"></div>
           </div>
         </section>
 

@@ -90,47 +90,49 @@ export default function EnviosYPagosPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center min-h-[calc(100vh-115px)]">
-          <div className="flex flex-col relative z-10">
-            <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
-              {t(c?.hero?.title || 'Envíos y Pagos')}
-            </h1>
-            <h2 className="text-xl md:text-2xl text-accent mb-6 font-heading font-light">
-              {t(c?.hero?.subtitle || 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.')}
-            </h2>
-            <p className="text-muted-foreground text-[13px] leading-relaxed mb-10 max-w-lg">
-              {t(c?.hero?.text || 'Realizamos envíos internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada país destino, para que tu experiencia sea segura y sin complicaciones.')}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              {(c?.features || [
-                { text: 'Envíos seguros a\ntoda América Latina y Europa', icon: 'PlaneTakeoff' },
-                { text: 'Pagos protegidos\ny múltiples opciones', icon: 'ShieldCheck' }
-              ]).map((feat: any, idx: number) => {
-                 const IconMap: any = { Truck, ShieldCheck, PlaneTakeoff };
-                 const Icon = IconMap[feat.icon] || Truck;
-                 return (
-                   <div key={idx} className="flex items-center gap-4 bg-transparent border border-accent/40 rounded-md px-6 py-4 flex-1">
-                     <Icon className="w-6 h-6 text-accent shrink-0" strokeWidth={1.5} />
-                     <span className="text-[11px] text-white leading-snug whitespace-pre-line">{t(feat.text)}</span>
-                   </div>
-                 );
-              })}
-            </div>
+        <section className="relative w-full min-h-[calc(100vh-115px)] flex flex-col justify-center">
+          {/* Background Image */}
+          <div className="absolute inset-0 z-0">
+            <Image 
+              src="/images/cheotnun-k-beauty-politica-envios.webp" 
+              alt="Envíos"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </div>
 
-          <div className="relative w-full h-[350px] md:h-[450px]">
-            {/* Abstract background shape for image */}
-            <div className="absolute inset-0 bg-[#c5a173]/10 rounded-[10rem] rounded-tr-3xl overflow-hidden -right-10 translate-x-10 scale-110" />
-            <div className="absolute inset-0 right-0 h-full w-full rounded-l-full overflow-hidden border border-white/10 shadow-2xl">
-              <Image
-                src="/images/cheotnun-k-beauty-politica-envios.webp"
-                alt="Envíos"
-                fill
-                className="object-cover object-right"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
+          <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
+            <div className="flex flex-col">
+              <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
+                {t(c?.hero?.title || 'Envíos y Pagos')}
+              </h1>
+              <h2 className="text-xl md:text-2xl text-accent mb-6 font-heading font-light">
+                {t(c?.hero?.subtitle || 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.')}
+              </h2>
+              <p className="text-muted-foreground text-[13px] leading-relaxed mb-10 max-w-lg">
+                {t(c?.hero?.text || 'Realizamos envíos internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada país destino, para que tu experiencia sea segura y sin complicaciones.')}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                {(c?.features || [
+                  { text: 'Envíos seguros a\ntoda América Latina y Europa', icon: 'PlaneTakeoff' },
+                  { text: 'Pagos protegidos\ny múltiples opciones', icon: 'ShieldCheck' }
+                ]).map((feat: any, idx: number) => {
+                   const IconMap: any = { Truck, ShieldCheck, PlaneTakeoff };
+                   const Icon = IconMap[feat.icon] || Truck;
+                   return (
+                     <div key={idx} className="flex items-center gap-4 bg-transparent border border-accent/40 rounded-md px-6 py-4 flex-1 backdrop-blur-sm">
+                       <Icon className="w-6 h-6 text-accent shrink-0" strokeWidth={1.5} />
+                       <span className="text-[11px] text-white leading-snug whitespace-pre-line">{t(feat.text)}</span>
+                     </div>
+                   );
+                })}
+              </div>
             </div>
+            
+            {/* Right side left empty to reveal background */}
+            <div className="hidden lg:block w-full h-full"></div>
           </div>
         </section>
 
