@@ -42,16 +42,18 @@ export async function POST(req: NextRequest) {
     }
 
     // === ONE-TIME PAYMENT FLOW (Product purchase) ===
-    const { orderId, totalAmount, customerEmail, customerName, items } = body;
+    const { orderId, totalAmount, customerEmail, customerName, items, locale } = body;
     if (!orderId || !totalAmount) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
+
+    const currency = locale === 'pt' ? 'brl' : 'usd';
 
     const session = await getStripe().checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency,
           product_data: {
             name: `Pedido #${orderId.substring(0, 8)} - Cheotnun K-Beauty`,
             description: items

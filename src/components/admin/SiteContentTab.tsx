@@ -31,7 +31,7 @@ export default function SiteContentTab() {
         root = updated.translations[activeLang];
       }
 
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       if (isRootSec) {
         if (!root[section]) root[section] = {};
         let obj = root[section];
@@ -55,6 +55,41 @@ export default function SiteContentTab() {
     });
   };
 
+  // Helper to resolve dotted paths like 'maeum.cards' -> obj['maeum']['cards']
+  const getNested = (obj: any, path: string): any => {
+    if (!obj || !path) return undefined;
+    const parts = path.split('.');
+    let current = obj;
+    for (const part of parts) {
+      if (current === undefined || current === null) return undefined;
+      current = current[part];
+    }
+    return current;
+  };
+
+  const setNested = (obj: any, path: string, value: any): boolean => {
+    if (!obj || !path) return false;
+    const parts = path.split('.');
+    let current = obj;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (!current[parts[i]]) current[parts[i]] = {};
+      current = current[parts[i]];
+    }
+    current[parts[parts.length - 1]] = value;
+    return true;
+  };
+
+  const ensureNested = (obj: any, path: string): any => {
+    if (!obj || !path) return undefined;
+    const parts = path.split('.');
+    let current = obj;
+    for (const part of parts) {
+      if (!current[part]) current[part] = {};
+      current = current[part];
+    }
+    return current;
+  };
+
   // Array Fields Handlers
   const handleArrayItemChange = (section: string, arrayField: string, index: number, field: string, value: any) => {
     setContent((prev: any) => {
@@ -67,18 +102,21 @@ export default function SiteContentTab() {
         root = updated.translations[activeLang];
       }
 
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? root : root.home;
 
       if (!isRootSec && !root.home) root.home = {};
       if (!parentObj[section]) parentObj[section] = {};
-      if (!parentObj[section][arrayField]) {
+      // Ensure the nested array path exists
+      const arrContainer = ensureNested(parentObj[section], arrayField.split('.').slice(0, -1).join('.'));
+      const arrKey = arrayField.split('.').pop() || arrayField;
+      if (!arrContainer[arrKey]) {
         const baseParent = isRootSec ? updated : updated.home;
-        const baseArr = baseParent?.[section]?.[arrayField] || [];
-        parentObj[section][arrayField] = JSON.parse(JSON.stringify(baseArr));
+        const baseArr = getNested(baseParent?.[section], arrayField) || [];
+        arrContainer[arrKey] = JSON.parse(JSON.stringify(baseArr));
       }
 
-      const arr = parentObj[section][arrayField];
+      const arr = arrContainer[arrKey];
       if (arr) {
         // Ensure index exists
         while (arr.length <= index) {
@@ -107,38 +145,46 @@ export default function SiteContentTab() {
   };
 
   const addArrayItem = (section: string, arrayField: string, template: any) => {
-    // Adding array item always modifies the base structure (ES) first to maintain length consistency
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? updated : updated.home;
 
       if (!isRootSec && !updated.home) updated.home = {};
       if (!parentObj[section]) parentObj[section] = {};
-      if (!parentObj[section][arrayField]) {
-        parentObj[section][arrayField] = [];
+      const arrContainer = ensureNested(parentObj[section], arrayField.split('.').slice(0, -1).join('.'));
+      const arrKey = arrayField.split('.').pop() || arrayField;
+      if (!arrContainer[arrKey]) {
+        arrContainer[arrKey] = [];
       }
-      parentObj[section][arrayField].push(JSON.parse(JSON.stringify(template)));
+      arrContainer[arrKey].push(JSON.parse(JSON.stringify(template)));
       return updated;
     });
   };
 
+  const getNestedArray = (obj: any, path: string): any[] | null => {
+    if (!obj || !path) return null;
+    const val = getNested(obj, path);
+    return Array.isArray(val) ? val : null;
+  };
+
   const removeArrayItem = (section: string, arrayField: string, index: number) => {
-    // Removing array item modifies base structure and deletes index from all translations
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
-      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? updated : updated.home;
 
-      if (parentObj?.[section]?.[arrayField]) {
-        parentObj[section][arrayField].splice(index, 1);
+      const arr = getNestedArray(parentObj?.[section], arrayField);
+      if (arr) {
+        arr.splice(index, 1);
       }
       // Remove from translations as well
       if (updated.translations) {
         Object.keys(updated.translations).forEach(lang => {
           const tParentObj = isRootSec ? updated.translations[lang] : updated.translations[lang]?.home;
-          if (tParentObj?.[section]?.[arrayField]) {
-            tParentObj[section][arrayField].splice(index, 1);
+          const tArr = getNestedArray(tParentObj?.[section], arrayField);
+          if (tArr) {
+            tArr.splice(index, 1);
           }
         });
       }
@@ -160,7 +206,7 @@ export default function SiteContentTab() {
       root = content.translations?.[activeLang];
     }
     if (!root) return '';
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     let obj = isRootSec ? root[section] : root.home?.[section];
     if (!obj) return '';
     let current = obj;
@@ -173,7 +219,7 @@ export default function SiteContentTab() {
 
   const getBaseValue = (section: string, field: string): string => {
     const parts = field.split('.');
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     let obj = isRootSec ? content[section] : content.home?.[section];
     if (!obj) return '';
     let current = obj;
@@ -189,13 +235,12 @@ export default function SiteContentTab() {
     if (activeLang !== 'es') {
       root = content.translations?.[activeLang];
     }
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     const parentObj = isRootSec ? root : root?.home;
 
-    if (!parentObj || !parentObj[section] || !parentObj[section][arrayField] || !parentObj[section][arrayField][index]) {
-      return '';
-    }
-    const item = parentObj[section][arrayField][index];
+    const arr = getNestedArray(parentObj?.[section], arrayField);
+    if (!arr || !arr[index]) return '';
+    const item = arr[index];
     if (field === '') {
       return typeof item === 'string' ? item : '';
     }
@@ -210,13 +255,12 @@ export default function SiteContentTab() {
   };
 
   const getBaseArrayValue = (section: string, arrayField: string, index: number, field: string): string => {
-    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+    const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
     const parentObj = isRootSec ? content : content.home;
 
-    if (!parentObj || !parentObj[section] || !parentObj[section][arrayField] || !parentObj[section][arrayField][index]) {
-      return '';
-    }
-    const item = parentObj[section][arrayField][index];
+    const arr = getNestedArray(parentObj?.[section], arrayField);
+    if (!arr || !arr[index]) return '';
+    const item = arr[index];
     if (field === '') {
       return typeof item === 'string' ? item : '';
     }
@@ -321,6 +365,7 @@ export default function SiteContentTab() {
     { id: 'marcas', label: 'Página: Marcas' },
     { id: 'comoFunciona', label: 'Página: Como Funciona' },
     { id: 'contacto', label: 'Página: Contacto' },
+    { id: 'ayudaDevoluciones', label: 'Página: Devoluciones' },
     { id: 'envios', label: 'Página: Envíos' },
     { id: 'rutinasPage', label: 'Página: Rutinas' },
     { id: 'experienciasPage', label: 'Página: Experiencias' },
@@ -343,6 +388,15 @@ export default function SiteContentTab() {
   const testList = content.experienciasPage?.testimonials?.list || [];
   const termSections = content.terminos?.sections || [];
   const privSections = content.privacidad?.sections || [];
+  const rutinasIngredients = content.rutinasPage?.ingredients || [];
+  const rutinasRoutineSteps = content.rutinasPage?.routineSteps || [];
+  const rutinasTips = content.rutinasPage?.tips || [];
+  const rutinasMakeup = content.rutinasPage?.makeup || [];
+  const rutinasCategories = content.rutinasPage?.categories || [];
+  const rutinasFaq = content.rutinasPage?.faq || [];
+  const maeumPoints = content.experienciasPage?.maeum?.points || [];
+  const comoFuncionaSteps = content.comoFunciona?.steps || [];
+  const shippingItems = content.comoFunciona?.shippingInfo?.items || [];
 
   return (
     <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
@@ -409,14 +463,18 @@ export default function SiteContentTab() {
               {renderInput('Texto Botão Rutinas', 'hero', 'btnRoutineText')}
               {renderInput('Link Botão Rutinas', 'hero', 'btnRoutineLink')}
             </div>
-            {activeLang === 'es' && (
-              <ImageUpload
-                currentUrl={getBaseValue('hero', 'bgImage')}
-                onUrlChange={v => handleChange('hero', 'bgImage', v)}
-                folder="hero"
-                label="Imagem de Fundo do Hero"
-              />
-            )}
+            <ImageUpload
+              currentUrl={getBaseValue('hero', 'bgImage')}
+              onUrlChange={v => handleChange('hero', 'bgImage', v)}
+              folder="hero"
+              label="Imagem de Fundo do Hero (Desktop)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('hero', 'bgImageMobile')}
+              onUrlChange={v => handleChange('hero', 'bgImageMobile', v)}
+              folder="hero"
+              label="Imagem de Fundo do Hero (Mobile)"
+            />
           </div>
         )}
 
@@ -425,20 +483,16 @@ export default function SiteContentTab() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Barra de Destaques</h3>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('highlights', 'items', { icon: 'ShieldCheck', title: 'NOVO', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
-                </Button>
-              )}
+              <Button onClick={() => addArrayItem('highlights', 'items', { icon: 'ShieldCheck', title: 'NOVO', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR
+              </Button>
             </div>
             <p className="text-[10px] text-muted-foreground">Ícones disponíveis: ShieldCheck, Truck, ShieldAlert, Heart, Droplet, Sparkles, Smile, Hourglass, ClipboardList, Star, Compass</p>
             {highlightsItems.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('highlights', 'items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('highlights', 'items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   {renderArrayInput('Ícone', 'highlights', 'items', idx, 'icon')}
@@ -482,11 +536,9 @@ export default function SiteContentTab() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Experiencias Cheotnun</h3>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('experiencias', 'cards', { badge: 'NOVA', badgeColor: 'accent', title: 'Nova Experiência', text: 'Descrição', buttonText: 'SABER MÁS', image: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR CARD
-                </Button>
-              )}
+              <Button onClick={() => addArrayItem('experiencias', 'cards', { badge: 'NOVA', badgeColor: 'accent', title: 'Nova Experiência', text: 'Descrição', buttonText: 'SABER MÁS', image: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR CARD
+              </Button>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {renderInput('Pré-título da Seção', 'experiencias', 'preTitle')}
@@ -497,9 +549,7 @@ export default function SiteContentTab() {
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-accent uppercase">Card #{idx + 1}</span>
-                    {activeLang === 'es' && (
-                      <button onClick={() => removeArrayItem('experiencias', 'cards', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                    )}
+                    <button onClick={() => removeArrayItem('experiencias', 'cards', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {renderArrayInput('Badge', 'experiencias', 'cards', idx, 'badge')}
@@ -518,14 +568,12 @@ export default function SiteContentTab() {
                     {renderArrayInput('Texto do Botão', 'experiencias', 'cards', idx, 'buttonText')}
                   </div>
                   {renderArrayInput('Texto', 'experiencias', 'cards', idx, 'text', { rows: 2 })}
-                  {activeLang === 'es' && (
-                    <ImageUpload
-                      currentUrl={getBaseArrayValue('experiencias', 'cards', idx, 'image')}
-                      onUrlChange={v => handleArrayItemChange('experiencias', 'cards', idx, 'image', v)}
-                      folder="experiencias"
-                      label="Imagem do Card"
-                    />
-                  )}
+                  <ImageUpload
+                    currentUrl={getBaseArrayValue('experiencias', 'cards', idx, 'image')}
+                    onUrlChange={v => handleArrayItemChange('experiencias', 'cards', idx, 'image', v)}
+                    folder="experiencias"
+                    label="Imagem do Card"
+                  />
                 </div>
               ))}
             </div>
@@ -546,11 +594,9 @@ export default function SiteContentTab() {
             <div className="border-t border-white/5 pt-4">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-[10px] font-bold text-accent uppercase">Itens de Rutina</h4>
-                {activeLang === 'es' && (
-                  <Button onClick={() => addArrayItem('routines', 'items', { name: 'Nova Rutina', icon: 'Sparkles' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                    <Plus className="h-3 w-3" /> ADICIONAR
-                  </Button>
-                )}
+                <Button onClick={() => addArrayItem('routines', 'items', { name: 'Nova Rutina', icon: 'Sparkles' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {routinesItems.map((item: any, idx: number) => (
@@ -562,18 +608,14 @@ export default function SiteContentTab() {
                         className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
                         placeholder={activeLang !== 'es' && getBaseArrayValue('routines', 'items', idx, 'name') ? `[ES]: ${getBaseArrayValue('routines', 'items', idx, 'name')}` : "Nome"} 
                       />
-                      {activeLang === 'es' && (
-                        <input 
-                          value={getArrayValue('routines', 'items', idx, 'icon')} 
-                          onChange={e => handleArrayItemChange('routines', 'items', idx, 'icon', e.target.value)} 
-                          className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
-                          placeholder="Ícone" 
-                        />
-                      )}
+                      <input 
+                        value={getArrayValue('routines', 'items', idx, 'icon')} 
+                        onChange={e => handleArrayItemChange('routines', 'items', idx, 'icon', e.target.value)} 
+                        className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
+                        placeholder="Ícone" 
+                      />
                     </div>
-                    {activeLang === 'es' && (
-                      <button onClick={() => removeArrayItem('routines', 'items', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
-                    )}
+                    <button onClick={() => removeArrayItem('routines', 'items', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
                   </div>
                 ))}
               </div>
@@ -582,11 +624,9 @@ export default function SiteContentTab() {
             <div className="border-t border-white/5 pt-4">
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-[10px] font-bold text-accent uppercase">Badges Inferiores</h4>
-                {activeLang === 'es' && (
-                  <Button onClick={() => addArrayItem('routines', 'badges', { icon: 'ShieldCheck', title: 'NOVO BADGE' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                    <Plus className="h-3 w-3" /> ADICIONAR
-                  </Button>
-                )}
+                <Button onClick={() => addArrayItem('routines', 'badges', { icon: 'ShieldCheck', title: 'NOVO BADGE' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {routinesBadges.map((badge: any, idx: number) => (
@@ -598,18 +638,14 @@ export default function SiteContentTab() {
                         className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
                         placeholder={activeLang !== 'es' && getBaseArrayValue('routines', 'badges', idx, 'title') ? `[ES]: ${getBaseArrayValue('routines', 'badges', idx, 'title')}` : "Título"} 
                       />
-                      {activeLang === 'es' && (
-                        <input 
-                          value={getArrayValue('routines', 'badges', idx, 'icon')} 
-                          onChange={e => handleArrayItemChange('routines', 'badges', idx, 'icon', e.target.value)} 
-                          className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
-                          placeholder="Ícone" 
-                        />
-                      )}
+                      <input 
+                        value={getArrayValue('routines', 'badges', idx, 'icon')} 
+                        onChange={e => handleArrayItemChange('routines', 'badges', idx, 'icon', e.target.value)} 
+                        className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
+                        placeholder="Ícone" 
+                      />
                     </div>
-                    {activeLang === 'es' && (
-                      <button onClick={() => removeArrayItem('routines', 'badges', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
-                    )}
+                    <button onClick={() => removeArrayItem('routines', 'badges', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
                   </div>
                 ))}
               </div>
@@ -627,31 +663,29 @@ export default function SiteContentTab() {
               {renderInput('Texto do Botão', 'instagram', 'buttonText')}
               {renderInput('Link do Botão', 'instagram', 'buttonLink')}
             </div>
-            {activeLang === 'es' && (
-              <div className="border-t border-white/5 pt-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-[10px] font-bold text-accent uppercase">Imagens do Feed</h4>
-                  <Button onClick={() => addArrayItem('instagram', 'images', 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                    <Plus className="h-3 w-3" /> ADICIONAR
-                  </Button>
-                </div>
-                <div className="grid grid-cols-1 gap-3">
-                  {instagramImages.map((url: string, idx: number) => (
-                    <div key={idx} className="flex gap-2 items-start">
-                      <div className="flex-1">
-                        <ImageUpload
-                          currentUrl={url}
-                          onUrlChange={v => handleArrayItemChange('instagram', 'images', idx, '', v)}
-                          folder="instagram"
-                          label={`Imagem ${idx + 1}`}
-                        />
-                      </div>
-                      <button onClick={() => removeArrayItem('instagram', 'images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
-                    </div>
-                  ))}
-                </div>
+            <div className="border-t border-white/5 pt-4">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-[10px] font-bold text-accent uppercase">Imagens do Feed</h4>
+                <Button onClick={() => addArrayItem('instagram', 'images', 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
               </div>
-            )}
+              <div className="grid grid-cols-1 gap-3">
+                {instagramImages.map((url: string, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-start">
+                    <div className="flex-1">
+                      <ImageUpload
+                        currentUrl={url}
+                        onUrlChange={v => handleArrayItemChange('instagram', 'images', idx, '', v)}
+                        folder="instagram"
+                        label={`Imagem ${idx + 1}`}
+                      />
+                    </div>
+                    <button onClick={() => removeArrayItem('instagram', 'images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
@@ -676,14 +710,12 @@ export default function SiteContentTab() {
               {renderInput('Texto do Anúncio (barra superior)', 'header', 'announcementText')}
               {renderInput('Texto "Envíos"', 'header', 'shippingText')}
               {renderInput('Texto "Atención"', 'header', 'attentionText')}
-              {activeLang === 'es' && (
-                <ImageUpload
-                  currentUrl={getBaseValue('header', 'logoUrl')}
-                  onUrlChange={v => handleChange('header', 'logoUrl', v)}
-                  folder="logo"
-                  label="Logo do Site"
-                />
-              )}
+              <ImageUpload
+                currentUrl={getBaseValue('header', 'logoUrl')}
+                onUrlChange={v => handleChange('header', 'logoUrl', v)}
+                folder="logo"
+                label="Logo do Site"
+              />
             </div>
           </div>
         )}
@@ -696,6 +728,7 @@ export default function SiteContentTab() {
             <div className="grid grid-cols-2 gap-4">
               {renderInput('URL Instagram', 'footer', 'social.instagram')}
               {renderInput('URL YouTube', 'footer', 'social.youtube')}
+              {renderInput('URL TikTok', 'footer', 'social.tiktok')}
             </div>
 
             <div className="border-t border-white/5 pt-4">
@@ -714,14 +747,127 @@ export default function SiteContentTab() {
               {renderInput('Subtítulo do Hero', 'marcas', 'hero.subtitle')}
               {renderInput('Texto do Botão Hero', 'marcas', 'hero.buttonText')}
             </div>
-            {activeLang === 'es' && (
+            <ImageUpload
+              currentUrl={getBaseValue('marcas', 'hero.image')}
+              onUrlChange={v => handleChange('marcas', 'hero.image', v)}
+              folder="marcas"
+              label="Imagem Hero (Marcas)"
+            />
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Recursos (Features)</h4>
+              <p className="text-[9px] text-muted-foreground">Ícones disponíveis: Award, Beaker, Heart, ShieldCheck, ShoppingBag, Headset, Gift, Star</p>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Lista de Recursos</span>
+                <Button onClick={() => addArrayItem('marcas', 'features', { title: 'Novo', text: 'Descrição', icon: 'Award' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.marcas?.features || []).map((feat: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Feature #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('marcas', 'features', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {renderArrayInput('Ícone', 'marcas', 'features', idx, 'icon', { placeholder: 'Award, Beaker, Heart...' })}
+                    {renderArrayInput('Título', 'marcas', 'features', idx, 'title')}
+                    {renderArrayInput('Texto', 'marcas', 'features', idx, 'text')}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Por que nos escolher (Why Choose Us)</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'marcas', 'whyChooseUs.title')}
+                {renderInput('Texto de Conclusão (Título)', 'marcas', 'whyChooseUs.conclusionTitle')}
+                {renderInput('Texto de Conclusão', 'marcas', 'whyChooseUs.conclusionText', { rows: 2 })}
+              </div>
               <ImageUpload
-                currentUrl={getBaseValue('marcas', 'hero.image')}
-                onUrlChange={v => handleChange('marcas', 'hero.image', v)}
+                currentUrl={getBaseValue('marcas', 'whyChooseUs.image')}
+                onUrlChange={v => handleChange('marcas', 'whyChooseUs.image', v)}
                 folder="marcas"
-                label="Imagem Hero (Marcas)"
+                label="Imagem Why Choose Us"
               />
-            )}
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Itens</span>
+                <Button onClick={() => addArrayItem('marcas', 'whyChooseUs.items', { title: 'Novo', text: 'Descrição', icon: 'ShieldCheck' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.marcas?.whyChooseUs?.items || []).map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
+                    <button onClick={() => { removeArrayItem('marcas', 'whyChooseUs.items', idx); }} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {renderArrayInput('Ícone', 'marcas', 'whyChooseUs.items', idx, 'icon')}
+                    {renderArrayInput('Título', 'marcas', 'whyChooseUs.items', idx, 'title')}
+                    {renderArrayInput('Texto', 'marcas', 'whyChooseUs.items', idx, 'text')}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Depoimentos (Testimonials)</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'marcas', 'testimonials.title')}
+                {renderInput('Texto do Botão', 'marcas', 'testimonials.buttonText')}
+                {renderInput('Link do Botão', 'marcas', 'testimonials.buttonLink')}
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Lista de Depoimentos</span>
+                <Button onClick={() => addArrayItem('marcas', 'testimonials.list', { name: 'Nome', text: 'Depoimento', country: 'País', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.marcas?.testimonials?.list || []).map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Depoimento #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('marcas', 'testimonials.list', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {renderArrayInput('Nome', 'marcas', 'testimonials.list', idx, 'name')}
+                    {renderArrayInput('País', 'marcas', 'testimonials.list', idx, 'country')}
+                  </div>
+                  {renderArrayInput('Texto', 'marcas', 'testimonials.list', idx, 'text', { rows: 2 })}
+                  <ImageUpload
+                    currentUrl={getBaseArrayValue('marcas', 'testimonials.list', idx, 'img')}
+                    onUrlChange={v => handleArrayItemChange('marcas', 'testimonials.list', idx, 'img', v)}
+                    folder="marcas"
+                    label="Foto do Depoimento"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Sellos de Confiança (Trust Badges)</h4>
+              <p className="text-[9px] text-muted-foreground">Ícones: Leaf, FlaskConical, Rabbit, Recycle, Flower2, Award, Beaker, Heart, ShieldCheck</p>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Badges</span>
+                <Button onClick={() => addArrayItem('marcas', 'trustBadges', { icon: 'Leaf', text: 'Nuevo badge' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.marcas?.trustBadges || []).map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Badge #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('marcas', 'trustBadges', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Ícone', 'marcas', 'trustBadges', idx, 'icon')}
+                    {renderArrayInput('Texto', 'marcas', 'trustBadges', idx, 'text')}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -739,14 +885,56 @@ export default function SiteContentTab() {
               {renderInput('Título de Envíos', 'comoFunciona', 'shippingInfo.title')}
               {renderInput('Subtítulo de Envíos', 'comoFunciona', 'shippingInfo.subtitle')}
             </div>
-            {activeLang === 'es' && (
-              <ImageUpload
-                currentUrl={getBaseValue('comoFunciona', 'hero.image')}
-                onUrlChange={v => handleChange('comoFunciona', 'hero.image', v)}
-                folder="como-funciona"
-                label="Imagem Hero (Como Funciona)"
-              />
-            )}
+            <ImageUpload
+              currentUrl={getBaseValue('comoFunciona', 'hero.image')}
+              onUrlChange={v => handleChange('comoFunciona', 'hero.image', v)}
+              folder="como-funciona"
+              label="Imagem Hero (Como Funciona)"
+            />
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Passos (Steps)</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Lista de Passos</span>
+                <Button onClick={() => addArrayItem('comoFunciona', 'steps', { number: '1', icon: 'ShoppingBag', title: 'Novo Passo', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {comoFuncionaSteps.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Passo #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('comoFunciona', 'steps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Número', 'comoFunciona', 'steps', idx, 'number')}
+                    {renderArrayInput('Ícone', 'comoFunciona', 'steps', idx, 'icon')}
+                    {renderArrayInput('Título', 'comoFunciona', 'steps', idx, 'title')}
+                    {renderArrayInput('Texto', 'comoFunciona', 'steps', idx, 'text', { rows: 2 })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Informações de Envio (Shipping Info Items)</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Itens de Envio</span>
+                <Button onClick={() => addArrayItem('comoFunciona', 'shippingInfo.items', { title: 'Novo Título', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {shippingItems.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('comoFunciona', 'shippingInfo.items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  {renderArrayInput('Título', 'comoFunciona', 'shippingInfo.items', idx, 'title')}
+                  {renderArrayInput('Texto', 'comoFunciona', 'shippingInfo.items', idx, 'text', { rows: 2 })}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -759,14 +947,12 @@ export default function SiteContentTab() {
               {renderInput('Subtítulo do Hero', 'contacto', 'hero.subtitle', { rows: 3 })}
               {renderInput('Título de FAQ', 'contacto', 'faq.title')}
             </div>
-            {activeLang === 'es' && (
-              <ImageUpload
-                currentUrl={getBaseValue('contacto', 'hero.image')}
-                onUrlChange={v => handleChange('contacto', 'hero.image', v)}
-                folder="contacto"
-                label="Imagem Hero (Contacto)"
-              />
-            )}
+            <ImageUpload
+              currentUrl={getBaseValue('contacto', 'hero.image')}
+              onUrlChange={v => handleChange('contacto', 'hero.image', v)}
+              folder="contacto"
+              label="Imagem Hero (Contacto)"
+            />
             
             <div className="border-t border-white/5 pt-4">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Informações de Contato</h4>
@@ -776,6 +962,120 @@ export default function SiteContentTab() {
                 {renderInput('Endereço de E-mail', 'contacto', 'contactMethods.email.value')}
                 {renderInput('Endereço Físico', 'contacto', 'contactMethods.address.value')}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* DEVOLUCIONES */}
+        {activeSection === 'ayudaDevoluciones' && (
+          <div className="space-y-5">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Devoluciones</h3>
+            <div className="grid grid-cols-2 gap-4">
+              {renderInput('Badge', 'ayudaDevoluciones', 'hero.badge')}
+              {renderInput('Título', 'ayudaDevoluciones', 'hero.title')}
+              {renderInput('Subtítulo', 'ayudaDevoluciones', 'hero.subtitle', { rows: 2 })}
+              {renderInput('Título da Seção de Passos', 'ayudaDevoluciones', 'hero.sectionTitle')}
+              {renderInput('Título Condições', 'ayudaDevoluciones', 'hero.conditionsTitle')}
+              {renderInput('Título Não Aceitos', 'ayudaDevoluciones', 'hero.notAcceptedTitle')}
+              {renderInput('Título Contato', 'ayudaDevoluciones', 'hero.contactTitle')}
+              {renderInput('Texto Contato', 'ayudaDevoluciones', 'hero.contactText', { rows: 2 })}
+              {renderInput('Email Contato', 'ayudaDevoluciones', 'hero.contactEmail')}
+              {renderInput('WhatsApp Contato', 'ayudaDevoluciones', 'hero.contactWhatsapp')}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Passos</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Lista de Passos</span>
+                <Button onClick={() => addArrayItem('ayudaDevoluciones', 'hero.steps', { step: '01', icon: 'Clock', title: 'Novo', desc: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.ayudaDevoluciones?.hero?.steps || []).map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Passo #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('ayudaDevoluciones', 'hero.steps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Número', 'ayudaDevoluciones', 'hero.steps', idx, 'step')}
+                    {renderArrayInput('Ícone', 'ayudaDevoluciones', 'hero.steps', idx, 'icon')}
+                    {renderArrayInput('Título', 'ayudaDevoluciones', 'hero.steps', idx, 'title')}
+                    <div className="col-span-2">
+                      {renderArrayInput('Descrição', 'ayudaDevoluciones', 'hero.steps', idx, 'desc', { rows: 2 })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Resumo (Summary Cards)</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Cards</span>
+                <Button onClick={() => addArrayItem('ayudaDevoluciones', 'hero.summary', { icon: 'Clock', title: 'Novo', text: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.ayudaDevoluciones?.hero?.summary || []).map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Card #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('ayudaDevoluciones', 'hero.summary', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    {renderArrayInput('Ícone', 'ayudaDevoluciones', 'hero.summary', idx, 'icon')}
+                    {renderArrayInput('Título', 'ayudaDevoluciones', 'hero.summary', idx, 'title')}
+                    {renderArrayInput('Texto', 'ayudaDevoluciones', 'hero.summary', idx, 'text')}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Condições Aceitas</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Condições</span>
+                <Button onClick={() => addArrayItem('ayudaDevoluciones', 'hero.conditions', 'Nova condição')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.ayudaDevoluciones?.hero?.conditions || []).map((cond: string, idx: number) => (
+                <div key={idx} className="flex gap-2 items-center">
+                  <div className="flex-1">
+                    <input
+                      value={getArrayValue('ayudaDevoluciones', 'hero.conditions', idx, '')}
+                      onChange={e => handleArrayItemChange('ayudaDevoluciones', 'hero.conditions', idx, '', e.target.value)}
+                      className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white"
+                      placeholder="Condição"
+                    />
+                  </div>
+                  <button onClick={() => removeArrayItem('ayudaDevoluciones', 'hero.conditions', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Não Aceitos</h4>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-accent font-bold uppercase">Itens Não Aceitos</span>
+                <Button onClick={() => addArrayItem('ayudaDevoluciones', 'hero.notAccepted', 'Novo item')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {(content?.ayudaDevoluciones?.hero?.notAccepted || []).map((item: string, idx: number) => (
+                <div key={idx} className="flex gap-2 items-center">
+                  <div className="flex-1">
+                    <input
+                      value={getArrayValue('ayudaDevoluciones', 'hero.notAccepted', idx, '')}
+                      onChange={e => handleArrayItemChange('ayudaDevoluciones', 'hero.notAccepted', idx, '', e.target.value)}
+                      className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white"
+                      placeholder="Item não aceito"
+                    />
+                  </div>
+                  <button onClick={() => removeArrayItem('ayudaDevoluciones', 'hero.notAccepted', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                </div>
+              ))}
             </div>
           </div>
         )}
@@ -795,14 +1095,12 @@ export default function SiteContentTab() {
               {renderInput('Título Pagamentos Seguros', 'envios', 'payments.title')}
               {renderInput('Subtítulo Pagamentos Seguros', 'envios', 'payments.subtitle')}
             </div>
-            {activeLang === 'es' && (
-              <ImageUpload
-                currentUrl={getBaseValue('envios', 'hero.image')}
-                onUrlChange={v => handleChange('envios', 'hero.image', v)}
-                folder="envios"
-                label="Imagem Hero (Envíos)"
-              />
-            )}
+            <ImageUpload
+              currentUrl={getBaseValue('envios', 'hero.image')}
+              onUrlChange={v => handleChange('envios', 'hero.image', v)}
+              folder="envios"
+              label="Imagem Hero (Envíos)"
+            />
           </div>
         )}
 
@@ -815,30 +1113,24 @@ export default function SiteContentTab() {
               {renderInput('Subtítulo do Hero', 'rutinasPage', 'hero.subtitle')}
               {renderInput('Texto do Botão Hero', 'rutinasPage', 'hero.buttonText')}
             </div>
-            {activeLang === 'es' && (
-              <ImageUpload
-                currentUrl={getBaseValue('rutinasPage', 'hero.image')}
-                onUrlChange={v => handleChange('rutinasPage', 'hero.image', v)}
-                folder="rutinas"
-                label="Imagem Hero (Rutinas)"
-              />
-            )}
+            <ImageUpload
+              currentUrl={getBaseValue('rutinasPage', 'hero.image')}
+              onUrlChange={v => handleChange('rutinasPage', 'hero.image', v)}
+              folder="rutinas"
+              label="Imagem Hero (Rutinas)"
+            />
 
             <div className="flex items-center justify-between mt-6">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Passos da Rotina</h4>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('rutinasPage', 'steps', { step: '1', title: 'Novo', subtitle: '', description: '', icon: 'Droplet' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
-                </Button>
-              )}
+              <Button onClick={() => addArrayItem('rutinasPage', 'steps', { step: '1', title: 'Novo', subtitle: '', description: '', icon: 'Droplet' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR
+              </Button>
             </div>
             {rutinasSteps.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Passo #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('rutinasPage', 'steps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('rutinasPage', 'steps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {renderArrayInput('Número (Step)', 'rutinasPage', 'steps', idx, 'step')}
@@ -852,6 +1144,217 @@ export default function SiteContentTab() {
               </div>
             ))}
 
+            {/* STEPS SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Seção de Etapas (Steps Section)</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'rutinasPage', 'stepsSection.title')}
+                {renderInput('Subtítulo da Seção', 'rutinasPage', 'stepsSection.subtitle')}
+                {renderInput('Texto do Rodapé', 'rutinasPage', 'stepsSection.footerText', { rows: 2 })}
+              </div>
+            </div>
+
+            {/* INGREDIENTS SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Seção de Ingredientes</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'rutinasPage', 'ingredientsSection.title')}
+                {renderInput('Subtítulo da Seção', 'rutinasPage', 'ingredientsSection.subtitle')}
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Ingredientes</span>
+                <Button onClick={() => addArrayItem('rutinasPage', 'ingredients', { name: 'Novo Ingrediente', desc: 'Descrição', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {rutinasIngredients.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Ingrediente #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('rutinasPage', 'ingredients', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Nome', 'rutinasPage', 'ingredients', idx, 'name')}
+                    <div className="col-span-2">
+                      {renderArrayInput('Descrição', 'rutinasPage', 'ingredients', idx, 'desc', { rows: 2 })}
+                    </div>
+                  </div>
+                  <ImageUpload
+                    currentUrl={getBaseArrayValue('rutinasPage', 'ingredients', idx, 'img')}
+                    onUrlChange={v => handleArrayItemChange('rutinasPage', 'ingredients', idx, 'img', v)}
+                    folder="rutinas"
+                    label="Imagem do Ingrediente"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* ROUTINE SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Como Montar sua Rotina</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'rutinasPage', 'routineSection.title')}
+                {renderInput('Título do Box', 'rutinasPage', 'routineSection.boxTitle')}
+                {renderInput('Descrição do Box', 'rutinasPage', 'routineSection.boxDesc', { rows: 2 })}
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Passos da Rotina</span>
+                <Button onClick={() => addArrayItem('rutinasPage', 'routineSteps', { num: '1', title: 'Novo', icon: 'Droplet', sub: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {rutinasRoutineSteps.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Passo #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('rutinasPage', 'routineSteps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Número', 'rutinasPage', 'routineSteps', idx, 'num')}
+                    {renderArrayInput('Ícone', 'rutinasPage', 'routineSteps', idx, 'icon')}
+                    {renderArrayInput('Título', 'rutinasPage', 'routineSteps', idx, 'title')}
+                    {renderArrayInput('Subtítulo (opcional)', 'rutinasPage', 'routineSteps', idx, 'sub')}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* TIPS SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Dicas</h4>
+              {renderInput('Título da Seção', 'rutinasPage', 'tipsSection.title')}
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Dicas</span>
+                <Button onClick={() => addArrayItem('rutinasPage', 'tips', { title: 'Nova Dica', desc: 'Descrição', img: '', icon: 'Sun' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {rutinasTips.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Dica #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('rutinasPage', 'tips', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Ícone', 'rutinasPage', 'tips', idx, 'icon')}
+                    {renderArrayInput('Título', 'rutinasPage', 'tips', idx, 'title')}
+                    <div className="col-span-2">
+                      {renderArrayInput('Descrição', 'rutinasPage', 'tips', idx, 'desc', { rows: 2 })}
+                    </div>
+                  </div>
+                  <ImageUpload
+                    currentUrl={getBaseArrayValue('rutinasPage', 'tips', idx, 'img')}
+                    onUrlChange={v => handleArrayItemChange('rutinasPage', 'tips', idx, 'img', v)}
+                    folder="rutinas"
+                    label="Imagem da Dica"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* MAKEUP SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Universo da Maquiagem Coreana</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'rutinasPage', 'makeupSection.title')}
+                {renderInput('Subtítulo da Seção', 'rutinasPage', 'makeupSection.subtitle')}
+                {renderInput('Texto do Botão', 'rutinasPage', 'makeupSection.buttonText')}
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Maquiagens</span>
+                <Button onClick={() => addArrayItem('rutinasPage', 'makeup', { name: 'Novo', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {rutinasMakeup.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Maquiagem #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('rutinasPage', 'makeup', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  {renderArrayInput('Nome', 'rutinasPage', 'makeup', idx, 'name')}
+                  <ImageUpload
+                    currentUrl={getBaseArrayValue('rutinasPage', 'makeup', idx, 'img')}
+                    onUrlChange={v => handleArrayItemChange('rutinasPage', 'makeup', idx, 'img', v)}
+                    folder="rutinas"
+                    label="Imagem da Maquiagem"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* CATEGORIES SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Explorar Categorias</h4>
+              {renderInput('Título da Seção', 'rutinasPage', 'categoriesSection.title')}
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Categorias</span>
+                <Button onClick={() => addArrayItem('rutinasPage', 'categories', { name: 'Nova Categoria', icon: 'Sparkles' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {rutinasCategories.map((item: any, idx: number) => (
+                  <div key={idx} className="border border-white/5 rounded-lg p-3 bg-secondary/30 flex gap-2 items-center">
+                    <div className="flex-1 space-y-1">
+                      <input
+                        value={getArrayValue('rutinasPage', 'categories', idx, 'name')}
+                        onChange={e => handleArrayItemChange('rutinasPage', 'categories', idx, 'name', e.target.value)}
+                        className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white"
+                        placeholder={activeLang !== 'es' && getBaseArrayValue('rutinasPage', 'categories', idx, 'name') ? `[ES]: ${getBaseArrayValue('rutinasPage', 'categories', idx, 'name')}` : "Nome"}
+                      />
+                      <input
+                        value={getArrayValue('rutinasPage', 'categories', idx, 'icon')}
+                        onChange={e => handleArrayItemChange('rutinasPage', 'categories', idx, 'icon', e.target.value)}
+                        className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white"
+                        placeholder="Ícone"
+                      />
+                    </div>
+                    <button onClick={() => removeArrayItem('rutinasPage', 'categories', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* FAQ SECTION */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">FAQ</h4>
+              {renderInput('Título da Seção', 'rutinasPage', 'faqSection.title')}
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Perguntas Frequentes</span>
+                <Button onClick={() => addArrayItem('rutinasPage', 'faq', { q: 'Nova Pergunta?', a: 'Resposta' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR
+                </Button>
+              </div>
+              {rutinasFaq.map((item: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">FAQ #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('rutinasPage', 'faq', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  {renderArrayInput('Pergunta', 'rutinasPage', 'faq', idx, 'q')}
+                  {renderArrayInput('Resposta', 'rutinasPage', 'faq', idx, 'a', { rows: 3 })}
+                </div>
+              ))}
+            </div>
+
+            {/* NEWSLETTER */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Newsletter</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título', 'rutinasPage', 'newsletter.title')}
+                {renderInput('Subtítulo', 'rutinasPage', 'newsletter.subtitle')}
+                {renderInput('Texto do Botão', 'rutinasPage', 'newsletter.buttonText')}
+                {renderInput('Aviso Legal', 'rutinasPage', 'newsletter.disclaimer', { rows: 2 })}
+              </div>
+              <ImageUpload
+                currentUrl={getBaseValue('rutinasPage', 'newsletter.image')}
+                onUrlChange={v => handleChange('rutinasPage', 'newsletter.image', v)}
+                folder="rutinas"
+                label="Imagem da Newsletter"
+              />
+            </div>
+
           </div>
         )}
 
@@ -864,30 +1367,26 @@ export default function SiteContentTab() {
               {renderInput('Subtítulo do Hero', 'experienciasPage', 'hero.subtitle')}
               {renderInput('Texto do Botão Hero', 'experienciasPage', 'hero.buttonText')}
             </div>
-            {activeLang === 'es' && (
-              <ImageUpload
-                currentUrl={getBaseValue('experienciasPage', 'hero.image')}
-                onUrlChange={v => handleChange('experienciasPage', 'hero.image', v)}
-                folder="experiencias"
-                label="Imagem Hero (Experiencias)"
-              />
-            )}
+            <ImageUpload
+              currentUrl={getBaseValue('experienciasPage', 'hero.image')}
+              onUrlChange={v => handleChange('experienciasPage', 'hero.image', v)}
+              folder="experiencias"
+              label="Imagem Hero (Experiencias)"
+            />
+
+            {renderInput('Título da Seção Experiências', 'experienciasPage', 'experiences.title')}
 
             <div className="flex items-center justify-between mt-6">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Lista de Experiências</h4>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('experienciasPage', 'experiencesList', { title: 'Novo', desc: '', icon: 'Award', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
-                </Button>
-              )}
+              <Button onClick={() => addArrayItem('experienciasPage', 'experiencesList', { title: 'Novo', desc: '', icon: 'Award', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR
+              </Button>
             </div>
             {expList.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Card #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('experienciasPage', 'experiencesList', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('experienciasPage', 'experiencesList', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {renderArrayInput('Título', 'experienciasPage', 'experiencesList', idx, 'title')}
@@ -896,24 +1395,57 @@ export default function SiteContentTab() {
                      {renderArrayInput('Descrição', 'experienciasPage', 'experiencesList', idx, 'desc', { rows: 2 })}
                   </div>
                 </div>
+                <ImageUpload
+                  currentUrl={getBaseArrayValue('experienciasPage', 'experiencesList', idx, 'img')}
+                  onUrlChange={v => handleArrayItemChange('experienciasPage', 'experiencesList', idx, 'img', v)}
+                  folder="experiencias"
+                  label="Imagem do Card"
+                />
               </div>
             ))}
 
-            <div className="flex items-center justify-between mt-6">
-              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Maeum Global - Cards</h4>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('experienciasPage', 'maeum.cards', { title: 'Novo', desc: '', icon: 'Award', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Maeum Global - Textos</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Badge', 'experienciasPage', 'maeum.badge')}
+                {renderInput('Título', 'experienciasPage', 'maeum.title')}
+                {renderInput('Subtítulo', 'experienciasPage', 'maeum.subtitle')}
+                {renderInput('Descrição', 'experienciasPage', 'maeum.desc', { rows: 2 })}
+                {renderInput('Texto do Botão', 'experienciasPage', 'maeum.buttonText')}
+                {renderInput('Link do Botão', 'experienciasPage', 'maeum.buttonLink')}
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-[10px] text-accent font-bold uppercase">Pontos (Points)</span>
+                <Button onClick={() => addArrayItem('experienciasPage', 'maeum.points', 'Novo ponto')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
                   <Plus className="h-3 w-3" /> ADICIONAR
                 </Button>
-              )}
+              </div>
+              {maeumPoints.map((point: string, idx: number) => (
+                <div key={idx} className="flex gap-2 items-center">
+                  <div className="flex-1">
+                    <input
+                      value={getArrayValue('experienciasPage', 'maeum.points', idx, '')}
+                      onChange={e => handleArrayItemChange('experienciasPage', 'maeum.points', idx, '', e.target.value)}
+                      className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white"
+                      placeholder="Texto do ponto"
+                    />
+                  </div>
+                  <button onClick={() => removeArrayItem('experienciasPage', 'maeum.points', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between mt-6">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Maeum Global - Cards</h4>
+              <Button onClick={() => addArrayItem('experienciasPage', 'maeum.cards', { title: 'Novo', desc: '', icon: 'Award', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR
+              </Button>
             </div>
             {maeumCards.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Maeum Card #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('experienciasPage', 'maeum.cards', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('experienciasPage', 'maeum.cards', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {renderArrayInput('Título', 'experienciasPage', 'maeum.cards', idx, 'title')}
@@ -922,24 +1454,33 @@ export default function SiteContentTab() {
                      {renderArrayInput('Descrição', 'experienciasPage', 'maeum.cards', idx, 'desc', { rows: 2 })}
                   </div>
                 </div>
+                <ImageUpload
+                  currentUrl={getBaseArrayValue('experienciasPage', 'maeum.cards', idx, 'img')}
+                  onUrlChange={v => handleArrayItemChange('experienciasPage', 'maeum.cards', idx, 'img', v)}
+                  folder="experiencias"
+                  label="Imagem do Card"
+                />
               </div>
             ))}
 
-            <div className="flex items-center justify-between mt-6">
-              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Depoimentos</h4>
-              {activeLang === 'es' && (
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Depoimentos</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'experienciasPage', 'testimonials.title')}
+                {renderInput('Texto do Botão', 'experienciasPage', 'testimonials.buttonText')}
+              </div>
+              <div className="flex items-center justify-between mt-4">
+                <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Lista de Depoimentos</h4>
                 <Button onClick={() => addArrayItem('experienciasPage', 'testimonials.list', { name: 'Nome', country: 'País', quote: '', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
                   <Plus className="h-3 w-3" /> ADICIONAR
                 </Button>
-              )}
+              </div>
             </div>
             {testList.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Depoimento #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('experienciasPage', 'testimonials.list', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('experienciasPage', 'testimonials.list', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {renderArrayInput('Nome', 'experienciasPage', 'testimonials.list', idx, 'name')}
@@ -948,8 +1489,25 @@ export default function SiteContentTab() {
                      {renderArrayInput('Citação (Quote)', 'experienciasPage', 'testimonials.list', idx, 'quote', { rows: 2 })}
                   </div>
                 </div>
+                <ImageUpload
+                  currentUrl={getBaseArrayValue('experienciasPage', 'testimonials.list', idx, 'img')}
+                  onUrlChange={v => handleArrayItemChange('experienciasPage', 'testimonials.list', idx, 'img', v)}
+                  folder="experiencias"
+                  label="Foto do Depoimento"
+                />
               </div>
             ))}
+
+            {/* NEWSLETTER */}
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Newsletter</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título', 'experienciasPage', 'newsletter.title')}
+                {renderInput('Subtítulo', 'experienciasPage', 'newsletter.subtitle')}
+                {renderInput('Texto do Botão', 'experienciasPage', 'newsletter.buttonText')}
+                {renderInput('Aviso Legal', 'experienciasPage', 'newsletter.disclaimer', { rows: 2 })}
+              </div>
+            </div>
 
           </div>
         )}
@@ -988,19 +1546,15 @@ export default function SiteContentTab() {
 
             <div className="flex items-center justify-between mt-6">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Seções e Regras</h4>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('terminos', 'sections', { title: 'Nova Seção', content: '', icon: 'FileText' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
-                </Button>
-              )}
+              <Button onClick={() => addArrayItem('terminos', 'sections', { title: 'Nova Seção', content: '', icon: 'FileText' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR
+              </Button>
             </div>
             {termSections.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Seção #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('terminos', 'sections', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('terminos', 'sections', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {renderArrayInput('Ícone', 'terminos', 'sections', idx, 'icon')}
@@ -1048,19 +1602,15 @@ export default function SiteContentTab() {
 
             <div className="flex items-center justify-between mt-6">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Cláusulas</h4>
-              {activeLang === 'es' && (
-                <Button onClick={() => addArrayItem('privacidad', 'sections', { title: 'Nova Cláusula', content: '', icon: 'Shield' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
-                </Button>
-              )}
+              <Button onClick={() => addArrayItem('privacidad', 'sections', { title: 'Nova Cláusula', content: '', icon: 'Shield' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR
+              </Button>
             </div>
             {privSections.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-accent uppercase">Cláusula #{idx + 1}</span>
-                  {activeLang === 'es' && (
-                    <button onClick={() => removeArrayItem('privacidad', 'sections', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
-                  )}
+                  <button onClick={() => removeArrayItem('privacidad', 'sections', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {renderArrayInput('Ícone', 'privacidad', 'sections', idx, 'icon')}

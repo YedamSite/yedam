@@ -92,6 +92,7 @@ function TiendaContent() {
         product_id: product.id,
         name: product.name,
         price: product.price,
+        price_brl: product.price_brl || product.price * 5,
         quantity: 1,
         image: '/products/dokdo-cleanser.jpg'
       });
@@ -242,7 +243,7 @@ function TiendaContent() {
                         
                         <div className="flex flex-col gap-3 mt-4 pt-2 border-t border-white/5">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-accent font-heading">US$ {prod.price.toFixed(2)}</span>
+                            <span className="text-xs font-bold text-accent font-heading">{locale === 'pt' ? `R$ ${(prod.price_brl || prod.price * 5).toFixed(2)}` : `US$ ${prod.price.toFixed(2)}`}</span>
                             <div className="flex items-center gap-2">
                               <span className={`text-[9px] font-semibold ${prod.stock > 0 ? 'text-green-500' : 'text-red-500'}`}>
                                 {prod.stock > 0 ? `Stock: ${prod.stock}` : t('Agotado')}

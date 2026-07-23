@@ -47,11 +47,11 @@ const DEFAULT_STATE: DbState = {
     { id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', name: 'Skin1004', slug: 'skin1004', description: 'Produtos baseados em extrato puro de Centella Asiática de Madagascar.', is_featured: true }
   ],
   products: [
-    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidratación.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
-    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'Sérum iluminador diseñado para combatir la pigmentación y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' },
-    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cutánea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' },
-    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'Tónico calmante ideal para pieles sensibles y con tendencia al acné.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
-    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asiática para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' }
+    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidratación.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, price_brl: 90.00, price_promo_brl: 81.00, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
+    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'Sérum iluminador diseñado para combatir la pigmentación y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, price_brl: 114.50, price_promo_brl: 99.50, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' },
+    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cutánea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, price_brl: 95.00, price_promo_brl: 90.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' },
+    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'Tónico calmante ideal para pieles sensibles y con tendencia al acné.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, price_brl: 105.00, price_promo_brl: 97.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
+    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asiática para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, price_brl: 115.00, price_promo_brl: 105.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' }
   ],
   product_images: [],
   addresses: [
@@ -278,7 +278,8 @@ const DEFAULT_STATE: DbState = {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
       social: {
         instagram: 'https://instagram.com/cheotnun.kbeauty',
-        youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured'
+        youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
+        tiktok: 'https://www.tiktok.com/@lacheotnun'
       },
       columns: [
         {
@@ -312,6 +313,24 @@ const DEFAULT_STATE: DbState = {
         }
       ],
       marcas: {
+        testimonials: {
+          title: 'Lo que dicen nuestras clientas',
+          buttonText: 'VER MÁS OPINIONES',
+          buttonLink: 'https://www.instagram.com/lacheotnun',
+          list: [
+            { name: 'María G.', text: 'Los productos llegaron super bien empacados y antes del tiempo estimado. ¡Todo 100% original!', country: 'México', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150' },
+            { name: 'Carolina R.', text: 'Me encanta la atención, siempre me ayudan a elegir lo mejor para mi piel. ¡Recomendadísimas!', country: 'Chile', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150' },
+            { name: 'Valeria P.', text: 'Cheotnun se ha convertido en mi tienda favorita de K-Beauty.', country: 'Colombia', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150' },
+            { name: 'Daniela S.', text: 'La calidad de los productos es impecable. Se nota todo el cuidado en cada detalle.', country: 'Argentina', img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=150' }
+          ]
+        },
+        trustBadges: [
+          { icon: 'Leaf', text: 'Ingredientes seguros\ny efectivos' },
+          { icon: 'FlaskConical', text: 'Fórmulas probadas\ndermatológicamente' },
+          { icon: 'Rabbit', text: 'No testeado\nen animales' },
+          { icon: 'Recycle', text: 'Empaques responsables\ny reciclables' },
+          { icon: 'Flower2', text: 'Inspirado en la tradición,\nmejorado por la ciencia' }
+        ],
         hero: {
           title: 'Marcas Coreanas',
           subtitle: 'Trabajamos con las mejores marcas de Corea del Sur para ofrecerte lo mejor en cuidado de la piel.',
@@ -379,6 +398,45 @@ const DEFAULT_STATE: DbState = {
           buttonText: 'VER TODAS LAS PREGUNTAS FRECUENTES'
         }
       },
+      ayudaDevoluciones: {
+        hero: {
+          badge: 'Política de Devolución',
+          title: 'Cambios y Devoluciones',
+          subtitle: 'Compra con confianza. Tienes 14 días para devolver tus productos sin compromiso.',
+          steps: [
+            { step: '01', icon: 'Clock', title: 'Solicitud (14 días)', desc: 'Tienes 14 días naturales desde la recepción para solicitar la devolución. Escríbenos con tu número de pedido y motivo.' },
+            { step: '02', icon: 'Package', title: 'Preparación', desc: 'Te enviaremos las instrucciones y etiqueta de devolución. Empaqueta los productos en su embalaje original, sin usar y precintados.' },
+            { step: '03', icon: 'RotateCw', title: 'Envío Gratis', desc: 'Para productos defectuosos o errores nuestros, cubrimos el coste de envío. Para cambios de opinión, el coste corre por tu cuenta.' },
+            { step: '04', icon: 'ShieldCheck', title: 'Reembolso (5-7 días)', desc: 'Una vez recibido y verificado, procesamos el reembolso en 5-7 días hábiles a tu método de pago original.' }
+          ],
+          summary: [
+            { icon: 'Clock', title: '14 Días', text: 'Para solicitar devolución desde la recepción' },
+            { icon: 'Package', title: 'Producto Sin Usar', text: 'Con embalaje original y precintado' },
+            { icon: 'CheckCircle', title: 'Reembolso Rápido', text: '5-7 días hábiles tras verificación' }
+          ],
+          sectionTitle: 'Proceso de Devolución',
+          conditionsTitle: 'Condiciones para Devolución',
+          conditions: [
+            'Producto sin usar, sin abrir y en perfecto estado',
+            'Embalaje original intacto con todos los precintos',
+            'Ticket o comprobante de compra',
+            'Solicitud dentro de los 14 días naturales',
+            'Formulario de devolución completado'
+          ],
+          notAcceptedTitle: 'No Aceptamos Devoluciones de',
+          notAccepted: [
+            'Productos abiertos o usados',
+            'Artículos en oferta o liquidación (salvo defecto)',
+            'Tarjetas regalo y cajas de suscripción',
+            'Productos sin embalaje original',
+            'Devoluciones después de 14 días'
+          ],
+          contactTitle: '¿Necesitas Ayuda?',
+          contactText: 'Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier duda sobre cambios o devoluciones.',
+          contactEmail: 'hola@cheotnun.com',
+          contactWhatsapp: '+34 600 111 222'
+        }
+      },
       envios: {
         hero: {
           title: 'Envíos y Pagos',
@@ -405,7 +463,160 @@ const DEFAULT_STATE: DbState = {
           ]
         }
       }
-    }
+    },
+    rutinasPage: {
+      hero: {
+        title: 'Aprenda os passos do skincare coreano',
+        subtitle: 'Entenda a funcao de cada etapa e monte a rotina perfeita para sua pele.',
+        buttonText: 'EXPLORAR PRODUTOS',
+        image: '/images/cheotnun-k-beauty-rutinas-skincare.webp'
+      },
+      stepsSection: {
+        title: 'Conheca cada etapa do skincare',
+        subtitle: 'Entenda a funcao de cada passo e descubra os produtos ideais para sua pele.',
+        footerText: '* Clique em cada etapa para saber mais detalhes sobre os produtos recomendados.'
+      },
+      steps: [
+        { step: '1', icon: 'Droplet', title: 'Limpeza', subtitle: 'Dobra limpeza', description: 'O primeiro passo para uma pele saudavel. Remove impurezas e prepara a pele para os proximos passos.' },
+        { step: '2', icon: 'Sparkles', title: 'Tonico', subtitle: 'Equilibrio', description: 'Restaura o pH da pele e remove residuos remanescentes da limpeza.' },
+        { step: '3', icon: 'Droplet', title: 'Essencia', subtitle: 'Hidratacao profunda', description: 'O coracao da rotina coreana. Hidrata e prepara a pele para absorver os proximos produtos.' },
+        { step: '4', icon: 'Sparkles', title: 'Serum', subtitle: 'Tratamento focalizado', description: 'Concentrado de ativos para tratar necessidades especificas da sua pele.' },
+        { step: '5', icon: 'Droplet', title: 'Hidratante', subtitle: 'Barreira protetora', description: 'Sela a hidratacao e fortalece a barreira cutanea.' },
+        { step: '6', icon: 'Sparkles', title: 'Protetor Solar', subtitle: 'Protecao diaria', description: 'Passo obrigatorio durante o dia. Protege contra raios UVA e UVB.' }
+      ],
+      ingredientsSection: {
+        title: 'Ingredientes do K-Beauty',
+        subtitle: 'Conheca alguns dos ingredientes mais amados da cosmeticia coreana.'
+      },
+      ingredients: [
+        { img: 'https://images.unsplash.com/photo-1616671243739-5e1608e2cd3d?q=80&w=200', name: 'Centella Asiatica', desc: 'Poderoso calmante e regenerador da pele.' },
+        { img: 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=200', name: 'Niacinamida', desc: 'Uniformiza o tom e textura da pele.' },
+        { img: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=200', name: 'Acido Hialuronico', desc: 'Hidratacao profunda e duradoura.' },
+        { img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=200', name: 'Extrato de Cha Verde', desc: 'Antioxidante que protege contra danos ambientais.' },
+        { img: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=200', name: 'Snail Mucin', desc: 'Reparacao e hidratacao intensa.' },
+        { img: 'https://images.unsplash.com/photo-1560750588-73207b1ef5b8?q=80&w=200', name: 'Extrato de Aloe Vera', desc: 'Hidrata e acalma a pele sensivel.' },
+        { img: 'https://images.unsplash.com/photo-1598138324937-2a5920d3c85e?q=80&w=200', name: 'Vitamina C', desc: 'Ilumina e uniformiza a pele.' },
+        { img: 'https://images.unsplash.com/photo-1583241800698-e8ab01830a07?q=80&w=200', name: 'Ceramidas', desc: 'Fortalecem a barreira cutanea.' }
+      ],
+      routineSection: {
+        title: 'Como montar sua rotina?',
+        boxTitle: 'Sua rotina pode ser unica.',
+        boxDesc: 'Nem todas as pessoas precisam seguir todos os passos todos os dias. Conheca sua pele e adapte a rotina as suas necessidades.'
+      },
+      routineSteps: [
+        { num: '1', icon: 'Droplet', title: 'Limpeza' },
+        { num: '2', icon: 'Sparkles', title: 'Tonico' },
+        { num: '3', icon: 'Droplet', title: 'Essencia' },
+        { num: '4', icon: 'Sparkles', title: 'Serum' },
+        { num: '5', icon: 'Droplet', title: 'Hidratante' },
+        { num: '6', icon: 'Sparkles', title: 'Protetor Solar', sub: '(Durante o dia)' }
+      ],
+      tipsSection: {
+        title: 'Dicas para aproveitar melhor seus produtos'
+      },
+      tips: [
+        { icon: 'Sun', title: 'Rotina da manha', desc: 'Foque em protecao e hidratacao. Use protetor solar todos os dias.', img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=400' },
+        { icon: 'Moon', title: 'Rotina da noite', desc: 'Invista em reparacao e tratamento. Sua pele se regenera enquanto voce dorme.', img: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?q=80&w=400' },
+        { icon: 'Sparkles', title: 'Pele oleosa', desc: 'Use gel de limpeza e hidratantes oil-free. Nao pule o hidratante!', img: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=400' },
+        { icon: 'Droplet', title: 'Pele seca', desc: 'Aposte em ingredientes como acido hialuronico e ceramidas para hidratacao profunda.', img: 'https://images.unsplash.com/photo-1618992196915-6b6c1c7d0fe7?q=80&w=400' }
+      ],
+      makeupSection: {
+        title: 'Universo da Maquiagem Coreana',
+        subtitle: 'Explore as categorias mais populares da maquiagem coreana.',
+        buttonText: 'VER TODAS AS CATEGORIAS DE MAQUIAGEM'
+      },
+      makeup: [
+        { name: 'Cushion', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+        { name: 'Lip Tint', img: 'https://images.unsplash.com/photo-1583241157141-ca2d8deb81ae?q=80&w=200' },
+        { name: 'Blush', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+        { name: 'Sombra', img: 'https://images.unsplash.com/photo-1583241157141-ca2d8deb81ae?q=80&w=200' },
+        { name: 'Mascara', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+        { name: 'Batom', img: 'https://images.unsplash.com/photo-1583241157141-ca2d8deb81ae?q=80&w=200' },
+        { name: 'Caneta Delineadora', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+        { name: 'Poe Solta', img: 'https://images.unsplash.com/photo-1583241157141-ca2d8deb81ae?q=80&w=200' }
+      ],
+      categoriesSection: {
+        title: 'Explore nossas categorias'
+      },
+      categories: [
+        { icon: 'Droplet', name: 'Skincare' },
+        { icon: 'Sparkles', name: 'Maquiagem' },
+        { icon: 'Sun', name: 'Protetor Solar' },
+        { icon: 'Heart', name: 'Cuidados Especiais' },
+        { icon: 'ClipboardList', name: 'Kits' },
+        { icon: 'Star', name: 'Mais Vendidos' },
+        { icon: 'Compass', name: 'Marcas' },
+        { icon: 'Smile', name: 'Acessorios' }
+      ],
+      faqSection: {
+        title: 'Perguntas frequentes'
+      },
+      faq: [
+        { q: 'Quantos passos devo seguir na minha rotina?', a: 'O ideal e comecar com o basico: limpeza, hidratacao e protecao solar. Conforme sua pele se adapta, voce pode adicionar mais passos.' },
+        { q: 'Posso misturar produtos de marcas diferentes?', a: 'Sim! O importante e escolher produtos que atendam as necessidades da sua pele.' },
+        { q: 'Com que frequencia devo esfoliar a pele?', a: 'Recomendamos 1 a 2 vezes por semana para peles normais, e 1 vez a cada 15 dias para peles sensiveis.' },
+        { q: 'Preciso usar protetor solar mesmo em dias nublados?', a: 'Sim! Os raios UV penetram as nuvens e causam danos a pele mesmo em dias fechados.' }
+      ],
+      newsletter: {
+        title: 'Receba novidades sobre o universo do K-Beauty',
+        subtitle: 'Lancamentos, tendencias e dicas exclusivas diretamente no seu email.',
+        buttonText: 'QUERO RECEBER NOVIDADES',
+        disclaimer: 'Prometemos nao enviar spam. Voce pode cancelar a qualquer momento.',
+        image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=400'
+      }
+    },
+    experienciasPage: {
+      hero: {
+        title: 'Experiencias Yedam',
+        subtitle: 'Mucho mas que productos, una conexion con la cultura coreana.',
+        buttonText: 'Conecta con la cultura coreana',
+        image: '/images/cheotnun-k-beauty-experiencias-viagens.webp'
+      },
+      experiences: {
+        title: 'Descubre nuestras experiencias'
+      },
+      experiencesList: [
+        { icon: 'FlaskConical', title: 'Beauty Experience', desc: 'Descubre el origen de tus productos favoritos y sumergete en la cultura coreana del cuidado de la piel.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400' },
+        { icon: 'Award', title: 'Workshops Exclusivos', desc: 'Aprende tecnicas de belleza coreana con expertos y profesionales certificados.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400' },
+        { icon: 'PlaneTakeoff', title: 'Viajes Culturales', desc: 'Explora Corea del Sur a traves de experiencias unicas que conectan belleza, cultura y bienestar.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400' },
+        { icon: 'Users', title: 'Eventos Privados', desc: 'Organizamos eventos exclusivos para grupos que deseen una experiencia personalizada.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=400' },
+        { icon: 'Heart', title: 'Retiros de Bienestar', desc: 'Programas inmersivos que combinan skincare, bienestar y conexion con la naturaleza.', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400' }
+      ],
+      maeum: {
+        badge: 'En colaboracion con',
+        title: 'MAEUM GLOBAL',
+        subtitle: 'Viajes que transforman.',
+        desc: 'Maeum Global te lleva a Corea para vivir experiencias unicas de belleza, cultura y bienestar.',
+        points: [
+          'Rutas exclusivas de K-Beauty',
+          'Acompanamiento profesional',
+          'Experiencias culturales autenticas',
+          'Conexion con marcas locales'
+        ],
+        buttonText: 'EXPLORAR VIAJES',
+        buttonLink: 'https://www.maeumglobal.com.br',
+        cards: [
+          { title: 'Rutas de Belleza', desc: 'Descubre los secretos del K-Beauty en los lugares mas emblematicos de Corea.', img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', icon: 'MapPin' },
+          { title: 'Cultura y Tradicion', desc: 'Sumergete en la cultura coreana a traves de experiencias unicas.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400', icon: 'Award' },
+          { title: 'Bienestar Integral', desc: 'Conecta cuerpo y mente con programas disenados para tu bienestar.', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400', icon: 'Camera' }
+        ]
+      },
+      testimonials: {
+        title: 'Lo que dicen nuestras viajeras',
+        buttonText: 'VER MAS TESTIMONIOS',
+        list: [
+          { quote: 'Una experiencia que cambio mi forma de ver la belleza. Corea es magico.', name: 'Camila R.', country: 'Mexico', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200' },
+          { quote: 'Los workshops de maquillaje coreano fueron increibles. Aprendi muchisimo.', name: 'Sofia M.', country: 'Colombia', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200' },
+          { quote: 'Viajar con Maeum Global y Cheotnun fue la mejor decision. Repetire sin dudas.', name: 'Valentina L.', country: 'Argentina', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }
+        ]
+      },
+      newsletter: {
+        title: 'Se la primera en enterarte',
+        subtitle: 'de nuevas experiencias y viajes exclusivos.',
+        buttonText: 'SUSCRIBIRME',
+        disclaimer: 'Prometemos no enviar spam. Puedes cancelar cuando quieras.'
+      }
+    },
   },
   system_settings: {
     visual_theme: {
@@ -644,12 +855,14 @@ async function loadSettingsFromSupabase() {
     const resp = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details'] }),
+      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content'] }),
     });
     if (!resp.ok) return;
     const json = await resp.json();
     if (json.data?.visual_theme) memoryDb.system_settings.visual_theme = json.data.visual_theme;
     if (json.data?.company_details) memoryDb.system_settings.company_details = json.data.company_details;
+    if (json.data?.seo) memoryDb.system_settings.seo = json.data.seo;
+    if (json.data?.site_content) memoryDb.site_content = json.data.site_content;
   } catch {}
 }
 
@@ -705,7 +918,9 @@ export const db = {
   save: <K extends keyof DbState>(table: K, records: DbState[K]): void => {
     memoryDb[table] = records;
     persistToLocalStorage();
-    if (table === 'system_settings') {
+    if (table === 'site_content') {
+      trySaveSettingsToSupabase('site_content', records);
+    } else if (table === 'system_settings') {
       const settings = records as any;
       if (settings.visual_theme) trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
       if (settings.company_details) trySaveSettingsToSupabase('company_details', settings.company_details);

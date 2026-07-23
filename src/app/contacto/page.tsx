@@ -90,7 +90,7 @@ export default function ContactoPage() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
-              src="/images/cheotnun-k-beauty-contato-atendimento.webp" 
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-contato-atendimento.webp"} 
               alt="Contacto"
               fill
               className="object-cover object-center"

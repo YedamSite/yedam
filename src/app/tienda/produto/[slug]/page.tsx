@@ -67,6 +67,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
         product_id: product.id,
         name: product.name,
         price: product.price,
+        price_brl: product.price_brl || product.price * 5,
         quantity: 1,
         image: '/products/dokdo-cleanser.jpg'
       });
@@ -133,7 +134,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
             </div>
 
             <div className="flex items-center justify-between border-y border-white/5 py-4">
-              <span className="font-heading text-3xl font-bold text-accent">US$ {product.price.toFixed(2)}</span>
+              <span className="font-heading text-3xl font-bold text-accent">{locale === 'pt' ? `R$ ${(product.price_brl || product.price * 5).toFixed(2)}` : `US$ ${product.price.toFixed(2)}`}</span>
               <div className="text-right flex items-center gap-3">
                 <span className="text-xs text-muted-foreground">{product.volume}</span>
                 <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border ${

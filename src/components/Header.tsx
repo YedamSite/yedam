@@ -239,7 +239,7 @@ export default function Header() {
           <nav className="hidden md:flex items-center justify-center gap-10 flex-1">
             {navItems.map((item: any) => (
               <Link
-                key={item.href}
+                key={item.href + '-' + item.label}
                 href={item.href}
                 className={`text-xs uppercase tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
                   }`}
@@ -482,7 +482,7 @@ export default function Header() {
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <Link
-                  key={item.href}
+                  key={item.href + '-' + item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`text-xs uppercase tracking-wider font-bold hover:text-accent ${pathname === item.href ? 'text-accent' : 'text-foreground'

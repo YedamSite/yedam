@@ -5,6 +5,7 @@ import { Plus, Trash2, Edit3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function BrandsTab() {
   const [brands, setBrands] = useState<any[]>([]);
@@ -16,6 +17,7 @@ export default function BrandsTab() {
   const [formSlug, setFormSlug] = useState('');
   const [formDesc, setFormDesc] = useState('');
   const [formFeatured, setFormFeatured] = useState(false);
+  const [formLogo, setFormLogo] = useState('');
 
   // PT/EN translations form states
   const [translations, setTranslations] = useState<Record<string, { name: string; description: string }>>({
@@ -28,7 +30,7 @@ export default function BrandsTab() {
   useEffect(() => { load(); }, []);
 
   const resetForm = () => {
-    setFormName(''); setFormSlug(''); setFormDesc(''); setFormFeatured(false);
+    setFormName(''); setFormSlug(''); setFormDesc(''); setFormFeatured(false); setFormLogo('');
     setTranslations({
       pt: { name: '', description: '' },
       en: { name: '', description: '' }
@@ -47,6 +49,7 @@ export default function BrandsTab() {
       name: formName,
       slug: formSlug || formName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       description: formDesc || '',
+      logo_url: formLogo || '',
       is_featured: formFeatured,
       translations: {
         pt: {
@@ -78,6 +81,7 @@ export default function BrandsTab() {
     setFormName(brand.name);
     setFormSlug(brand.slug);
     setFormDesc(brand.description || '');
+    setFormLogo(brand.logo_url || '');
     setFormFeatured(brand.is_featured || false);
     setTranslations({
       pt: {
@@ -153,6 +157,12 @@ export default function BrandsTab() {
                   <input type="checkbox" id="featured" checked={formFeatured} onChange={e => setFormFeatured(e.target.checked)} className="rounded border-white/10" />
                   <label htmlFor="featured" className="text-[10px] font-bold text-accent uppercase select-none cursor-pointer">Marca em Destaque</label>
                 </div>
+                <ImageUpload
+                  currentUrl={formLogo}
+                  onUrlChange={setFormLogo}
+                  folder="brands"
+                  label="Logo da Marca"
+                />
               </>
             ) : (
               <>
@@ -192,9 +202,13 @@ export default function BrandsTab() {
           <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2">Marcas ({brands.length})</h3>
           {brands.map((brand) => (
             <div key={brand.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4 text-xs">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="font-bold text-white">
+              <div className="flex items-center gap-3">
+                {brand.logo_url && (
+                  <img src={brand.logo_url} alt="" className="w-8 h-8 rounded-full object-cover border border-white/10" />
+                )}
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-white">
                     {brand.name}
                     {brand.translations?.pt?.name && <span className="text-[8px] text-green-400 border border-green-500/20 px-1 rounded ml-2 font-normal">PT</span>}
                     {brand.translations?.en?.name && <span className="text-[8px] text-blue-400 border border-blue-500/20 px-1 rounded ml-1 font-normal">EN</span>}
@@ -203,7 +217,8 @@ export default function BrandsTab() {
                 </div>
                 <span className="text-[10px] text-muted-foreground">/{brand.slug}</span>
               </div>
-              <div className="flex items-center gap-2">
+            </div>
+            <div className="flex items-center gap-2">
                 <button onClick={() => handleEdit(brand)} className="text-accent hover:text-accentHover p-1.5"><Edit3 className="h-3.5 w-3.5" /></button>
                 <button onClick={() => handleDelete(brand.id)} className="text-red-500 hover:text-red-400 p-1.5"><Trash2 className="h-3.5 w-3.5" /></button>
               </div>

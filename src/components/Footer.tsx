@@ -88,9 +88,11 @@ export default function Footer() {
                 <Youtube className="h-4.5 w-4.5" />
               </a>
             )}
-            <a href="https://www.tiktok.com/@lacheotnun" target="_blank" rel="noreferrer" className="text-accent hover:text-accentHover transition-colors">
-              <TikTok className="h-4.5 w-4.5" />
-            </a>
+            {social.tiktok && (
+              <a href={social.tiktok} target="_blank" rel="noreferrer" className="text-accent hover:text-accentHover transition-colors">
+                <TikTok className="h-4.5 w-4.5" />
+              </a>
+            )}
           </div>
         </div>
 

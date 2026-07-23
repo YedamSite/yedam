@@ -70,6 +70,8 @@ export default function Home() {
   const c = content;
   const rawCategories = db.get('categories') || [];
   const categories = rawCategories.map((cat: any) => db.getTranslatedRecord(cat, locale));
+  const allBrands = db.get('brands') || [];
+  const brandMap = Object.fromEntries(allBrands.map((b: any) => [b.id, db.getTranslatedRecord(b, locale)?.name || b.name]));
 
   return (
     <div className="flex flex-col min-h-screen bg-[#020617] text-white relative">
@@ -189,12 +191,7 @@ export default function Home() {
           <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-5 gap-4">
             {products.slice(0, 5).map((prod) => {
               const isFav = favorites.includes(prod.id);
-              let brand = 'K-Beauty';
-              if (prod.brand_id === 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33') brand = 'Round Lab';
-              else if (prod.brand_id === 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44') brand = 'Beauty of Joseon';
-              else if (prod.brand_id === 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55') brand = 'COSRX';
-              else if (prod.brand_id === 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66') brand = 'Anua';
-              else if (prod.brand_id === '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77') brand = 'Skin1004';
+              const brand = brandMap[prod.brand_id] || 'K-Beauty';
 
               const imgUrl = prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400';
 

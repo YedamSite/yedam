@@ -48,14 +48,19 @@ export default function AdminDashboard() {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const [brands, setBrands] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [emailLogs, setEmailLogs] = useState<any[]>([]);
 
   // CRUD Product States
   const [prodName, setProdName] = useState('');
   const [prodPrice, setProdPrice] = useState(0);
+  const [prodPricePromo, setProdPricePromo] = useState(0);
+  const [prodPriceBrl, setProdPriceBrl] = useState(0);
+  const [prodPricePromoBrl, setProdPricePromoBrl] = useState(0);
   const [prodStock, setProdStock] = useState(10);
   const [prodCategory, setProdCategory] = useState('10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11');
+  const [prodBrand, setProdBrand] = useState('');
   const [prodSku, setProdSku] = useState('');
   const [prodHsCode, setProdHsCode] = useState('3304.99.90');
   const [prodWeight, setProdWeight] = useState(0.15);
@@ -173,6 +178,7 @@ export default function AdminDashboard() {
     setBlocks(db.get('cms_blocks') || []);
     setProducts(db.get('products') || []);
     setCategories(db.get('categories') || []);
+    setBrands(db.get('brands') || []);
     setOrders(db.get('orders') || []);
     setEmailLogs(db.get('communication_logs') || []);
     setCoupons(db.get('coupons') || []);
@@ -316,8 +322,12 @@ export default function AdminDashboard() {
     setEditingProductId(prod.id);
     setProdName(prod.name);
     setProdPrice(prod.price);
+    setProdPricePromo(prod.price_promo || 0);
+    setProdPriceBrl(prod.price_brl || 0);
+    setProdPricePromoBrl(prod.price_promo_brl || 0);
     setProdStock(prod.stock);
     setProdCategory(prod.category_id);
+    setProdBrand(prod.brand_id || '');
     setProdSku(prod.sku);
     setProdHsCode(prod.hs_code);
     setProdWeight(prod.weight);
@@ -340,7 +350,8 @@ export default function AdminDashboard() {
 
   const cancelEditProduct = () => {
     setEditingProductId(null);
-    setProdName(''); setProdPrice(0); setProdStock(10);
+    setProdName(''); setProdPrice(0); setProdPricePromo(0); setProdPriceBrl(0); setProdPricePromoBrl(0); setProdStock(10);
+    setProdCategory('10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'); setProdBrand('');
     setProdSku(''); setProdHsCode('3304.99.90'); setProdWeight(0.15); setProdVolume('50ml');
     setProdDesc(''); setProdDescEn(''); setProdImage('');
     setProdTranslations({
@@ -376,8 +387,12 @@ export default function AdminDashboard() {
           name: prodName,
           sku: prodSku || allProds[idx].sku,
           price: Number(prodPrice),
+          price_promo: Number(prodPricePromo) || undefined,
+          price_brl: Number(prodPriceBrl) || undefined,
+          price_promo_brl: Number(prodPricePromoBrl) || undefined,
           stock: Number(prodStock),
           category_id: prodCategory,
+          brand_id: prodBrand || allProds[idx].brand_id,
           hs_code: prodHsCode,
           weight: Number(prodWeight),
           volume: prodVolume,
@@ -401,12 +416,15 @@ export default function AdminDashboard() {
       description: prodDesc || 'Nuevo cosmético coreano importado.',
       description_en: prodTranslations.en.description || prodDescEn || 'New imported Korean cosmetic product.',
       price: Number(prodPrice),
+      price_promo: Number(prodPricePromo) || undefined,
+      price_brl: Number(prodPriceBrl) || undefined,
+      price_promo_brl: Number(prodPricePromoBrl) || undefined,
       stock: Number(prodStock),
       volume: prodVolume || '50ml',
       weight: Number(prodWeight || 0.15),
       hs_code: prodHsCode || '3304.99.90',
       status: 'active',
-      brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33',
+      brand_id: prodBrand || '',
       category_id: prodCategory,
       image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
       translations: productTranslations
@@ -1207,15 +1225,49 @@ if (!authorized) {
                       </select>
                     </div>
                     <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">Marca</label>
+                      <select
+                        value={prodBrand}
+                        onChange={e => setProdBrand(e.target.value)}
+                        className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white"
+                      >
+                        <option value="">Sin marca</option>
+                        {brands.map((brand: any) => (
+                          <option key={brand.id} value={brand.id}>{brand.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-bold uppercase text-accent">SKU</label>
                       <Input value={prodSku} onChange={e => setProdSku(e.target.value)} placeholder="Ej: YD-102" />
                     </div>
+                    {prodActiveLang === 'pt' ? (
+                      <>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Preço (BRL)</label>
+                          <Input required type="number" step="0.01" value={prodPriceBrl || ''} onChange={e => setProdPriceBrl(Number(e.target.value))} placeholder="0.00" />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Preço Promocional (BRL)</label>
+                          <Input type="number" step="0.01" value={prodPricePromoBrl || ''} onChange={e => setProdPricePromoBrl(Number(e.target.value))} placeholder="0.00" />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Precio (USD)</label>
+                          <Input required type="number" step="0.01" value={prodPrice || ''} onChange={e => setProdPrice(Number(e.target.value))} placeholder="0.00" />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[10px] font-bold uppercase text-accent">Precio Promocional (USD)</label>
+                          <Input type="number" step="0.01" value={prodPricePromo || ''} onChange={e => setProdPricePromo(Number(e.target.value))} placeholder="0.00" />
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Precio (USD)</label>
-                      <Input required type="number" step="0.01" value={prodPrice || ''} onChange={e => setProdPrice(Number(e.target.value))} placeholder="0.00" />
-                    </div>
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-bold uppercase text-accent">Stock Inicial</label>
                       <Input required type="number" value={prodStock} onChange={e => setProdStock(Number(e.target.value))} />

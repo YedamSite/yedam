@@ -94,7 +94,7 @@ export default function ComoFuncionaPage() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
-              src="/images/cheotnun-k-beauty-como-funciona-guia.webp" 
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-como-funciona-guia.webp"} 
               alt="Productos"
               fill
               className="object-cover object-center"

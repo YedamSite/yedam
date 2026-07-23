@@ -14,7 +14,7 @@ import AuthModal from '@/components/AuthModal';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function CheckoutWizard() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [step, setStep] = useState(1);
   const [cartItems, setCartItems] = useState<any[]>([]);
 
@@ -77,15 +77,20 @@ export default function CheckoutWizard() {
   };
 
   // Apply Coupon "CUPOM10"
+  const getPrice = (item: any) => locale === 'pt' ? (item.price_brl || item.price * 5) : item.price;
+  const currency = locale === 'pt' ? 'R$' : 'US$';
+  const rate = locale === 'pt' ? 5 : 1;
+
   const handleApplyCoupon = () => {
     if (couponCode.toUpperCase() === 'CUPOM10') {
-      setDiscount(10); // 10 USD off
+      setDiscount(10 * rate);
       setCouponApplied(true);
     }
   };
 
-  const subtotal = cartItems.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0);
-  const total = Math.max(0, subtotal + 15.00 - discount); // subtotal + shipping - discount
+  const subtotal = cartItems.reduce((acc, curr) => acc + (getPrice(curr) * curr.quantity), 0);
+  const shipping = locale === 'pt' ? 75.00 : 15.00;
+  const total = Math.max(0, subtotal + shipping - discount);
 
   // Check for Stripe success/cancel redirect on mount
   useEffect(() => {
@@ -177,6 +182,7 @@ export default function CheckoutWizard() {
           customerName: `${firstName} ${lastName}`,
           totalAmount: total,
           items: cartItems,
+          locale,
         }),
       });
 
@@ -229,7 +235,7 @@ export default function CheckoutWizard() {
                         </div>
                         <div>
                           <h4 className="text-xs font-bold text-white max-w-[150px] sm:max-w-xs truncate">{item.name}</h4>
-                          <span className="text-[10px] text-accent font-semibold font-heading">US$ {item.price.toFixed(2)}</span>
+                          <span className="text-[10px] text-accent font-semibold font-heading">{currency} {getPrice(item).toFixed(2)}</span>
                         </div>
                       </div>
 
@@ -258,7 +264,7 @@ export default function CheckoutWizard() {
                       {t('APLICAR')}
                     </Button>
                   </div>
-                  {couponApplied && <span className="text-[10px] text-green-500 mt-1 font-semibold">{t('✓ Cupón "CUPOM10" aplicado: -US$ 10.00')}</span>}
+                  {couponApplied && <span className="text-[10px] text-green-500 mt-1 font-semibold">{t('✓ Cupón "CUPOM10" aplicado:')} -{currency} {discount.toFixed(2)}</span>}
                 </div>
               ) : (
                 <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-xs text-muted-foreground">
@@ -437,22 +443,22 @@ export default function CheckoutWizard() {
                 <div className="flex flex-col gap-2.5 text-xs text-muted-foreground">
                   <div className="flex justify-between">
                     <span>{t('Subtotal')}</span>
-                    <span>US$ {subtotal.toFixed(2)}</span>
+                    <span>{currency} {subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>{t('Envío')}</span>
-                    <span>US$ 15.00</span>
+                    <span>{currency} {shipping.toFixed(2)}</span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-green-500">
                       <span>{t('Descuento (Cupón)')}</span>
-                      <span>-US$ {discount.toFixed(2)}</span>
+                      <span>-{currency} {discount.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="h-px bg-white/5 my-2" />
                   <div className="flex justify-between text-sm font-bold text-white">
                     <span>{t('Total General')}</span>
-                    <span className="text-accent font-heading text-lg">US$ {total.toFixed(2)}</span>
+                    <span className="text-accent font-heading text-lg">{currency} {total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

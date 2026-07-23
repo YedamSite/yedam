@@ -46,7 +46,7 @@ export default function MarcasPage() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
               alt="K-Beauty Products"
               fill
               className="object-cover object-center"
@@ -181,48 +181,23 @@ export default function MarcasPage() {
         {/* 4. TESTIMONIALS SECTION */}
         <section className="w-full px-4 lg:px-12 pb-24 max-w-[1400px] mx-auto flex flex-col items-center">
           <h2 className="text-2xl font-heading font-light text-white mb-12 text-center">
-            {t('Lo que dicen nuestras clientas')}
+            {t(c?.testimonials?.title || 'Lo que dicen nuestras clientas')}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-            {[
-              { 
-                text: 'Los productos llegaron super bien empacados y antes del tiempo estimado. ¡Todo 100% original!', 
-                name: 'María G.', 
-                country: 'México',
-                image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop'
-              },
-              { 
-                text: 'Me encanta la atención, siempre me ayudan a elegir lo mejor para mi piel. ¡Recomendadísimas!', 
-                name: 'Carolina R.', 
-                country: 'Chile',
-                image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop'
-              },
-              { 
-                text: 'Cheotnun se ha convertido en mi tienda favorita de K-Beauty.', 
-                name: 'Valeria P.', 
-                country: 'Colombia',
-                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop'
-              },
-              { 
-                text: 'La calidad de los productos es impecable. Se nota todo el cuidado en cada detalle.', 
-                name: 'Daniela S.', 
-                country: 'Argentina',
-                image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=150&auto=format&fit=crop'
-              }
-            ].map((test, idx) => (
+            {(c?.testimonials?.list || []).length > 0 ? (c?.testimonials?.list || []).map((test: any, idx: number) => (
               <div key={idx} className="bg-[#EFE8DF] rounded-2xl p-8 flex flex-col justify-between min-h-[260px] text-[#1c2838]">
                 <div>
                   <div className="flex gap-1 mb-4">
                     {[1,2,3,4,5].map(star => <Star key={star} className="w-3.5 h-3.5 fill-[#D5A07D] text-[#C9C9C9]" />)}
                   </div>
                   <p className="text-sm font-medium leading-relaxed mb-8">
-                    "{test.text}"
+                    "{t(test.text)}"
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full overflow-hidden relative shadow-sm">
-                    <Image src={test.image} alt={test.name} fill className="object-cover" />
+                    <Image src={test.img || test.image} alt={test.name} fill className="object-cover" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-xs font-bold leading-tight">{test.name}</span>
@@ -230,11 +205,15 @@ export default function MarcasPage() {
                   </div>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="col-span-4 text-center text-xs text-muted-foreground py-12">
+                {t('Ningún testimonio disponible.')}
+              </div>
+            )}
           </div>
 
-          <a href="https://www.instagram.com/lacheotnun" target="_blank" rel="noopener noreferrer" className="mt-12 px-8 py-3 rounded-full border border-white/20 text-xs font-bold tracking-widest uppercase hover:bg-white/5 transition-colors">
-            {t('VER MÁS OPINIONES')}
+          <a href={c?.testimonials?.buttonLink || 'https://www.instagram.com/lacheotnun'} target="_blank" rel="noopener noreferrer" className="mt-12 px-8 py-3 rounded-full border border-white/20 text-xs font-bold tracking-widest uppercase hover:bg-white/5 transition-colors">
+            {t(c?.testimonials?.buttonText || 'VER MÁS OPINIONES')}
           </a>
         </section>
 
@@ -242,20 +221,20 @@ export default function MarcasPage() {
         <section className="w-full border-t border-white/10 bg-[#050B14]">
           <div className="max-w-[1400px] mx-auto px-4 lg:px-12 py-8">
             <div className="flex flex-wrap lg:flex-nowrap justify-between gap-6">
-              {[
-                { icon: Leaf, text: 'Ingredientes seguros\ny efectivos' },
-                { icon: FlaskConical, text: 'Fórmulas probadas\ndermatológicamente' },
-                { icon: Rabbit, text: 'No testeado\nen animales' },
-                { icon: Recycle, text: 'Empaques responsables\ny reciclables' },
-                { icon: Flower2, text: 'Inspirado en la tradición,\nmejorado por la ciencia' }
-              ].map((badge, idx) => (
-                <div key={idx} className="flex items-center gap-3 flex-1 min-w-[200px]">
-                  <badge.icon className="w-6 h-6 text-[#C9C9C9] stroke-[1.2] shrink-0" />
-                  <span className="text-[10px] text-gray-300 leading-tight whitespace-pre-line">
-                    {t(badge.text)}
-                  </span>
-                </div>
-              ))}
+              {(c?.trustBadges || []).length > 0 ? (c?.trustBadges || []).map((badge: any, idx: number) => {
+                const BadgeIcon: any = { Leaf, FlaskConical, Rabbit, Recycle, Flower2, Award, Beaker, Heart, ShieldCheck, ShoppingBag, Headset, Gift, Star };
+                const Icon = BadgeIcon[badge.icon] || Leaf;
+                return (
+                  <div key={idx} className="flex items-center gap-3 flex-1 min-w-[200px]">
+                    <Icon className="w-6 h-6 text-[#C9C9C9] stroke-[1.2] shrink-0" />
+                    <span className="text-[10px] text-gray-300 leading-tight whitespace-pre-line">
+                      {t(badge.text)}
+                    </span>
+                  </div>
+                );
+              }) : (
+                <div className="text-[10px] text-muted-foreground text-center w-full">{t('Sin sellos de confianza configurados.')}</div>
+              )}
             </div>
           </div>
         </section>

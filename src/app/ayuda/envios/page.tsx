@@ -94,7 +94,7 @@ export default function EnviosYPagosPage() {
           {/* Background Image */}
           <div className="absolute inset-0 z-0">
             <Image 
-              src="/images/cheotnun-k-beauty-politica-envios.webp" 
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-politica-envios.webp"} 
               alt="Envíos"
               fill
               className="object-cover object-center"
