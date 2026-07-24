@@ -220,8 +220,8 @@ export default function Header() {
             <Image
               src={headerContent.logoUrl || '/images/cheotnun-logo.webp'}
               alt="Cheotnun"
-              width={36}
-              height={36}
+              width={52}
+              height={52}
               className="rounded-full object-cover shrink-0"
             />
             <div className="flex flex-col items-center justify-center md:hidden">
