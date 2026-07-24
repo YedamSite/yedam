@@ -62,6 +62,8 @@ export default function MarcasPage() {
               priority
             />
           </div>
+          {/* Overlay: stronger on mobile for text readability */}
+          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/50 to-black/20 md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent" />
 
           <div className="relative z-10 w-full px-4 lg:px-12 py-6 max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full">
             {/* Text Content */}
