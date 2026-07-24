@@ -1956,7 +1956,7 @@ function mergeTableLocalFirst(table: string, incoming: any[]) {
     if (!localRecord) {
       local.push(record);
       changed = true;
-    } else if (new Date((record as any).updated_at || 0) > new Date((localRecord as any).updated_at || 0)) {
+    } else if ((localRecord as any).updated_at && (record as any).updated_at && new Date((record as any).updated_at) > new Date((localRecord as any).updated_at)) {
       Object.assign(localRecord, record);
       changed = true;
     }
@@ -2100,6 +2100,9 @@ export const db = {
   save: <K extends keyof DbState>(table: K, records: DbState[K]): void => {
     memoryDb[table] = records;
     persistToLocalStorage();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
+    }
     if (table === 'site_content') {
       trySaveSettingsToSupabase('site_content', records);
     } else if (table === 'system_settings') {

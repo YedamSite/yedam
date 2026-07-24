@@ -208,12 +208,7 @@ export default function AdminDashboard() {
     
     // Listener para atualizar quando o db mudar em outras abas/páginas
     const handleStorageChange = () => loadData();
-    const handleDbChange = (e: Event) => {
-      const customEvent = e as CustomEvent;
-      if (customEvent.detail?.table === 'newsletter_subscribers') {
-        setSubscribers(db.get('newsletter_subscribers') || []);
-      }
-    };
+    const handleDbChange = () => loadData();
     
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('cheotnun_db_change', handleDbChange as EventListener);
@@ -393,7 +388,7 @@ export default function AdminDashboard() {
           price_promo_brl: Number(prodPricePromoBrl) || undefined,
           stock: Number(prodStock),
           category_id: prodCategory,
-          brand_id: prodBrand || allProds[idx].brand_id,
+          brand_id: prodBrand || allProds[idx].brand_id || null,
           hs_code: prodHsCode,
           weight: Number(prodWeight),
           volume: prodVolume,
@@ -425,8 +420,8 @@ export default function AdminDashboard() {
       weight: Number(prodWeight || 0.15),
       hs_code: prodHsCode || '3304.99.90',
       status: 'active',
-      brand_id: prodBrand || '',
-      category_id: prodCategory,
+      brand_id: prodBrand || null,
+      category_id: prodCategory || null,
       image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
       translations: productTranslations
     };

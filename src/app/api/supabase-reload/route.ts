@@ -55,6 +55,12 @@ export async function POST(req: Request) {
       if (valid.length === 0) {
         return NextResponse.json({ success: true, synced: 0 });
       }
+      // Sanitize foreign keys: empty strings → null (UUID columns reject empty strings)
+      for (const r of valid) {
+        for (const key of ['brand_id', 'category_id', 'user_id', 'order_id', 'product_id']) {
+          if (r[key] === '') r[key] = null;
+        }
+      }
       const supabase = createClient(supabaseUrl, serviceRoleKey);
       const { error } = await supabase.from(tableName).upsert(valid, { onConflict: 'id', ignoreDuplicates: false });
       if (error) {
