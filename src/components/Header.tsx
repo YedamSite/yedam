@@ -156,7 +156,6 @@ export default function Header() {
     { label: t('Rutinas'), href: '/rutinas' },
     { label: t('Experiencias'), href: '/experiencias' },
     { label: t('Blog'), href: '/blog' },
-    { label: t('Ayuda'), href: '/ayuda/envios' },
     { label: t('Contacto'), href: '/contacto' }
   ];
   return (
@@ -217,8 +216,14 @@ export default function Header() {
         <div className="absolute inset-0 -z-10 bg-background/95 backdrop-blur" />
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between relative z-10">
           {/* Logo - Left */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <Image
+              src={headerContent.logoUrl || '/images/cheotnun-logo.webp'}
+              alt="Cheotnun"
+              width={36}
+              height={36}
+              className="rounded-full object-cover shrink-0"
+            />
             <div className="flex flex-col items-center justify-center md:hidden">
               <span className="font-heading text-lg font-light text-white uppercase tracking-wider leading-none">
                 Cheotnun

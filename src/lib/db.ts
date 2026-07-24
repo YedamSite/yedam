@@ -280,7 +280,6 @@ const DEFAULT_STATE: DbState = {
         { label: 'Rutinas', href: '/rutinas' },
         { label: 'Experiencias', href: '/experiencias' },
         { label: 'Blog', href: '/blog' },
-        { label: 'Ayuda', href: '/ayuda/envios' },
         { label: 'Contacto', href: '/contacto' }
       ]
     },
@@ -889,7 +888,6 @@ const DEFAULT_STATE: DbState = {
             { label: 'Rotinas', href: '/rutinas' },
             { label: 'Experiências', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
-            { label: 'Ajuda', href: '/ayuda/envios' },
             { label: 'Contato', href: '/contacto' }
           ]
         },
@@ -1378,7 +1376,6 @@ const DEFAULT_STATE: DbState = {
             { label: 'Routines', href: '/rutinas' },
             { label: 'Experiences', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
-            { label: 'Help', href: '/ayuda/envios' },
             { label: 'Contact', href: '/contacto' }
           ]
         },
