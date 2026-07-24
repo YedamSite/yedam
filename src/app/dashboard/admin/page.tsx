@@ -177,13 +177,19 @@ export default function AdminDashboard() {
   const loadData = () => {
     setBlocks(db.get('cms_blocks') || []);
     setProducts(db.get('products') || []);
-    setCategories(db.get('categories') || []);
+    const cats = db.get('categories') || [];
+    setCategories(cats);
     setBrands(db.get('brands') || []);
     setOrders(db.get('orders') || []);
     setEmailLogs(db.get('communication_logs') || []);
     setCoupons(db.get('coupons') || []);
     setBlogPosts(db.get('blog_posts') || []);
     setSubscribers(db.get('newsletter_subscribers') || []);
+
+    setProdCategory(prev => {
+      if (prev && cats.some((c: any) => c.id === prev)) return prev;
+      return cats[0]?.id || '';
+    });
   };
 
   useEffect(() => {
@@ -347,7 +353,8 @@ export default function AdminDashboard() {
   const cancelEditProduct = () => {
     setEditingProductId(null);
     setProdName(''); setProdPrice(0); setProdPricePromo(0); setProdPriceBrl(0); setProdPricePromoBrl(0); setProdStock(10);
-    setProdCategory('10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'); setProdBrand('');
+    const cats = db.get('categories') || [];
+    setProdCategory(cats[0]?.id || ''); setProdBrand('');
     setProdSku(''); setProdHsCode('3304.99.90'); setProdWeight(0.15); setProdVolume('50ml');
     setProdDesc(''); setProdDescEn(''); setProdImage('');
     setProdTranslations({
@@ -360,20 +367,32 @@ export default function AdminDashboard() {
   // Create/Update Product
   const handleCreateProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!prodName || !prodPrice) return;
+    if (!prodName || (!prodPrice && !prodPriceBrl)) return;
 
-    const allProds = db.get('products');
+    const allProds = db.get('products') || [];
+    const cats = db.get('categories') || [];
+    const selectedCatId = prodCategory || cats[0]?.id || null;
+
+    const basePriceUsd = Number(prodPrice) || (Number(prodPriceBrl) ? Number(prodPriceBrl) / 5 : 0);
+    const basePriceBrl = Number(prodPriceBrl) || (Number(prodPrice) ? Number(prodPrice) * 5 : 0);
+    const promoUsd = Number(prodPricePromo) || undefined;
+    const promoBrl = Number(prodPricePromoBrl) || (Number(prodPricePromo) ? Number(prodPricePromo) * 5 : undefined);
 
     const productTranslations = {
       pt: {
-        name: prodTranslations.pt.name || '',
-        description: prodTranslations.pt.description || ''
+        name: prodTranslations.pt.name || prodName,
+        description: prodTranslations.pt.description || prodDesc || ''
       },
       en: {
-        name: prodTranslations.en.name || '',
-        description: prodTranslations.en.description || prodDescEn || ''
+        name: prodTranslations.en.name || prodName,
+        description: prodTranslations.en.description || prodDescEn || prodDesc || ''
       }
     };
+
+    const computedSlug = prodName.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
     if (editingProductId) {
       const idx = allProds.findIndex((p: any) => p.id === editingProductId);
@@ -382,19 +401,19 @@ export default function AdminDashboard() {
           ...allProds[idx],
           name: prodName,
           sku: prodSku || allProds[idx].sku,
-          price: Number(prodPrice),
-          price_promo: Number(prodPricePromo) || undefined,
-          price_brl: Number(prodPriceBrl) || undefined,
-          price_promo_brl: Number(prodPricePromoBrl) || undefined,
+          price: basePriceUsd,
+          price_promo: promoUsd,
+          price_brl: basePriceBrl,
+          price_promo_brl: promoBrl,
           stock: Number(prodStock),
-          category_id: prodCategory,
-          brand_id: prodBrand || allProds[idx].brand_id || null,
+          category_id: selectedCatId,
+          brand_id: prodBrand || null,
           hs_code: prodHsCode,
           weight: Number(prodWeight),
           volume: prodVolume,
           description: prodDesc,
           description_en: prodTranslations.en.description || prodDescEn || prodDesc,
-          image: prodImage || allProds[idx].image,
+          image: prodImage || allProds[idx].image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
           translations: productTranslations
         };
         db.save('products', allProds);
@@ -408,20 +427,20 @@ export default function AdminDashboard() {
       id: crypto.randomUUID(),
       sku: prodSku || 'YD-' + Math.floor(Math.random() * 10000),
       name: prodName,
-      slug: prodName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      slug: computedSlug || ('prod-' + Date.now()),
       description: prodDesc || 'Nuevo cosmético coreano importado.',
       description_en: prodTranslations.en.description || prodDescEn || 'New imported Korean cosmetic product.',
-      price: Number(prodPrice),
-      price_promo: Number(prodPricePromo) || undefined,
-      price_brl: Number(prodPriceBrl) || undefined,
-      price_promo_brl: Number(prodPricePromoBrl) || undefined,
+      price: basePriceUsd,
+      price_promo: promoUsd,
+      price_brl: basePriceBrl,
+      price_promo_brl: promoBrl,
       stock: Number(prodStock),
       volume: prodVolume || '50ml',
       weight: Number(prodWeight || 0.15),
       hs_code: prodHsCode || '3304.99.90',
       status: 'active',
       brand_id: prodBrand || null,
-      category_id: prodCategory || null,
+      category_id: selectedCatId,
       image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
       translations: productTranslations
     };

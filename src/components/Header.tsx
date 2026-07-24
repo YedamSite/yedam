@@ -319,11 +319,7 @@ export default function Header() {
                           <span className="text-[8px] text-accent font-bold uppercase tracking-widest border-t border-white/5 pt-2">{t('Productos')}</span>
                           <div className="flex flex-col gap-2.5">
                             {searchResults.map((prod: any) => {
-                              const imgUrl = prod.id === '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11' ? 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=100' :
-                                             prod.id === '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22' ? 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=100' :
-                                             prod.id === '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33' ? 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=100' :
-                                             prod.id === '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44' ? 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=100' :
-                                             'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=100';
+                              const imgUrl = prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=100';
                               return (
                                 <Link
                                   key={prod.id}

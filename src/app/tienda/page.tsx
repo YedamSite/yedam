@@ -43,8 +43,12 @@ function TiendaContent() {
     setCategories(translatedCategories);
 
     if (categoryParam) {
-      const cat = translatedCategories.find((c: any) => c.slug === categoryParam);
-      if (cat) setSelectedCategory(cat.id);
+      const cat = translatedCategories.find((c: any) => c.slug === categoryParam || c.id === categoryParam);
+      if (cat) {
+        setSelectedCategory(cat.id);
+      } else {
+        setSelectedCategory('ALL');
+      }
     } else {
       setSelectedCategory('ALL');
     }
@@ -94,7 +98,7 @@ function TiendaContent() {
         price: product.price,
         price_brl: product.price_brl || product.price * 5,
         quantity: 1,
-        image: '/products/dokdo-cleanser.jpg'
+        image: product.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'
       });
     }
 
@@ -106,9 +110,15 @@ function TiendaContent() {
   const filteredProducts = products.filter(p => {
     const matchesBrand = selectedBrand === 'ALL' || p.brand_id === selectedBrand;
     const matchesCategory = selectedCategory === 'ALL' || p.category_id === selectedCategory;
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || (p.description || '').toLowerCase().includes(searchQuery.toLowerCase());
     return matchesBrand && matchesCategory && matchesSearch;
   });
+
+  const categoryMap = React.useMemo(() => {
+    const map: Record<string, string> = {};
+    categories.forEach(c => { map[c.id] = c.name; });
+    return map;
+  }, [categories]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -166,7 +176,7 @@ function TiendaContent() {
                       selectedCategory === cat.id ? 'bg-accent/15 text-accent font-bold' : 'text-muted-foreground hover:bg-white/5'
                     }`}
                   >
-                    {t(cat.name)}
+                    {cat.name}
                   </button>
                 ))}
               </div>
@@ -205,6 +215,7 @@ function TiendaContent() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {filteredProducts.map((prod) => {
                   const isFav = favorites.includes(prod.id);
+                  const catName = categoryMap[prod.category_id] || t('Skin Care');
                   return (
                     <div key={prod.id} className="bg-card border border-white/5 rounded-2xl overflow-hidden shadow-xl hover:border-accent/40 transition-all flex flex-col group relative">
                       {/* Favorite Toggle Button */}
@@ -218,19 +229,20 @@ function TiendaContent() {
                       <div className="relative aspect-square w-full overflow-hidden bg-secondary">
                         <Image
                           src={prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'}
-                          alt={t(prod.name)}
+                          alt={prod.name}
                           fill
+                          unoptimized
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                       
                       <div className="p-4 flex-1 flex flex-col justify-between">
                         <div>
-                          <span className="text-[9px] font-bold text-accent uppercase tracking-wider">{t('Skin Care')}</span>
+                          <span className="text-[9px] font-bold text-accent uppercase tracking-wider">{catName}</span>
                           <h3 className="font-heading text-sm font-medium text-white line-clamp-2 mt-1 leading-snug group-hover:text-accent transition-colors">
-                            {t(prod.name)}
+                            {prod.name}
                           </h3>
-                          <p className="text-[9px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{t(prod.description)}</p>
+                          <p className="text-[9px] text-muted-foreground line-clamp-2 mt-1.5 leading-relaxed">{prod.description}</p>
                           <div className="flex items-center gap-1 mt-1.5">
                             <div className="flex text-accent">
                               {[...Array(5)].map((_, i) => (

@@ -38,9 +38,38 @@ export async function uploadImage(file: File, folder: string = 'general'): Promi
 async function fallbackUpload(file: File): Promise<string> {
   return new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result as string);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxDim = 800;
+        let width = img.width;
+        let height = img.height;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.75));
+          return;
+        }
+        resolve(e.target?.result as string || '');
+      };
+      img.onerror = () => {
+        resolve(e.target?.result as string || '');
+      };
+      img.src = e.target?.result as string;
     };
+    reader.onerror = () => resolve('');
     reader.readAsDataURL(file);
   });
 }

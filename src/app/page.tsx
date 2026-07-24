@@ -159,7 +159,7 @@ export default function Home() {
               <Image src={cat.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'} alt={cat.name} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-sm py-4 px-2 text-center border-t border-white/5">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-white group-hover:text-accent transition-colors leading-snug">
-                  {t(cat.name)}
+                  {cat.name}
                 </span>
               </div>
             </Link>

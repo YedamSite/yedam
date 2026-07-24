@@ -69,7 +69,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
         price: product.price,
         price_brl: product.price_brl || product.price * 5,
         quantity: 1,
-        image: '/products/dokdo-cleanser.jpg'
+        image: product.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'
       });
     }
 
@@ -109,6 +109,7 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
               src={product.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=800'}
               alt={product.name}
               fill
+              unoptimized
               className="object-cover"
               priority
             />

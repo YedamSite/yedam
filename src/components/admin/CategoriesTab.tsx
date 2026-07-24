@@ -38,25 +38,34 @@ export default function CategoriesTab() {
     setActiveLang('es');
   };
 
+  const generateSlug = (str: string) => {
+    return str.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName) return;
-    const all = db.get('categories');
+    const all = db.get('categories') || [];
     
+    const computedSlug = formSlug ? generateSlug(formSlug) : generateSlug(formName);
+
     const categoryData = {
       id: editingId || crypto.randomUUID(),
       name: formName,
-      slug: formSlug || formName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      slug: computedSlug,
       description: formDesc || '',
       image: formImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
       translations: {
         pt: {
-          name: translations.pt.name || '',
-          description: translations.pt.description || ''
+          name: translations.pt.name || formName,
+          description: translations.pt.description || formDesc || ''
         },
         en: {
-          name: translations.en.name || '',
-          description: translations.en.description || ''
+          name: translations.en.name || formName,
+          description: translations.en.description || formDesc || ''
         }
       }
     };
@@ -140,7 +149,7 @@ export default function CategoriesTab() {
               <>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] font-bold uppercase text-accent">Nome (ES)</label>
-                  <Input required value={formName} onChange={e => { setFormName(e.target.value); if (!editingId) setFormSlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-')); }} placeholder="Ex: Cuidado Facial" />
+                  <Input required value={formName} onChange={e => { setFormName(e.target.value); if (!editingId) setFormSlug(generateSlug(e.target.value)); }} placeholder="Ex: Cuidado Facial" />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] font-bold uppercase text-accent">Slug (URL)</label>

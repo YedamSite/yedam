@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { uploadImage } from '@/lib/supabaseStorage';
 
@@ -24,12 +24,19 @@ export default function ImageUpload({
   const [urlInput, setUrlInput] = useState(currentUrl || '');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    setUrlInput(currentUrl || '');
+    if (!currentUrl) {
+      setPreview(null);
+    }
+  }, [currentUrl]);
+
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) {
-      alert('A imagem deve ter no máximo 5MB.');
+    if (file.size > 10 * 1024 * 1024) {
+      alert('A imagem deve ter no máximo 10MB.');
       return;
     }
 
@@ -51,6 +58,7 @@ export default function ImageUpload({
     if (url) {
       onUrlChange(url);
       setUrlInput(url);
+      setPreview(null);
     }
 
     if (inputRef.current) inputRef.current.value = '';
