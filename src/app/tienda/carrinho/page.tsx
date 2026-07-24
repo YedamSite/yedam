@@ -91,19 +91,45 @@ export default function CheckoutWizard() {
     localStorage.setItem('cheotnun_cart', JSON.stringify(filtered));
   };
 
-  // Apply Coupon "CUPOM10"
+  // Dynamic Coupon System
+  const [couponError, setCouponError] = useState('');
+  const [appliedCouponCode, setAppliedCouponCode] = useState('');
+
   const getPrice = (item: any) => locale === 'pt' ? (item.price_brl || item.price * 5) : item.price;
   const currency = locale === 'pt' ? 'R$' : 'US$';
   const rate = locale === 'pt' ? 5 : 1;
 
+  const subtotal = cartItems.reduce((acc, curr) => acc + (getPrice(curr) * curr.quantity), 0);
+
   const handleApplyCoupon = () => {
-    if (couponCode.toUpperCase() === 'CUPOM10') {
-      setDiscount(10 * rate);
-      setCouponApplied(true);
+    setCouponError('');
+    const codeClean = couponCode.trim().toUpperCase();
+    if (!codeClean) return;
+
+    const allCoupons = (db.get('coupons') as any[]) || [];
+    const found = allCoupons.find((c: any) => (c.code || '').toUpperCase() === codeClean && c.status === 'active');
+
+    if (!found) {
+      setDiscount(0);
+      setCouponApplied(false);
+      setAppliedCouponCode('');
+      setCouponError(t('Cupón inválido o no existente'));
+      return;
     }
+
+    let calculatedDiscount = 0;
+    if (found.type === 'percentage') {
+      calculatedDiscount = subtotal * (Number(found.discount) / 100);
+    } else {
+      calculatedDiscount = Number(found.discount) * rate;
+    }
+
+    setDiscount(calculatedDiscount);
+    setCouponApplied(true);
+    setAppliedCouponCode(found.code);
+    setCouponError('');
   };
 
-  const subtotal = cartItems.reduce((acc, curr) => acc + (getPrice(curr) * curr.quantity), 0);
   const shipping = locale === 'pt' ? 75.00 : 15.00;
   const total = Math.max(0, subtotal + shipping - discount);
 
@@ -272,14 +298,23 @@ export default function CheckoutWizard() {
                     <Input
                       value={couponCode}
                       onChange={e => setCouponCode(e.target.value)}
-                      placeholder={t('Cupón de descuento (CUPOM10)')}
-                      className="bg-black/30 border-white/10 text-white rounded-xl text-xs flex-1"
+                      placeholder={t('Código del Cupón')}
+                      className="bg-black/30 border-white/10 text-white rounded-xl text-xs flex-1 uppercase"
                     />
                     <Button onClick={handleApplyCoupon} className="bg-accent hover:bg-accentHover text-background font-bold rounded-xl text-xs px-5">
                       {t('APLICAR')}
                     </Button>
                   </div>
-                  {couponApplied && <span className="text-[10px] text-green-500 mt-1 font-semibold">{t('✓ Cupón "CUPOM10" aplicado:')} -{currency} {discount.toFixed(2)}</span>}
+                  {couponApplied && (
+                    <span className="text-[10px] text-green-500 mt-1.5 font-semibold block">
+                      ✓ {t('Cupón')} &quot;{appliedCouponCode}&quot; {t('aplicado')}: -{currency} {discount.toFixed(2)}
+                    </span>
+                  )}
+                  {couponError && (
+                    <span className="text-[10px] text-red-500 mt-1.5 font-semibold block">
+                      ✕ {couponError}
+                    </span>
+                  )}
                 </div>
               ) : (
                 <div className="border border-dashed border-white/10 rounded-2xl p-12 text-center text-xs text-muted-foreground">

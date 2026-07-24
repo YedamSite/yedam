@@ -78,6 +78,7 @@ export default function AdminDashboard() {
   const [coupons, setCoupons] = useState<any[]>([]);
   const [newCouponCode, setNewCouponCode] = useState('');
   const [newCouponDiscount, setNewCouponDiscount] = useState(0);
+  const [newCouponType, setNewCouponType] = useState<'fixed' | 'percentage'>('fixed');
 
   // Newsletter Subscribers State
   const [subscribers, setSubscribers] = useState<any[]>([]);
@@ -477,9 +478,9 @@ export default function AdminDashboard() {
     const allCoupons = db.get('coupons') || [];
     const newC = {
       id: crypto.randomUUID(),
-      code: newCouponCode.toUpperCase(),
+      code: newCouponCode.trim().toUpperCase(),
       discount: Number(newCouponDiscount),
-      type: 'fixed',
+      type: newCouponType,
       status: 'active'
     };
     allCoupons.push(newC);
@@ -487,6 +488,22 @@ export default function AdminDashboard() {
     setCoupons(allCoupons);
     setNewCouponCode('');
     setNewCouponDiscount(0);
+  };
+
+  const handleDeleteCoupon = (id: string) => {
+    if (!confirm('¿Eliminar este cupón permanentemente?')) return;
+    db.deleteRecord('coupons', id);
+    setCoupons(db.get('coupons') || []);
+  };
+
+  const handleToggleCouponStatus = (id: string, currentStatus: string) => {
+    const all = db.get('coupons') || [];
+    const idx = all.findIndex((c: any) => c.id === id);
+    if (idx !== -1) {
+      all[idx].status = currentStatus === 'active' ? 'inactive' : 'active';
+      db.save('coupons', all);
+      setCoupons(all);
+    }
   };
 
   const generateSlug = (title: string) => {
@@ -1722,11 +1739,24 @@ if (!authorized) {
                   <form onSubmit={handleCreateCoupon} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[10px] font-bold uppercase text-accent">Código del Cupón</label>
-                      <Input required value={newCouponCode} onChange={e => setNewCouponCode(e.target.value)} placeholder="Ej: VERANO15" />
+                      <Input required value={newCouponCode} onChange={e => setNewCouponCode(e.target.value)} placeholder="Ej: VERANO15" className="uppercase font-mono" />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Descuento (USD)</label>
-                      <Input required type="number" value={newCouponDiscount || ''} onChange={e => setNewCouponDiscount(Number(e.target.value))} placeholder="0.00" />
+                      <label className="text-[10px] font-bold uppercase text-accent">Tipo de Descuento</label>
+                      <select
+                        value={newCouponType}
+                        onChange={e => setNewCouponType(e.target.value as any)}
+                        className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-xs text-white"
+                      >
+                        <option value="fixed">Monto Fijo ($ USD)</option>
+                        <option value="percentage">Porcentaje (% Off)</option>
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-[10px] font-bold uppercase text-accent">
+                        {newCouponType === 'percentage' ? 'Porcentaje de Descuento (%)' : 'Monto de Descuento (USD)'}
+                      </label>
+                      <Input required type="number" step="0.01" value={newCouponDiscount || ''} onChange={e => setNewCouponDiscount(Number(e.target.value))} placeholder={newCouponType === 'percentage' ? '15' : '10.00'} />
                     </div>
                     <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2 rounded-xl text-xs">
                       AGREGAR CUPÓN
@@ -1736,18 +1766,49 @@ if (!authorized) {
 
                 {/* Coupons list */}
                 <div className="lg:col-span-2 flex flex-col gap-3">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2">Cupones de Descuento Activos</h3>
-                  {coupons.map((coupon) => (
-                    <div key={coupon.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4 text-xs">
-                      <div>
-                        <h4 className="font-bold text-white uppercase tracking-wider">{coupon.code}</h4>
-                        <span className="text-[10px] text-muted-foreground">Descuento de US$ {coupon.discount.toFixed(2)} fijos en el checkout</span>
-                      </div>
-                      <span className="text-xs text-green-400 bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full uppercase font-bold">
-                        {coupon.status}
-                      </span>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-2">Cupones de Descuento Registrados</h3>
+                  {coupons.length === 0 ? (
+                    <div className="border border-dashed border-white/10 rounded-2xl p-8 text-center text-xs text-muted-foreground">
+                      No hay cupones registrados.
                     </div>
-                  ))}
+                  ) : (
+                    coupons.map((coupon) => (
+                      <div key={coupon.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4 text-xs">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-bold text-white uppercase tracking-wider font-mono text-sm">{coupon.code}</h4>
+                            <span className="text-[9px] bg-accent/10 border border-accent/20 text-accent font-bold px-2 py-0.5 rounded">
+                              {coupon.type === 'percentage' ? `${coupon.discount}% OFF` : `US$ ${Number(coupon.discount).toFixed(2)} OFF`}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground block mt-1">
+                            {coupon.type === 'percentage' 
+                              ? `Descuento del ${coupon.discount}% sobre el subtotal del pedido`
+                              : `Descuento de US$ ${Number(coupon.discount).toFixed(2)} fijos en el checkout`}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => handleToggleCouponStatus(coupon.id, coupon.status)}
+                            className={`text-xs px-3 py-1 rounded-full uppercase font-bold transition-all ${
+                              coupon.status === 'active' 
+                                ? 'text-green-400 bg-green-500/10 border border-green-500/20 hover:bg-green-500/20' 
+                                : 'text-zinc-400 bg-zinc-500/10 border border-zinc-500/20 hover:bg-zinc-500/20'
+                            }`}
+                          >
+                            {coupon.status === 'active' ? 'Activo' : 'Inactivo'}
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCoupon(coupon.id)}
+                            className="text-red-500 hover:text-red-400 p-2 hover:bg-white/5 rounded-lg transition-colors"
+                            title="Eliminar cupón"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
