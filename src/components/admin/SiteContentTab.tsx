@@ -953,6 +953,89 @@ export default function SiteContentTab() {
                 </div>
               ))}
             </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">FAQ - Perguntas Frequentes</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título FAQ', 'comoFunciona', 'faq.title')}
+                {renderInput('Subtítulo FAQ', 'comoFunciona', 'faq.subtitle')}
+                {renderInput('Texto Botão', 'comoFunciona', 'faq.buttonText')}
+              </div>
+              <div className="mt-4 space-y-4">
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Perguntas</h5>
+                {(content?.comoFunciona?.faq?.items || []).map((q: string, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'faq.items', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'faq.items', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="Pergunta" /></div>
+                    <button onClick={() => removeArrayItem('comoFunciona', 'faq.items', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('comoFunciona', 'faq.items', 'Nova pergunta')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR PERGUNTA
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Promessas / Qualidade</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título', 'comoFunciona', 'promises.title')}
+                {renderInput('Subtítulo', 'comoFunciona', 'promises.subtitle', { rows: 2 })}
+                <div className="col-span-2">
+                  <ImageUpload currentUrl={getBaseValue('comoFunciona', 'promises.image')} onUrlChange={v => handleChange('comoFunciona', 'promises.image', v)} folder="como-funciona" label="Imagem Promessas" />
+                </div>
+              </div>
+              <div className="mt-4 space-y-4">
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Itens de Qualidade</h5>
+                {(content?.comoFunciona?.promises?.items || []).map((item: any, idx: number) => (
+                  <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
+                      <button onClick={() => removeArrayItem('comoFunciona', 'promises.items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {renderArrayInput('Ícone', 'comoFunciona', 'promises.items', idx, 'icon')}
+                      {renderArrayInput('Título', 'comoFunciona', 'promises.items', idx, 'title')}
+                    </div>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('comoFunciona', 'promises.items', { icon: 'ShieldCheck', title: 'Novo item' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR ITEM
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Comunidade / Instagram</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título', 'comoFunciona', 'community.title')}
+                {renderInput('Descrição', 'comoFunciona', 'community.desc', { rows: 2 })}
+                {renderInput('Texto Botão', 'comoFunciona', 'community.buttonText')}
+                {renderInput('Link Instagram', 'comoFunciona', 'community.buttonLink')}
+              </div>
+              <div className="mt-4 space-y-4">
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Imagens (URLs)</h5>
+                {(content?.comoFunciona?.community?.images || []).map((img: string, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'community.images', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'community.images', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="URL da imagem" /></div>
+                    <button onClick={() => removeArrayItem('comoFunciona', 'community.images', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('comoFunciona', 'community.images', 'https://')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR IMAGEM
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t border-white/5 pt-6 space-y-4">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Newsletter</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título', 'comoFunciona', 'newsletter.title')}
+                {renderInput('Subtítulo', 'comoFunciona', 'newsletter.subtitle', { rows: 2 })}
+                {renderInput('Placeholder Email', 'comoFunciona', 'newsletter.placeholder')}
+                {renderInput('Texto Botão', 'comoFunciona', 'newsletter.buttonText')}
+                {renderInput('Disclaimer', 'comoFunciona', 'newsletter.disclaimer', { rows: 2 })}
+              </div>
+            </div>
           </div>
         )}
 
@@ -963,7 +1046,7 @@ export default function SiteContentTab() {
             <div className="grid grid-cols-2 gap-4">
               {renderInput('Título do Hero', 'contacto', 'hero.title', { rows: 2 })}
               {renderInput('Subtítulo do Hero', 'contacto', 'hero.subtitle', { rows: 3 })}
-              {renderInput('Título de FAQ', 'contacto', 'faq.title')}
+              {renderInput('Texto do Botão Hero', 'contacto', 'hero.buttonText')}
             </div>
             <ImageUpload
               currentUrl={getBaseValue('contacto', 'hero.image')}
@@ -971,14 +1054,140 @@ export default function SiteContentTab() {
               folder="contacto"
               label="Imagem Hero (Contacto)"
             />
+
+            <div className="border-t border-white/5 pt-4 space-y-4">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Badges do Hero</h4>
+              {(content?.contacto?.hero?.badges || []).map((badge: any, idx: number) => (
+                <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-accent uppercase">Badge #{idx + 1}</span>
+                    <button onClick={() => removeArrayItem('contacto', 'hero.badges', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {renderArrayInput('Ícone', 'contacto', 'hero.badges', idx, 'icon')}
+                    {renderArrayInput('Texto', 'contacto', 'hero.badges', idx, 'text')}
+                  </div>
+                </div>
+              ))}
+              <Button onClick={() => addArrayItem('contacto', 'hero.badges', { icon: 'Clock', text: 'Novo badge' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                <Plus className="h-3 w-3" /> ADICIONAR BADGE
+              </Button>
+            </div>
             
             <div className="border-t border-white/5 pt-4">
               <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Informações de Contato</h4>
               <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título da Seção', 'contacto', 'contactMethods.title')}
                 {renderInput('Número do WhatsApp', 'contacto', 'contactMethods.whatsapp.value')}
                 {renderInput('Horário de Atendimento', 'contacto', 'contactMethods.whatsapp.time')}
+                {renderInput('Descrição WhatsApp', 'contacto', 'contactMethods.whatsapp.desc', { rows: 2 })}
+                {renderInput('Texto Botão WhatsApp', 'contacto', 'contactMethods.whatsapp.btn')}
+                {renderInput('Link WhatsApp', 'contacto', 'contactMethods.whatsapp.link')}
                 {renderInput('Endereço de E-mail', 'contacto', 'contactMethods.email.value')}
-                {renderInput('Endereço Físico', 'contacto', 'contactMethods.address.value')}
+                {renderInput('Descrição E-mail', 'contacto', 'contactMethods.email.desc', { rows: 2 })}
+                {renderInput('Texto Botão E-mail', 'contacto', 'contactMethods.email.btn')}
+                {renderInput('Link E-mail', 'contacto', 'contactMethods.email.link')}
+                {renderInput('Instagram Label', 'contacto', 'contactMethods.instagram.label')}
+                {renderInput('Instagram @', 'contacto', 'contactMethods.instagram.value')}
+                {renderInput('Descrição Instagram', 'contacto', 'contactMethods.instagram.desc', { rows: 2 })}
+                {renderInput('Texto Botão Instagram', 'contacto', 'contactMethods.instagram.btn')}
+                {renderInput('Link Instagram', 'contacto', 'contactMethods.instagram.link')}
+                {renderInput('Horário Label', 'contacto', 'contactMethods.hours.label')}
+                {renderInput('Descrição Horário', 'contacto', 'contactMethods.hours.desc', { rows: 2 })}
+                {renderInput('Texto Botão Horário', 'contacto', 'contactMethods.hours.btn')}
+                {renderInput('Endereço Label', 'contacto', 'contactMethods.address.label')}
+                {renderInput('Descrição Endereço', 'contacto', 'contactMethods.address.desc', { rows: 2 })}
+                {renderInput('Texto Botão Endereço', 'contacto', 'contactMethods.address.btn')}
+                {renderInput('Link Endereço', 'contacto', 'contactMethods.address.link')}
+              </div>
+            </div>
+
+            <div className="border-t border-white/5 pt-4">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Formulário de Contato</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título do Form', 'contacto', 'form.title')}
+                {renderInput('Label Nome', 'contacto', 'form.nameLabel')}
+                {renderInput('Label E-mail', 'contacto', 'form.emailLabel')}
+                {renderInput('Label Assunto', 'contacto', 'form.subjectLabel')}
+                {renderInput('Label Mensagem', 'contacto', 'form.messageLabel')}
+                {renderInput('Texto Botão Enviar', 'contacto', 'form.submitText')}
+                {renderInput('Aviso de Segurança', 'contacto', 'form.securityNotice', { rows: 2 })}
+                {renderInput('Alerta de Sucesso', 'contacto', 'form.successAlert', { rows: 2 })}
+              </div>
+              <div className="mt-4 space-y-4">
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Opções de Assunto</h5>
+                {(content?.contacto?.form?.subjectOptions || []).map((opt: string, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1">
+                      <input value={getArrayValue('contacto', 'form.subjectOptions', idx, '')} onChange={e => handleArrayItemChange('contacto', 'form.subjectOptions', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="Opção de assunto" />
+                    </div>
+                    <button onClick={() => removeArrayItem('contacto', 'form.subjectOptions', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('contacto', 'form.subjectOptions', 'Novo assunto')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR OPÇÃO
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t border-white/5 pt-4">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">FAQ - Tópicos</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título FAQ', 'contacto', 'faq.title')}
+                {renderInput('Subtítulo FAQ Rápida', 'contacto', 'faq.subtitle')}
+                {renderInput('Texto Botão FAQ', 'contacto', 'faq.buttonText')}
+              </div>
+              <div className="mt-4 space-y-4">
+                {(content?.contacto?.faq?.topics || []).map((topic: any, idx: number) => (
+                  <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-accent uppercase">Tópico #{idx + 1}</span>
+                      <button onClick={() => removeArrayItem('contacto', 'faq.topics', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {renderArrayInput('Ícone', 'contacto', 'faq.topics', idx, 'icon')}
+                      {renderArrayInput('Título', 'contacto', 'faq.topics', idx, 'title')}
+                      {renderArrayInput('Descrição', 'contacto', 'faq.topics', idx, 'desc', { rows: 2 })}
+                    </div>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('contacto', 'faq.topics', { icon: 'Info', title: 'Novo tópico', desc: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR TÓPICO
+                </Button>
+              </div>
+              <div className="mt-4 space-y-4">
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Perguntas Rápidas</h5>
+                {(content?.contacto?.faq?.quickItems || []).map((q: string, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1"><input value={getArrayValue('contacto', 'faq.quickItems', idx, '')} onChange={e => handleArrayItemChange('contacto', 'faq.quickItems', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="Pergunta rápida" /></div>
+                    <button onClick={() => removeArrayItem('contacto', 'faq.quickItems', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('contacto', 'faq.quickItems', 'Nova pergunta')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR PERGUNTA
+                </Button>
+              </div>
+            </div>
+
+            <div className="border-t border-white/5 pt-4">
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Comunidade / Instagram</h4>
+              <div className="grid grid-cols-2 gap-4">
+                {renderInput('Título Comunidade', 'contacto', 'community.title')}
+                {renderInput('Descrição', 'contacto', 'community.desc', { rows: 2 })}
+                {renderInput('Texto Botão', 'contacto', 'community.buttonText')}
+                {renderInput('Link Instagram', 'contacto', 'community.buttonLink')}
+              </div>
+              <div className="mt-4 space-y-4">
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Imagens Instagram (URLs)</h5>
+                {(content?.contacto?.community?.images || []).map((img: string, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1"><input value={getArrayValue('contacto', 'community.images', idx, '')} onChange={e => handleArrayItemChange('contacto', 'community.images', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="URL da imagem" /></div>
+                    <button onClick={() => removeArrayItem('contacto', 'community.images', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+                <Button onClick={() => addArrayItem('contacto', 'community.images', 'https://')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> ADICIONAR IMAGEM
+                </Button>
               </div>
             </div>
           </div>

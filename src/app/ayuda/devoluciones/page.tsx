@@ -10,13 +10,14 @@ import { useLanguage } from '@/context/LanguageContext';
 const iconMap: Record<string, any> = { RotateCcw, CheckCircle, Clock, Package, ShieldCheck, AlertCircle };
 
 export default function DevolucionesPage() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [content, setContent] = useState<any>(null);
 
   useEffect(() => {
-    const c = db.get('site_content')?.ayudaDevoluciones?.hero;
-    setContent(c);
-  }, []);
+    const siteContent = db.get('site_content');
+    const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
+    setContent(translatedContent.ayudaDevoluciones?.hero || null);
+  }, [locale]);
 
   const c = content;
   const badge = c?.badge || 'Política de Devolución';

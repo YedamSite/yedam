@@ -239,7 +239,7 @@ export default function ComoFuncionaPage() {
            <div className="bg-[#EAE4DC] text-[#1c2838] rounded-3xl p-8 lg:p-12 shadow-lg flex flex-col md:flex-row items-center gap-10 overflow-hidden relative">
               <div className="relative w-full md:w-1/3 h-[300px] rounded-2xl overflow-hidden shrink-0">
                  <Image 
-                   src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600" 
+                   src={c?.promises?.image || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600'} 
                    alt="Productos originales"
                    fill
                    className="object-cover"
@@ -247,80 +247,79 @@ export default function ComoFuncionaPage() {
               </div>
               
               <div className="flex-1 flex flex-col justify-center relative z-10">
-                 <h3 className="text-3xl font-heading mb-4 leading-tight">{t('Productos 100 % originales')}</h3>
+                 <h3 className="text-3xl font-heading mb-4 leading-tight">{t(c?.promises?.title || 'Productos 100 % originales')}</h3>
                  <p className="text-[11px] text-[#1c2838]/80 leading-relaxed mb-10 max-w-lg">
-                   {t('Solo trabajamos con marcas coreanas auténticas y autorizadas. Garantizamos la calidad y procedencia de cada producto que llega a tus manos.')}
+                   {t(c?.promises?.subtitle || 'Solo trabajamos con marcas coreanas auténticas y autorizadas. Garantizamos la calidad y procedencia de cada producto que llega a tus manos.')}
                  </p>
 
                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                    {[
-                      { icon: ShieldCheck, title: 'Marcas oficiales' },
-                      { icon: Box, title: 'Compra directa\nen Corea del Sur' },
-                      { icon: CheckCircle2, title: 'Productos\ncertificados' },
-                      { icon: Leaf, title: 'Frescura y calidad\ngarantizadas' }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex flex-col items-center text-center">
-                         <div className="w-12 h-12 rounded-full border border-[#1c2838]/20 flex items-center justify-center mb-3">
-                           <item.icon className="w-5 h-5 stroke-[1.5]" />
-                         </div>
-                         <h5 className="text-[9px] font-bold text-[#1c2838] leading-tight whitespace-pre-line">{t(item.title)}</h5>
-                      </div>
-                    ))}
+                    {(c?.promises?.items || [
+                      { icon: 'ShieldCheck', title: 'Marcas oficiales' },
+                      { icon: 'Box', title: 'Compra directa en Corea del Sur' },
+                      { icon: 'CheckCircle2', title: 'Productos certificados' },
+                      { icon: 'Leaf', title: 'Frescura y calidad garantizadas' }
+                    ]).map((item: any, idx: number) => {
+                      const PromIconMap: any = { ShieldCheck, Box, CheckCircle2, Leaf };
+                      const PromIcon = PromIconMap[item.icon] || ShieldCheck;
+                      return (
+                        <div key={idx} className="flex flex-col items-center text-center">
+                           <div className="w-12 h-12 rounded-full border border-[#1c2838]/20 flex items-center justify-center mb-3">
+                             <PromIcon className="w-5 h-5 stroke-[1.5]" />
+                           </div>
+                           <h5 className="text-[9px] font-bold text-[#1c2838] leading-tight whitespace-pre-line">{t(item.title)}</h5>
+                        </div>
+                      );
+                    })}
                  </div>
               </div>
            </div>
         </section>
 
         {/* PREGUNTAS FRECUENTES */}
-        <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
-           <div className="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-white/10 pb-4">
-              <div>
-                 <h3 className="text-2xl font-heading text-white font-light">{t('Preguntas frecuentes')}</h3>
-                 <p className="text-[11px] text-white/60 mt-1">{t('Resolvemos tus dudas más comunes.')}</p>
-              </div>
-              <Link href="/ayuda/preguntas-frecuentes" className="text-[9px] font-bold text-white uppercase tracking-widest hover:text-[#C9C9C9] transition-colors flex items-center gap-2 mt-4 md:mt-0">
-                 {t('VER TODAS LAS PREGUNTAS')} <ArrowRight className="w-3 h-3" />
-               </Link>
-           </div>
+        {(c?.faq?.items || []).length > 0 && (
+          <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
+             <div className="flex flex-col md:flex-row justify-between items-end mb-8 border-b border-white/10 pb-4">
+                <div>
+                   <h3 className="text-2xl font-heading text-white font-light">{t(c?.faq?.title || 'Preguntas frecuentes')}</h3>
+                   <p className="text-[11px] text-white/60 mt-1">{t(c?.faq?.subtitle || 'Resolvemos tus dudas más comunes.')}</p>
+                </div>
+                <Link href="/ayuda/preguntas-frecuentes" className="text-[9px] font-bold text-white uppercase tracking-widest hover:text-[#C9C9C9] transition-colors flex items-center gap-2 mt-4 md:mt-0">
+                   {t(c?.faq?.buttonText || 'VER TODAS LAS PREGUNTAS')} <ArrowRight className="w-3 h-3" />
+                 </Link>
+             </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
-              {[
-                '¿Los productos son originales?',
-                '¿Cuánto tarda en llegar mi pedido?',
-                '¿Hacen envíos a mi país?',
-                '¿Puedo cambiar o devolver un producto?',
-                '¿Qué métodos de pago aceptan?',
-                '¿Cómo sé el estado de mi pedido?'
-              ].map((q, idx) => (
-                 <div key={idx} className="border-b border-white/10 py-5 flex items-center justify-between cursor-pointer group hover:border-[#C9C9C9]/40 transition-colors">
-                    <span className="text-[12px] text-white/90 group-hover:text-[#C9C9C9] transition-colors">{t(q)}</span>
-                    <Plus className="w-4 h-4 text-white/40 group-hover:text-[#C9C9C9] transition-colors" />
-                 </div>
-              ))}
-           </div>
-        </section>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
+                {(c?.faq?.items || []).map((q: string, idx: number) => (
+                   <div key={idx} className="border-b border-white/10 py-5 flex items-center justify-between cursor-pointer group hover:border-[#C9C9C9]/40 transition-colors">
+                      <span className="text-[12px] text-white/90 group-hover:text-[#C9C9C9] transition-colors">{t(q)}</span>
+                      <Plus className="w-4 h-4 text-white/40 group-hover:text-[#C9C9C9] transition-colors" />
+                   </div>
+                ))}
+             </div>
+          </section>
+        )}
 
         {/* UNETE A NUESTRA COMUNIDAD (INSTAGRAM) */}
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
            <div className="flex flex-col xl:flex-row gap-8 items-center xl:items-start">
               <div className="flex-1 max-w-sm mt-4 text-center xl:text-left">
-                 <h3 className="text-2xl font-heading text-white font-light mb-2">{t('Únete a nuestra comunidad')}</h3>
+                 <h3 className="text-2xl font-heading text-white font-light mb-2">{t(c?.community?.title || 'Únete a nuestra comunidad')}</h3>
                  <p className="text-[11px] text-white/60 leading-relaxed mb-6">
-                   {t('Descubre rutinas, tips, lanzamientos y mucho más en Instagram.')}
+                   {t(c?.community?.desc || 'Descubre rutinas, tips, lanzamientos y mucho más en Instagram.')}
                  </p>
-                 <a href="https://instagram.com/yedam.kbeauty" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/5 text-white font-bold text-[9px] tracking-widest px-6 py-3 rounded-sm uppercase transition-all">
-                    <Instagram className="w-4 h-4" /> {t('SEGUIR EN INSTAGRAM')}
+                 <a href={c?.community?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/5 text-white font-bold text-[9px] tracking-widest px-6 py-3 rounded-sm uppercase transition-all">
+                    <Instagram className="w-4 h-4" /> {t(c?.community?.buttonText || 'SEGUIR EN INSTAGRAM')}
                  </a>
               </div>
 
               <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4">
-                 {[
+                 {(c?.community?.images || [
                    'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
                    'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
                    'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
                    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
-                 ].map((img, idx) => (
-                    <a key={idx} href="https://instagram.com/yedam.kbeauty" target="_blank" rel="noreferrer" className="relative h-40 md:h-48 rounded-xl overflow-hidden group">
+                 ]).map((img: string, idx: number) => (
+                    <a key={idx} href={c?.community?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer" className="relative h-40 md:h-48 rounded-xl overflow-hidden group">
                        <Image src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Instagram className="w-6 h-6 text-white" />
@@ -343,10 +342,10 @@ export default function ComoFuncionaPage() {
              <div className="flex items-center gap-6 z-10 pl-4">
                <div>
                  <h4 className="text-xl md:text-2xl font-heading text-white font-light mb-1">
-                   {t('Sé la primera en enterarte')}
+                   {t(c?.newsletter?.title || 'Sé la primera en enterarte')}
                  </h4>
                  <p className="text-[11px] text-white/60 max-w-sm leading-relaxed">
-                   {t('Nuevos lanzamientos, ofertas exclusivas y contenido especial directamente en tu correo.')}
+                   {t(c?.newsletter?.subtitle || 'Nuevos lanzamientos, ofertas exclusivas y contenido especial directamente en tu correo.')}
                  </p>
                  <div className="w-full max-w-md z-10 flex flex-col items-end">
                 {newsletterSubscribed ? (
@@ -401,16 +400,16 @@ export default function ComoFuncionaPage() {
                       required
                       value={newsletterEmail}
                       onChange={(e) => setNewsletterEmail(e.target.value)}
-                      placeholder={t('Tu correo electrónico')} 
+                      placeholder={t(c?.newsletter?.placeholder || 'Tu correo electrónico')} 
                       className="flex-1 bg-transparent border border-white/20 rounded-l-md px-4 text-xs text-white focus:outline-none focus:border-[#C9C9C9] placeholder:text-gray-500"
                     />
                     <button type="submit" className="bg-[#C9C9C9] hover:bg-[#d6b78e] text-[#1c2838] font-bold text-[10px] tracking-widest px-8 rounded-r-md uppercase transition-colors">
-                      {t('SUSCRIBIRME')}
+                      {t(c?.newsletter?.buttonText || 'SUSCRIBIRME')}
                     </button>
                   </form>
                 )}
                 <p className="text-[9px] text-white/40 w-full text-left mt-3">
-                  {t('Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.')}
+                  {t(c?.newsletter?.disclaimer || 'Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.')}
                 </p>
               </div>
              </div>

@@ -379,23 +379,111 @@ const DEFAULT_STATE: DbState = {
             { title: 'Tiempo estimado de entrega', text: 'De 7 a 20 días hábiles, dependiendo de tu país.' },
             { title: 'Te mantenemos informada', text: 'Recibirás tu número de seguimiento para acompañar cada paso de tu pedido.' }
           ]
+        },
+        faq: {
+          title: 'Preguntas frecuentes',
+          subtitle: 'Resolvemos tus dudas más comunes.',
+          buttonText: 'VER TODAS LAS PREGUNTAS',
+          items: [
+            '¿Los productos son originales?',
+            '¿Cuánto tarda en llegar mi pedido?',
+            '¿Hacen envíos a mi país?',
+            '¿Puedo cambiar o devolver un producto?',
+            '¿Qué métodos de pago aceptan?',
+            '¿Cómo sé el estado de mi pedido?'
+          ]
+        },
+        promises: {
+          title: 'Productos 100 % originales',
+          subtitle: 'Solo trabajamos con marcas coreanas auténticas y autorizadas. Garantizamos la calidad y procedencia de cada producto que llega a tus manos.',
+          image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600',
+          items: [
+            { icon: 'ShieldCheck', title: 'Marcas oficiales' },
+            { icon: 'Box', title: 'Compra directa en Corea del Sur' },
+            { icon: 'CheckCircle2', title: 'Productos certificados' },
+            { icon: 'Leaf', title: 'Frescura y calidad garantizadas' }
+          ]
+        },
+        community: {
+          title: 'Únete a nuestra comunidad',
+          desc: 'Descubre rutinas, tips, lanzamientos y mucho más en Instagram.',
+          buttonText: 'SEGUIR EN INSTAGRAM',
+          buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+          images: [
+            'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
+            'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
+            'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
+            'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
+          ]
+        },
+        newsletter: {
+          title: 'Sé la primera en enterarte',
+          subtitle: 'Nuevos lanzamientos, ofertas exclusivas y contenido especial directamente en tu correo.',
+          placeholder: 'Tu correo electrónico',
+          buttonText: 'SUSCRIBIRME',
+          disclaimer: 'Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.'
         }
       },
       contacto: {
         hero: {
+          image: '/images/cheotnun-k-beauty-contato-atendimento.webp',
           title: 'Estamos aquí\npara ti',
-          subtitle: '¿Tienes preguntas, necesitas ayuda con tu pedido o quieres más información sobre nuestros productos? Nuestro equipo está listo para ayudarte.'
+          subtitle: '¿Tienes preguntas, necesitas ayuda con tu pedido o quieres más información sobre nuestros productos? Nuestro equipo está listo para ayudarte.',
+          buttonText: 'RESPUESTA RÁPIDA Y PERSONALIZADA',
+          badges: [
+            { icon: 'Clock', text: 'Atención en español' },
+            { icon: 'Clock', text: 'Respuesta en menos de 24h' },
+            { icon: 'CheckCircle2', text: 'Tu satisfacción es nuestra prioridad' }
+          ]
         },
         contactMethods: {
           title: 'Formas de contacto',
-          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00' },
-          email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h' },
-          address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur' }
+          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma más rápida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form' },
+          email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Envíanos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:hola@cheotnun.com' },
+          instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envíanos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+          hours: { label: 'Horario de atención', value: 'Excepto feriados', time: '', desc: 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#' },
+          address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: '#' }
+        },
+        form: {
+          title: 'Envíanos un mensaje',
+          nameLabel: 'Nombre completo',
+          emailLabel: 'E-mail',
+          subjectLabel: 'Asunto',
+          subjectOptions: ['Selecciona un asunto', 'Dudas sobre productos', 'Estado de mi pedido', 'Devoluciones', 'Otros'],
+          messageLabel: 'Tu mensaje',
+          submitText: 'ENVIAR MENSAJE',
+          securityNotice: 'Tu información está segura con nosotros y no será compartida.',
+          successAlert: '¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.'
         },
         faq: {
           title: '¿En qué podemos ayudarte?',
           subtitle: 'Preguntas frecuentes rápidas',
-          buttonText: 'VER TODAS LAS PREGUNTAS FRECUENTES'
+          buttonText: 'VER TODAS LAS PREGUNTAS FRECUENTES',
+          topics: [
+            { icon: 'Info', title: 'Información sobre productos', desc: 'Dudas sobre ingredientes, beneficios y recomendaciones.' },
+            { icon: 'PackageSearch', title: 'Pedidos y envíos', desc: 'Consulta sobre el estado de tu pedido, envíos y entregas.' },
+            { icon: 'CreditCard', title: 'Pagos y facturación', desc: 'Información sobre métodos de pago, facturas y reembolsos.' },
+            { icon: 'RefreshCw', title: 'Devoluciones y cambios', desc: 'Dudas sobre cambios, devoluciones y garantías.' },
+            { icon: 'Handshake', title: 'Colaboraciones y prensa', desc: 'Propuestas de colaboración, eventos y prensa.' }
+          ],
+          quickItems: [
+            '¿Cuánto tiempo tarda en llegar mi pedido?',
+            '¿Qué métodos de pago aceptan?',
+            '¿Realizan envíos a mi país?',
+            '¿Puedo cambiar o devolver un producto?'
+          ]
+        },
+        community: {
+          title: 'Únete a nuestra comunidad',
+          desc: 'Síguenos en nuestras redes sociales y sé la primera en descubrir lanzamientos, promociones y consejos de belleza.',
+          buttonText: 'SEGUIR EN INSTAGRAM',
+          buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+          images: [
+            'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
+            'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
+            'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
+            'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
+          ]
         }
       },
       ayudaDevoluciones: {
@@ -615,6 +703,1066 @@ const DEFAULT_STATE: DbState = {
         subtitle: 'de nuevas experiencias y viajes exclusivos.',
         buttonText: 'SUSCRIBIRME',
         disclaimer: 'Prometemos no enviar spam. Puedes cancelar cuando quieras.'
+      }
+    },
+    terminos: {
+      hero: {
+        badge: 'Marco Legal',
+        title: 'Términos y Condiciones',
+        subtitle: 'Conoce las reglas que rigen el uso de nuestra plataforma y la relación con nuestros clientes.'
+      },
+      intro: {
+        p1: 'Bienvenido a Cheotnun K-Beauty. Al acceder y utilizar este sitio web, aceptas cumplir con los siguientes términos y condiciones. Si no estás de acuerdo con alguno de estos términos, te recomendamos no utilizar nuestros servicios.',
+        brand: 'Cheotnun K-Beauty',
+        p2: 'Estos términos establecen los derechos y obligaciones entre Cheotnun K-Beauty y los usuarios de nuestra tienda online especializada en cosmética coreana.'
+      },
+      company: {
+        name: 'Cheotnun K-Beauty',
+        nif: 'B-12345678',
+        address: 'Calle Gran Vía 12, Madrid, España',
+        email: 'hola@cheotnun.com',
+        phone: '+34 600 111 222'
+      },
+      additional: {
+        ageTitle: 'Edad Mínima',
+        ageDesc: 'Debes ser mayor de 18 años o contar con autorización legal para realizar compras en nuestra tienda. Al registrarte, confirmas que cumples con este requisito.',
+        accountTitle: 'Cuentas de Usuario',
+        accountDesc: 'Eres responsable de mantener la confidencialidad de tus credenciales de acceso. Notifícanos inmediatamente sobre cualquier uso no autorizado de tu cuenta.'
+      },
+      contact: {
+        title: 'Consultas Legales',
+        desc: 'Para cualquier duda sobre estos términos, puedes contactar a nuestro equipo legal.',
+        email: 'legal@cheotnun.com',
+        phone: '+34 912 345 678'
+      },
+      sections: [
+        { icon: 'ShoppingBag', title: 'Productos y Precios', content: 'Todos los productos están sujetos a disponibilidad. Nos reservamos el derecho de modificar precios sin previo aviso. Los precios mostrados incluyen impuestos aplicables pero no incluyen gastos de envío.' },
+        { icon: 'CreditCard', title: 'Pagos y Facturación', content: 'Aceptamos pagos a través de Stripe, PayPal y transferencia bancaria. El cargo se realizará en el momento de la compra. Emitimos factura electrónica para todos los pedidos.' },
+        { icon: 'Truck', title: 'Envíos y Entregas', content: 'Realizamos envíos a toda América Latina y Europa. Los plazos de entrega varían según el destino. No nos responsabilizamos por retrasos aduaneros una vez que el paquete ha salido de Corea del Sur.' },
+        { icon: 'RotateCcw', title: 'Devoluciones y Reembolsos', content: 'Aceptamos devoluciones dentro de los 14 días posteriores a la recepción. El producto debe estar sin usar y en su embalaje original. Los gastos de devolución corren por cuenta del cliente salvo productos defectuosos.' },
+        { icon: 'ShieldCheck', title: 'Propiedad Intelectual', content: 'Todo el contenido de este sitio web, incluyendo imágenes, textos y logotipos, es propiedad de Cheotnun K-Beauty y está protegido por leyes de propiedad intelectual.' },
+        { icon: 'Scale', title: 'Limitación de Responsabilidad', content: 'Cheotnun K-Beauty no se hace responsable por daños indirectos derivados del uso de nuestros productos. Cada producto incluye instrucciones de uso que deben ser seguidas cuidadosamente.' }
+      ]
+    },
+    privacidad: {
+      hero: {
+        badge: 'Transparencia y Seguridad',
+        title: 'Política de Privacidad',
+        subtitle: 'Tus datos están seguros con nosotros. Conoce cómo recopilamos, usamos y protegemos tu información personal.'
+      },
+      intro: {
+        p1: 'En Cheotnun K-Beauty nos tomamos muy en serio tu privacidad. Esta política describe cómo recopilamos, utilizamos y protegemos tus datos personales cuando utilizas nuestra tienda online.',
+        brand: 'Cheotnun K-Beauty',
+        p2: 'Al usar nuestra web, aceptas las prácticas descritas en esta política. Te recomendamos leerla detenidamente.',
+        p3: 'Nuestro compromiso es garantizar la confidencialidad y seguridad de tus datos personales de acuerdo con la normativa aplicable.'
+      },
+      security: {
+        title: 'Seguridad de Datos',
+        p1: 'Implementamos medidas de seguridad técnicas y organizativas para proteger tus datos personales contra accesos no autorizados, pérdida o destrucción.',
+        p2: 'Aunque usamos las mejores prácticas, ninguna transmisión por Internet es 100% segura. Hacemos todo lo posible para proteger tu información.'
+      },
+      cookies: {
+        title: 'Uso de Cookies',
+        p1: 'Usamos cookies propias y de terceros para mejorar tu experiencia de navegación, analizar el tráfico y personalizar contenido.',
+        p2: 'Puedes configurar tu navegador para rechazar cookies, aunque esto podría afectar la funcionalidad de algunas partes del sitio.'
+      },
+      contact: {
+        title: '¿Dudas sobre Privacidad?',
+        desc: 'Nuestro Delegado de Protección de Datos está disponible para resolver cualquier consulta.',
+        email: 'dpo@cheotnun.com',
+        address: 'Calle Gran Vía 12, Madrid, España'
+      },
+      sections: [
+        { icon: 'FileText', title: 'Información que Recopilamos', content: 'Recopilamos información que nos proporcionas directamente (nombre, email, dirección) e información de navegación (cookies, páginas visitadas).' },
+        { icon: 'ShieldCheck', title: 'Uso de tu Información', content: 'Utilizamos tus datos para procesar pedidos, mejorar nuestros servicios, enviar comunicaciones comerciales (con tu consentimiento) y cumplir obligaciones legales.' },
+        { icon: 'Share2', title: 'Compartir Información', content: 'No vendemos tus datos personales. Compartimos información solo con proveedores de servicios esenciales (procesamiento de pagos, logística de envíos) bajo estrictos acuerdos de confidencialidad.' },
+        { icon: 'Clock', title: 'Retención de Datos', content: 'Conservamos tus datos mientras mantengas una cuenta activa o durante el tiempo necesario para cumplir con obligaciones legales y fiscales.' },
+        { icon: 'UserCheck', title: 'Tus Derechos', content: 'Tienes derecho a acceder, rectificar, cancelar y oponerte al tratamiento de tus datos. Puedes ejercer estos derechos escribiendo a dpo@cheotnun.com.' },
+        { icon: 'Globe', title: 'Transferencias Internacionales', content: 'Al ser una tienda con operaciones internacionales, tus datos pueden ser transferidos y almacenados en servidores fuera de tu país de residencia.' }
+      ]
+    },
+    blog: {
+      pageTitle: 'Blog Cheotnun K-Beauty',
+      pageSubtitle: 'Artículos, guías y secretos del skincare coreano.'
+    },
+    translations: {
+      pt: {
+        home: {
+          hero: {
+            titleLine1: 'Sua beleza.',
+            titleLine2: 'Seu ritual.',
+            titleLine3: 'Seu momento.',
+            subtitle: 'Cosméticos coreanos autênticos selecionados para cada etapa do seu cuidado facial. Fórmulas botânicas que revelam sua luminosidade natural.',
+            btnBuyText: 'COMPRAR AGORA',
+            btnBuyLink: '/tienda',
+            btnRoutineText: 'DESCUBRIR ROTINAS',
+            btnRoutineLink: '/rutinas',
+            bgImage: '/images/banner.webp'
+          },
+          highlights: {
+            items: [
+              { icon: 'ShieldCheck', title: '100% ORIGINAIS', text: 'Direto da Coreia' },
+              { icon: 'Truck', title: 'ENVIOS INTERNACIONAIS', text: 'Para toda a América Latina' },
+              { icon: 'ShieldAlert', title: 'PASSOS SEGUROS', text: 'Protegemos sua compra' },
+              { icon: 'Heart', title: 'ATENDIMENTO PERSONALIZADO', text: 'Estamos para ajudar você' }
+            ]
+          },
+          categories: {
+            preTitle: 'CATEGORIAS',
+            title: 'Explorar por Categoria',
+            subtitle: 'Descubra nossa seleção completa de produtos K-Beauty organizados por categoria para encontrar exatamente o que sua pele precisa.',
+            buttonText: 'VER MAIS'
+          },
+          bestSellers: {
+            preTitle: 'MAIS VENDIDOS',
+            title: 'Os Favoritos',
+            subtitle: 'Os produtos que estão conquistando o coração das nossas clientes.',
+            buttonText: 'VER MAIS'
+          },
+          experiencias: {
+            preTitle: 'EXPERIÊNCIAS',
+            title: 'Viva o K-Beauty',
+            cards: [
+              { badge: 'WORKSHOP', title: 'Aprenda Conosco', text: 'Participe de workshops exclusivos sobre skincare coreano.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=600', badgeColor: 'bg-pink-500' },
+              { badge: 'VIAGEM', title: 'Explore a Coreia', text: 'Viaje para Coreia do Sul com experiências únicas de beleza e cultura.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600', badgeColor: 'bg-purple-500' },
+              { badge: 'EVENTO', title: 'Eventos Exclusivos', text: 'Eventos privados para grupos que desejam uma experiência personalizada.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600', badgeColor: 'bg-amber-500' }
+            ]
+          },
+          routines: {
+            preTitle: 'ROTINAS',
+            title: 'Sua Rotina Perfeita',
+            subtitle: 'Passos simples para uma pele radiante com produtos coreanos.',
+            buttonText: 'VER ROTINAS',
+            items: [
+              { icon: 'Droplets', name: 'Double Cleansing' },
+              { icon: 'Sparkles', name: 'Esfoliação' },
+              { icon: 'FlaskConical', name: 'Tônico' },
+              { icon: 'Droplet', name: 'Essência' },
+              { icon: 'Gem', name: 'Sérum' },
+              { icon: 'Snowflake', name: 'Hidratação' }
+            ],
+            badges: [
+              { icon: 'Sun', title: 'Protetor Solar' },
+              { icon: 'Moon', title: 'Cuidado Noturno' },
+              { icon: 'Heart', title: 'Antienvelhecimento' }
+            ]
+          },
+          instagram: {
+            title: 'Siga-nos no Instagram',
+            subtitle: 'Compartilhamos dicas, novidades e bastidores do K-Beauty.',
+            buttonLink: 'https://www.instagram.com/lacheotnun',
+            buttonText: '@lacheotnun',
+            images: [
+              'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
+              'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=400',
+              'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=400',
+              'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=400'
+            ]
+          },
+          newsletter: {
+            preTitle: 'NEWSLETTER',
+            title: 'Receba Novidades',
+            successMessage: 'CADASTRADO!',
+            buttonText: 'QUERO RECEBER'
+          }
+        },
+        header: {
+          topBar: 'Frete grátis para compras acima de R\$ 297 para todo o Brasil',
+          logoText: 'CHEOTNUN',
+          logoSubtext: 'Corean Beauty',
+          ctaText: 'COMECE AQUI',
+          ctaLink: '/tienda',
+          navLinks: [
+            { label: 'Início', href: '/' },
+            { label: 'Loja', href: '/tienda' },
+            { label: 'Marcas', href: '/marcas' },
+            { label: 'Rotinas', href: '/rutinas' },
+            { label: 'Experiências', href: '/experiencias' },
+            { label: 'Blog', href: '/blog' },
+            { label: 'Contato', href: '/contacto' },
+            { label: 'Ajuda', href: '/ayuda/envios' }
+          ]
+        },
+        footer: {
+          logoText: 'CHEOTNUN',
+          logoSubtext: 'K-Beauty',
+          description: 'Sua loja online de cosméticos coreanos autênticos. Produtos originais direto da Coreia.',
+          copyright: '© 2026 Cheotnun K-Beauty. Todos os direitos reservados.',
+          columns: [
+            { title: 'PRODUTOS', links: [
+              { label: 'Todos os Produtos', href: '/tienda' },
+              { label: 'Mais Vendidos', href: '/tienda' },
+              { label: 'Lançamentos', href: '/tienda' },
+              { label: 'Marcas', href: '/marcas' },
+              { label: 'Promoções', href: '/tienda' }
+            ]},
+            { title: 'AJUDA', links: [
+              { label: 'Como Comprar', href: '/como-funciona' },
+              { label: 'Envíos e Pagamentos', href: '/ayuda/envios' },
+              { label: 'Devoluciones', href: '/ayuda/devoluciones' },
+              { label: 'Perguntas Frequentes', href: '/como-funciona' },
+              { label: 'Contato', href: '/contacto' }
+            ]},
+            { title: 'LEGAL', links: [
+              { label: 'Términos e Condições', href: '/terminos' },
+              { label: 'Política de Privacidade', href: '/politica-de-privacidad' },
+              { label: 'Política de Cookies', href: '/politica-de-privacidad' }
+            ]}
+          ]
+        },
+        marcas: {
+          hero: {
+            image: '/images/marcas-hero.webp',
+            title: 'Nossas Marcas',
+            subtitle: 'Trabalhamos com as melhores marcas coreanas para levar até você o que há de mais autêntico e inovador em K-Beauty.'
+          },
+          features: [
+            { icon: 'ShieldCheck', title: '100% Original', text: 'Todos os produtos são adquiridos diretamente de distribuidores oficiais na Coreia.' },
+            { icon: 'Truck', title: 'Envio Seguro', text: 'Embalagem especial para garantir que seu produto chegue em perfeitas condições.' },
+            { icon: 'Award', title: 'Qualidade Garantida', text: 'Selecionamos apenas marcas com trayectoria comprovada e ingredientes de alta qualidade.' }
+          ],
+          whyChooseUs: {
+            title: 'Por que escolher a Cheotnun?',
+            items: [
+              { icon: 'MapPin', title: 'Conexão Direta com a Coreia', text: 'Nossa equipe viaja regularmente à Coreia para selecionar pessoalmente cada produto.' },
+              { icon: 'ShieldCheck', title: 'Autenticidade Garantida', text: 'Certificados de autenticidade e selos originais em cada produto.' },
+              { icon: 'Sparkles', title: 'Curadoria Especializada', text: 'Cada produto é testado e aprovado por nossa equipe de especialistas em skincare.' },
+              { icon: 'HeartHandshake', title: 'Atendimento Personalizado', text: 'Suporte dedicado para ajudar você a encontrar a rotina perfeita para sua pele.' }
+            ],
+            conclusionImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600',
+            conclusionTitle: 'Qualidade que você pode confiar',
+            conclusionText: 'Mais de 10.000 clientes satisfeitas na América Latina confiam na Cheotnun para cuidar da sua pele com o melhor do K-Beauty.'
+          },
+          testimonials: {
+            title: 'O que dizem nossas clientes',
+            list: [
+              { text: 'Amei os produtos! Minha pele nunca esteve tão radiante. A entrega foi super rápida.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', name: 'Ana Silva', country: 'Brasil' },
+              { text: 'Produtos originais e embalagem perfeita. Recomendo para todas que querem skincare de verdade.', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200', name: 'Mariana Costa', country: 'Brasil' },
+              { text: 'A Cheotnun mudou minha rotina de skincare. Agora entendo porque o K-Beauty é tão famoso.', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200', name: 'Juliana Oliveira', country: 'Brasil' }
+            ],
+            buttonLink: '/contacto',
+            buttonText: 'COMPARTILHE SUA EXPERIÊNCIA'
+          },
+          trustBadges: [
+            { icon: 'ShieldCheck', text: 'Produtos Originais' },
+            { icon: 'Truck', text: 'Envio Internacional' },
+            { icon: 'CreditCard', text: 'Pagamento Seguro' },
+            { icon: 'Headphones', text: 'Suporte Dedicado' }
+          ]
+        },
+        comoFunciona: {
+          hero: { image: '/images/como-funciona-hero.webp', title: 'Como Funciona', subtitle: 'Simples, rápido e seguro. Veja como é fácil comprar na Cheotnun.' },
+          steps: [
+            { number: '01', icon: 'Search', title: 'Explore', text: 'Navegue por nossas categorias e descubra os produtos perfeitos para sua pele.' },
+            { number: '02', icon: 'ShoppingCart', title: 'Escolha', text: 'Selecione seus produtos favoritos e adicione ao carrinho.' },
+            { number: '03', icon: 'CreditCard', title: 'Pague', text: 'Escolha seu método de pagamento preferido (cartão, PayPal ou transferência).' },
+            { number: '04', icon: 'Package', title: 'Receba', text: 'Seu pedido chega na sua casa com toda segurança e rastreamento.' }
+          ],
+          paymentsInfo: { title: 'Métodos de Pagamento', subtitle: 'Aceitamos diversas formas de pagamento para sua comodidade.' },
+          shippingInfo: {
+            title: 'Informações de Envio',
+            subtitle: 'Envio para toda América Latina com seguro e rastreamento inclusos.',
+            items: [
+              { title: 'Prazo de Entrega', text: '7 a 15 dias úteis dependendo do destino. Trabalhamos com transportadoras parceiras que atuam em toda a região.' },
+              { title: 'Rastreamento', text: 'Fornecemos código de rastreamento para todos os pedidos. Você acompanha cada etapa até receber.' },
+              { title: 'Seguro', text: 'Todos os envios incluem seguro contra extravio ou danos. Sua compra está protegida do início ao fim.' }
+            ]
+          },
+          faq: {
+            title: 'Perguntas frequentes',
+            subtitle: 'Resolvemos suas dúvidas mais comuns.',
+            buttonText: 'VER TODAS AS PERGUNTAS',
+            items: [
+              'Os produtos são originais?',
+              'Quanto tempo leva para meu pedido chegar?',
+              'Vocês fazem envios para meu país?',
+              'Posso trocar ou devolver um produto?',
+              'Quais métodos de pagamento aceitam?',
+              'Como saber o status do meu pedido?'
+            ]
+          },
+          promises: {
+            title: 'Produtos 100% originais',
+            subtitle: 'Trabalhamos apenas com marcas coreanas autênticas e autorizadas. Garantimos a qualidade e procedência de cada produto.',
+            image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600',
+            items: [
+              { icon: 'ShieldCheck', title: 'Marcas oficiais' },
+              { icon: 'Box', title: 'Compra direta na Coreia do Sul' },
+              { icon: 'CheckCircle2', title: 'Produtos certificados' },
+              { icon: 'Leaf', title: 'Frescor e qualidade garantidos' }
+            ]
+          },
+          community: {
+            title: 'Junte-se à nossa comunidade',
+            desc: 'Descubra rotinas, dicas, lançamentos e muito mais no Instagram.',
+            buttonText: 'SEGUIR NO INSTAGRAM',
+            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            images: [
+              'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
+              'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
+            ]
+          },
+          newsletter: {
+            title: 'Seja a primeira a saber',
+            subtitle: 'Novos lançamentos, ofertas exclusivas e conteúdo especial direto no seu e-mail.',
+            placeholder: 'Seu melhor e-mail',
+            buttonText: 'QUERO RECEBER',
+            disclaimer: 'Prometemos não enviar spam. Compartilhamos apenas o melhor do K-Beauty.'
+          }
+        },
+        contacto: {
+          hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Fale Conosco', subtitle: 'Estamos aqui para ajudar você com dúvidas, sugestões ou qualquer necessidade.', buttonText: 'RESPOSTA RÁPIDA E PERSONALIZADA', badges: [{ icon: 'Clock', text: 'Atendimento em português' }, { icon: 'Clock', text: 'Resposta em menos de 24h' }, { icon: 'CheckCircle2', text: 'Sua satisfação é nossa prioridade' }] },
+          contactMethods: {
+            title: 'Formas de contato',
+            whatsapp: { label: 'WhatsApp', value: '+55 (11) 99999-9999', time: 'Seg a Sex, 9h às 18h (GMT-3)', desc: 'A forma mais rápida de falar com nossa equipe.', btn: 'FALAR AGORA', link: '#contacto-form' },
+            email: { label: 'E-mail', value: 'ola@cheotnun.com', time: 'Resposta em menos de 24h', desc: 'Envie um e-mail e responderemos em breve.', btn: 'ENVIAR E-MAIL', link: 'mailto:ola@cheotnun.com' },
+            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+            hours: { label: 'Horário de atendimento', value: 'Exceto feriados', time: '', desc: 'Segunda a sexta 9h às 18h (GMT-3)', btn: 'VER HORÁRIOS', link: '#' },
+            address: { label: 'Endereço', value: 'São Paulo, SP, Brasil', time: '', desc: 'Escritório administrativo', btn: 'VER NO MAPA', link: '#' }
+          },
+          form: {
+            title: 'Envie uma mensagem',
+            nameLabel: 'Nome completo',
+            emailLabel: 'E-mail',
+            subjectLabel: 'Assunto',
+            subjectOptions: ['Selecione um assunto', 'Dúvidas sobre produtos', 'Status do meu pedido', 'Devoluções', 'Outros'],
+            messageLabel: 'Sua mensagem',
+            submitText: 'ENVIAR MENSAGEM',
+            securityNotice: 'Suas informações estão seguras conosco e não serão compartilhadas.',
+            successAlert: 'Mensagem enviada com sucesso! Entraremos em contato em breve.'
+          },
+          faq: {
+            title: 'Em que podemos ajudar?',
+            subtitle: 'Perguntas frequentes rápidas',
+            buttonText: 'VER TODAS AS PERGUNTAS FREQUENTES',
+            topics: [
+              { icon: 'Info', title: 'Informações sobre produtos', desc: 'Dúvidas sobre ingredientes, benefícios e recomendações.' },
+              { icon: 'PackageSearch', title: 'Pedidos e envios', desc: 'Consulte o status do seu pedido, prazos de entrega.' },
+              { icon: 'CreditCard', title: 'Pagamentos e faturamento', desc: 'Informações sobre métodos de pagamento, notas fiscais e reembolsos.' },
+              { icon: 'RefreshCw', title: 'Devoluções e trocas', desc: 'Dúvidas sobre trocas, devoluções e garantias.' },
+              { icon: 'Handshake', title: 'Colaborações e imprensa', desc: 'Propostas de colaboração, eventos e imprensa.' }
+            ],
+            quickItems: [
+              'Quanto tempo leva para meu pedido chegar?',
+              'Quais métodos de pagamento vocês aceitam?',
+              'Vocês fazem envios para todo o Brasil?',
+              'Posso trocar ou devolver um produto?'
+            ]
+          },
+          community: {
+            title: 'Junte-se à nossa comunidade',
+            desc: 'Siga-nos nas redes sociais e seja a primeira a descobrir lançamentos, promoções e dicas de beleza.',
+            buttonText: 'SEGUIR NO INSTAGRAM',
+            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            images: [
+              'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
+              'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
+            ]
+          }
+        },
+        envios: {
+          hero: { image: '/images/envios-hero.webp', title: 'Envíos e Pagamentos', subtitle: 'Toda a informação sobre prazos, custos e métodos de pagamento.', text: 'Na Cheotnun queremos que sua experiência de compra seja tranquila e segura.' },
+          features: [
+            { text: 'Envio para toda América Latina e Europa', icon: 'Globe' },
+            { text: 'Pagamento 100% seguro com criptografia SSL', icon: 'ShieldCheck' }
+          ],
+          shipping: {
+            title: 'Como funciona o envio',
+            text: 'Trabalhamos com parceiros logísticos internacionais para garantir que seu pedido chegue rápido e com segurança.',
+            tableTitle: 'Prazos e Custos de Envio',
+            tableSubtitle: 'Valores e prazos estimados por região.'
+          },
+          payments: {
+            title: 'Métodos de Pagamento',
+            subtitle: 'Aceitamos diversas formas de pagamento para sua comodidade.',
+            methods: [
+              { name: 'Cartão de Crédito', desc: 'Visa, Mastercard, American Express e Diners Club. Parcelamento em até 6x.' },
+              { name: 'PayPal', desc: 'Pague com sua conta PayPal de forma rápida e segura.' },
+              { name: 'Transferência Bancária', desc: 'Transferência direta para nossa conta. Consulte os dados após finalizar a compra.' },
+              { name: 'Pix', desc: 'Pagamento instantâneo para clientes no Brasil.' }
+            ]
+          }
+        },
+        ayudaDevoluciones: {
+          hero: {
+            badge: 'Política de Devolução',
+            title: 'Devoluciones e Reembolsos',
+            subtitle: 'Na Cheotnun sua satisfação é nossa prioridade. Se por algum motivo você não ficar satisfeita, estamos aqui para ajudar.',
+            steps: [
+              { icon: 'Mail', number: '1', title: 'Solicite', desc: 'Envie um e-mail para devoluciones@cheotnun.com com seu número de pedido e motivo da devolução.' },
+              { icon: 'ClipboardCheck', number: '2', title: 'Aprovamos', desc: 'Nossa equipe analisará sua solicitação em até 48 horas úteis.' },
+              { icon: 'Package', number: '3', title: 'Envie', desc: 'Após aprovação, enviaremos as instruções para devolução do produto.' },
+              { icon: 'RefreshCw', number: '4', title: 'Reembolsamos', desc: 'Assim que recebermos e verificarmos o produto, processaremos o reembolso.' }
+            ],
+            sectionTitle: 'Processo de Devolução',
+            summary: [
+              { title: 'Prazo', text: 'Até 14 dias após o recebimento do pedido.' },
+              { title: 'Condição', text: 'Produto sem uso, na embalagem original e com todos os lacres.' },
+              { title: 'Custo', text: 'Gratuito para produtos com defeito. O cliente arca com o frete nos demais casos.' }
+            ],
+            conditionsTitle: 'Condições para Devolução',
+            conditions: [
+              'O produto deve estar sem uso e na embalagem original.',
+              'Todos os lacres e selos de garantia devem estar intactos.',
+              'A solicitação deve ser feita em até 14 dias corridos após o recebimento.',
+              'Produtos em promoção ou em kit podem ter condições especiais de devolução.',
+              'O reembolso será processado no mesmo método de pagamento utilizado na compra.'
+            ],
+            notAcceptedTitle: 'Não Aceitamos Devolução de:',
+            notAccepted: [
+              'Produtos com sinais de uso ou violação do lacre de segurança.',
+              'Produtos em promoção ou liquidação com aviso de não aceitação de devolução.',
+              'Amostras grátis ou brindes promocionais.',
+              'Pedidos com mais de 30 dias após o recebimento.',
+              'Produtos que foram danificados por mau uso ou armazenamento inadequado.'
+            ],
+            contactTitle: 'Contato para Devoluções',
+            contactText: 'Tem alguma dúvida sobre o processo de devolução? Estamos aqui para ajudar.',
+            contactEmail: 'devoluciones@cheotnun.com',
+            contactWhatsapp: '+55 (11) 98888-7777'
+          }
+        },
+        rutinasPage: {
+          hero: { image: '/images/rutinas-hero.webp', badge: 'ROTINAS K-BEAUTY', title: 'Sua Rotina de Skincare', subtitle: 'Descubra a rotina coreana passo a passo e transforme sua pele.', buttonText: 'COMECE SUA ROTINA' },
+          stepsSection: { title: 'Os Passos do K-Beauty', subtitle: 'A rotina coreana de skincare pode ter de 5 a 12 passos. Aqui estão os essenciais.', footerText: '✨ Cada pele é única. Adapte os passos conforme sua necessidade.' },
+          steps: [
+            { icon: 'Droplets', title: 'Double Cleansing', desc: 'O primeiro passo é a limpeza dupla: primeiro um óleo removedor de maquiagem, depois um cleanser à base de água.' },
+            { icon: 'Sparkles', title: 'Esfoliação', desc: 'Remove células mortas e renova a pele. Recomendamos 1-2 vezes por semana.' },
+            { icon: 'FlaskConical', title: 'Tônico', desc: 'Equilibra o pH da pele e prepara para receber os próximos passos.' },
+            { icon: 'Droplet', title: 'Essência', desc: 'Um passo exclusivamente coreano, mais leve que um sérum, que hidrata e prepara a pele.' },
+            { icon: 'Gem', title: 'Sérum', desc: 'Concentrado de ativos para tratar necessidades específicas: vitamina C, ácido hialurônico, retinol.' },
+            { icon: 'Snowflake', title: 'Hidratação', desc: 'Creme hidratante que sela todos os passos anteriores e mantém a pele macia.' }
+          ],
+          ingredientsSection: { title: 'Ingredientes Coreanos', subtitle: 'Conheça os ingredientes estrela da cosmética coreana.' },
+          ingredients: [
+            { img: 'https://images.unsplash.com/photo-1615391978149-9fce07b0d447?q=80&w=200', name: 'Snail Mucin', desc: 'Hidrata, regenera e repara a pele. O ingrediente favorito do K-Beauty.' },
+            { img: 'https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=200', name: 'Centella Asiatica', desc: 'Acalma, cicatriza e reduz inflamações. Perfeita para peles sensíveis.' },
+            { img: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=200', name: 'Ácido Hialurônico', desc: 'Hidratação profunda que retém a umidade na pele.' },
+            { img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=200', name: 'Niacinamida', desc: 'Clareia manchas, controla oleosidade e fortalece a barreira da pele.' },
+            { img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=200', name: 'Própolis', desc: 'Antibacteriano natural, hidrata e dá luminosidade.' },
+            { img: 'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=200', name: 'Vitamina C', desc: 'Poderoso antioxidante que ilumina e uniformiza o tom da pele.' },
+            { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200', name: 'Ceramidas', desc: 'Restauram a barreira de proteção da pele, evitando a perda de umidade.' },
+            { img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=200', name: 'Retinol', desc: 'Antienvelhecimento potente que estimula colágeno e renova as células.' }
+          ],
+          routineSection: { title: 'Ordem da Rotina', boxTitle: 'Sua rotina pode ser única.', boxDesc: 'Comece com o básico e adicione passos conforme sua pele se acostuma. O segredo é a consistência nos cuidados diários.' },
+          routineSteps: [
+            { num: '1', title: 'Limpeza', icon: 'Droplets', sub: 'Óleo + Water Cleanser' },
+            { num: '2', title: 'Esfoliação', icon: 'Sparkles', sub: '1-2x/semana' },
+            { num: '3', title: 'Tônico + Essência', icon: 'FlaskConical', sub: 'Equilibrar + Preparar' },
+            { num: '4', title: 'Sérum + Ampola', icon: 'Gem', sub: 'Tratamento específico' },
+            { num: '5', title: 'Hidratação', icon: 'Snowflake', sub: 'Creme + Óleo' },
+            { num: '6', title: 'Proteção', icon: 'Sun', sub: 'Protetor Solar (manhã)' }
+          ],
+          tipsSection: { title: 'Dicas Essenciais' },
+          tips: [
+            { title: 'Conheça seu Tipo de Pele', desc: 'Antes de começar qualquer rotina, identifique se sua pele é oleosa, seca, mista ou sensível.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Search' },
+            { title: 'Introduza um Passo de Cada Vez', desc: 'Comece com limpeza, hidratação e protetor solar. Depois adicione sérum, esfoliação e tratamentos.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'ArrowRight' },
+            { title: 'Seja Consistente', desc: 'Resultados reais vêm com o uso diário. Dê à sua pele tempo para se adaptar aos novos produtos.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Clock' },
+            { title: 'Protetor Solar é Inegociável', desc: 'Use todos os dias, mesmo em casa. A proteção solar previne envelhecimento precoce e manchas.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Sun' }
+          ],
+          makeupSection: { title: 'Universo Maquiagem', subtitle: 'A maquiagem coreana é conhecida por sua leveza e acabamento natural.', buttonText: 'SAIBA MAIS' },
+          makeup: [
+            { name: 'Base Leve', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Corretivo', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Blush', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Batom', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Sombra', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Delineador', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Máscara de Cílios', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Pó Translúcido', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' }
+          ],
+          categoriesSection: { title: 'Categorias' },
+          categories: [
+            { icon: 'Droplets', name: 'Limpeza' },
+            { icon: 'Sparkles', name: 'Esfoliação' },
+            { icon: 'FlaskConical', name: 'Tônico' },
+            { icon: 'Droplet', name: 'Essência' },
+            { icon: 'Gem', name: 'Sérum' },
+            { icon: 'Snowflake', name: 'Hidratação' },
+            { icon: 'Sun', name: 'Protetor Solar' },
+            { icon: 'Moon', name: 'Cuidado Noturno' }
+          ],
+          faqSection: { title: 'Perguntas Frequentes' },
+          faq: [
+            { q: 'Quantos passos uma rotina coreana tem?', a: 'A rotina tradicional coreana tem entre 5 e 12 passos. Recomendamos começar com o essencial e adicionar conforme sua pele se adapta.' },
+            { q: 'Posso misturar produtos de marcas diferentes?', a: 'Sim! O importante é escolher produtos adequados ao seu tipo de pele e necessidades, independente da marca.' },
+            { q: 'Qual a diferença entre essência e sérum?', a: 'A essência é mais líquida e hidrata superficialmente. O sérum é mais concentrado e trata problemas específicos.' },
+            { q: 'Com que idade devo começar a usar antienvelhecimento?', a: 'A prevenção pode começar aos 20-25 anos com antioxidantes como vitamina C. Retinol e ativos mais potentes geralmente a partir dos 30.' }
+          ],
+          newsletter: { title: 'Receba dicas exclusivas', subtitle: 'e fique por dentro das novidades do universo K-Beauty.', buttonText: 'QUERO RECEBER', disclaimer: 'Prometemos não enviar spam. Você pode cancelar a qualquer momento.', image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=400' }
+        },
+        experienciasPage: {
+          hero: { title: 'Experiências Cheotnun', subtitle: 'Muito mais que produtos, uma conexão com a cultura coreana.', buttonText: 'Conecte-se com a cultura coreana', image: '/images/cheotnun-k-beauty-experiencias-viagens.webp' },
+          experiences: { title: 'Descubra nossas experiências' },
+          experiencesList: [
+            { icon: 'FlaskConical', title: 'Beauty Experience', desc: 'Descubra a origem dos seus produtos favoritos e mergulhe na cultura coreana do cuidado da pele.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400' },
+            { icon: 'Award', title: 'Workshops Exclusivos', desc: 'Aprenda técnicas de beleza coreana com especialistas e profissionais certificados.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400' },
+            { icon: 'PlaneTakeoff', title: 'Viagens Culturais', desc: 'Explore a Coreia do Sul através de experiências únicas que conectam beleza, cultura e bem-estar.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400' },
+            { icon: 'Users', title: 'Eventos Privados', desc: 'Organizamos eventos exclusivos para grupos que desejam uma experiência personalizada.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=400' },
+            { icon: 'Heart', title: 'Retiros de Bem-Estar', desc: 'Programas imersivos que combinam skincare, bem-estar e conexão com a natureza.', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400' }
+          ],
+          maeum: {
+            badge: 'Em parceria com',
+            title: 'MAEUM GLOBAL',
+            subtitle: 'Viagens que transformam.',
+            desc: 'Maeum Global leva você à Coreia para viver experiências únicas de beleza, cultura e bem-estar.',
+            points: [
+              'Roteiros personalizados de K-Beauty',
+              'Acompanhamento de especialistas locais',
+              'Visitas a fábricas e boutiques exclusivas',
+              'Aulas de maquiagem e skincare coreano'
+            ],
+            buttonLink: 'https://www.maeumglobal.com.br',
+            buttonText: 'SAIBA MAIS',
+            cards: [
+              { title: 'Imersão Cultural', desc: 'Conheça a Coreia além do skincare: história, gastronomia e muito mais.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400', icon: 'Compass' },
+              { title: 'Beauty Tour', desc: 'Visite as principais lojas e clínicas de beleza em Seoul e Busan.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400', icon: 'Sparkles' },
+              { title: 'Aprendizado', desc: 'Workshops práticos com maquiadores e dermatologistas coreanos.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400', icon: 'BookOpen' }
+            ]
+          },
+          testimonials: {
+            title: 'Depoimentos',
+            buttonText: 'COMPARTILHE SUA EXPERIÊNCIA',
+            list: [
+              { quote: 'Uma experiência que mudou minha forma de ver a beleza. Coreia é mágico.', name: 'Camila R.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200' },
+              { quote: 'Os workshops de maquiagem coreana foram incríveis. Aprendi muito.', name: 'Sofia M.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200' },
+              { quote: 'Viajar com Maeum Global e Cheotnun foi a melhor decisão. Repetirei sem dúvidas.', name: 'Valentina L.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }
+            ]
+          },
+          newsletter: {
+            title: 'Seja a primeira a saber',
+            subtitle: 'de novas experiências e viagens exclusivas.',
+            buttonText: 'INSCREVER-ME',
+            disclaimer: 'Prometemos não enviar spam. Você pode cancelar quando quiser.'
+          }
+        },
+        terminos: {
+          hero: { badge: 'Marco Legal', title: 'Termos e Condições', subtitle: 'Conheça as regras que regem o uso da nossa plataforma e a relação com nossos clientes.' },
+          intro: { p1: 'Bem-vindo à Cheotnun K-Beauty. Ao acessar e utilizar este site, você aceita cumprir os seguintes termos e condições. Se não concordar com algum destes termos, recomendamos não utilizar nossos serviços.', brand: 'Cheotnun K-Beauty', p2: 'Estes termos estabelecem os direitos e obrigações entre Cheotnun K-Beauty e os usuários de nossa loja online especializada em cosméticos coreanos.' },
+          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: 'São Paulo, SP, Brasil', email: 'ola@cheotnun.com', phone: '+55 (11) 99999-9999' },
+          additional: { ageTitle: 'Idade Mínima', ageDesc: 'Você deve ser maior de 18 anos ou ter autorização legal para realizar compras em nossa loja. Ao se registrar, confirma que cumpre este requisito.', accountTitle: 'Contas de Usuário', accountDesc: 'Você é responsável por manter a confidencialidade de suas credenciais de acesso. Notifique-nos imediatamente sobre qualquer uso não autorizado de sua conta.' },
+          contact: { title: 'Consultas Legais', desc: 'Para qualquer dúvida sobre estes termos, entre em contato com nossa equipe jurídica.', email: 'legal@cheotnun.com', phone: '+55 (11) 91234-5678' },
+          sections: [
+            { icon: 'ShoppingBag', title: 'Produtos e Preços', content: 'Todos os produtos estão sujeitos à disponibilidade. Reservamo-nos o direito de modificar preços sem aviso prévio. Os preços exibidos incluem impostos aplicáveis mas não incluem frete.' },
+            { icon: 'CreditCard', title: 'Pagamentos e Faturamento', content: 'Aceitamos pagamentos via cartão de crédito, PayPal e Pix. O pagamento será processado no momento da compra. Emitimos nota fiscal para todos os pedidos.' },
+            { icon: 'Truck', title: 'Envios e Entregas', content: 'Realizamos envios para todo o Brasil e América Latina. Os prazos de entrega variam conforme o destino. Não nos responsabilizamos por atrasos alfandegários após o pacote sair da Coreia do Sul.' },
+            { icon: 'RotateCcw', title: 'Devoluções e Reembolsos', content: 'Aceitamos devoluções dentro de 14 dias após o recebimento. O produto deve estar sem uso e na embalagem original. O frete de devolução é por conta do cliente, exceto para produtos com defeito.' },
+            { icon: 'ShieldCheck', title: 'Propriedade Intelectual', content: 'Todo o conteúdo deste site, incluindo imagens, textos e logotipos, é propriedade da Cheotnun K-Beauty e está protegido por leis de propriedade intelectual.' },
+            { icon: 'Scale', title: 'Limitação de Responsabilidade', content: 'A Cheotnun K-Beauty não se responsabiliza por danos indiretos decorrentes do uso de nossos produtos. Cada produto inclui instruções de uso que devem ser seguidas cuidadosamente.' }
+          ]
+        },
+        privacidad: {
+          hero: { badge: 'Transparência e Segurança', title: 'Política de Privacidade', subtitle: 'Seus dados estão seguros conosco. Saiba como coletamos, usamos e protegemos suas informações pessoais.' },
+          intro: { p1: 'Na Cheotnun K-Beauty levamos sua privacidade muito a sério. Esta política descreve como coletamos, utilizamos e protegemos seus dados pessoais ao utilizar nossa loja online.', brand: 'Cheotnun K-Beauty', p2: 'Ao usar nosso site, você aceita as práticas descritas nesta política. Recomendamos a leitura atenta.', p3: 'Nosso compromisso é garantir a confidencialidade e segurança dos seus dados pessoais de acordo com a legislação aplicável.' },
+          security: { title: 'Segurança de Dados', p1: 'Implementamos medidas de segurança técnicas e organizacionais para proteger seus dados pessoais contra acessos não autorizados, perda ou destruição.', p2: 'Embora usemos as melhores práticas, nenhuma transmissão pela Internet é 100% segura. Fazemos todo o possível para proteger suas informações.' },
+          cookies: { title: 'Uso de Cookies', p1: 'Utilizamos cookies próprios e de terceiros para melhorar sua experiência de navegação, analisar o tráfego e personalizar conteúdo.', p2: 'Você pode configurar seu navegador para recusar cookies, embora isso possa afetar a funcionalidade de algumas partes do site.' },
+          contact: { title: 'Dúvidas sobre Privacidade?', desc: 'Nosso Encarregado de Proteção de Dados está disponível para responder qualquer dúvida.', email: 'dpo@cheotnun.com', address: 'São Paulo, SP, Brasil' },
+          sections: [
+            { icon: 'FileText', title: 'Informações que Coletamos', content: 'Coletamos informações que você nos fornece diretamente (nome, e-mail, endereço) e informações de navegação (cookies, páginas visitadas).' },
+            { icon: 'ShieldCheck', title: 'Uso das suas Informações', content: 'Utilizamos seus dados para processar pedidos, melhorar nossos serviços, enviar comunicações comerciais (com seu consentimento) e cumprir obrigações legais.' },
+            { icon: 'Share2', title: 'Compartilhamento de Informações', content: 'Não vendemos seus dados pessoais. Compartilhamos informações apenas com provedores de serviços essenciais (processamento de pagamentos, logística de envios) sob estritos acordos de confidencialidade.' },
+            { icon: 'Clock', title: 'Retenção de Dados', content: 'Mantemos seus dados enquanto você tiver uma conta ativa ou pelo tempo necessário para cumprir obrigações legais e fiscais.' },
+            { icon: 'UserCheck', title: 'Seus Direitos', content: 'Você tem direito de acessar, retificar, cancelar e se opor ao tratamento de seus dados. Exercite esses direitos escrevendo para dpo@cheotnun.com.' },
+            { icon: 'Globe', title: 'Transferências Internacionais', content: 'Por ser uma loja com operações internacionais, seus dados podem ser transferidos e armazenados em servidores fora do seu país de residência.' }
+          ]
+        },
+        blog: {
+          pageTitle: 'Blog Cheotnun K-Beauty',
+          pageSubtitle: 'Artigos, guias e segredos do skincare coreano.'
+        }
+      },
+      en: {
+        home: {
+          hero: {
+            titleLine1: 'Your beauty.',
+            titleLine2: 'Your ritual.',
+            titleLine3: 'Your moment.',
+            subtitle: 'Authentic Korean cosmetics selected for every stage of your facial care. Botanical formulas that reveal your natural radiance.',
+            btnBuyText: 'BUY NOW',
+            btnBuyLink: '/tienda',
+            btnRoutineText: 'DISCOVER ROUTINES',
+            btnRoutineLink: '/rutinas',
+            bgImage: '/images/banner.webp'
+          },
+          highlights: {
+            items: [
+              { icon: 'ShieldCheck', title: '100% ORIGINAL', text: 'Direct from Korea' },
+              { icon: 'Truck', title: 'INTERNATIONAL SHIPPING', text: 'To all Latin America' },
+              { icon: 'ShieldAlert', title: 'SAFE PURCHASE', text: 'We protect your order' },
+              { icon: 'Heart', title: 'PERSONALIZED CARE', text: 'We are here for you' }
+            ]
+          },
+          categories: {
+            preTitle: 'CATEGORIES',
+            title: 'Browse by Category',
+            subtitle: 'Discover our complete selection of K-Beauty products organized by category to find exactly what your skin needs.',
+            buttonText: 'SEE MORE'
+          },
+          bestSellers: {
+            preTitle: 'BEST SELLERS',
+            title: 'The Favorites',
+            subtitle: 'The products that are winning the hearts of our customers.',
+            buttonText: 'SEE MORE'
+          },
+          experiencias: {
+            preTitle: 'EXPERIENCES',
+            title: 'Live K-Beauty',
+            cards: [
+              { badge: 'WORKSHOP', title: 'Learn with Us', text: 'Join exclusive workshops on Korean skincare.', buttonText: 'LEARN MORE', image: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=600', badgeColor: 'bg-pink-500' },
+              { badge: 'TRAVEL', title: 'Explore Korea', text: 'Travel to South Korea with unique beauty and culture experiences.', buttonText: 'LEARN MORE', image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600', badgeColor: 'bg-purple-500' },
+              { badge: 'EVENT', title: 'Exclusive Events', text: 'Private events for groups seeking a personalized experience.', buttonText: 'LEARN MORE', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600', badgeColor: 'bg-amber-500' }
+            ]
+          },
+          routines: {
+            preTitle: 'ROUTINES',
+            title: 'Your Perfect Routine',
+            subtitle: 'Simple steps for radiant skin with Korean products.',
+            buttonText: 'VIEW ROUTINES',
+            items: [
+              { icon: 'Droplets', name: 'Double Cleansing' },
+              { icon: 'Sparkles', name: 'Exfoliation' },
+              { icon: 'FlaskConical', name: 'Toner' },
+              { icon: 'Droplet', name: 'Essence' },
+              { icon: 'Gem', name: 'Serum' },
+              { icon: 'Snowflake', name: 'Moisturizer' }
+            ],
+            badges: [
+              { icon: 'Sun', title: 'Sun Protection' },
+              { icon: 'Moon', title: 'Night Care' },
+              { icon: 'Heart', title: 'Anti-Aging' }
+            ]
+          },
+          instagram: {
+            title: 'Follow us on Instagram',
+            subtitle: 'We share tips, news and behind-the-scenes of K-Beauty.',
+            buttonLink: 'https://www.instagram.com/lacheotnun',
+            buttonText: '@lacheotnun',
+            images: [
+              'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
+              'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=400',
+              'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=400',
+              'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=400'
+            ]
+          },
+          newsletter: {
+            preTitle: 'NEWSLETTER',
+            title: 'Get Updates',
+            successMessage: 'SUBSCRIBED!',
+            buttonText: 'SUBSCRIBE'
+          }
+        },
+        header: {
+          topBar: 'Free shipping on orders over \$150 for all Latin America',
+          logoText: 'CHEOTNUN',
+          logoSubtext: 'Corean Beauty',
+          ctaText: 'START HERE',
+          ctaLink: '/tienda',
+          navLinks: [
+            { label: 'Home', href: '/' },
+            { label: 'Shop', href: '/tienda' },
+            { label: 'Brands', href: '/marcas' },
+            { label: 'Routines', href: '/rutinas' },
+            { label: 'Experiences', href: '/experiencias' },
+            { label: 'Blog', href: '/blog' },
+            { label: 'Contact', href: '/contacto' },
+            { label: 'Help', href: '/ayuda/envios' }
+          ]
+        },
+        footer: {
+          logoText: 'CHEOTNUN',
+          logoSubtext: 'K-Beauty',
+          description: 'Your online store for authentic Korean cosmetics. Original products direct from Korea.',
+          copyright: '© 2026 Cheotnun K-Beauty. All rights reserved.',
+          columns: [
+            { title: 'PRODUCTS', links: [
+              { label: 'All Products', href: '/tienda' },
+              { label: 'Best Sellers', href: '/tienda' },
+              { label: 'New Arrivals', href: '/tienda' },
+              { label: 'Brands', href: '/marcas' },
+              { label: 'Sales', href: '/tienda' }
+            ]},
+            { title: 'HELP', links: [
+              { label: 'How to Buy', href: '/como-funciona' },
+              { label: 'Shipping & Payments', href: '/ayuda/envios' },
+              { label: 'Returns', href: '/ayuda/devoluciones' },
+              { label: 'FAQ', href: '/como-funciona' },
+              { label: 'Contact', href: '/contacto' }
+            ]},
+            { title: 'LEGAL', links: [
+              { label: 'Terms & Conditions', href: '/terminos' },
+              { label: 'Privacy Policy', href: '/politica-de-privacidad' },
+              { label: 'Cookie Policy', href: '/politica-de-privacidad' }
+            ]}
+          ]
+        },
+        marcas: {
+          hero: {
+            image: '/images/marcas-hero.webp',
+            title: 'Our Brands',
+            subtitle: 'We work with the best Korean brands to bring you the most authentic and innovative products in K-Beauty.'
+          },
+          features: [
+            { icon: 'ShieldCheck', title: '100% Original', text: 'All products are sourced directly from official distributors in Korea.' },
+            { icon: 'Truck', title: 'Safe Shipping', text: 'Special packaging to ensure your product arrives in perfect condition.' },
+            { icon: 'Award', title: 'Quality Guaranteed', text: 'We only select brands with proven track record and high-quality ingredients.' }
+          ],
+          whyChooseUs: {
+            title: 'Why choose Cheotnun?',
+            items: [
+              { icon: 'MapPin', title: 'Direct Connection to Korea', text: 'Our team travels regularly to Korea to personally select each product.' },
+              { icon: 'ShieldCheck', title: 'Authenticity Guaranteed', text: 'Certificates of authenticity and original seals on every product.' },
+              { icon: 'Sparkles', title: 'Expert Curation', text: 'Every product is tested and approved by our team of skincare experts.' },
+              { icon: 'HeartHandshake', title: 'Personalized Support', text: 'Dedicated support to help you find the perfect routine for your skin.' }
+            ],
+            conclusionImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600',
+            conclusionTitle: 'Quality you can trust',
+            conclusionText: 'Over 10,000 satisfied customers across Latin America trust Cheotnun to care for their skin with the best of K-Beauty.'
+          },
+          testimonials: {
+            title: 'What our customers say',
+            list: [
+              { text: 'I loved the products! My skin has never been so radiant. Delivery was super fast.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', name: 'Ana Silva', country: 'Brazil' },
+              { text: 'Original products and perfect packaging. I recommend to everyone who wants real skincare.', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200', name: 'Mariana Costa', country: 'Brazil' },
+              { text: 'Cheotnun changed my skincare routine. Now I understand why K-Beauty is so famous.', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200', name: 'Juliana Oliveira', country: 'Brazil' }
+            ],
+            buttonLink: '/contacto',
+            buttonText: 'SHARE YOUR EXPERIENCE'
+          },
+          trustBadges: [
+            { icon: 'ShieldCheck', text: 'Original Products' },
+            { icon: 'Truck', text: 'International Shipping' },
+            { icon: 'CreditCard', text: 'Secure Payment' },
+            { icon: 'Headphones', text: 'Dedicated Support' }
+          ]
+        },
+        comoFunciona: {
+          hero: { image: '/images/como-funciona-hero.webp', title: 'How It Works', subtitle: 'Simple, fast and secure. See how easy it is to buy at Cheotnun.' },
+          steps: [
+            { number: '01', icon: 'Search', title: 'Explore', text: 'Browse our categories and discover the perfect products for your skin.' },
+            { number: '02', icon: 'ShoppingCart', title: 'Choose', text: 'Select your favorite products and add them to cart.' },
+            { number: '03', icon: 'CreditCard', title: 'Pay', text: 'Choose your preferred payment method (card, PayPal or bank transfer).' },
+            { number: '04', icon: 'Package', title: 'Receive', text: 'Your order arrives safely with tracking included.' }
+          ],
+          paymentsInfo: { title: 'Payment Methods', subtitle: 'We accept various payment methods for your convenience.' },
+          shippingInfo: {
+            title: 'Shipping Information',
+            subtitle: 'Shipping to all Latin America with insurance and tracking included.',
+            items: [
+              { title: 'Delivery Time', text: '7 to 15 business days depending on destination. We work with partner carriers throughout the region.' },
+              { title: 'Tracking', text: 'We provide tracking codes for all orders. Follow every step until delivery.' },
+              { title: 'Insurance', text: 'All shipments include insurance against loss or damage. Your purchase is protected from start to finish.' }
+            ]
+          },
+          faq: {
+            title: 'Frequently Asked Questions',
+            subtitle: 'We answer your most common questions.',
+            buttonText: 'VIEW ALL FAQs',
+            items: [
+              'Are the products original?',
+              'How long does shipping take?',
+              'Do you ship to my country?',
+              'Can I return or exchange a product?',
+              'What payment methods do you accept?',
+              'How can I track my order?'
+            ]
+          },
+          promises: {
+            title: '100% Original Products',
+            subtitle: 'We only work with authentic and authorized Korean brands. We guarantee the quality and origin of every product.',
+            image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600',
+            items: [
+              { icon: 'ShieldCheck', title: 'Official brands' },
+              { icon: 'Box', title: 'Direct purchase in South Korea' },
+              { icon: 'CheckCircle2', title: 'Certified products' },
+              { icon: 'Leaf', title: 'Freshness and quality guaranteed' }
+            ]
+          },
+          community: {
+            title: 'Join our community',
+            desc: 'Discover routines, tips, launches and more on Instagram.',
+            buttonText: 'FOLLOW ON INSTAGRAM',
+            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            images: [
+              'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
+              'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
+            ]
+          },
+          newsletter: {
+            title: 'Be the first to know',
+            subtitle: 'New launches, exclusive offers and special content straight to your inbox.',
+            placeholder: 'Your email address',
+            buttonText: 'SUBSCRIBE',
+            disclaimer: 'We promise not to spam. We only share the best of K-Beauty.'
+          }
+        },
+        contacto: {
+          hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Contact Us', subtitle: 'We are here to help you with questions, suggestions or any need.', buttonText: 'QUICK PERSONALIZED RESPONSE', badges: [{ icon: 'Clock', text: 'English support' }, { icon: 'Clock', text: 'Response in under 24h' }, { icon: 'CheckCircle2', text: 'Your satisfaction is our priority' }] },
+          contactMethods: {
+            title: 'Contact Methods',
+            whatsapp: { label: 'WhatsApp', value: '+1 (555) 123-4567', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: '#contacto-form' },
+            email: { label: 'Email', value: 'hello@cheotnun.com', time: 'Response in under 24h', desc: 'Send us an email and we will reply shortly.', btn: 'SEND EMAIL', link: 'mailto:hello@cheotnun.com' },
+            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+            hours: { label: 'Business Hours', value: 'Except holidays', time: '', desc: 'Monday to Friday 9am to 6pm (EST)', btn: 'VIEW HOURS', link: '#' },
+            address: { label: 'Address', value: 'Miami, FL, USA', time: '', desc: 'Administrative office', btn: 'VIEW ON MAP', link: '#' }
+          },
+          form: {
+            title: 'Send us a message',
+            nameLabel: 'Full name',
+            emailLabel: 'Email',
+            subjectLabel: 'Subject',
+            subjectOptions: ['Select a subject', 'Product questions', 'Order status', 'Returns', 'Other'],
+            messageLabel: 'Your message',
+            submitText: 'SEND MESSAGE',
+            securityNotice: 'Your information is safe with us and will not be shared.',
+            successAlert: 'Message sent successfully! We will contact you shortly.'
+          },
+          faq: {
+            title: 'How can we help?',
+            subtitle: 'Quick FAQs',
+            buttonText: 'VIEW ALL FAQS',
+            topics: [
+              { icon: 'Info', title: 'Product Information', desc: 'Questions about ingredients, benefits and recommendations.' },
+              { icon: 'PackageSearch', title: 'Orders & Shipping', desc: 'Check your order status, delivery times.' },
+              { icon: 'CreditCard', title: 'Payments & Billing', desc: 'Information about payment methods, invoices and refunds.' },
+              { icon: 'RefreshCw', title: 'Returns & Exchanges', desc: 'Questions about exchanges, returns and warranties.' },
+              { icon: 'Handshake', title: 'Collaborations & Press', desc: 'Collaboration proposals, events and press.' }
+            ],
+            quickItems: [
+              'How long does shipping take?',
+              'What payment methods do you accept?',
+              'Do you ship to my country?',
+              'Can I return or exchange a product?'
+            ]
+          },
+          community: {
+            title: 'Join our community',
+            desc: 'Follow us on social media and be the first to discover launches, promotions and beauty tips.',
+            buttonText: 'FOLLOW ON INSTAGRAM',
+            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            images: [
+              'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
+              'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
+              'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
+            ]
+          }
+        },
+        envios: {
+          hero: { image: '/images/envios-hero.webp', title: 'Shipping & Payments', subtitle: 'All information about shipping times, costs and payment methods.', text: 'At Cheotnun we want your shopping experience to be smooth and secure.' },
+          features: [
+            { text: 'Shipping to all Latin America and Europe', icon: 'Globe' },
+            { text: '100% secure payment with SSL encryption', icon: 'ShieldCheck' }
+          ],
+          shipping: {
+            title: 'How shipping works',
+            text: 'We work with international logistics partners to ensure your order arrives fast and safely.',
+            tableTitle: 'Shipping Times and Costs',
+            tableSubtitle: 'Estimated prices and delivery times by region.'
+          },
+          payments: {
+            title: 'Payment Methods',
+            subtitle: 'We accept various payment methods for your convenience.',
+            methods: [
+              { name: 'Credit Card', desc: 'Visa, Mastercard, American Express and Diners Club. Installments up to 6x.' },
+              { name: 'PayPal', desc: 'Pay with your PayPal account quickly and securely.' },
+              { name: 'Bank Transfer', desc: 'Direct transfer to our account. Check details after checkout.' },
+              { name: 'Wire Transfer', desc: 'International wire transfer available for select countries.' }
+            ]
+          }
+        },
+        ayudaDevoluciones: {
+          hero: {
+            badge: 'Return Policy',
+            title: 'Returns & Refunds',
+            subtitle: 'At Cheotnun your satisfaction is our priority. If for any reason you are not satisfied, we are here to help.',
+            steps: [
+              { icon: 'Mail', number: '1', title: 'Request', desc: 'Send an email to returns@cheotnun.com with your order number and reason for return.' },
+              { icon: 'ClipboardCheck', number: '2', title: 'Approval', desc: 'Our team will review your request within 48 business hours.' },
+              { icon: 'Package', number: '3', title: 'Send', desc: 'After approval, we will send instructions for returning the product.' },
+              { icon: 'RefreshCw', number: '4', title: 'Refund', desc: 'Once we receive and verify the product, we will process the refund.' }
+            ],
+            sectionTitle: 'Return Process',
+            summary: [
+              { title: 'Deadline', text: 'Up to 14 days after receiving the order.' },
+              { title: 'Condition', text: 'Product unused, in original packaging with all seals.' },
+              { title: 'Cost', text: 'Free for defective products. Customer pays shipping for other cases.' }
+            ],
+            conditionsTitle: 'Return Conditions',
+            conditions: [
+              'The product must be unused and in its original packaging.',
+              'All seals and warranty stickers must be intact.',
+              'The request must be made within 14 calendar days of receipt.',
+              'Sale items or kit products may have special return conditions.',
+              'The refund will be processed through the same payment method used for the purchase.'
+            ],
+            notAcceptedTitle: 'We Do NOT Accept Returns for:',
+            notAccepted: [
+              'Products showing signs of use or tampered security seals.',
+              'Clearance or sale items marked as non-returnable.',
+              'Free samples or promotional gifts.',
+              'Orders received more than 30 days ago.',
+              'Products damaged by misuse or improper storage.'
+            ],
+            contactTitle: 'Returns Contact',
+            contactText: 'Have questions about the return process? We are here to help.',
+            contactEmail: 'returns@cheotnun.com',
+            contactWhatsapp: '+1 (555) 888-7777'
+          }
+        },
+        rutinasPage: {
+          hero: { image: '/images/rutinas-hero.webp', badge: 'K-BEAUTY ROUTINES', title: 'Your Skincare Routine', subtitle: 'Discover the Korean routine step by step and transform your skin.', buttonText: 'START YOUR ROUTINE' },
+          stepsSection: { title: 'Steps of K-Beauty', subtitle: 'The Korean skincare routine can have 5 to 12 steps. Here are the essentials.', footerText: '✨ Every skin is unique. Adapt the steps to your needs.' },
+          steps: [
+            { icon: 'Droplets', title: 'Double Cleansing', desc: 'The first step is double cleansing: first an oil-based makeup remover, then a water-based cleanser.' },
+            { icon: 'Sparkles', title: 'Exfoliation', desc: 'Removes dead skin cells and renews the skin. Recommended 1-2 times per week.' },
+            { icon: 'FlaskConical', title: 'Toner', desc: 'Balances skin pH and prepares it for the next steps.' },
+            { icon: 'Droplet', title: 'Essence', desc: 'An exclusively Korean step, lighter than a serum, that hydrates and prepares the skin.' },
+            { icon: 'Gem', title: 'Serum', desc: 'Concentrated active ingredients for specific needs: vitamin C, hyaluronic acid, retinol.' },
+            { icon: 'Snowflake', title: 'Moisturizer', desc: 'Moisturizing cream that seals all previous steps and keeps skin soft.' }
+          ],
+          ingredientsSection: { title: 'Korean Ingredients', subtitle: 'Meet the star ingredients of Korean cosmetics.' },
+          ingredients: [
+            { img: 'https://images.unsplash.com/photo-1615391978149-9fce07b0d447?q=80&w=200', name: 'Snail Mucin', desc: 'Hydrates, regenerates and repairs the skin. The favorite ingredient of K-Beauty.' },
+            { img: 'https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=200', name: 'Centella Asiatica', desc: 'Soothes, heals and reduces inflammation. Perfect for sensitive skin.' },
+            { img: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=200', name: 'Hyaluronic Acid', desc: 'Deep hydration that retains moisture in the skin.' },
+            { img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=200', name: 'Niacinamide', desc: 'Brightens dark spots, controls oiliness and strengthens the skin barrier.' },
+            { img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=200', name: 'Propolis', desc: 'Natural antibacterial, hydrates and adds radiance.' },
+            { img: 'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=200', name: 'Vitamin C', desc: 'Powerful antioxidant that brightens and evens skin tone.' },
+            { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200', name: 'Ceramides', desc: 'Restore the skin\'s protective barrier, preventing moisture loss.' },
+            { img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=200', name: 'Retinol', desc: 'Powerful anti-aging ingredient that stimulates collagen and renews cells.' }
+          ],
+          routineSection: { title: 'Routine Order', boxTitle: 'Your routine can be unique.', boxDesc: 'Start with the basics and add steps as your skin gets used to it. The secret is consistency in daily care.' },
+          routineSteps: [
+            { num: '1', title: 'Cleanse', icon: 'Droplets', sub: 'Oil + Water Cleanser' },
+            { num: '2', title: 'Exfoliate', icon: 'Sparkles', sub: '1-2x/week' },
+            { num: '3', title: 'Toner + Essence', icon: 'FlaskConical', sub: 'Balance + Prep' },
+            { num: '4', title: 'Serum + Ampoule', icon: 'Gem', sub: 'Specific treatment' },
+            { num: '5', title: 'Moisturize', icon: 'Snowflake', sub: 'Cream + Oil' },
+            { num: '6', title: 'Protect', icon: 'Sun', sub: 'Sunscreen (morning)' }
+          ],
+          tipsSection: { title: 'Essential Tips' },
+          tips: [
+            { title: 'Know Your Skin Type', desc: 'Before starting any routine, identify if your skin is oily, dry, combination or sensitive.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Search' },
+            { title: 'Introduce One Step at a Time', desc: 'Start with cleansing, moisturizing and sunscreen. Then add serum, exfoliation and treatments.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'ArrowRight' },
+            { title: 'Be Consistent', desc: 'Real results come from daily use. Give your skin time to adapt to new products.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Clock' },
+            { title: 'Sunscreen is Non-Negotiable', desc: 'Use every day, even at home. Sun protection prevents premature aging and dark spots.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Sun' }
+          ],
+          makeupSection: { title: 'Makeup Universe', subtitle: 'Korean makeup is known for its lightness and natural finish.', buttonText: 'LEARN MORE' },
+          makeup: [
+            { name: 'Light Foundation', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Concealer', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Blush', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Lipstick', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Eyeshadow', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Eyeliner', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Mascara', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'Translucent Powder', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' }
+          ],
+          categoriesSection: { title: 'Categories' },
+          categories: [
+            { icon: 'Droplets', name: 'Cleansing' },
+            { icon: 'Sparkles', name: 'Exfoliation' },
+            { icon: 'FlaskConical', name: 'Toner' },
+            { icon: 'Droplet', name: 'Essence' },
+            { icon: 'Gem', name: 'Serum' },
+            { icon: 'Snowflake', name: 'Moisturizer' },
+            { icon: 'Sun', name: 'Sun Protection' },
+            { icon: 'Moon', name: 'Night Care' }
+          ],
+          faqSection: { title: 'Frequently Asked Questions' },
+          faq: [
+            { q: 'How many steps does a Korean routine have?', a: 'The traditional Korean routine has between 5 and 12 steps. We recommend starting with the essentials and adding as your skin adapts.' },
+            { q: 'Can I mix products from different brands?', a: 'Yes! The important thing is to choose products suitable for your skin type and needs, regardless of the brand.' },
+            { q: 'What is the difference between essence and serum?', a: 'Essence is more liquid and provides surface hydration. Serum is more concentrated and treats specific concerns.' },
+            { q: 'At what age should I start anti-aging products?', a: 'Prevention can start at 20-25 years with antioxidants like vitamin C. Retinol and stronger actives are typically used from age 30.' }
+          ],
+          newsletter: { title: 'Get exclusive tips', subtitle: 'and stay updated on K-Beauty news.', buttonText: 'SUBSCRIBE', disclaimer: 'We promise not to spam. You can unsubscribe at any time.', image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=400' }
+        },
+        experienciasPage: {
+          hero: { title: 'Cheotnun Experiences', subtitle: 'Much more than products, a connection with Korean culture.', buttonText: 'Connect with Korean culture', image: '/images/cheotnun-k-beauty-experiencias-viagens.webp' },
+          experiences: { title: 'Discover our experiences' },
+          experiencesList: [
+            { icon: 'FlaskConical', title: 'Beauty Experience', desc: 'Discover the origin of your favorite products and immerse yourself in Korean skincare culture.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400' },
+            { icon: 'Award', title: 'Exclusive Workshops', desc: 'Learn Korean beauty techniques with experts and certified professionals.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400' },
+            { icon: 'PlaneTakeoff', title: 'Cultural Travel', desc: 'Explore South Korea through unique experiences connecting beauty, culture and wellness.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400' },
+            { icon: 'Users', title: 'Private Events', desc: 'We organize exclusive events for groups seeking a personalized experience.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=400' },
+            { icon: 'Heart', title: 'Wellness Retreats', desc: 'Immersive programs combining skincare, wellness and connection with nature.', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400' }
+          ],
+          maeum: {
+            badge: 'In partnership with',
+            title: 'MAEUM GLOBAL',
+            subtitle: 'Travels that transform.',
+            desc: 'Maeum Global takes you to Korea to experience unique beauty, culture and wellness experiences.',
+            points: [
+              'Custom K-Beauty itineraries',
+              'Guidance from local experts',
+              'Visits to exclusive factories and boutiques',
+              'Korean makeup and skincare classes'
+            ],
+            buttonLink: 'https://www.maeumglobal.com.br',
+            buttonText: 'LEARN MORE',
+            cards: [
+              { title: 'Cultural Immersion', desc: 'Explore Korea beyond skincare: history, gastronomy and more.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400', icon: 'Compass' },
+              { title: 'Beauty Tour', desc: 'Visit the main beauty stores and clinics in Seoul and Busan.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400', icon: 'Sparkles' },
+              { title: 'Learning', desc: 'Hands-on workshops with Korean makeup artists and dermatologists.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400', icon: 'BookOpen' }
+            ]
+          },
+          testimonials: {
+            title: 'Testimonials',
+            buttonText: 'SHARE YOUR EXPERIENCE',
+            list: [
+              { quote: 'An experience that changed how I see beauty. Korea is magical.', name: 'Camila R.', country: 'Brazil', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200' },
+              { quote: 'The Korean makeup workshops were incredible. I learned so much.', name: 'Sofia M.', country: 'Colombia', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200' },
+              { quote: 'Traveling with Maeum Global and Cheotnun was the best decision. I will definitely repeat it.', name: 'Valentina L.', country: 'Argentina', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }
+            ]
+          },
+          newsletter: {
+            title: 'Be the first to know',
+            subtitle: 'about new experiences and exclusive trips.',
+            buttonText: 'SUBSCRIBE',
+            disclaimer: 'We promise not to spam. You can unsubscribe anytime.'
+          }
+        },
+        terminos: {
+          hero: { badge: 'Legal Framework', title: 'Terms & Conditions', subtitle: 'Learn the rules governing the use of our platform and the relationship with our customers.' },
+          intro: { p1: 'Welcome to Cheotnun K-Beauty. By accessing and using this website, you agree to comply with the following terms and conditions. If you do not agree with any of these terms, we recommend that you do not use our services.', brand: 'Cheotnun K-Beauty', p2: 'These terms establish the rights and obligations between Cheotnun K-Beauty and the users of our online store specializing in Korean cosmetics.' },
+          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: 'Miami, FL, USA', email: 'hello@cheotnun.com', phone: '+1 (555) 123-4567' },
+          additional: { ageTitle: 'Minimum Age', ageDesc: 'You must be at least 18 years old or have legal authorization to make purchases in our store. By registering, you confirm that you meet this requirement.', accountTitle: 'User Accounts', accountDesc: 'You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately of any unauthorized use of your account.' },
+          contact: { title: 'Legal Inquiries', desc: 'For any questions about these terms, please contact our legal team.', email: 'legal@cheotnun.com', phone: '+1 (555) 234-5678' },
+          sections: [
+            { icon: 'ShoppingBag', title: 'Products & Prices', content: 'All products are subject to availability. We reserve the right to modify prices without prior notice. Displayed prices include applicable taxes but do not include shipping costs.' },
+            { icon: 'CreditCard', title: 'Payments & Billing', content: 'We accept payments via credit card, PayPal and bank transfer. The charge will be processed at the time of purchase. We issue an electronic invoice for all orders.' },
+            { icon: 'Truck', title: 'Shipping & Delivery', content: 'We ship to all Latin America and Europe. Delivery times vary by destination. We are not responsible for customs delays once the package has left South Korea.' },
+            { icon: 'RotateCcw', title: 'Returns & Refunds', content: 'We accept returns within 14 days of receipt. The product must be unused and in its original packaging. Return shipping costs are the responsibility of the customer except for defective products.' },
+            { icon: 'ShieldCheck', title: 'Intellectual Property', content: 'All content on this website, including images, text and logos, is the property of Cheotnun K-Beauty and is protected by intellectual property laws.' },
+            { icon: 'Scale', title: 'Limitation of Liability', content: 'Cheotnun K-Beauty is not liable for indirect damages arising from the use of our products. Each product includes usage instructions that must be followed carefully.' }
+          ]
+        },
+        privacidad: {
+          hero: { badge: 'Transparency & Security', title: 'Privacy Policy', subtitle: 'Your data is safe with us. Learn how we collect, use and protect your personal information.' },
+          intro: { p1: 'At Cheotnun K-Beauty we take your privacy very seriously. This policy describes how we collect, use and protect your personal data when using our online store.', brand: 'Cheotnun K-Beauty', p2: 'By using our website, you agree to the practices described in this policy. We recommend reading it carefully.', p3: 'Our commitment is to guarantee the confidentiality and security of your personal data in accordance with applicable regulations.' },
+          security: { title: 'Data Security', p1: 'We implement technical and organizational security measures to protect your personal data against unauthorized access, loss or destruction.', p2: 'Although we use best practices, no Internet transmission is 100% secure. We do our best to protect your information.' },
+          cookies: { title: 'Cookie Usage', p1: 'We use first and third-party cookies to improve your browsing experience, analyze traffic and personalize content.', p2: 'You can configure your browser to reject cookies, although this may affect the functionality of some parts of the site.' },
+          contact: { title: 'Privacy Questions?', desc: 'Our Data Protection Officer is available to answer any questions.', email: 'dpo@cheotnun.com', address: 'Miami, FL, USA' },
+          sections: [
+            { icon: 'FileText', title: 'Information We Collect', content: 'We collect information you provide directly (name, email, address) and browsing information (cookies, pages visited).' },
+            { icon: 'ShieldCheck', title: 'Use of Your Information', content: 'We use your data to process orders, improve our services, send commercial communications (with your consent) and fulfill legal obligations.' },
+            { icon: 'Share2', title: 'Sharing Information', content: 'We do not sell your personal data. We share information only with essential service providers (payment processing, shipping logistics) under strict confidentiality agreements.' },
+            { icon: 'Clock', title: 'Data Retention', content: 'We keep your data while you have an active account or for as long as necessary to fulfill legal and tax obligations.' },
+            { icon: 'UserCheck', title: 'Your Rights', content: 'You have the right to access, rectify, cancel and object to the processing of your data. Exercise these rights by writing to dpo@cheotnun.com.' },
+            { icon: 'Globe', title: 'International Transfers', content: 'As a store with international operations, your data may be transferred and stored on servers outside your country of residence.' }
+          ]
+        },
+        blog: {
+          pageTitle: 'Cheotnun K-Beauty Blog',
+          pageSubtitle: 'Articles, guides and secrets of Korean skincare.'
+        }
       }
     },
   },
