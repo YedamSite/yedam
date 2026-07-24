@@ -555,6 +555,11 @@ export const additionalTranslations = {
     'Este teléfono ya está registrado.': 'Este telefone já está cadastrado.',
     'Este documento ya está registrado.': 'Este documento já está cadastrado.',
     'Ya existe una cuenta con este {fields}. Por favor, verifica los datos.': 'Já existe uma conta com este(s) {fields}. Por favor, verifique os dados.',
+    // Checkout validations
+    'CPF inválido. Ingrese un CPF real de 11 dígitos.': 'CPF inválido. Digite um CPF real com 11 dígitos.',
+    'CNPJ inválido. Ingrese un CNPJ real de 14 dígitos.': 'CNPJ inválido. Digite um CNPJ real com 14 dígitos.',
+    'Código Postal / CEP no encontrado o inválido. Ingrese un CEP real.': 'CEP não encontrado ou inválido. Digite um CEP real.',
+    'Teléfono o DDD inválido. Ingrese un número válido.': 'Telefone ou DDD inválido. Digite um número válido.',
     // Admin Dashboard Loading
     'Verificando autorización administrativa...': 'Verificando autorização administrativa...',
     'CMS & Sales Enterprise': 'CMS & Vendas Enterprise',
@@ -1425,6 +1430,11 @@ export const additionalTranslations = {
     'Este teléfono ya está registrado.': 'This phone number is already registered.',
     'Este documento ya está registrado.': 'This document is already registered.',
     'Ya existe una cuenta con este {fields}. Por favor, verifica los datos.': 'An account already exists with this {fields}. Please verify your information.',
+    // Checkout validations
+    'CPF inválido. Ingrese un CPF real de 11 dígitos.': 'Invalid CPF. Enter a real 11-digit CPF.',
+    'CNPJ inválido. Ingrese un CNPJ real de 14 dígitos.': 'Invalid CNPJ. Enter a real 14-digit CNPJ.',
+    'Código Postal / CEP no encontrado o inválido. Ingrese un CEP real.': 'Postal Code / CEP not found or invalid. Enter a real CEP.',
+    'Teléfono o DDD inválido. Ingrese un número válido.': 'Invalid phone number or area code. Enter a valid number.',
     // Admin Dashboard Loading
     'Verificando autorización administrativa...': 'Verifying admin authorization...',
     'CMS & Sales Enterprise': 'CMS & Sales Enterprise',

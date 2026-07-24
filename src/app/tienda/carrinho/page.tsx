@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText, CreditCard, Loader2 } from 'lucide-react';
+import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText, CreditCard, Loader2, Globe, Search, ChevronDown } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { authService } from '@/lib/supabaseAuth';
 import AuthModal from '@/components/AuthModal';
 import { db } from '@/lib/db';
 import { useLanguage } from '@/context/LanguageContext';
-import { DIAL_CODES, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
+import { COUNTRIES, DIAL_CODES, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
 
 const COUNTRY_KEY_MAP: Record<string, string> = {
   'Brasil': 'Brazil',
@@ -42,6 +42,34 @@ function isValidCPF(cpf: string): boolean {
   rev = 11 - (sum % 11);
   if (rev === 10 || rev === 11) rev = 0;
   if (rev !== parseInt(clean.charAt(10))) return false;
+  return true;
+}
+
+function isValidCNPJ(cnpj: string): boolean {
+  const clean = cnpj.replace(/\D/g, '');
+  if (clean.length !== 14) return false;
+  if (/^(\d)\1+$/.test(clean)) return false;
+  let size = clean.length - 2;
+  let numbers = clean.substring(0, size);
+  const digits = clean.substring(size);
+  let sum = 0;
+  let pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += parseInt(numbers.charAt(size - i)) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result !== parseInt(digits.charAt(0))) return false;
+  size = size + 1;
+  numbers = clean.substring(0, size);
+  sum = 0;
+  pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += parseInt(numbers.charAt(size - i)) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result !== parseInt(digits.charAt(1))) return false;
   return true;
 }
 
@@ -115,6 +143,15 @@ export default function CheckoutWizard() {
     else setDocType('nif');
   }, [country]);
 
+  // Country search dropdown state
+  const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch.trim()) return COUNTRIES;
+    return COUNTRIES.filter(c => c.toLowerCase().includes(countrySearch.toLowerCase()));
+  }, [countrySearch]);
+
   const handleZipCodeChange = async (val: string) => {
     const formatted = formatPostalCode(val, countryKey);
     setZipCode(formatted);
@@ -131,8 +168,10 @@ export default function CheckoutWizard() {
           if (addressData.street) setStreet(addressData.street);
           setCepError('');
         } else {
-          setCepError(t('✕ CEP no encontrado o inválido'));
+          setCepError(t('Código Postal / CEP no encontrado o inválido. Ingrese un CEP real.'));
         }
+      } else if (clean.length > 0 && clean.length !== 8) {
+        setCepError(t('Código Postal / CEP no encontrado o inválido. Ingrese un CEP real.'));
       }
     }
   };
@@ -144,7 +183,7 @@ export default function CheckoutWizard() {
     if (formatted.trim()) {
       const valid = validatePhone(formatted, countryKey);
       if (!valid) {
-        setPhoneError(t('✕ Teléfono o DDD inválido'));
+        setPhoneError(t('Teléfono o DDD inválido. Ingrese un número válido.'));
       } else {
         setPhoneError('');
       }
@@ -157,16 +196,26 @@ export default function CheckoutWizard() {
     setDocNumber(val);
     setDocError('');
 
-    if (country === 'Brasil') {
+    if (!val.trim()) return;
+
+    if (country === 'Brasil' || countryKey === 'Brazil') {
       const clean = val.replace(/\D/g, '');
-      if (clean.length === 11) {
-        if (!isValidCPF(clean)) {
-          setDocError(t('✕ CPF inválido'));
+      if (docType === 'cnpj' || clean.length > 11) {
+        if (!isValidCNPJ(clean)) {
+          setDocError(t('CNPJ inválido. Ingrese un CNPJ real de 14 dígitos.'));
         } else {
           setDocError('');
         }
-      } else if (clean.length > 11 && clean.length !== 14) {
-        setDocError(t('✕ Documento CPF/CNPJ incompleto o inválido'));
+      } else {
+        if (!isValidCPF(clean)) {
+          setDocError(t('CPF inválido. Ingrese un CPF real de 11 dígitos.'));
+        } else {
+          setDocError('');
+        }
+      }
+    } else {
+      if (val.trim().length < 4) {
+        setDocError(t('Número de documento inválido.'));
       } else {
         setDocError('');
       }
@@ -455,47 +504,88 @@ export default function CheckoutWizard() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
+                  {/* Searchable Country Selector matching AuthModal */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-semibold uppercase text-accent">{t('País de Destino')}</label>
-                    <select
-                      value={country}
-                      onChange={e => setCountry(e.target.value)}
-                      className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-xs text-white"
-                    >
-                      <option value="Brasil">Brasil (+55)</option>
-                      <option value="España">España (+34)</option>
-                      <option value="México">México (+52)</option>
-                      <option value="Chile">Chile (+56)</option>
-                      <option value="Colombia">Colombia (+57)</option>
-                      <option value="Argentina">Argentina (+54)</option>
-                      <option value="Uruguay">Uruguay (+598)</option>
-                      <option value="Paraguay">Paraguay (+595)</option>
-                      <option value="Estados Unidos">Estados Unidos (+1)</option>
-                      <option value="Portugal">Portugal (+351)</option>
-                    </select>
+                    <div className="relative">
+                      <div
+                        onClick={() => { setIsCountryOpen(!isCountryOpen); setCountrySearch(''); }}
+                        className="flex h-10 w-full items-center gap-2 rounded-xl border border-white/10 bg-background px-3 py-2 text-xs text-white cursor-pointer hover:border-white/20"
+                      >
+                        <Globe className="h-4 w-4 text-accent shrink-0" />
+                        <span className="flex-1 truncate font-medium">{country} ({dialCode})</span>
+                        <ChevronDown className={`h-4 w-4 text-white/40 shrink-0 transition-transform ${isCountryOpen ? 'rotate-180' : ''}`} />
+                      </div>
+                      {isCountryOpen && (
+                        <div className="absolute top-full left-0 right-0 mt-1 z-50 bg-background border border-white/10 rounded-xl shadow-2xl max-h-56 overflow-hidden">
+                          <div className="flex items-center gap-2 px-3 py-2 border-b border-white/5 bg-secondary/50">
+                            <Search className="h-3.5 w-3.5 text-white/40 shrink-0" />
+                            <input
+                              autoFocus
+                              value={countrySearch}
+                              onChange={e => setCountrySearch(e.target.value)}
+                              placeholder={t('Buscar país...')}
+                              className="bg-transparent w-full text-xs text-white outline-none placeholder:text-white/30"
+                            />
+                          </div>
+                          <div className="overflow-y-auto max-h-40">
+                            {filteredCountries.map(c => {
+                              const codeKey = COUNTRY_KEY_MAP[c] || c;
+                              const code = DIAL_CODES[codeKey] || '';
+                              return (
+                                <div
+                                  key={c}
+                                  onClick={() => {
+                                    setCountry(c);
+                                    setIsCountryOpen(false);
+                                  }}
+                                  className={`px-3 py-2 text-xs cursor-pointer flex justify-between items-center hover:bg-white/5 ${country === c ? 'text-accent font-bold bg-white/5' : 'text-white/80'}`}
+                                >
+                                  <span>{c}</span>
+                                  <span className="text-[10px] font-mono opacity-60">{code}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Dynamic Document input based on country selection */}
+                  {/* Dynamic Document type + number input based on country selection */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">
-                      {country === 'Brasil' && t('Documento CPF / CNPJ')}
-                      {country === 'México' && t('Documento RFC o CURP')}
-                      {country === 'Chile' && t('Documento RUT')}
-                      {country === 'Colombia' && t('Documento RUT o CC')}
-                      {country === 'Argentina' && t('Documento DNI o CUIT')}
-                      {country === 'España' && t('Documento NIF / NIE')}
-                      {country === 'Uruguay' && t('Documento RUT o CI')}
-                      {country === 'Paraguay' && t('Documento RUC o CI')}
-                      {country === 'Estados Unidos' && t('Documento SSN / Passport')}
-                      {country === 'Portugal' && t('Documento NIF')}
-                    </label>
+                    <div className="flex justify-between items-center">
+                      <label className="text-[10px] font-semibold uppercase text-accent">
+                        {country === 'Brasil' || countryKey === 'Brazil' ? t('Documento de Identificación') : t('Documento de Identificación')}
+                      </label>
+                      {(country === 'Brasil' || countryKey === 'Brazil') && (
+                        <div className="flex gap-2 text-[9px] font-bold">
+                          <button
+                            type="button"
+                            onClick={() => { setDocType('cpf'); setDocNumber(''); setDocError(''); }}
+                            className={`px-1.5 py-0.5 rounded ${docType === 'cpf' ? 'bg-accent text-background font-bold' : 'text-white/60 hover:text-white'}`}
+                          >
+                            CPF
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setDocType('cnpj'); setDocNumber(''); setDocError(''); }}
+                            className={`px-1.5 py-0.5 rounded ${docType === 'cnpj' ? 'bg-accent text-background font-bold' : 'text-white/60 hover:text-white'}`}
+                          >
+                            CNPJ
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     <Input
                       value={docNumber}
                       onChange={e => handleDocChange(e.target.value)}
                       placeholder={
-                        country === 'Brasil' ? '000.000.000-00' : country === 'España' ? '12345678Z' : country === 'Uruguay' ? '1234567-8' : '123456-7'
+                        country === 'Brasil' || countryKey === 'Brazil'
+                          ? (docType === 'cnpj' ? '00.000.000/0001-00' : '000.000.000-00')
+                          : country === 'España' ? '12345678Z' : country === 'Uruguay' ? '1234567-8' : '123456-7'
                       }
-                      className="bg-background border-white/10 text-white text-xs h-10 font-mono uppercase"
+                      className={`bg-background border-white/10 text-white text-xs h-10 font-mono uppercase ${docError ? 'border-red-500/60 focus:border-red-500' : ''}`}
                       required
                     />
                     {docError && <span className="text-[10px] text-red-400 font-semibold">{docError}</span>}
@@ -509,8 +599,8 @@ export default function CheckoutWizard() {
                       <Input
                         value={zipCode}
                         onChange={e => handleZipCodeChange(e.target.value)}
-                        placeholder={country === 'Brasil' ? '89238-589' : t('Código Postal')}
-                        className="bg-background border-white/10 text-white text-xs h-10 font-mono"
+                        placeholder={country === 'Brasil' || countryKey === 'Brazil' ? '89238-589' : t('Código Postal')}
+                        className={`bg-background border-white/10 text-white text-xs h-10 font-mono ${cepError ? 'border-red-500/60 focus:border-red-500' : ''}`}
                         required
                       />
                       {cepLoading && <Loader2 className="absolute right-3 h-4 w-4 text-accent animate-spin" />}
