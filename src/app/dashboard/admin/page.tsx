@@ -266,7 +266,9 @@ export default function AdminDashboard() {
         knownChatIds.current = currentChatIds;
         knownMsgCountPerChat.current = currentMsgCount;
 
-        if (activeSubTab !== 'chat' && notify > 0) {
+        if (activeSubTab === 'chat') {
+          setChatUnread(0);
+        } else if (notify > 0) {
           setChatUnread(prev => prev + notify);
         }
       } catch {}

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MessageCircle, X, Send, User } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/context/LanguageContext';
@@ -12,6 +13,7 @@ interface LiveChatProps {
 }
 
 export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps = {}) {
+  const pathname = usePathname();
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
@@ -19,6 +21,10 @@ export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps =
   const [chatId, setChatId] = useState<string>('');
   const [unread, setUnread] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  if (pathname?.startsWith('/dashboard/admin')) {
+    return null;
+  }
 
   // Controlar abertura externa
   useEffect(() => {

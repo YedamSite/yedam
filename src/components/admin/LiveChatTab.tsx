@@ -88,10 +88,11 @@ export default function LiveChatTab() {
   const activeChat = chats.find(c => c.id === activeChatId);
 
   const scrollLockRef = useRef(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const lastAutoScrollRef = useRef<{ chatId: string | null; count: number }>({ chatId: null, count: 0 });
 
   useEffect(() => {
-    if (!messagesEndRef.current) return;
+    if (!chatContainerRef.current) return;
     if (!activeChat) return;
 
     const currentCount = activeChat.messages.length;
@@ -99,7 +100,7 @@ export default function LiveChatTab() {
     const hasNewMessages = currentCount > lastAutoScrollRef.current.count;
 
     if (isNewChat || hasNewMessages) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       scrollLockRef.current = false;
       lastAutoScrollRef.current = { chatId: activeChat.id, count: currentCount };
     }
@@ -116,6 +117,9 @@ export default function LiveChatTab() {
   const handleSendAndScroll = async (e: React.FormEvent) => {
     scrollLockRef.current = false;
     await sendMessage(e);
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   };
 
   return (
@@ -180,7 +184,7 @@ export default function LiveChatTab() {
                   </div>
                 </div>
 
-              <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4" onScroll={handleScroll}>
+              <div ref={chatContainerRef} className="flex-1 p-6 overflow-y-auto flex flex-col gap-4" onScroll={handleScroll}>
                 {activeChat.messages.map((msg) => (
                   <div key={msg.id} className={`max-w-[80%] rounded-2xl px-4 py-3 text-xs ${msg.sender === 'admin' ? 'bg-accent text-background self-end rounded-tr-sm' : 'bg-secondary border border-white/5 text-white self-start rounded-tl-sm'}`}>
                     <p>{msg.content}</p>
@@ -189,7 +193,6 @@ export default function LiveChatTab() {
                     </span>
                   </div>
                 ))}
-                <div ref={messagesEndRef} />
               </div>
 
               <form onSubmit={handleSendAndScroll} className="p-4 bg-secondary/30 border-t border-white/5 flex gap-2">
