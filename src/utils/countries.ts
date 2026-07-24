@@ -157,7 +157,7 @@ export function formatPostalCode(value: string, country: string): string {
 }
 
 export function validatePhone(value: string, country: string): boolean {
-  if (country !== "Brazil") {
+  if (country !== "Brazil" && country !== "Brasil") {
     const clean = value.replace(/[\s+-]/g, "");
     return clean.length >= 7 && clean.length <= 20;
   }
@@ -173,4 +173,205 @@ export function validatePhone(value: string, country: string): boolean {
     "91","92","93","94","95","96","97","98","99"
   ];
   return validDDDs.includes(n.substring(0, 2));
+}
+
+export function isValidCPF(cpf: string): boolean {
+  const clean = cpf.replace(/\D/g, '');
+  if (clean.length !== 11) return false;
+  if (/^(\d)\1+$/.test(clean)) return false;
+  let sum = 0;
+  for (let i = 0; i < 9; i++) sum += parseInt(clean.charAt(i)) * (10 - i);
+  let rev = 11 - (sum % 11);
+  if (rev === 10 || rev === 11) rev = 0;
+  if (rev !== parseInt(clean.charAt(9))) return false;
+  sum = 0;
+  for (let i = 0; i < 10; i++) sum += parseInt(clean.charAt(i)) * (11 - i);
+  rev = 11 - (sum % 11);
+  if (rev === 10 || rev === 11) rev = 0;
+  if (rev !== parseInt(clean.charAt(10))) return false;
+  return true;
+}
+
+export function isValidCNPJ(cnpj: string): boolean {
+  const clean = cnpj.replace(/\D/g, '');
+  if (clean.length !== 14) return false;
+  if (/^(\d)\1+$/.test(clean)) return false;
+  let size = clean.length - 2;
+  let numbers = clean.substring(0, size);
+  const digits = clean.substring(size);
+  let sum = 0;
+  let pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += parseInt(numbers.charAt(size - i)) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result !== parseInt(digits.charAt(0))) return false;
+  size = size + 1;
+  numbers = clean.substring(0, size);
+  sum = 0;
+  pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += parseInt(numbers.charAt(size - i)) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result !== parseInt(digits.charAt(1))) return false;
+  return true;
+}
+
+export function isValidNIFSpain(nif: string): boolean {
+  const clean = nif.trim().toUpperCase();
+  if (clean.length !== 9) return false;
+  const letters = "TRWAGMYFPDXBNJZSQVHLCKE";
+  if (/^\d{8}[A-Z]$/.test(clean)) {
+    const num = parseInt(clean.substring(0, 8), 10);
+    return letters[num % 23] === clean[8];
+  }
+  if (/^[XYZ]\d{7}[A-Z]$/.test(clean)) {
+    let prefix = "0";
+    if (clean[0] === 'Y') prefix = "1";
+    if (clean[0] === 'Z') prefix = "2";
+    const num = parseInt(prefix + clean.substring(1, 8), 10);
+    return letters[num % 23] === clean[8];
+  }
+  if (/^[ABCDEFGHJNPQRSUVW]\d{7}[A-J0-9]$/.test(clean)) {
+    return true;
+  }
+  return false;
+}
+
+export function isValidRUTChile(rut: string): boolean {
+  const clean = rut.replace(/[\.\-]/g, '').toUpperCase();
+  if (clean.length < 8 || clean.length > 9) return false;
+  const body = clean.slice(0, -1);
+  const dv = clean.slice(-1);
+  let sum = 0;
+  let multiplier = 2;
+  for (let i = body.length - 1; i >= 0; i--) {
+    sum += parseInt(body[i], 10) * multiplier;
+    multiplier = multiplier === 7 ? 2 : multiplier + 1;
+  }
+  const expectedMod = 11 - (sum % 11);
+  let expectedDV = 'K';
+  if (expectedMod === 11) expectedDV = '0';
+  else if (expectedMod < 10) expectedDV = expectedMod.toString();
+  return dv === expectedDV;
+}
+
+export function isValidCUITArgentina(cuit: string): boolean {
+  const clean = cuit.replace(/\D/g, '');
+  if (clean.length !== 11) return false;
+  const factors = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+  let sum = 0;
+  for (let i = 0; i < 10; i++) {
+    sum += parseInt(clean[i], 10) * factors[i];
+  }
+  const mod = sum % 11;
+  let expectedDV = 11 - mod;
+  if (expectedDV === 11) expectedDV = 0;
+  if (expectedDV === 10) expectedDV = 9;
+  return parseInt(clean[10], 10) === expectedDV;
+}
+
+export function isValidRFCMexico(rfc: string): boolean {
+  const clean = rfc.trim().toUpperCase().replace(/[\s-]/g, '');
+  if (clean.length === 12) {
+    return /^[A-Z&Ñ]{3}\d{6}[A-Z0-9]{3}$/.test(clean);
+  }
+  if (clean.length === 13) {
+    return /^[A-Z&Ñ]{4}\d{6}[A-Z0-9]{3}$/.test(clean);
+  }
+  return false;
+}
+
+export function isValidCURPMexico(curp: string): boolean {
+  const clean = curp.trim().toUpperCase();
+  return /^[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d$/.test(clean);
+}
+
+export function isValidNITColombia(nit: string): boolean {
+  const clean = nit.replace(/\D/g, '');
+  if (clean.length < 9 || clean.length > 10) return false;
+  const v = clean.slice(0, 9);
+  const dv = parseInt(clean.slice(-1), 10);
+  const weights = [41, 37, 29, 23, 19, 17, 13, 7, 3];
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += parseInt(v[i], 10) * weights[i];
+  }
+  const mod = sum % 11;
+  let expected = mod > 1 ? 11 - mod : mod;
+  return dv === expected;
+}
+
+export function validateDocumentByCountry(value: string, country: string, docType: string): { valid: boolean; errorMsgKey?: string } {
+  if (!value.trim()) return { valid: false, errorMsgKey: 'Campo obligatorio' };
+
+  const countryLower = country.toLowerCase();
+
+  if (countryLower === 'brasil' || countryLower === 'brazil') {
+    const clean = value.replace(/\D/g, '');
+    if (docType === 'cnpj' || clean.length > 11) {
+      return isValidCNPJ(clean)
+        ? { valid: true }
+        : { valid: false, errorMsgKey: 'CNPJ inválido. Ingrese un CNPJ real de 14 dígitos.' };
+    } else {
+      return isValidCPF(clean)
+        ? { valid: true }
+        : { valid: false, errorMsgKey: 'CPF inválido. Ingrese un CPF real de 11 dígitos.' };
+    }
+  }
+
+  if (countryLower === 'españa' || countryLower === 'spain') {
+    return isValidNIFSpain(value)
+      ? { valid: true }
+      : { valid: false, errorMsgKey: 'NIF/NIE inválido. Verifique el número y la letra de control.' };
+  }
+
+  if (countryLower === 'chile') {
+    return isValidRUTChile(value)
+      ? { valid: true }
+      : { valid: false, errorMsgKey: 'RUT inválido. Verifique el número y dígito verificador.' };
+  }
+
+  if (countryLower === 'argentina') {
+    const clean = value.replace(/\D/g, '');
+    if (docType === 'cuit' || docType === 'cuil' || clean.length === 11) {
+      return isValidCUITArgentina(clean)
+        ? { valid: true }
+        : { valid: false, errorMsgKey: 'CUIT/CUIL inválido. Verifique el número y dígito verificador.' };
+    }
+    return clean.length >= 7 && clean.length <= 9
+      ? { valid: true }
+      : { valid: false, errorMsgKey: 'DNI inválido.' };
+  }
+
+  if (countryLower === 'méxico' || countryLower === 'mexico') {
+    if (docType === 'curp') {
+      return isValidCURPMexico(value)
+        ? { valid: true }
+        : { valid: false, errorMsgKey: 'CURP inválido. Ingrese una CURP válida de 18 caracteres.' };
+    }
+    return isValidRFCMexico(value)
+      ? { valid: true }
+      : { valid: false, errorMsgKey: 'RFC inválido. Ingrese un RFC válido.' };
+  }
+
+  if (countryLower === 'colombia') {
+    const clean = value.replace(/\D/g, '');
+    if (docType === 'nit') {
+      return isValidNITColombia(clean)
+        ? { valid: true }
+        : { valid: false, errorMsgKey: 'NIT inválido. Verifique el número y dígito de verificación.' };
+    }
+    return clean.length >= 6 && clean.length <= 10
+      ? { valid: true }
+      : { valid: false, errorMsgKey: 'Cédula de ciudadanía inválida.' };
+  }
+
+  const clean = value.replace(/[\s.-]/g, '');
+  return clean.length >= 5 && clean.length <= 25
+    ? { valid: true }
+    : { valid: false, errorMsgKey: 'Número de documento inválido.' };
 }

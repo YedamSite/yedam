@@ -13,7 +13,7 @@ import { authService } from '@/lib/supabaseAuth';
 import AuthModal from '@/components/AuthModal';
 import { db } from '@/lib/db';
 import { useLanguage } from '@/context/LanguageContext';
-import { COUNTRIES, DIAL_CODES, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
+import { COUNTRIES, DIAL_CODES, getDocumentTypes, validateDocumentByCountry, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
 
 const COUNTRY_KEY_MAP: Record<string, string> = {
   'Brasil': 'Brazil',
@@ -198,27 +198,11 @@ export default function CheckoutWizard() {
 
     if (!val.trim()) return;
 
-    if (country === 'Brasil' || countryKey === 'Brazil') {
-      const clean = val.replace(/\D/g, '');
-      if (docType === 'cnpj' || clean.length > 11) {
-        if (!isValidCNPJ(clean)) {
-          setDocError(t('CNPJ inválido. Ingrese un CNPJ real de 14 dígitos.'));
-        } else {
-          setDocError('');
-        }
-      } else {
-        if (!isValidCPF(clean)) {
-          setDocError(t('CPF inválido. Ingrese un CPF real de 11 dígitos.'));
-        } else {
-          setDocError('');
-        }
-      }
+    const result = validateDocumentByCountry(val, countryKey, docType);
+    if (!result.valid && result.errorMsgKey) {
+      setDocError(t(result.errorMsgKey));
     } else {
-      if (val.trim().length < 4) {
-        setDocError(t('Número de documento inválido.'));
-      } else {
-        setDocError('');
-      }
+      setDocError('');
     }
   };
 
@@ -554,28 +538,22 @@ export default function CheckoutWizard() {
 
                   {/* Dynamic Document type + number input based on country selection */}
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center flex-wrap gap-1">
                       <label className="text-[10px] font-semibold uppercase text-accent">
-                        {country === 'Brasil' || countryKey === 'Brazil' ? t('Documento de Identificación') : t('Documento de Identificación')}
+                        {t('Documento de Identificación')}
                       </label>
-                      {(country === 'Brasil' || countryKey === 'Brazil') && (
-                        <div className="flex gap-2 text-[9px] font-bold">
+                      <div className="flex gap-1.5 text-[9px] font-bold">
+                        {getDocumentTypes(countryKey).map(doc => (
                           <button
+                            key={doc.value}
                             type="button"
-                            onClick={() => { setDocType('cpf'); setDocNumber(''); setDocError(''); }}
-                            className={`px-1.5 py-0.5 rounded ${docType === 'cpf' ? 'bg-accent text-background font-bold' : 'text-white/60 hover:text-white'}`}
+                            onClick={() => { setDocType(doc.value); setDocNumber(''); setDocError(''); }}
+                            className={`px-1.5 py-0.5 rounded transition-all ${docType === doc.value ? 'bg-accent text-background font-bold shadow-sm' : 'text-white/60 hover:text-white bg-white/5'}`}
                           >
-                            CPF
+                            {doc.label}
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => { setDocType('cnpj'); setDocNumber(''); setDocError(''); }}
-                            className={`px-1.5 py-0.5 rounded ${docType === 'cnpj' ? 'bg-accent text-background font-bold' : 'text-white/60 hover:text-white'}`}
-                          >
-                            CNPJ
-                          </button>
-                        </div>
-                      )}
+                        ))}
+                      </div>
                     </div>
                     <Input
                       value={docNumber}
@@ -583,7 +561,7 @@ export default function CheckoutWizard() {
                       placeholder={
                         country === 'Brasil' || countryKey === 'Brazil'
                           ? (docType === 'cnpj' ? '00.000.000/0001-00' : '000.000.000-00')
-                          : country === 'España' ? '12345678Z' : country === 'Uruguay' ? '1234567-8' : '123456-7'
+                          : country === 'España' ? '12345678Z' : country === 'Uruguay' ? '1234567-8' : country === 'Chile' ? '12.345.678-K' : '123456-7'
                       }
                       className={`bg-background border-white/10 text-white text-xs h-10 font-mono uppercase ${docError ? 'border-red-500/60 focus:border-red-500' : ''}`}
                       required
