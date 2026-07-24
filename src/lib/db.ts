@@ -1909,6 +1909,7 @@ function getDefault<K extends keyof DbState>(table: K): DbState[K] {
 
 const SYNC_TABLES: (keyof DbState)[] = ['categories', 'brands', 'products', 'blog_posts', 'routines', 'cms_blocks', 'orders', 'order_tracking', 'communication_logs', 'subscriptions'];
 const MERGE_TABLES = new Set(['orders', 'order_tracking', 'communication_logs', 'subscriptions']);
+const LOCAL_FIRST_TABLES = new Set(['categories', 'brands', 'products', 'blog_posts', 'routines', 'cms_blocks']);
 
 async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
   try {
@@ -1941,6 +1942,28 @@ function saveDeletedId(id: string) {
     ids.add(id);
     localStorage.setItem(DELETED_IDS_KEY, JSON.stringify([...ids]));
   } catch {}
+}
+
+function mergeTableLocalFirst(table: string, incoming: any[]) {
+  const local = (memoryDb as any)[table] || [];
+  const deletedIds = loadDeletedIds();
+  const localMap = new Map(local.map((r: any) => [r.id, r]));
+  let changed = false;
+
+  for (const record of incoming) {
+    if (deletedIds.has(record.id)) continue;
+    const localRecord = localMap.get(record.id);
+    if (!localRecord) {
+      local.push(record);
+      changed = true;
+    } else if (new Date((record as any).updated_at || 0) > new Date((localRecord as any).updated_at || 0)) {
+      Object.assign(localRecord, record);
+      changed = true;
+    }
+  }
+
+  (memoryDb as any)[table] = local;
+  return changed;
 }
 
 function mergeTableData(table: string, incoming: any[]) {
@@ -1982,6 +2005,8 @@ async function tryLoadFromSupabase() {
       if (!rows || rows.length === 0) continue;
       if (MERGE_TABLES.has(table)) {
         if (mergeTableData(table, rows)) changed = true;
+      } else if (LOCAL_FIRST_TABLES.has(table)) {
+        if (mergeTableLocalFirst(table, rows)) changed = true;
       } else {
         (memoryDb as any)[table] = rows;
         changed = true;
@@ -2053,6 +2078,8 @@ export const db = {
         if (!rows || rows.length === 0) continue;
         if (MERGE_TABLES.has(table)) {
           if (mergeTableData(table, rows)) changed = true;
+        } else if (LOCAL_FIRST_TABLES.has(table)) {
+          if (mergeTableLocalFirst(table, rows)) changed = true;
         } else {
           (memoryDb as any)[table] = rows;
           changed = true;

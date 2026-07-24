@@ -234,7 +234,6 @@ export default function AdminDashboard() {
   // Chat notification polling (always active, even before first chat tab visit)
   useEffect(() => {
     const checkChatNotifications = async () => {
-      if (activeSubTab === 'chat') return;
       try {
         const res = await fetch('/api/chat');
         const data = await res.json();
@@ -263,10 +262,12 @@ export default function AdminDashboard() {
           }
         }
 
-        if (notify > 0) setChatUnread(prev => prev + notify);
-
         knownChatIds.current = currentChatIds;
         knownMsgCountPerChat.current = currentMsgCount;
+
+        if (activeSubTab !== 'chat' && notify > 0) {
+          setChatUnread(prev => prev + notify);
+        }
       } catch {}
     };
 

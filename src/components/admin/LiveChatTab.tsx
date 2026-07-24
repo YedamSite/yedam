@@ -87,13 +87,23 @@ export default function LiveChatTab() {
 
   const activeChat = chats.find(c => c.id === activeChatId);
 
-  // Auto-scroll only when NEW messages arrive (length increases)
   const scrollLockRef = useRef(false);
+  const lastAutoScrollRef = useRef<{ chatId: string | null; count: number }>({ chatId: null, count: 0 });
+
   useEffect(() => {
-    if (messagesEndRef.current && !scrollLockRef.current) {
+    if (!messagesEndRef.current) return;
+    if (!activeChat) return;
+
+    const currentCount = activeChat.messages.length;
+    const isNewChat = activeChat.id !== lastAutoScrollRef.current.chatId;
+    const hasNewMessages = currentCount > lastAutoScrollRef.current.count;
+
+    if (isNewChat || hasNewMessages) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      scrollLockRef.current = false;
+      lastAutoScrollRef.current = { chatId: activeChat.id, count: currentCount };
     }
-  }, [activeChat?.messages?.length]);
+  }, [activeChat?.id, activeChat?.messages?.length]);
 
   // Track user scrolling: if user scrolls up, lock auto-scroll
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
