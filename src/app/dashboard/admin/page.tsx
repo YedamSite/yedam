@@ -21,6 +21,7 @@ import BrandsTab from '@/components/admin/BrandsTab';
 import ImageUpload from '@/components/ImageUpload';
 import ShippingTab from '@/components/admin/ShippingTab';
 import LiveChatTab from '@/components/admin/LiveChatTab';
+import ClientesTab from '@/components/admin/ClientesTab';
 import { MessageCircle } from 'lucide-react';
 import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
 import { deleteOrderFromSupabase } from '@/actions/shopActions';
@@ -674,6 +675,7 @@ if (!authorized) {
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-0.5 custom-scrollbar">
           {[
             { id: 'dashboard', label: 'Dashboard Geral', icon: BarChart3 },
+            { id: 'clientes', label: 'Clientes & CRM', icon: Users },
             { id: 'chat', label: 'Live Chat', icon: MessageCircle },
             { id: 'visual', label: 'Estilo Visual', icon: Palette },
             { id: 'builder', label: 'Page Builder (Home)', icon: Layers },
@@ -687,8 +689,8 @@ if (!authorized) {
             { id: 'coupons', label: 'Cupones & Promos', icon: Tag },
             { id: 'blog', label: 'Blog & Artículos', icon: BookOpen },
             { id: 'shipping', label: 'Fretes e Zonas', icon: Globe },
-                        { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
-                      ].map((tab) => {
+            { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
+          ].map((tab) => {
             const Icon = tab.icon;
             return (
               <button
@@ -749,6 +751,9 @@ if (!authorized) {
           <div className="min-h-[400px]">
             {/* TAB: SITE CONTENT */}
             {activeSubTab === 'sitecontent' && <SiteContentTab />}
+
+            {/* TAB: CLIENTES */}
+            {activeSubTab === 'clientes' && <ClientesTab />}
 
           {/* TAB: CATEGORIES */}
           {activeSubTab === 'categories' && <CategoriesTab />}

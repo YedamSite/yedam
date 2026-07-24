@@ -105,6 +105,7 @@ export default function CheckoutWizard() {
   const [city, setCity] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [stripeLoading, setStripeLoading] = useState(false);
 
   // Validation states
@@ -112,6 +113,7 @@ export default function CheckoutWizard() {
   const [cepError, setCepError] = useState('');
   const [docError, setDocError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const countryKey = COUNTRY_KEY_MAP[country] || country;
   const dialCode = DIAL_CODES[countryKey] || '+55';
@@ -129,7 +131,15 @@ export default function CheckoutWizard() {
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
-  // Sync document type requirements when country changes
+  // Sync document type requirements when country changes & auto-fill user email
+  useEffect(() => {
+    const u = authService.getCurrentUser();
+    if (u) {
+      setCurrentUser(u);
+      if (u.email && !email) setEmail(u.email);
+    }
+  }, []);
+
   useEffect(() => {
     setCepError('');
     setDocError('');
@@ -142,6 +152,20 @@ export default function CheckoutWizard() {
     else if (country === 'México') setDocType('rfc');
     else setDocType('nif');
   }, [country]);
+
+  const handleEmailChange = (val: string) => {
+    setEmail(val);
+    if (!val.trim()) {
+      setEmailError('');
+      return;
+    }
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+    if (!isValid) {
+      setEmailError(t('Correo electrónico inválido. Ingrese un correo válido.'));
+    } else {
+      setEmailError('');
+    }
+  };
 
   // Country search dropdown state
   const [isCountryOpen, setIsCountryOpen] = useState(false);
@@ -487,6 +511,19 @@ export default function CheckoutWizard() {
                   </div>
                 </div>
 
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-semibold uppercase text-accent">{t('Correo Electrónico de Confirmación')}</label>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={e => handleEmailChange(e.target.value)}
+                    placeholder={t('ejemplo@correo.com')}
+                    className={`bg-background border-white/10 text-white text-xs h-10 ${emailError ? 'border-red-500/60 focus:border-red-500' : ''}`}
+                    required
+                  />
+                  {emailError && <span className="text-[10px] text-red-400 font-semibold">{emailError}</span>}
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   {/* Searchable Country Selector matching AuthModal */}
                   <div className="flex flex-col gap-1.5">
@@ -749,7 +786,7 @@ export default function CheckoutWizard() {
                   <div className="flex flex-col gap-2">
                     <Button
                       onClick={() => setStep(3)}
-                      disabled={!firstName || !lastName || !street || !city || !zipCode || !docNumber || !phone || Boolean(cepError) || Boolean(docError) || Boolean(phoneError)}
+                      disabled={!firstName || !lastName || !email || !street || !city || !zipCode || !docNumber || !phone || Boolean(cepError) || Boolean(docError) || Boolean(phoneError) || Boolean(emailError)}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
                       {t('CONTINUAR AL PAGO')}
