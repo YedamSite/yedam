@@ -454,9 +454,8 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteProduct = (id: string) => {
-    const allProds = db.get('products');
-    const filtered = allProds.filter((p: any) => p.id !== id);
-    db.save('products', filtered);
+    if (!confirm('¿Eliminar este producto permanentemente?')) return;
+    db.deleteRecord('products', id);
     loadData();
   };
 
@@ -608,8 +607,7 @@ export default function AdminDashboard() {
 
   const handleDeletePost = (id: string) => {
     if (!confirm('¿Eliminar este artículo permanentemente?')) return;
-    const allPosts = db.get('blog_posts') || [];
-    db.save('blog_posts', allPosts.filter((p: any) => p.id !== id));
+    db.deleteRecord('blog_posts', id);
     setBlogPosts(db.get('blog_posts'));
   };
 

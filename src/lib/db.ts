@@ -2030,6 +2030,15 @@ function trySaveToSupabase(table: string, records: any[]) {
   }).catch(() => {});
 }
 
+function tryDeleteFromSupabase(table: string, id: string) {
+  if (!supabaseReady) return;
+  fetch('/api/supabase-reload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'delete', table, id }),
+  }).catch(() => {});
+}
+
 async function loadSettingsFromSupabase() {
   try {
     const resp = await fetch('/api/supabase-reload', {
@@ -2140,6 +2149,18 @@ export const db = {
   },
 
   markDeleted: (id: string) => saveDeletedId(id),
+  deleteRecord: <K extends keyof DbState>(table: K, id: string): void => {
+    saveDeletedId(id);
+    const current = memoryDb[table];
+    if (Array.isArray(current)) {
+      (memoryDb as any)[table] = current.filter((r: any) => r.id !== id);
+      persistToLocalStorage();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
+      }
+      tryDeleteFromSupabase(table as string, id);
+    }
+  },
   getDefault,
   mergeTranslations: (base: any, translation: any) => mergeTranslations(base, translation),
   getTranslatedRecord: (record: any, locale: string) => getTranslatedRecord(record, locale),

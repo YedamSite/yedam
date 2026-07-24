@@ -98,8 +98,7 @@ export default function BrandsTab() {
 
   const handleDelete = (id: string) => {
     if (!confirm('¿Eliminar esta marca permanentemente?')) return;
-    const all = db.get('brands');
-    db.save('brands', all.filter((b: any) => b.id !== id));
+    db.deleteRecord('brands', id);
     load();
   };
 

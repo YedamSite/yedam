@@ -104,8 +104,7 @@ export default function CategoriesTab() {
 
   const handleDelete = (id: string) => {
     if (!confirm('¿Eliminar esta categoría permanentemente?')) return;
-    const all = db.get('categories');
-    db.save('categories', all.filter((c: any) => c.id !== id));
+    db.deleteRecord('categories', id);
     load();
   };
 
