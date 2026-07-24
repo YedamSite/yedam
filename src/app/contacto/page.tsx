@@ -105,7 +105,14 @@ export default function ContactoPage() {
               src={c?.hero?.image || "/images/cheotnun-k-beauty-contato-atendimento.webp"} 
               alt="Contacto"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center hidden md:block"
+              priority
+            />
+            <Image 
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-contato-atendimento.webp"} 
+              alt="Contacto Mobile"
+              fill
+              className="object-cover object-center md:hidden"
               priority
             />
           </div>

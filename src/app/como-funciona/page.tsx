@@ -97,7 +97,14 @@ export default function ComoFuncionaPage() {
               src={c?.hero?.image || "/images/cheotnun-k-beauty-como-funciona-guia.webp"} 
               alt="Productos"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center hidden md:block"
+              priority
+            />
+            <Image 
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp"} 
+              alt="Productos Mobile"
+              fill
+              className="object-cover object-center md:hidden"
               priority
             />
           </div>

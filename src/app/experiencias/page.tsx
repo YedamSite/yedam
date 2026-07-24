@@ -69,7 +69,14 @@ export default function ExperienciasPage() {
               src={c?.hero?.image || "/images/cheotnun-k-beauty-experiencias-viagens.webp"} 
               alt="Experiencias Yedam"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center hidden md:block"
+              priority
+            />
+            <Image 
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp"} 
+              alt="Experiencias Yedam Mobile"
+              fill
+              className="object-cover object-center md:hidden"
               priority
             />
           </div>

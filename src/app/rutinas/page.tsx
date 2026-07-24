@@ -76,9 +76,16 @@ export default function RutinasPage() {
           <div className="absolute inset-0 z-0">
             <Image 
               src={c?.hero?.image || "/images/cheotnun-k-beauty-rutinas-skincare.webp"} 
-              alt="Skincare Products"
+              alt="Rutinas Skincare"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center hidden md:block"
+              priority
+            />
+            <Image 
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-rutinas-skincare.webp"} 
+              alt="Rutinas Skincare Mobile"
+              fill
+              className="object-cover object-center md:hidden"
               priority
             />
           </div>

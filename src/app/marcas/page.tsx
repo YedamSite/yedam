@@ -49,7 +49,14 @@ export default function MarcasPage() {
               src={c?.hero?.image || "/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
               alt="K-Beauty Products"
               fill
-              className="object-cover object-center"
+              className="object-cover object-center hidden md:block"
+              priority
+            />
+            <Image
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
+              alt="K-Beauty Products Mobile"
+              fill
+              className="object-cover object-center md:hidden"
               priority
             />
           </div>
