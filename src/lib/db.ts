@@ -272,7 +272,17 @@ const DEFAULT_STATE: DbState = {
       announcementText: 'Belleza que nace de la tradición. Cosmética que transforma.',
       shippingText: 'Envíos para toda América Latina',
       attentionText: 'Atención',
-      logoUrl: '/images/cheotnun-logo.webp'
+      logoUrl: '/images/cheotnun-logo.webp',
+      navLinks: [
+        { label: 'Inicio', href: '/' },
+        { label: 'Tienda', href: '/tienda' },
+        { label: 'Marcas', href: '/marcas' },
+        { label: 'Rutinas', href: '/rutinas' },
+        { label: 'Experiencias', href: '/experiencias' },
+        { label: 'Blog', href: '/blog' },
+        { label: 'Ayuda', href: '/ayuda/envios' },
+        { label: 'Contacto', href: '/contacto' }
+      ]
     },
     footer: {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
@@ -879,8 +889,8 @@ const DEFAULT_STATE: DbState = {
             { label: 'Rotinas', href: '/rutinas' },
             { label: 'Experiências', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
-            { label: 'Contato', href: '/contacto' },
-            { label: 'Ajuda', href: '/ayuda/envios' }
+            { label: 'Ajuda', href: '/ayuda/envios' },
+            { label: 'Contato', href: '/contacto' }
           ]
         },
         footer: {
@@ -1368,8 +1378,8 @@ const DEFAULT_STATE: DbState = {
             { label: 'Routines', href: '/rutinas' },
             { label: 'Experiences', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
-            { label: 'Contact', href: '/contacto' },
-            { label: 'Help', href: '/ayuda/envios' }
+            { label: 'Help', href: '/ayuda/envios' },
+            { label: 'Contact', href: '/contacto' }
           ]
         },
         footer: {

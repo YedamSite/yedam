@@ -152,10 +152,12 @@ export default function Header() {
   const navItems: any[] = headerContent.navLinks || [
     { label: t('Inicio'), href: '/' },
     { label: t('Tienda'), href: '/tienda' },
-    { label: t('Categorías'), href: '/tienda' },
-    { label: t('Rutinas'), href: '/rutinas' },
     { label: t('Marcas'), href: '/marcas' },
-    { label: t('Experiencias'), href: '/experiencias' }
+    { label: t('Rutinas'), href: '/rutinas' },
+    { label: t('Experiencias'), href: '/experiencias' },
+    { label: t('Blog'), href: '/blog' },
+    { label: t('Ayuda'), href: '/ayuda/envios' },
+    { label: t('Contacto'), href: '/contacto' }
   ];
   return (
     <div className="w-full flex flex-col sticky top-0 z-50">
@@ -237,7 +239,7 @@ export default function Header() {
 
           {/* Desktop Nav Centered - flex-1 to fill space */}
           <nav className="hidden md:flex items-center justify-center gap-10 flex-1">
-            {navItems.map((item: any) => (
+            {navItems.slice(0, -1).map((item: any) => (
               <Link
                 key={item.href + '-' + item.label}
                 href={item.href}
@@ -247,6 +249,16 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
+            {navItems.length > 0 && (
+              <Link
+                key={navItems[navItems.length - 1].href + '-' + navItems[navItems.length - 1].label}
+                href={navItems[navItems.length - 1].href}
+                className={`ml-auto text-xs uppercase tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === navItems[navItems.length - 1].href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
+                  }`}
+              >
+                {navItems[navItems.length - 1].label}
+              </Link>
+            )}
           </nav>
 
           {/* Action Buttons - Right */}
