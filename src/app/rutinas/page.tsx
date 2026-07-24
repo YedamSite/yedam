@@ -92,7 +92,7 @@ export default function RutinasPage() {
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
-          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/50 to-black/20 md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/50 to-black/20 md:hidden" />
 
           <div className="relative z-10 w-full max-w-[1200px] mx-auto px-6 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="max-w-xl">

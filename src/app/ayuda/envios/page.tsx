@@ -111,7 +111,7 @@ export default function EnviosYPagosPage() {
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
-          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/50 to-black/20 md:bg-gradient-to-r md:from-black/60 md:via-black/30 md:to-transparent" />
+          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/70 via-black/50 to-black/20 md:hidden" />
 
           <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-6 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
             <div className="flex flex-col">
