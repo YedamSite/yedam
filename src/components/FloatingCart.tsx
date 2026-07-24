@@ -28,11 +28,11 @@ export default function FloatingCart() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 md:hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 md:hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
       {/* Mini Cart Preview */}
       <div className="group relative">
         {/* Mini dropdown on hover/tap */}
-        <div className="absolute bottom-full right-0 mb-3 w-72 bg-[#07101E] border border-white/10 rounded-2xl p-4 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
+        <div className="absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] max-w-[300px] sm:w-72 bg-[#07101E] border border-white/10 rounded-2xl p-4 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
           <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
             <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Carrinho</span>
             <span className="text-[10px] text-muted-foreground">{totalItems} itens</span>

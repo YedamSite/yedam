@@ -140,7 +140,7 @@ export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps =
     <>
       <button
         onClick={() => handleToggle(true)}
-        className={`fixed bottom-6 z-50 bg-accent hover:bg-accentHover text-background p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen || externalOpen ? '-right-20 scale-0' : 'right-6 scale-100'}`}
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 bg-accent hover:bg-accentHover text-background p-3.5 sm:p-4 rounded-full shadow-2xl transition-all duration-300 transform ${isOpen || externalOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
       >
         <MessageCircle className="h-6 w-6" />
         {unread > 0 && !isOpen && !externalOpen && (
@@ -150,7 +150,7 @@ export default function LiveChat({ externalOpen, onOpenChange }: LiveChatProps =
         )}
       </button>
 
-      <div className={`fixed bottom-6 right-6 z-50 w-80 sm:w-96 bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen || externalOpen ? 'scale-100 opacity-100 visible' : 'scale-0 opacity-0 invisible'}`}>
+      <div className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] max-w-[380px] sm:w-96 bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen || externalOpen ? 'scale-100 opacity-100 visible' : 'scale-0 opacity-0 invisible'}`}>
         <div className="bg-accent text-background p-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-background/20 p-2 rounded-full">

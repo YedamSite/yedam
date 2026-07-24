@@ -95,7 +95,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full px-4 md:px-8 relative z-10 py-8 md:py-12">
           <div className="flex flex-col items-start gap-4 md:gap-5 text-left max-w-xl">
             <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-2.5 py-1 md:px-3.5 md:py-1.5">
-              <span className="text-[7px] md:text-[9px] font-bold text-accent uppercase tracking-[0.15em] whitespace-nowrap">
+              <span className="text-[7px] md:text-[9px] font-bold text-accent uppercase tracking-[0.15em] max-w-full text-center leading-snug">
                 {t('CHEOTNUN — Tu tienda online de cosmética coreana K-Beauty')}
               </span>
             </div>
