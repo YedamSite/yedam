@@ -42,13 +42,14 @@ export default function MarcasPage() {
       <main className="flex-1 w-full overflow-hidden">
         
         {/* 1. HERO SECTION */}
-        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
+        <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <Image
               src={c?.hero?.image || "/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
               alt="K-Beauty Products"
               fill
+              sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
             />
@@ -56,6 +57,7 @@ export default function MarcasPage() {
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
               alt="K-Beauty Products Mobile"
               fill
+              sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
             />

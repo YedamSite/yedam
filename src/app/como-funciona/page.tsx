@@ -90,13 +90,14 @@ export default function ComoFuncionaPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
+        <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <Image 
               src={c?.hero?.image || "/images/cheotnun-k-beauty-como-funciona-guia.webp"} 
               alt="Productos"
               fill
+              sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
             />
@@ -104,6 +105,7 @@ export default function ComoFuncionaPage() {
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp"} 
               alt="Productos Mobile"
               fill
+              sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
             />

@@ -99,12 +99,13 @@ export default function ContactoPage() {
 
       <main className="flex-1 w-full flex flex-col items-center">
         {/* HERO SECTION */}
-        <section className="relative w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
-          <div className="absolute inset-0 z-0">
+        <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
+          <div className="absolute inset-0 z-0 overflow-hidden">
             <Image 
               src={c?.hero?.image || "/images/cheotnun-k-beauty-contato-atendimento.webp"} 
               alt="Contacto"
               fill
+              sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
             />
@@ -112,6 +113,7 @@ export default function ContactoPage() {
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-contato-atendimento.webp"} 
               alt="Contacto Mobile"
               fill
+              sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
             />
