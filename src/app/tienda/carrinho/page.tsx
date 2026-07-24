@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText, CreditCard } from 'lucide-react';
+import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText, CreditCard, Loader2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,54 @@ import { authService } from '@/lib/supabaseAuth';
 import AuthModal from '@/components/AuthModal';
 import { db } from '@/lib/db';
 import { useLanguage } from '@/context/LanguageContext';
+import { DIAL_CODES, formatPhone, formatPostalCode, validatePhone } from '@/utils/countries';
+
+const COUNTRY_KEY_MAP: Record<string, string> = {
+  'Brasil': 'Brazil',
+  'España': 'Spain',
+  'México': 'Mexico',
+  'Chile': 'Chile',
+  'Colombia': 'Colombia',
+  'Argentina': 'Argentina',
+  'Uruguay': 'Uruguay',
+  'Paraguay': 'Paraguay',
+  'Estados Unidos': 'United States',
+  'Portugal': 'Portugal',
+};
+
+function isValidCPF(cpf: string): boolean {
+  const clean = cpf.replace(/\D/g, '');
+  if (clean.length !== 11) return false;
+  if (/^(\d)\1+$/.test(clean)) return false;
+  let sum = 0;
+  for (let i = 0; i < 9; i++) sum += parseInt(clean.charAt(i)) * (10 - i);
+  let rev = 11 - (sum % 11);
+  if (rev === 10 || rev === 11) rev = 0;
+  if (rev !== parseInt(clean.charAt(9))) return false;
+  sum = 0;
+  for (let i = 0; i < 10; i++) sum += parseInt(clean.charAt(i)) * (11 - i);
+  rev = 11 - (sum % 11);
+  if (rev === 10 || rev === 11) rev = 0;
+  if (rev !== parseInt(clean.charAt(10))) return false;
+  return true;
+}
+
+async function lookupViaCep(cep: string): Promise<{ street: string; city: string; state: string } | null> {
+  const clean = cep.replace(/\D/g, '');
+  if (clean.length !== 8) return null;
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${clean}/json/`);
+    const data = await res.json();
+    if (data.erro) return null;
+    return {
+      street: data.logradouro || '',
+      city: data.localidade || '',
+      state: data.uf || ''
+    };
+  } catch {
+    return null;
+  }
+}
 
 export default function CheckoutWizard() {
   const { t, locale } = useLanguage();
@@ -21,7 +69,7 @@ export default function CheckoutWizard() {
 
   // Form states
   const [country, setCountry] = useState('Brasil');
-  const [docType, setDocType] = useState('nif');
+  const [docType, setDocType] = useState('cpf');
   const [docNumber, setDocNumber] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -30,6 +78,15 @@ export default function CheckoutWizard() {
   const [zipCode, setZipCode] = useState('');
   const [phone, setPhone] = useState('');
   const [stripeLoading, setStripeLoading] = useState(false);
+
+  // Validation states
+  const [cepLoading, setCepLoading] = useState(false);
+  const [cepError, setCepError] = useState('');
+  const [docError, setDocError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  const countryKey = COUNTRY_KEY_MAP[country] || country;
+  const dialCode = DIAL_CODES[countryKey] || '+55';
 
   // Coupon state
   const [couponCode, setCouponCode] = useState('');
@@ -46,10 +103,75 @@ export default function CheckoutWizard() {
 
   // Sync document type requirements when country changes
   useEffect(() => {
-    if (country === 'España') setDocType('nif');
+    setCepError('');
+    setDocError('');
+    setPhoneError('');
+    if (country === 'Brasil') setDocType('cpf');
+    else if (country === 'España') setDocType('nif');
     else if (country === 'Uruguay') setDocType('rut');
     else if (country === 'Paraguay') setDocType('ruc');
+    else if (country === 'Argentina') setDocType('dni');
+    else if (country === 'México') setDocType('rfc');
+    else setDocType('nif');
   }, [country]);
+
+  const handleZipCodeChange = async (val: string) => {
+    const formatted = formatPostalCode(val, countryKey);
+    setZipCode(formatted);
+    setCepError('');
+
+    if (country === 'Brasil' || countryKey === 'Brazil') {
+      const clean = formatted.replace(/\D/g, '');
+      if (clean.length === 8) {
+        setCepLoading(true);
+        const addressData = await lookupViaCep(clean);
+        setCepLoading(false);
+        if (addressData) {
+          if (addressData.city) setCity(addressData.city);
+          if (addressData.street) setStreet(addressData.street);
+          setCepError('');
+        } else {
+          setCepError(t('✕ CEP no encontrado o inválido'));
+        }
+      }
+    }
+  };
+
+  const handlePhoneChange = (val: string) => {
+    const formatted = formatPhone(val, countryKey);
+    setPhone(formatted);
+
+    if (formatted.trim()) {
+      const valid = validatePhone(formatted, countryKey);
+      if (!valid) {
+        setPhoneError(t('✕ Teléfono o DDD inválido'));
+      } else {
+        setPhoneError('');
+      }
+    } else {
+      setPhoneError('');
+    }
+  };
+
+  const handleDocChange = (val: string) => {
+    setDocNumber(val);
+    setDocError('');
+
+    if (country === 'Brasil') {
+      const clean = val.replace(/\D/g, '');
+      if (clean.length === 11) {
+        if (!isValidCPF(clean)) {
+          setDocError(t('✕ CPF inválido'));
+        } else {
+          setDocError('');
+        }
+      } else if (clean.length > 11 && clean.length !== 14) {
+        setDocError(t('✕ Documento CPF/CNPJ incompleto o inválido'));
+      } else {
+        setDocError('');
+      }
+    }
+  };
 
   // Load cart from localStorage on mount and enrich with actual product images
   useEffect(() => {
@@ -338,18 +460,21 @@ export default function CheckoutWizard() {
                     <select
                       value={country}
                       onChange={e => setCountry(e.target.value)}
-                      className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white"
+                      className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-xs text-white"
                     >
-                      <option value="Brasil">Brasil</option>
-                      <option value="México">México</option>
-                      <option value="Chile">Chile</option>
-                      <option value="Colombia">Colombia</option>
-                      <option value="Argentina">Argentina</option>
-                      <option value="España">España</option>
-                      <option value="Uruguay">Uruguay</option>
-                      <option value="Paraguay">Paraguay</option>
+                      <option value="Brasil">Brasil (+55)</option>
+                      <option value="España">España (+34)</option>
+                      <option value="México">México (+52)</option>
+                      <option value="Chile">Chile (+56)</option>
+                      <option value="Colombia">Colombia (+57)</option>
+                      <option value="Argentina">Argentina (+54)</option>
+                      <option value="Uruguay">Uruguay (+598)</option>
+                      <option value="Paraguay">Paraguay (+595)</option>
+                      <option value="Estados Unidos">Estados Unidos (+1)</option>
+                      <option value="Portugal">Portugal (+351)</option>
                     </select>
                   </div>
+
                   {/* Dynamic Document input based on country selection */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[10px] font-semibold uppercase text-accent">
@@ -361,37 +486,65 @@ export default function CheckoutWizard() {
                       {country === 'España' && t('Documento NIF / NIE')}
                       {country === 'Uruguay' && t('Documento RUT o CI')}
                       {country === 'Paraguay' && t('Documento RUC o CI')}
+                      {country === 'Estados Unidos' && t('Documento SSN / Passport')}
+                      {country === 'Portugal' && t('Documento NIF')}
                     </label>
                     <Input
                       value={docNumber}
-                      onChange={e => setDocNumber(e.target.value)}
+                      onChange={e => handleDocChange(e.target.value)}
                       placeholder={
-                        country === 'España' ? t('Ej: 12345678Z') : country === 'Uruguay' ? t('Ej: 1234567-8') : t('Ej: 123456-7')
+                        country === 'Brasil' ? '000.000.000-00' : country === 'España' ? '12345678Z' : country === 'Uruguay' ? '1234567-8' : '123456-7'
                       }
+                      className="bg-background border-white/10 text-white text-xs h-10 font-mono uppercase"
                       required
                     />
+                    {docError && <span className="text-[10px] text-red-400 font-semibold">{docError}</span>}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Código Postal / CEP')}</label>
+                    <div className="relative flex items-center">
+                      <Input
+                        value={zipCode}
+                        onChange={e => handleZipCodeChange(e.target.value)}
+                        placeholder={country === 'Brasil' ? '89238-589' : t('Código Postal')}
+                        className="bg-background border-white/10 text-white text-xs h-10 font-mono"
+                        required
+                      />
+                      {cepLoading && <Loader2 className="absolute right-3 h-4 w-4 text-accent animate-spin" />}
+                    </div>
+                    {cepError && <span className="text-[10px] text-red-400 font-semibold">{cepError}</span>}
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Ciudad')}</label>
+                    <Input value={city} onChange={e => setCity(e.target.value)} required />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Calle & Número')}</label>
-                    <Input value={street} onChange={e => setStreet(e.target.value)} required />
-                  </div>
+                  <label className="text-[10px] font-semibold uppercase text-accent">{t('Calle & Número')}</label>
+                  <Input value={street} onChange={e => setStreet(e.target.value)} required placeholder={t('Ej: Av. Brasil 1234, Apt 402')} />
+                </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-semibold uppercase text-accent">{t('Ciudad')}</label>
-                      <Input value={city} onChange={e => setCity(e.target.value)} required />
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-semibold uppercase text-accent">{t('Código Postal')}</label>
-                      <Input value={zipCode} onChange={e => setZipCode(e.target.value)} required />
-                    </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-semibold uppercase text-accent">{t('Teléfono de Contacto (com DDI/DDD)')}</label>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3 text-xs text-accent font-bold font-mono z-10 shrink-0 select-none bg-accent/10 border border-accent/20 px-1.5 py-0.5 rounded">
+                      {dialCode}
+                    </span>
+                    <Input
+                      type="tel"
+                      value={phone}
+                      onChange={e => handlePhoneChange(e.target.value)}
+                      placeholder={country === 'Brasil' ? '(11) 99671-6235' : t('Número de teléfono')}
+                      className="pl-16 bg-background border-white/10 text-white text-xs h-10 font-mono"
+                      required
+                    />
                   </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Teléfono de Contacto')}</label>
-                  <Input value={phone} onChange={e => setPhone(e.target.value)} required />
+                  {phoneError && <span className="text-[10px] text-red-400 font-semibold">{phoneError}</span>}
                 </div>
               </div>
             </div>
@@ -497,9 +650,9 @@ export default function CheckoutWizard() {
                     </div>
                   )}
                   <div className="h-px bg-white/5 my-2" />
-                  <div className="flex justify-between text-sm font-bold text-white">
+                  <div className="flex justify-between items-center text-sm font-bold text-white">
                     <span>{t('Total General')}</span>
-                    <span className="text-accent font-heading text-lg">{currency} {total.toFixed(2)}</span>
+                    <span className="text-accent font-mono font-bold text-base tracking-tight">{currency} {total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -528,7 +681,7 @@ export default function CheckoutWizard() {
                   <div className="flex flex-col gap-2">
                     <Button
                       onClick={() => setStep(3)}
-                      disabled={!firstName || !lastName || !street || !city || !zipCode || !docNumber}
+                      disabled={!firstName || !lastName || !street || !city || !zipCode || !docNumber || !phone || Boolean(cepError) || Boolean(docError) || Boolean(phoneError)}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
                       {t('CONTINUAR AL PAGO')}
