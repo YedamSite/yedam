@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { submitOrderAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
 import AuthModal from '@/components/AuthModal';
+import { db } from '@/lib/db';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function CheckoutWizard() {
@@ -50,11 +51,25 @@ export default function CheckoutWizard() {
     else if (country === 'Paraguay') setDocType('ruc');
   }, [country]);
 
-  // Load cart from localStorage on mount
+  // Load cart from localStorage on mount and enrich with actual product images
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const cart = localStorage.getItem('cheotnun_cart');
-      setCartItems(cart ? JSON.parse(cart) : []);
+      const parsed = cart ? JSON.parse(cart) : [];
+      const allProds = (db.get('products') as any[]) || [];
+      const prodMap = new Map(allProds.map((p: any) => [p.id, p]));
+      const enriched = parsed.map((item: any) => {
+        const matchingProd: any = prodMap.get(item.product_id);
+        const actualImage = item.image && item.image !== '/products/dokdo-cleanser.jpg'
+          ? item.image
+          : matchingProd?.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=200';
+        return {
+          ...item,
+          image: actualImage
+        };
+      });
+      setCartItems(enriched);
+      localStorage.setItem('cheotnun_cart', JSON.stringify(enriched));
     }
   }, []);
 
@@ -231,7 +246,7 @@ export default function CheckoutWizard() {
                     <div key={item.product_id} className="border border-white/5 rounded-2xl p-4 bg-secondary/30 flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3">
                         <div className="relative h-12 w-12 rounded-lg overflow-hidden bg-secondary">
-                          <Image src="https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=200" alt={item.name} fill className="object-cover" />
+                          <Image src={item.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=200'} alt={item.name} fill unoptimized className="object-cover" />
                         </div>
                         <div>
                           <h4 className="text-xs font-bold text-white max-w-[150px] sm:max-w-xs truncate">{item.name}</h4>

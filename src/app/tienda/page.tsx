@@ -120,24 +120,58 @@ function TiendaContent() {
     return map;
   }, [categories]);
 
+  const activeCategory = React.useMemo(() => {
+    if (selectedCategory === 'ALL') return null;
+    return categories.find(c => c.id === selectedCategory) || null;
+  }, [categories, selectedCategory]);
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
 
       <main className="flex-1 py-12 px-4 md:px-8 max-w-7xl mx-auto w-full">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
-          <div>
-            <span className="text-xs text-accent uppercase font-bold tracking-widest">{t('K-Beauty Shop')}</span>
-            <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1">{t('Catálogo de Cosméticos')}</h1>
-          </div>
-          
-          {/* Global notification for cart addition */}
-          {addedProduct && (
-            <div className="bg-accent/25 border border-accent/40 text-accent text-xs rounded-xl px-4 py-2 animate-bounce">
-              ✓ ¡{addedProduct} {t('agregado al carrito')}!
+        {activeCategory ? (
+          <div className="relative w-full rounded-3xl overflow-hidden border border-white/10 p-6 md:p-8 bg-gradient-to-r from-card via-secondary/40 to-transparent flex flex-col md:flex-row items-center gap-6 shadow-2xl mb-8">
+            {activeCategory.image && (
+              <div className="relative h-28 w-28 md:h-36 md:w-36 rounded-2xl overflow-hidden border border-white/10 shrink-0 shadow-lg bg-secondary">
+                <Image
+                  src={activeCategory.image}
+                  alt={activeCategory.name}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              </div>
+            )}
+            <div className="flex-1 text-center md:text-left">
+              <span className="text-[10px] text-accent font-bold uppercase tracking-[0.2em]">{t('Categoría Seleccionada')}</span>
+              <h1 className="font-heading text-2xl md:text-4xl font-light text-white mt-1">{activeCategory.name}</h1>
+              {activeCategory.description && (
+                <p className="text-xs text-muted-foreground mt-2 max-w-2xl leading-relaxed">{activeCategory.description}</p>
+              )}
             </div>
-          )}
-        </div>
+            <button
+              onClick={() => setSelectedCategory('ALL')}
+              className="text-[10px] font-bold text-accent hover:underline uppercase tracking-wider shrink-0 bg-accent/10 border border-accent/20 rounded-full px-4 py-2 hover:bg-accent/20 transition-colors"
+            >
+              ✕ {t('Limpiar filtro')}
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
+            <div>
+              <span className="text-xs text-accent uppercase font-bold tracking-widest">{t('K-Beauty Shop')}</span>
+              <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1">{t('Catálogo de Cosméticos')}</h1>
+            </div>
+            
+            {/* Global notification for cart addition */}
+            {addedProduct && (
+              <div className="bg-accent/25 border border-accent/40 text-accent text-xs rounded-xl px-4 py-2 animate-bounce">
+                ✓ ¡{addedProduct} {t('agregado al carrito')}!
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Sidebar */}
@@ -162,21 +196,27 @@ function TiendaContent() {
               <div className="flex flex-col gap-1.5">
                 <button
                   onClick={() => setSelectedCategory('ALL')}
-                  className={`w-full text-left text-xs font-semibold py-2 px-3 rounded-lg transition-colors ${
+                  className={`w-full text-left text-xs font-semibold py-2 px-3 rounded-lg transition-colors flex items-center gap-2.5 ${
                     selectedCategory === 'ALL' ? 'bg-accent/15 text-accent font-bold' : 'text-muted-foreground hover:bg-white/5'
                   }`}
                 >
-                  {t('Todas las categorías')}
+                  <span className="h-2 w-2 rounded-full bg-accent/40 shrink-0" />
+                  <span className="truncate">{t('Todas las categorías')}</span>
                 </button>
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`w-full text-left text-xs font-semibold py-2 px-3 rounded-lg transition-colors ${
+                    className={`w-full text-left text-xs font-semibold py-2 px-3 rounded-lg transition-colors flex items-center gap-2.5 ${
                       selectedCategory === cat.id ? 'bg-accent/15 text-accent font-bold' : 'text-muted-foreground hover:bg-white/5'
                     }`}
                   >
-                    {cat.name}
+                    {cat.image ? (
+                      <img src={cat.image} alt={cat.name} className="h-5 w-5 rounded object-cover border border-white/10 shrink-0 bg-secondary" />
+                    ) : (
+                      <span className="h-2 w-2 rounded-full bg-accent/40 shrink-0" />
+                    )}
+                    <span className="truncate">{cat.name}</span>
                   </button>
                 ))}
               </div>
