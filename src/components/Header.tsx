@@ -214,18 +214,18 @@ export default function Header() {
 
       <header className="w-full border-t border-b border-white/10 px-4 md:px-8 h-20 bg-transparent relative flex items-center">
         <div className="absolute inset-0 -z-10 bg-background/95 backdrop-blur" />
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between relative z-10">
+        <div className="mx-auto flex w-full max-w-[1536px] items-center justify-between relative z-10 px-2 md:px-4 lg:px-6">
           {/* Logo - Left */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0">
+          <Link href="/" className="flex items-center gap-3 group shrink-0 min-w-max">
             <Image
               src={headerContent.logoUrl || '/images/cheotnun-logo.webp'}
               alt="Cheotnun"
-              width={52}
-              height={52}
+              width={48}
+              height={48}
               className="rounded-full object-cover shrink-0"
             />
             <div className="flex flex-col items-center justify-center md:hidden">
-              <span className="font-heading text-lg font-light text-white uppercase tracking-wider leading-none">
+              <span className="font-heading text-base font-light text-white uppercase tracking-wider leading-none">
                 Cheotnun
               </span>
               <span className="text-[6px] font-bold text-accent uppercase tracking-[0.3em] leading-none mt-0.5 text-center">
@@ -233,7 +233,7 @@ export default function Header() {
               </span>
             </div>
             <div className="hidden md:flex flex-col items-center justify-center">
-              <span className="font-heading text-2xl font-light text-white uppercase tracking-wider leading-none">
+              <span className="font-heading text-xl xl:text-2xl font-light text-white uppercase tracking-wider leading-none">
                 Cheotnun
               </span>
               <span className="text-[8px] font-bold text-accent uppercase tracking-[0.3em] leading-none mt-0.5 text-center">
@@ -242,14 +242,14 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Desktop Nav Centered - flex-1 to fill space */}
-          <nav className="hidden md:flex items-center flex-1">
-            <div className="flex items-center justify-center gap-10 flex-1">
+          {/* Desktop Nav Centered - Responsive Spacing & Scaling */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 px-4 xl:px-8">
+            <div className="flex items-center justify-center gap-3 xl:gap-6 2xl:gap-8 flex-1">
               {navItems.map((item: any) => (
                 <Link
                   key={item.href + '-' + item.label}
                   href={item.href}
-                  className={`text-xs uppercase tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
+                  className={`text-[11px] xl:text-xs uppercase tracking-wider xl:tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
                     }`}
                 >
                   {item.label}
@@ -259,126 +259,132 @@ export default function Header() {
           </nav>
 
           {/* Action Buttons - Right */}
-          <div className="hidden md:flex items-center gap-6 shrink-0">
-            {/* Dynamic Search Bar with Autocomplete */}
-            <div className="relative flex items-center">
-              {isSearchExpanded ? (
-                <div className="relative flex items-center">
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (headerSearchQuery.trim()) {
-                        router.push(`/tienda?search=${encodeURIComponent(headerSearchQuery.trim())}`);
-                        setIsSearchExpanded(false);
-                        setHeaderSearchQuery('');
-                      }
-                    }}
-                    className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-full px-3 py-1 animate-in fade-in zoom-in-95 duration-200"
-                  >
-                    <input
-                      type="text"
-                      value={headerSearchQuery}
-                      onChange={(e) => setHeaderSearchQuery(e.target.value)}
-                      placeholder={t('Buscar...')}
-                      autoFocus
-                      className="bg-transparent text-white border-0 outline-none text-[10px] w-28 uppercase tracking-wider placeholder-gray-500 font-bold"
-                    />
-                    <button type="submit">
-                      <Search strokeWidth={1.8} className="h-3.5 w-3.5 text-accent hover:scale-110 transition-all" />
-                    </button>
-                    <button type="button" onClick={() => { setIsSearchExpanded(false); setHeaderSearchQuery(''); }} className="text-gray-400 hover:text-white text-[9px] font-bold ml-1">
-                      ✕
-                    </button>
-                  </form>
+          <div className="hidden md:flex items-center gap-3 xl:gap-5 shrink-0">
+            {/* Action Icons Group */}
+            <div className="flex items-center gap-3 xl:gap-4">
+              {/* Dynamic Search Bar with Autocomplete */}
+              <div className="relative flex items-center">
+                {isSearchExpanded ? (
+                  <div className="relative flex items-center">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (headerSearchQuery.trim()) {
+                          router.push(`/tienda?search=${encodeURIComponent(headerSearchQuery.trim())}`);
+                          setIsSearchExpanded(false);
+                          setHeaderSearchQuery('');
+                        }
+                      }}
+                      className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-full px-3 py-1 animate-in fade-in zoom-in-95 duration-200"
+                    >
+                      <input
+                        type="text"
+                        value={headerSearchQuery}
+                        onChange={(e) => setHeaderSearchQuery(e.target.value)}
+                        placeholder={t('Buscar...')}
+                        autoFocus
+                        className="bg-transparent text-white border-0 outline-none text-[10px] w-28 uppercase tracking-wider placeholder-gray-500 font-bold"
+                      />
+                      <button type="submit">
+                        <Search strokeWidth={1.8} className="h-3.5 w-3.5 text-accent hover:scale-110 transition-all" />
+                      </button>
+                      <button type="button" onClick={() => { setIsSearchExpanded(false); setHeaderSearchQuery(''); }} className="text-gray-400 hover:text-white text-[9px] font-bold ml-1">
+                        ✕
+                      </button>
+                    </form>
 
-                  {/* Autocomplete Dropdown */}
-                  {headerSearchQuery.trim() && (searchResults.length > 0 || matchedCategories.length > 0) && (
-                    <div className="absolute right-0 top-full mt-2.5 w-72 rounded-2xl border border-white/10 bg-[#07101E] p-3.5 shadow-2xl z-50 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-150">
-                      {matchedCategories.length > 0 && (
-                        <div className="flex flex-col gap-1.5">
-                          <span className="text-[8px] text-accent font-bold uppercase tracking-widest">{t('Categorías')}</span>
-                          <div className="flex flex-col gap-1">
-                            {matchedCategories.map((cat: any) => (
-                              <Link
-                                key={cat.id}
-                                href={`/tienda?category=${cat.slug}`}
-                                onClick={() => {
-                                  setIsSearchExpanded(false);
-                                  setHeaderSearchQuery('');
-                                }}
-                                className="text-[10px] text-white hover:text-accent font-semibold transition-colors py-0.5 uppercase tracking-wide"
-                              >
-                                📁 {cat.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {searchResults.length > 0 && (
-                        <div className="flex flex-col gap-2">
-                          <span className="text-[8px] text-accent font-bold uppercase tracking-widest border-t border-white/5 pt-2">{t('Productos')}</span>
-                          <div className="flex flex-col gap-2.5">
-                            {searchResults.map((prod: any) => {
-                              const imgUrl = prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=100';
-                              return (
+                    {/* Autocomplete Dropdown */}
+                    {headerSearchQuery.trim() && (searchResults.length > 0 || matchedCategories.length > 0) && (
+                      <div className="absolute right-0 top-full mt-2.5 w-72 rounded-2xl border border-white/10 bg-[#07101E] p-3.5 shadow-2xl z-50 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-150">
+                        {matchedCategories.length > 0 && (
+                          <div className="flex flex-col gap-1.5">
+                            <span className="text-[8px] text-accent font-bold uppercase tracking-widest">{t('Categorías')}</span>
+                            <div className="flex flex-col gap-1">
+                              {matchedCategories.map((cat: any) => (
                                 <Link
-                                  key={prod.id}
-                                  href={`/tienda/produto/${prod.slug}`}
+                                  key={cat.id}
+                                  href={`/tienda?category=${cat.slug}`}
                                   onClick={() => {
                                     setIsSearchExpanded(false);
                                     setHeaderSearchQuery('');
                                   }}
-                                  className="flex items-center gap-2.5 group/item"
+                                  className="text-[10px] text-white hover:text-accent font-semibold transition-colors py-0.5 uppercase tracking-wide"
                                 >
-                                  <div className="relative h-8 w-8 rounded overflow-hidden shrink-0 bg-secondary/50">
-                                    <Image src={imgUrl} alt={prod.name} fill unoptimized className="object-cover" />
-                                  </div>
-                                  <div className="flex flex-col truncate">
-                                    <span className="text-[10px] text-white group-hover/item:text-accent font-bold truncate transition-colors leading-tight uppercase">{prod.name}</span>
-                                    <span className="text-[9px] text-accent/80 font-heading">US$ {prod.price.toFixed(2)}</span>
-                                  </div>
+                                  📁 {cat.name}
                                 </Link>
-                              );
-                            })}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <button onClick={() => setIsSearchExpanded(true)}>
-                  <Search strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 cursor-pointer transition-all" />
-                </button>
-              )}
+                        )}
+                        {searchResults.length > 0 && (
+                          <div className="flex flex-col gap-2">
+                            <span className="text-[8px] text-accent font-bold uppercase tracking-widest border-t border-white/5 pt-2">{t('Productos')}</span>
+                            <div className="flex flex-col gap-2.5">
+                              {searchResults.map((prod: any) => {
+                                const imgUrl = prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=100';
+                                return (
+                                  <Link
+                                    key={prod.id}
+                                    href={`/tienda/produto/${prod.slug}`}
+                                    onClick={() => {
+                                      setIsSearchExpanded(false);
+                                      setHeaderSearchQuery('');
+                                    }}
+                                    className="flex items-center gap-2.5 group/item"
+                                  >
+                                    <div className="relative h-8 w-8 rounded overflow-hidden shrink-0 bg-secondary/50">
+                                      <Image src={imgUrl} alt={prod.name} fill unoptimized className="object-cover" />
+                                    </div>
+                                    <div className="flex flex-col truncate">
+                                      <span className="text-[10px] text-white group-hover/item:text-accent font-bold truncate transition-colors leading-tight uppercase">{prod.name}</span>
+                                      <span className="text-[9px] text-accent/80 font-heading">US$ {prod.price.toFixed(2)}</span>
+                                    </div>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button onClick={() => setIsSearchExpanded(true)} className="p-1 hover:bg-white/5 rounded-full transition-colors">
+                    <Search strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 cursor-pointer transition-all" />
+                  </button>
+                )}
+              </div>
+
+              {/* Favorites */}
+              <Link href="/dashboard/cliente?tab=favorites" className="relative p-1 hover:bg-white/5 rounded-full transition-colors">
+                <Heart strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 transition-all" />
+                {favCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center shadow-sm">
+                    {favCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Cart */}
+              <Link href="/tienda/carrinho" className="relative p-1 hover:bg-white/5 rounded-full transition-colors">
+                <ShoppingBag strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 transition-all" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center shadow-sm">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
             </div>
 
-            {/* Favorites */}
-            <Link href="/dashboard/cliente?tab=favorites" className="relative">
-              <Heart strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 transition-all" />
-              {favCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
-                  {favCount}
-                </span>
-              )}
-            </Link>
-
-            {/* Cart */}
-            <Link href="/tienda/carrinho" className="relative">
-              <ShoppingBag strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 transition-all" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
+            {/* Vertical Separator */}
+            <div className="h-4 w-px bg-white/15 mx-0.5" />
 
             {/* User Session Profile or Login Buttons */}
             {currentUser ? (
               <div className="relative group">
-                <button className="flex items-center gap-1.5 px-4 py-1.5 border border-white/10 rounded-full text-[10px] uppercase font-bold tracking-wider hover:bg-white/5 transition-all text-foreground/90">
+                <button className="flex items-center gap-1.5 px-3.5 py-1.5 border border-white/15 rounded-full text-[10px] uppercase font-bold tracking-wider hover:bg-white/5 transition-all text-foreground/90">
                   <User strokeWidth={1.8} className="h-3.5 w-3.5 text-accent" />
-                  <span className="max-w-[100px] truncate">{currentUser.name}</span>
+                  <span className="max-w-[90px] xl:max-w-[110px] truncate">{currentUser.name}</span>
                 </button>
                 <div className="absolute right-0 top-full pt-1.5 w-52 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 z-50">
                   <div className="rounded-md border border-white/10 bg-secondary p-1 shadow-2xl">
@@ -400,16 +406,16 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2 xl:gap-3">
                 <button
                   onClick={() => openAuth('login')}
-                  className="text-[10px] font-bold uppercase tracking-wider text-foreground/80 hover:text-accent px-3 py-1.5 transition-all"
+                  className="text-[10px] xl:text-xs font-bold uppercase tracking-wider text-foreground/80 hover:text-accent px-2.5 py-1.5 transition-all whitespace-nowrap"
                 >
                   {t('Entrar')}
                 </button>
                 <button
                   onClick={() => openAuth('register')}
-                  className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] uppercase tracking-wider px-5 py-2.5 rounded-full shadow-lg transition-all hover:scale-105"
+                  className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] xl:text-xs uppercase tracking-wider px-4 xl:px-5 py-2 rounded-full shadow-lg transition-all hover:scale-105 whitespace-nowrap"
                 >
                   {t('Crear Cuenta')}
                 </button>
