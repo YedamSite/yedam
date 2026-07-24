@@ -60,11 +60,11 @@ export async function submitOrderAction(data: {
     }
     db.save('products', products);
 
-    // Create Order Record
+    // Create Order Record with initial pendente_pagamento status (until Stripe payment is completed)
     const newOrder = {
       id: orderId,
       customer_id: data.customerId,
-      status: 'aguardando_confirmacao',
+      status: 'pendente_pagamento',
       items: data.items,
       subtotal,
       shipping_amount: shipping,
@@ -270,6 +270,22 @@ export async function cancelOrderAction(orderId: string) {
     db.save('order_tracking', orderTracking);
     await syncOrderWithSupabase('order_tracking', db.get('order_tracking'));
 
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function confirmOrderPaymentAction(orderId: string) {
+  try {
+    const orders = db.get('orders');
+    const oIdx = orders.findIndex((o: any) => o.id === orderId);
+    if (oIdx !== -1) {
+      orders[oIdx].status = 'aguardando_confirmacao';
+      orders[oIdx].updated_at = new Date().toISOString();
+      db.save('orders', orders);
+      await syncOrderWithSupabase('orders', orders);
+    }
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

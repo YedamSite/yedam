@@ -145,6 +145,9 @@ export default function CheckoutWizard() {
           setOrderSuccess({ id: orderId });
           localStorage.removeItem('cheotnun_cart');
           setCartItems([]);
+          import('@/actions/shopActions').then(mod => {
+            mod.confirmOrderPaymentAction(orderId);
+          });
         }
         window.history.replaceState({}, '', '/tienda/carrinho');
       } else if (params.get('canceled') === 'true') {
@@ -183,7 +186,7 @@ export default function CheckoutWizard() {
     const customerId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
     const customerEmail = currentUser ? currentUser.email : 'cliente@example.com';
 
-    // 1. Create the order in local DB + Supabase
+    // 1. Create the pending order record
     const res = await submitOrderAction({
       customerId,
       items: cartItems,
@@ -199,19 +202,7 @@ export default function CheckoutWizard() {
       return;
     }
 
-    // 2. Save order locally for dashboard
-    try {
-      const raw = localStorage.getItem('cheotnun_db_state');
-      const state = raw ? JSON.parse(raw) : {};
-      if (!state.orders) state.orders = [];
-      const exists = state.orders.some((o: any) => o.id === res.order!.id);
-      if (!exists) {
-        state.orders.push(res.order!);
-        localStorage.setItem('cheotnun_db_state', JSON.stringify(state));
-      }
-    } catch {}
-
-    // 3. Create Stripe Checkout Session and redirect
+    // 2. Create Stripe Checkout Session and redirect
     try {
       setStripeLoading(true);
       const checkoutRes = await fetch('/api/stripe/checkout', {

@@ -1427,7 +1427,7 @@ if (!authorized) {
                 <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
                   {/* Order list */}
                   <div className="xl:col-span-3 flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-2">
-                    {orders.map((order) => {
+                    {orders.filter(o => o.status !== 'pendente_pagamento').map((order) => {
                       const isSelected = selectedOrderForInvoice?.id === order.id;
                       return (
                         <div

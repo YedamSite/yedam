@@ -2002,7 +2002,19 @@ async function tryLoadFromSupabase() {
     let changed = false;
     for (const table of SYNC_TABLES) {
       const rows = data[table];
-      if (!rows || rows.length === 0) continue;
+      if (!rows) continue;
+      if (rows.length === 0) {
+        if (table === 'orders' || MERGE_TABLES.has(table)) {
+          const deletedIds = loadDeletedIds();
+          const local = (memoryDb as any)[table] || [];
+          const kept = local.filter((r: any) => deletedIds.has(r.id));
+          if (kept.length !== local.length) {
+            (memoryDb as any)[table] = kept;
+            changed = true;
+          }
+        }
+        continue;
+      }
       if (MERGE_TABLES.has(table)) {
         if (mergeTableData(table, rows)) changed = true;
       } else if (LOCAL_FIRST_TABLES.has(table)) {
@@ -2084,7 +2096,19 @@ export const db = {
       let changed = false;
       for (const table of targetTables) {
         const rows = data[table];
-        if (!rows || rows.length === 0) continue;
+        if (!rows) continue;
+        if (rows.length === 0) {
+          if (table === 'orders' || MERGE_TABLES.has(table)) {
+            const deletedIds = loadDeletedIds();
+            const local = (memoryDb as any)[table] || [];
+            const kept = local.filter((r: any) => deletedIds.has(r.id));
+            if (kept.length !== local.length) {
+              (memoryDb as any)[table] = kept;
+              changed = true;
+            }
+          }
+          continue;
+        }
         if (MERGE_TABLES.has(table)) {
           if (mergeTableData(table, rows)) changed = true;
         } else if (LOCAL_FIRST_TABLES.has(table)) {

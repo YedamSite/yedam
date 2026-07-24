@@ -107,9 +107,9 @@ export default function ClienteDashboard() {
       console.error('Failed to reload from Supabase:', e);
     }
 
-    // Load orders
+    // Load orders (filtering out uncompleted Stripe checkouts)
     const allOrders = db.get('orders') || [];
-    const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
+    const userOrders = allOrders.filter((o: any) => o.customer_id === userId && o.status !== 'pendente_pagamento');
     setOrders(userOrders);
 
     // Load addresses
