@@ -769,7 +769,13 @@ export default function SiteContentTab() {
               currentUrl={getBaseValue('marcas', 'hero.image')}
               onUrlChange={v => handleChange('marcas', 'hero.image', v)}
               folder="marcas"
-              label="Imagem Hero (Marcas)"
+              label="Imagem Hero Desktop (Marcas)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('marcas', 'hero.imageMobile')}
+              onUrlChange={v => handleChange('marcas', 'hero.imageMobile', v)}
+              folder="marcas"
+              label="Imagem Hero Mobile (Marcas)"
             />
 
             <div className="border-t border-white/5 pt-6 space-y-4">
@@ -907,7 +913,13 @@ export default function SiteContentTab() {
               currentUrl={getBaseValue('comoFunciona', 'hero.image')}
               onUrlChange={v => handleChange('comoFunciona', 'hero.image', v)}
               folder="como-funciona"
-              label="Imagem Hero (Como Funciona)"
+              label="Imagem Hero Desktop (Como Funciona)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('comoFunciona', 'hero.imageMobile')}
+              onUrlChange={v => handleChange('comoFunciona', 'hero.imageMobile', v)}
+              folder="como-funciona"
+              label="Imagem Hero Mobile (Como Funciona)"
             />
 
             <div className="border-t border-white/5 pt-6 space-y-4">
@@ -1052,7 +1064,13 @@ export default function SiteContentTab() {
               currentUrl={getBaseValue('contacto', 'hero.image')}
               onUrlChange={v => handleChange('contacto', 'hero.image', v)}
               folder="contacto"
-              label="Imagem Hero (Contacto)"
+              label="Imagem Hero Desktop (Contacto)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('contacto', 'hero.imageMobile')}
+              onUrlChange={v => handleChange('contacto', 'hero.imageMobile', v)}
+              folder="contacto"
+              label="Imagem Hero Mobile (Contacto)"
             />
 
             <div className="border-t border-white/5 pt-4 space-y-4">
@@ -1326,7 +1344,13 @@ export default function SiteContentTab() {
               currentUrl={getBaseValue('envios', 'hero.image')}
               onUrlChange={v => handleChange('envios', 'hero.image', v)}
               folder="envios"
-              label="Imagem Hero (Envíos)"
+              label="Imagem Hero Desktop (Envíos)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('envios', 'hero.imageMobile')}
+              onUrlChange={v => handleChange('envios', 'hero.imageMobile', v)}
+              folder="envios"
+              label="Imagem Hero Mobile (Envíos)"
             />
           </div>
         )}
@@ -1344,7 +1368,13 @@ export default function SiteContentTab() {
               currentUrl={getBaseValue('rutinasPage', 'hero.image')}
               onUrlChange={v => handleChange('rutinasPage', 'hero.image', v)}
               folder="rutinas"
-              label="Imagem Hero (Rutinas)"
+              label="Imagem Hero Desktop (Rutinas)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('rutinasPage', 'hero.imageMobile')}
+              onUrlChange={v => handleChange('rutinasPage', 'hero.imageMobile', v)}
+              folder="rutinas"
+              label="Imagem Hero Mobile (Rutinas)"
             />
 
             <div className="flex items-center justify-between mt-6">
@@ -1598,7 +1628,13 @@ export default function SiteContentTab() {
               currentUrl={getBaseValue('experienciasPage', 'hero.image')}
               onUrlChange={v => handleChange('experienciasPage', 'hero.image', v)}
               folder="experiencias"
-              label="Imagem Hero (Experiencias)"
+              label="Imagem Hero Desktop (Experiencias)"
+            />
+            <ImageUpload
+              currentUrl={getBaseValue('experienciasPage', 'hero.imageMobile')}
+              onUrlChange={v => handleChange('experienciasPage', 'hero.imageMobile', v)}
+              folder="experiencias"
+              label="Imagem Hero Mobile (Experiencias)"
             />
 
             {renderInput('Título da Seção Experiências', 'experienciasPage', 'experiences.title')}
