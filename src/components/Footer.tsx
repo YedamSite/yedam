@@ -28,12 +28,20 @@ const TikTok = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+import { usePathname } from 'next/navigation';
+
 const LINK_ICONS: Record<string, React.ComponentType<any>> = {
   MessageCircle, Mail, MapPin
 };
 
 export default function Footer() {
   const { t, locale } = useLanguage();
+  const pathname = usePathname();
+
+  if (pathname?.startsWith('/dashboard/admin')) {
+    return null;
+  }
+
   const siteContent = db.get('site_content');
   const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
   const content = translatedContent.footer || null;
