@@ -175,8 +175,8 @@ const DEFAULT_STATE: DbState = {
         btnBuyLink: '/tienda',
         btnRoutineText: 'DESCUBRIR RUTINAS',
         btnRoutineLink: '/rutinas',
-        bgImage: '/images/banner.webp',
-        bgImageMobile: '/images/banner.webp'
+        bgImage: '/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp',
+        bgImageMobile: '/images/cheotnun-k-beauty-banner-mobile-skincare-coreano.webp'
       },
       highlights: {
         items: [
