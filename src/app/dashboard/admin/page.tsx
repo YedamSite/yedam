@@ -210,11 +210,15 @@ export default function AdminDashboard() {
     syncWithSupabase();
     // Aguardar Supabase ficar pronto e recarregar (evita flash de dados antigos)
     (async () => {
-      while (!db.isSupabaseReady()) {
+      let attempts = 0;
+      while (!db.isSupabaseReady() && attempts < 50) {
         await new Promise(r => setTimeout(r, 100));
+        attempts++;
       }
-      await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
-      loadData();
+      if (db.isSupabaseReady()) {
+        await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
+        loadData();
+      }
     })();
     
     // Listener para atualizar quando o db mudar em outras abas/páginas

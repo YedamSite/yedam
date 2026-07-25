@@ -97,8 +97,10 @@ export default function ClienteDashboard() {
 
   const loadData = useCallback(async () => {
     const user = authService.getCurrentUser();
-    const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
-    const userEmail = user ? user.email : 'cliente@example.com';
+    if (!user) return; // Prevent loading data if not authenticated
+
+    const userId = user.id;
+    const userEmail = user.email;
 
     // Try to load orders and subscriptions from Supabase first, then merge with localStorage
     try {
@@ -155,16 +157,19 @@ export default function ClienteDashboard() {
 
   useEffect(() => {
     const user = authService.getCurrentUser();
-    setCurrentUser(user);
-    if (user) {
-      setProfileForm({ name: user.name, email: user.email });
+    if (!user) {
+      window.location.href = '/';
+      return;
     }
+
+    setCurrentUser(user);
+    setProfileForm({ name: user.name, email: user.email });
     loadData();
 
     // Real-time polling: sync from Supabase and re-read orders every 5 seconds
     const interval = setInterval(async () => {
       await db.reloadFromSupabase(['orders', 'subscriptions']);
-      const userId = user ? user.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
+      const userId = user.id;
       const allOrders = db.get('orders') || [];
       const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
       setOrders(userOrders);
