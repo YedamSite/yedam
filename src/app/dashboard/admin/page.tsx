@@ -44,6 +44,7 @@ export default function AdminDashboard() {
   const [chatUnread, setChatUnread] = useState(0);
   const knownChatIds = useRef<Set<string>>(new Set());
   const knownMsgCountPerChat = useRef<Record<string, number>>({});
+  const isFirstChatLoad = useRef(true);
 
   // Data States
   const [blocks, setBlocks] = useState<any[]>([]);
@@ -238,7 +239,6 @@ export default function AdminDashboard() {
 
   // Chat notification polling (always active, even before first chat tab visit)
   useEffect(() => {
-    const isFirstChatLoad = useRef(true);
 
     const checkChatNotifications = async () => {
       try {
