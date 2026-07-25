@@ -198,11 +198,7 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    const hasCookie = document.cookie.split('; ').some(row => row.startsWith('cheotnun_admin_session=true'));
-    if (!hasCookie) {
-      window.location.href = '/dashboard/admin/login';
-      return;
-    }
+    // The middleware.ts handles authentication redirection now.
     setAuthorized(true);
 
     loadData();
@@ -744,8 +740,13 @@ if (!authorized) {
             </div>
             <Button
               onClick={() => {
-                document.cookie = "cheotnun_admin_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                window.location.href = '/dashboard/admin/login';
+                fetch('/api/auth/cookie', {
+                  method: 'DELETE',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ type: 'admin' })
+                }).then(() => {
+                  window.location.href = '/dashboard/admin/login';
+                });
               }}
               variant="outline"
               className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"

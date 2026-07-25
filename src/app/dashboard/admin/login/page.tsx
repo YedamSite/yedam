@@ -24,7 +24,11 @@ export default function AdminLoginPage() {
 
       // Master bypass for local testing
       if (cleanEmail === 'mauemglobal@gmail.com' && password === 'Ja@que12') {
-        document.cookie = "cheotnun_admin_session=true; path=/; max-age=7200; SameSite=Lax";
+        await fetch('/api/auth/cookie', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'admin' })
+        });
         setSuccessMsg('✓ Autenticado com sucesso! Redirecionando...');
         setTimeout(() => {
           window.location.href = '/dashboard/admin';
@@ -47,7 +51,11 @@ export default function AdminLoginPage() {
         const adminEmails = ['admin@cheotnun.com', 'mauemglobal@gmail.com'];
         if (data.user && data.user.email && adminEmails.includes(data.user.email)) {
           // Success
-          document.cookie = "cheotnun_admin_session=true; path=/; max-age=7200; SameSite=Lax";
+          await fetch('/api/auth/cookie', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'admin' })
+          });
           setSuccessMsg('✓ Autenticado com sucesso! Redirecionando...');
           setTimeout(() => {
             window.location.href = '/dashboard/admin';
@@ -61,7 +69,11 @@ export default function AdminLoginPage() {
         // Fallback local mock authentication
         if ((cleanEmail === 'admin@cheotnun.com' && password === 'admin123') || 
             (cleanEmail === 'mauemglobal@gmail.com' && password === 'Ja@que12')) {
-          document.cookie = "cheotnun_admin_session=true; path=/; max-age=7200; SameSite=Lax";
+          await fetch('/api/auth/cookie', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'admin' })
+          });
           setSuccessMsg('✓ Autenticado com sucesso! (Modo de Demonstração)');
           setTimeout(() => {
             window.location.href = '/dashboard/admin';

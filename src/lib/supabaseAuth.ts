@@ -39,17 +39,20 @@ const SESSION_COOKIE_NAME = 'cheotnun_session';
 
 function setSessionCookie(data: any) {
   if (typeof window === 'undefined') return;
-  try {
-    const cookieValue = encodeURIComponent(JSON.stringify(data));
-    document.cookie = `${SESSION_COOKIE_NAME}=${cookieValue}; path=/; max-age=86400; SameSite=Lax`;
-  } catch { /* ignore */ }
+  fetch('/api/auth/cookie', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'client', value: data })
+  }).catch(e => console.error('Failed to set secure session cookie', e));
 }
 
 function clearSessionCookie() {
   if (typeof window === 'undefined') return;
-  try {
-    document.cookie = `${SESSION_COOKIE_NAME}=; path=/; max-age=0; SameSite=Lax`;
-  } catch { /* ignore */ }
+  fetch('/api/auth/cookie', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type: 'client' })
+  }).catch(e => console.error('Failed to clear secure session cookie', e));
 }
 
 function saveSession(data: any) {
