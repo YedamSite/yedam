@@ -243,13 +243,13 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav Centered - Responsive Spacing & Scaling */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 px-4 xl:px-8">
-            <div className="flex items-center justify-center gap-3 xl:gap-6 2xl:gap-8 flex-1">
+          <nav className="hidden lg:flex items-center justify-center flex-1 px-8 lg:px-12 xl:px-16">
+            <div className="flex items-center justify-center gap-5 lg:gap-8 xl:gap-12 w-full">
               {navItems.map((item: any) => (
                 <Link
                   key={item.href + '-' + item.label}
                   href={item.href}
-                  className={`text-[11px] xl:text-xs uppercase tracking-wider xl:tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
+                  className={`text-[10px] lg:text-[11px] xl:text-xs uppercase tracking-[0.1em] xl:tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
                     }`}
                 >
                   {item.label}

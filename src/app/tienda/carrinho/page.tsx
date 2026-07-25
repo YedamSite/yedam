@@ -359,7 +359,8 @@ export default function CheckoutWizard() {
       state: country,
       postal_code: zipCode,
       country,
-      phone
+      phone,
+      email
     };
 
     const customerId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';

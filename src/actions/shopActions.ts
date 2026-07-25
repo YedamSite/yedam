@@ -114,8 +114,8 @@ export async function submitOrderAction(data: {
     // Resolve dynamic user name and email for logs
     const users = db.get('users') || [];
     const userRecord = users.find((u: any) => u.id === data.customerId);
-    const recipientEmail = userRecord ? userRecord.email : 'cliente@example.com';
-    const recipientName = userRecord ? userRecord.name : 'Cliente';
+    const recipientEmail = userRecord?.email || data.shippingAddress?.email || 'cliente@example.com';
+    const recipientName = userRecord?.name || data.shippingAddress?.first_name || 'Cliente';
 
     // Create Order tracking log
     orderTracking.push({
