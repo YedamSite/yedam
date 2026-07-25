@@ -1872,6 +1872,21 @@ function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
 
+function deepMerge(target: any, source: any): any {
+  if (typeof target !== 'object' || target === null) return source;
+  if (typeof source !== 'object' || source === null) return source;
+  if (Array.isArray(target) && Array.isArray(source)) return source;
+  const result = { ...target };
+  for (const key of Object.keys(source)) {
+    if (source[key] instanceof Object && !Array.isArray(source[key])) {
+      result[key] = deepMerge(result[key] || {}, source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  }
+  return result;
+}
+
 function persistToLocalStorage() {
   if (typeof window === 'undefined') return;
   try {
@@ -1894,8 +1909,8 @@ function loadFromLocalStorage(): boolean {
       memoryDb = {
         ...DEFAULT_STATE,
         ...parsed,
-        site_content: { ...DEFAULT_STATE.site_content, ...(parsed.site_content || {}) },
-        system_settings: { ...DEFAULT_STATE.system_settings, ...(parsed.system_settings || {}) }
+        site_content: deepMerge(DEFAULT_STATE.site_content, parsed.site_content || {}),
+        system_settings: deepMerge(DEFAULT_STATE.system_settings, parsed.system_settings || {})
       };
       return true;
     }
@@ -2065,7 +2080,7 @@ async function loadSettingsFromSupabase() {
     if (json.data?.visual_theme) memoryDb.system_settings.visual_theme = json.data.visual_theme;
     if (json.data?.company_details) memoryDb.system_settings.company_details = json.data.company_details;
     if (json.data?.seo) memoryDb.system_settings.seo = json.data.seo;
-    if (json.data?.site_content) memoryDb.site_content = json.data.site_content;
+    if (json.data?.site_content) memoryDb.site_content = deepMerge(DEFAULT_STATE.site_content, json.data.site_content);
   } catch {}
 }
 
