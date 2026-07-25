@@ -238,6 +238,8 @@ export default function AdminDashboard() {
 
   // Chat notification polling (always active, even before first chat tab visit)
   useEffect(() => {
+    const isFirstChatLoad = useRef(true);
+
     const checkChatNotifications = async () => {
       try {
         const res = await fetch('/api/chat');
@@ -255,7 +257,7 @@ export default function AdminDashboard() {
         let notify = 0;
 
         for (const id of currentChatIds) {
-          if (!knownChatIds.current.has(id)) notify++;
+          if (!knownChatIds.current.has(id) && !isFirstChatLoad.current) notify++;
         }
 
         for (const [chatId, count] of Object.entries(currentMsgCount)) {
@@ -269,6 +271,7 @@ export default function AdminDashboard() {
 
         knownChatIds.current = currentChatIds;
         knownMsgCountPerChat.current = currentMsgCount;
+        isFirstChatLoad.current = false;
 
         if (activeSubTab === 'chat') {
           setChatUnread(0);
