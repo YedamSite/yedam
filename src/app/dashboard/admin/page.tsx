@@ -1404,9 +1404,9 @@ if (!authorized) {
           {/* TAB: ORDERS & INVOICES */}
           {activeSubTab === 'orders' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 mb-6 gap-3">
                 <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">Pedidos ({orders.length})</h2>
-                <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground">
                   <button
                     onClick={async () => {
                       await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);

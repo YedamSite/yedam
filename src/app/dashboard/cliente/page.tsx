@@ -228,26 +228,56 @@ export default function ClienteDashboard() {
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full py-12 px-4 md:px-8">
+      <main className="flex-1 max-w-7xl mx-auto w-full py-8 px-4 md:px-8">
         {/* User profile brief header */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-full border-2 border-accent bg-[#030712] flex items-center justify-center text-accent text-lg font-light uppercase tracking-wider font-heading">
-              {currentUser?.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : <User className="h-7 w-7" />}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/10 pb-5 mb-6 gap-3">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-full border-2 border-accent bg-[#030712] flex items-center justify-center text-accent text-base sm:text-lg font-light uppercase tracking-wider font-heading shrink-0">
+              {currentUser?.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : <User className="h-6 w-6" />}
             </div>
             <div>
               <span className="text-[10px] uppercase font-bold tracking-widest text-accent">{t('Área del Cliente')}</span>
-              <h1 className="font-heading text-3xl font-light text-white uppercase tracking-wider">
+              <h1 className="font-heading text-xl sm:text-3xl font-light text-white uppercase tracking-wider">
                 {t('Hola,')} {currentUser?.name || t('Cliente')}
               </h1>
             </div>
           </div>
         </div>
 
+        {/* Mobile: Horizontal scrollable tabs */}
+        <div className="lg:hidden mb-6 -mx-4 px-4">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {[
+              { id: 'pedidos', label: t('Pedidos'), icon: Package },
+              { id: 'favorites', label: t('Favoritos'), icon: Heart },
+              { id: 'suscripciones', label: t('Club'), icon: Sparkles },
+              { id: 'addresses', label: t('Direcciones'), icon: MapPin },
+              { id: 'emails', label: t('Comms'), icon: Clock },
+              { id: 'perfil', label: t('Perfil'), icon: User }
+            ].map((tab) => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all shrink-0 ${
+                    activeTab === tab.id
+                      ? 'bg-accent text-background shadow-md shadow-accent/20'
+                      : 'bg-white/5 text-muted-foreground hover:text-white border border-white/10'
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Dashboard Tabs Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Navigation Sidebar */}
-          <div className="flex flex-col gap-1 border border-white/5 rounded-3xl p-4 bg-card shadow-xl h-fit">
+          {/* Navigation Sidebar — Desktop only */}
+          <div className="hidden lg:flex flex-col gap-1 border border-white/5 rounded-3xl p-4 bg-card shadow-xl h-fit">
             {[
               { id: 'pedidos', label: t('Mis Pedidos'), icon: Package },
               { id: 'favorites', label: t('Mis Favoritos'), icon: Heart },
@@ -277,7 +307,7 @@ export default function ClienteDashboard() {
           </div>
 
           {/* Main Area */}
-          <div className="lg:col-span-3 min-h-[500px]">
+          <div className="lg:col-span-3 min-h-[400px] w-full overflow-hidden">
             {/* TAB: MIS PEDIDOS */}
             {activeTab === 'pedidos' && (
               <div className="flex flex-col gap-6">
