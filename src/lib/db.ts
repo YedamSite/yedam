@@ -291,37 +291,35 @@ const DEFAULT_STATE: DbState = {
         youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
         tiktok: 'https://www.tiktok.com/@lacheotnun'
       },
-      columns: [
-        {
-          title: 'Tienda',
-          links: [
-            { label: 'Todos los productos', href: '/tienda' },
-            { label: 'Cuidado Facial', href: '/tienda?category=cuidado-facial' },
-            { label: 'Protección Solar', href: '/tienda?category=proteccion-solar' },
-            { label: 'Cómo funciona', href: '/como-funciona' },
-            { label: 'Rutinas Recomendadas', href: '/rutinas' },
-            { label: 'Blog', href: '/blog' }
-          ]
-        },
-        {
-          title: 'Ayuda & Políticas',
-          links: [
-            { label: 'Envíos y Entregas', href: '/ayuda/envios' },
-            { label: 'Cambios y Devoluciones', href: '/ayuda/devoluciones' },
-            { label: 'Contacto', href: '/contacto' },
-            { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
-            { label: 'Términos y Condiciones', href: '/terminos' }
-          ]
-        },
-        {
-          title: 'Atención al Cliente',
-          links: [
-            { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
-            { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
-            { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
-          ]
-        }
-      ],
+      col1: {
+        title: 'Tienda',
+        links: [
+          { label: 'Todos los productos', href: '/tienda' },
+          { label: 'Cuidado Facial', href: '/tienda?category=cuidado-facial' },
+          { label: 'Protección Solar', href: '/tienda?category=proteccion-solar' },
+          { label: 'Cómo funciona', href: '/como-funciona' },
+          { label: 'Rutinas Recomendadas', href: '/rutinas' },
+          { label: 'Blog', href: '/blog' }
+        ]
+      },
+      col2: {
+        title: 'Ayuda & Políticas',
+        links: [
+          { label: 'Envíos y Entregas', href: '/ayuda/envios' },
+          { label: 'Cambios y Devoluciones', href: '/ayuda/devoluciones' },
+          { label: 'Contacto', href: '/contacto' },
+          { label: 'Política de Privacidad', href: '/politica-de-privacidad' },
+          { label: 'Términos y Condiciones', href: '/terminos' }
+        ]
+      },
+      col3: {
+        title: 'Atención al Cliente',
+        links: [
+          { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
+          { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
+          { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
+        ]
+      },
       marcas: {
         testimonials: {
           title: 'Lo que dicen nuestras clientas',
@@ -904,27 +902,25 @@ const DEFAULT_STATE: DbState = {
           logoSubtext: 'K-Beauty',
           description: 'Sua loja online de cosméticos coreanos autênticos. Produtos originais direto da Coreia.',
           copyright: '© 2026 Cheotnun K-Beauty. Todos os direitos reservados.',
-          columns: [
-            { title: 'PRODUTOS', links: [
+          col1: { title: 'PRODUTOS', links: [
               { label: 'Todos os Produtos', href: '/tienda' },
               { label: 'Mais Vendidos', href: '/tienda' },
               { label: 'Lançamentos', href: '/tienda' },
               { label: 'Marcas', href: '/marcas' },
               { label: 'Promoções', href: '/tienda' }
             ]},
-            { title: 'AJUDA', links: [
+          col2: { title: 'AJUDA', links: [
               { label: 'Como Comprar', href: '/como-funciona' },
               { label: 'Envíos e Pagamentos', href: '/ayuda/envios' },
               { label: 'Devoluciones', href: '/ayuda/devoluciones' },
               { label: 'Perguntas Frequentes', href: '/como-funciona' },
               { label: 'Contato', href: '/contacto' }
             ]},
-            { title: 'LEGAL', links: [
+          col3: { title: 'LEGAL', links: [
               { label: 'Términos e Condições', href: '/terminos' },
               { label: 'Política de Privacidade', href: '/politica-de-privacidad' },
               { label: 'Política de Cookies', href: '/politica-de-privacidad' }
             ]}
-          ]
         },
         marcas: {
           hero: {
@@ -1392,27 +1388,25 @@ const DEFAULT_STATE: DbState = {
           logoSubtext: 'K-Beauty',
           description: 'Your online store for authentic Korean cosmetics. Original products direct from Korea.',
           copyright: '© 2026 Cheotnun K-Beauty. All rights reserved.',
-          columns: [
-            { title: 'PRODUCTS', links: [
+          col1: { title: 'PRODUCTS', links: [
               { label: 'All Products', href: '/tienda' },
               { label: 'Best Sellers', href: '/tienda' },
               { label: 'New Arrivals', href: '/tienda' },
               { label: 'Brands', href: '/marcas' },
               { label: 'Sales', href: '/tienda' }
             ]},
-            { title: 'HELP', links: [
+          col2: { title: 'HELP', links: [
               { label: 'How to Buy', href: '/como-funciona' },
               { label: 'Shipping & Payments', href: '/ayuda/envios' },
               { label: 'Returns', href: '/ayuda/devoluciones' },
               { label: 'FAQ', href: '/como-funciona' },
               { label: 'Contact', href: '/contacto' }
             ]},
-            { title: 'LEGAL', links: [
+          col3: { title: 'LEGAL', links: [
               { label: 'Terms & Conditions', href: '/terminos' },
               { label: 'Privacy Policy', href: '/politica-de-privacidad' },
               { label: 'Cookie Policy', href: '/politica-de-privacidad' }
             ]}
-          ]
         },
         marcas: {
           hero: {

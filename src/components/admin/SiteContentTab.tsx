@@ -749,9 +749,32 @@ export default function SiteContentTab() {
               {renderInput('URL TikTok', 'footer', 'social.tiktok')}
             </div>
 
-            <div className="border-t border-white/5 pt-4">
-              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Colunas do Footer</h4>
-              <p className="text-[10px] text-muted-foreground">As colunas, links e ícones do footer são editáveis através do código fonte em src/components/Footer.tsx para maior flexibilidade.</p>
+            <div className="border-t border-white/5 pt-4 space-y-6">
+              {['col1', 'col2', 'col3'].map((colKey, cIdx) => (
+                <div key={colKey} className="border border-white/5 rounded-xl p-4 bg-secondary/30">
+                  <h4 className="text-[10px] font-bold text-accent uppercase mb-3">Coluna {cIdx + 1}</h4>
+                  {renderInput('Título da Coluna', 'footer', `${colKey}.title`)}
+                  
+                  <div className="flex items-center justify-between mt-4 mb-2">
+                    <h5 className="text-[10px] font-bold text-white/70 uppercase">Links da Coluna</h5>
+                    <Button onClick={() => addArrayItem('footer', `${colKey}.links`, { label: 'Novo Link', href: '#' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                      <Plus className="h-3 w-3" /> ADICIONAR LINK
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {((content.footer as any)?.[colKey]?.links || []).map((_: any, idx: number) => (
+                      <div key={idx} className="flex gap-2 items-center">
+                        <div className="flex-1 grid grid-cols-2 gap-2">
+                          {renderArrayInput('Label (Texto)', 'footer', `${colKey}.links`, idx, 'label')}
+                          {renderArrayInput('URL / Link', 'footer', `${colKey}.links`, idx, 'href')}
+                        </div>
+                        <button onClick={() => removeArrayItem('footer', `${colKey}.links`, idx)} className="text-red-500 mt-5"><Trash2 className="h-3.5 w-3.5" /></button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

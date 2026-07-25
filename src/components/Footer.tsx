@@ -43,11 +43,13 @@ export default function Footer() {
   const logoUrl = content?.logoUrl || '/images/cheotnun-k-beauty-logo-oficial.webp';
   const description = content?.description || '';
   const social = content?.social || {};
-  const columns = content?.columns || [];
+  const col1 = content?.col1 || { title: 'Tienda', links: [] };
+  const col2 = content?.col2 || { title: 'Ayuda & Políticas', links: [] };
+  const col3 = content?.col3 || { title: 'Atención al Cliente', links: [] };
   
   // Ensure Contacto is present in the help column just in case it's missing from DB
-  const renderColumns = JSON.parse(JSON.stringify(columns));
-  const helpColumn = renderColumns.find((c: any) => c.title === 'Ayuda & Políticas' || c.title === 'Ayuda');
+  const renderColumns = [JSON.parse(JSON.stringify(col1)), JSON.parse(JSON.stringify(col2)), JSON.parse(JSON.stringify(col3))].filter(c => c.title);
+  const helpColumn = renderColumns.find((c: any) => c.title === 'Ayuda & Políticas' || c.title === 'Ayuda' || c.title === 'HELP');
   if (helpColumn && !helpColumn.links.some((l: any) => l.href === '/contacto')) {
     helpColumn.links.splice(2, 0, { label: 'Contacto', href: '/contacto' });
   }
