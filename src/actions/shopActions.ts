@@ -42,7 +42,17 @@ export async function submitOrderAction(data: {
     const orderTracking = db.get('order_tracking');
     const logs = db.get('communication_logs');
 
-    const subtotal = data.items.reduce((acc, curr) => acc + (curr.price * curr.quantity), 0);
+    let subtotal = 0;
+    // Calculate subtotal securely using prices from the database
+    data.items.forEach(item => {
+      const product = products.find((p: any) => p.id === item.product_id);
+      if (product) {
+        // Also update the item price in the array so it reflects the real price in the order record
+        item.price = product.price;
+        subtotal += (product.price * item.quantity);
+      }
+    });
+
     const shipping = 15.00;
     const total = subtotal + shipping;
 

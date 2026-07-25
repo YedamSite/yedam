@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { cookies } from 'next/headers';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const serviceRoleKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
@@ -20,6 +21,13 @@ const TABLE_MAP: Record<string, string> = {
 };
 
 export async function POST(req: Request) {
+  const cookieStore = await cookies();
+  const isAdmin = cookieStore.get('cheotnun_admin_session')?.value === 'true';
+
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   if (!supabaseUrl || !serviceRoleKey) {
     return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
   }

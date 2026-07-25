@@ -8,6 +8,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { db } from '@/lib/db';
 import { useLanguage } from '@/context/LanguageContext';
+import DOMPurify from 'isomorphic-dompurify';
 
 export default function BlogPostPage() {
   const { t, locale } = useLanguage();
@@ -87,7 +88,7 @@ export default function BlogPostPage() {
               prose-a:text-accent prose-a:no-underline hover:prose-a:underline
               prose-li:text-foreground/70
               prose-img:rounded-2xl prose-img:my-8"
-            dangerouslySetInnerHTML={{ __html: post.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
           />
 
           {/* Footer */}

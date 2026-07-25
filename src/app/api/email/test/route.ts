@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { testEmailConfig } from '@/lib/emailSender';
+import { cookies } from 'next/headers';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const to = searchParams.get('to') || process.env.ADMIN_NOTIFICATION_EMAIL || 'sac@cheotnun.com';
+
+  const cookieStore = await cookies();
+  const isAdmin = cookieStore.get('cheotnun_admin_session')?.value === 'true';
+
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
   try {
     const result = await testEmailConfig(to);

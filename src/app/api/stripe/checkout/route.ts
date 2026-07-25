@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
+import { createClient } from '@supabase/supabase-js';
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,9 +9,17 @@ export async function POST(req: NextRequest) {
 
     // === SUBSCRIPTION FLOW (Club Cheotnun) ===
     if (body.mode === 'subscription') {
-      const { planName, planPrice, customerEmail, customerName, customerId } = body;
-      if (!planName || !planPrice) {
-        return NextResponse.json({ error: 'Missing plan info' }, { status: 400 });
+      const { planName, customerEmail, customerName, customerId } = body;
+      
+      const VALID_PLANS: Record<string, number> = {
+        'Lover': 15.00,
+        'Addict': 25.00,
+        'Obsessed': 50.00
+      };
+      
+      const realPrice = VALID_PLANS[planName];
+      if (!planName || !realPrice) {
+        return NextResponse.json({ error: 'Invalid or missing plan info' }, { status: 400 });
       }
 
       const session = await getStripe().checkout.sessions.create({
@@ -22,13 +31,13 @@ export async function POST(req: NextRequest) {
               name: planName,
               description: `Assinatura mensal - ${planName}`,
             },
-            unit_amount: Math.round(planPrice * 100),
+            unit_amount: Math.round(realPrice * 100),
             recurring: { interval: 'month' },
           },
           quantity: 1,
         }],
         mode: 'subscription',
-        success_url: `${origin}/dashboard/cliente?tab=suscripciones&subscription=success&plan=${encodeURIComponent(planName)}&price=${planPrice}`,
+        success_url: `${origin}/dashboard/cliente?tab=suscripciones&subscription=success&plan=${encodeURIComponent(planName)}&price=${realPrice}`,
         cancel_url: `${origin}/dashboard/cliente?tab=suscripciones`,
         customer_email: customerEmail,
         metadata: {
@@ -42,9 +51,28 @@ export async function POST(req: NextRequest) {
     }
 
     // === ONE-TIME PAYMENT FLOW (Product purchase) ===
-    const { orderId, totalAmount, customerEmail, customerName, items, locale } = body;
-    if (!orderId || !totalAmount) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    const { orderId, customerEmail, customerName, items, locale } = body;
+    if (!orderId) {
+      return NextResponse.json({ error: 'Missing order ID' }, { status: 400 });
+    }
+    
+    // Fetch real order total from Supabase directly to prevent frontend tampering
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
+    
+    let realTotalAmount = 0;
+    
+    if (supabaseUrl && supabaseServiceKey) {
+       const supabase = createClient(supabaseUrl, supabaseServiceKey);
+       const { data: order } = await supabase.from('cheotnun_orders').select('total_amount').eq('id', orderId).single();
+       if (!order) return NextResponse.json({ error: 'Order not found in DB' }, { status: 404 });
+       realTotalAmount = order.total_amount;
+    } else {
+      // Fallback for local testing if Supabase is down
+      const { db } = await import('@/lib/db');
+      const order = db.get('orders').find((o: any) => o.id === orderId);
+      if (!order) return NextResponse.json({ error: 'Order not found locally' }, { status: 404 });
+      realTotalAmount = order.total_amount;
     }
 
     const currency = locale === 'pt' ? 'brl' : 'usd';
@@ -60,7 +88,7 @@ export async function POST(req: NextRequest) {
               ? items.map((i: any) => `${i.name} x${i.quantity}`).join(', ')
               : 'Produtos Cheotnun K-Beauty',
           },
-          unit_amount: Math.round(totalAmount * 100),
+          unit_amount: Math.round(realTotalAmount * 100),
         },
         quantity: 1,
       }],

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sendEmail, buildChatNotificationHtml } from '@/lib/emailSender';
+import { cookies } from 'next/headers';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const serviceRoleKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
@@ -13,6 +14,13 @@ function getClient() {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const sessionId = searchParams.get('sessionId');
+
+  const cookieStore = await cookies();
+  const isAdmin = cookieStore.get('cheotnun_admin_session')?.value === 'true';
+
+  if (!isAdmin && !sessionId) {
+    return NextResponse.json({ error: 'Unauthorized. Session ID required.' }, { status: 401 });
+  }
 
   try {
     const supabase = getClient();
