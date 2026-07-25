@@ -123,9 +123,9 @@ export default function LiveChatTab() {
   };
 
   return (
-    <div className="flex flex-col h-[600px] border border-white/5 rounded-3xl bg-card overflow-hidden">
-      <div className="flex h-full">
-        <div className="w-1/3 border-r border-white/5 flex flex-col bg-secondary/20">
+    <div className="flex flex-col md:h-[600px] border border-white/5 rounded-3xl bg-card overflow-hidden">
+      <div className="flex flex-col md:flex-row h-full">
+        <div className="w-full md:w-1/3 border-b md:border-b-0 md:border-r border-white/5 flex flex-col bg-secondary/20 h-[300px] md:h-auto shrink-0">
           <div className="p-4 border-b border-white/5">
             <h2 className="font-heading text-lg text-white">{t('Conversas')} ({chats.length})</h2>
           </div>
@@ -164,7 +164,7 @@ export default function LiveChatTab() {
           </div>
         </div>
 
-        <div className="w-2/3 flex flex-col bg-background/50">
+        <div className="w-full md:w-2/3 flex flex-col bg-background/50 h-[450px] md:h-auto">
           {activeChat ? (
             <>
                 <div className="p-4 border-b border-white/5 flex items-center gap-3 bg-secondary/30">

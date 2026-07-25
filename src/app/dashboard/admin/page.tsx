@@ -2103,13 +2103,13 @@ if (!authorized) {
 {/* TAB: NEWSLETTER SUBSCRIBERS */}
 {activeSubTab === 'newsletter' && (
   <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-    <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
-      <div className="flex items-center gap-4">
-        <h2 className="font-heading text-2xl font-light text-white">Newsletter & Leads de E-mail</h2>
+    <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/5 pb-4 mb-6 gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
+        <h2 className="font-heading text-xl sm:text-2xl font-light text-white">Newsletter & Leads de E-mail</h2>
         <button
           onClick={syncWithSupabase}
           disabled={syncingSupabase}
-          className={`text-[9px] font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all ${
+          className={`text-[9px] font-bold px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all w-full sm:w-auto justify-center ${
             syncingSupabase
               ? 'bg-gray-500/20 text-gray-400 cursor-not-allowed'
               : 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20'
