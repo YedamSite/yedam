@@ -319,8 +319,9 @@ const DEFAULT_STATE: DbState = {
           { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
           { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
         ]
-      },
-      marcas: {
+      }
+    },
+    marcas: {
         testimonials: {
           title: 'Lo que dicen nuestras clientas',
           buttonText: 'VER MÁS OPINIONES',
@@ -563,8 +564,7 @@ const DEFAULT_STATE: DbState = {
             { name: 'Transferencia bancaria', desc: 'Disponibles para algunos países. Contáctanos para más información.' }
           ]
         }
-      }
-    },
+      },
     rutinasPage: {
       hero: {
         title: 'Aprenda os passos do skincare coreano',
