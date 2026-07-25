@@ -175,7 +175,8 @@ const DEFAULT_STATE: DbState = {
         btnBuyLink: '/tienda',
         btnRoutineText: 'DESCUBRIR RUTINAS',
         btnRoutineLink: '/rutinas',
-        bgImage: '/images/banner.webp'
+        bgImage: '/images/banner.webp',
+        bgImageMobile: '/images/banner.webp'
       },
       highlights: {
         items: [
@@ -343,7 +344,8 @@ const DEFAULT_STATE: DbState = {
         hero: {
           title: 'Marcas Coreanas',
           subtitle: 'Trabajamos con las mejores marcas de Corea del Sur para ofrecerte lo mejor en cuidado de la piel.',
-          image: '/images/marcas-coreanas.webp'
+          image: '/images/marcas-coreanas.webp',
+          imageMobile: '/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp'
         },
         features: [
           { title: 'Marcas auténticas', text: 'Productos 100% originales comprados directamente en Corea del Sur.', icon: 'Award' },
@@ -367,7 +369,8 @@ const DEFAULT_STATE: DbState = {
         hero: {
           title: 'Cómo funciona',
           subtitle: 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, práctica y confiable.',
-          image: '/images/como-funciona-hero.webp'
+          image: '/images/como-funciona-hero.webp',
+          imageMobile: '/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp'
         },
         steps: [
           { number: '01', title: 'Eliges\ntus productos', text: 'Explora nuestra tienda\ny selecciona tus favoritos.' },
@@ -436,6 +439,7 @@ const DEFAULT_STATE: DbState = {
       contacto: {
         hero: {
           image: '/images/cheotnun-k-beauty-contato-atendimento.webp',
+          imageMobile: '/images/mobile/cheotnun-k-beauty-contato-atendimento.webp',
           title: 'Estamos aquí\npara ti',
           subtitle: '¿Tienes preguntas, necesitas ayuda con tu pedido o quieres más información sobre nuestros productos? Nuestro equipo está listo para ayudarte.',
           buttonText: 'RESPUESTA RÁPIDA Y PERSONALIZADA',
@@ -538,7 +542,9 @@ const DEFAULT_STATE: DbState = {
         hero: {
           title: 'Envíos y Pagos',
           subtitle: 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.',
-          text: 'Realizamos envíos internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada país destino, para que tu experiencia sea segura y sin complicaciones.'
+          text: 'Realizamos envíos internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada país destino, para que tu experiencia sea segura y sin complicaciones.',
+          image: '/images/cheotnun-k-beauty-politica-envios.webp',
+          imageMobile: '/images/mobile/cheotnun-k-beauty-politica-envios.webp'
         },
         features: [
           { text: 'Envíos seguros a\ntoda América Latina y Europa', icon: 'PlaneTakeoff' },
@@ -566,7 +572,8 @@ const DEFAULT_STATE: DbState = {
         title: 'Aprenda os passos do skincare coreano',
         subtitle: 'Entenda a funcao de cada etapa e monte a rotina perfeita para sua pele.',
         buttonText: 'EXPLORAR PRODUTOS',
-        image: '/images/cheotnun-k-beauty-rutinas-skincare.webp'
+        image: '/images/cheotnun-k-beauty-rutinas-skincare.webp',
+        imageMobile: '/images/mobile/cheotnun-k-beauty-rutinas-skincare.webp'
       },
       stepsSection: {
         title: 'Conheca cada etapa do skincare',
@@ -667,7 +674,8 @@ const DEFAULT_STATE: DbState = {
         title: 'Experiencias Yedam',
         subtitle: 'Mucho mas que productos, una conexion con la cultura coreana.',
         buttonText: 'Conecta con la cultura coreana',
-        image: '/images/cheotnun-k-beauty-experiencias-viagens.webp'
+        image: '/images/cheotnun-k-beauty-experiencias-viagens.webp',
+        imageMobile: '/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp'
       },
       experiences: {
         title: 'Descubre nuestras experiencias'
