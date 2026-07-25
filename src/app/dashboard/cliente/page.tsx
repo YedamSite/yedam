@@ -134,6 +134,7 @@ export default function ClienteDashboard() {
 
     // Load subscription from Supabase first, fallback to localStorage
     const allSubs = db.get('subscriptions') || [];
+    const hasAnyRecord = allSubs.some((s: any) => s.user_id === userId);
     const userSub = allSubs.find((s: any) => s.user_id === userId && s.status === 'active');
     if (userSub) {
       setSubscription({
@@ -143,6 +144,9 @@ export default function ClienteDashboard() {
         next_billing: userSub.next_billing,
         history: userSub.history || [],
       });
+    } else if (hasAnyRecord) {
+      setSubscription(null);
+      if (typeof window !== 'undefined') localStorage.removeItem('cheotnun_sub');
     } else if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('cheotnun_sub');
       setSubscription(saved ? JSON.parse(saved) : null);
@@ -165,6 +169,7 @@ export default function ClienteDashboard() {
       const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
       setOrders(userOrders);
       const allSubs = db.get('subscriptions') || [];
+      const hasAnyRecord = allSubs.some((s: any) => s.user_id === userId);
       const userSub = allSubs.find((s: any) => s.user_id === userId && s.status === 'active');
       if (userSub) {
         setSubscription({
@@ -174,6 +179,9 @@ export default function ClienteDashboard() {
           next_billing: userSub.next_billing,
           history: userSub.history || [],
         });
+      } else if (hasAnyRecord) {
+        setSubscription(null);
+        if (typeof window !== 'undefined') localStorage.removeItem('cheotnun_sub');
       }
     }, 5000);
 

@@ -52,6 +52,7 @@ export default function AdminDashboard() {
   const [brands, setBrands] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [emailLogs, setEmailLogs] = useState<any[]>([]);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
 
   // CRUD Product States
   const [prodName, setProdName] = useState('');
@@ -187,6 +188,7 @@ export default function AdminDashboard() {
     setCoupons(db.get('coupons') || []);
     setBlogPosts(db.get('blog_posts') || []);
     setSubscribers(db.get('newsletter_subscribers') || []);
+    setSubscriptions(db.get('subscriptions') || []);
 
     setProdCategory(prev => {
       if (prev && cats.some((c: any) => c.id === prev)) return prev;
@@ -2307,24 +2309,38 @@ if (!authorized) {
                       <span>Próximo Pago</span>
                       <span className="text-right">Estado</span>
                     </div>
-                    {[
-                      { name: 'Jaque Customer', email: 'cliente@example.com', plan: 'Premium Box', next: '2026-08-11', status: 'activa' },
-                      { name: 'Maria Rodriguez', email: 'maria@example.com', plan: 'Standard Box', next: '2026-07-28', status: 'activa' },
-                      { name: 'Sofia Fernandez', email: 'sofia@example.com', plan: 'Deluxe Box', next: '2026-08-01', status: 'cancelada' }
-                    ].map((sub, idx) => (
+                    {subscriptions.length === 0 ? (
+                      <div className="p-4 text-center text-muted-foreground text-[10px]">No hay suscriptores activos.</div>
+                    ) : subscriptions.map((sub, idx) => (
                       <div key={idx} className="grid grid-cols-4 p-3 border-b border-white/5 last:border-0 items-center">
                         <div className="flex flex-col">
-                          <span className="font-bold text-white">{sub.name}</span>
-                          <span className="text-[9px] text-muted-foreground">{sub.email}</span>
+                          <span className="font-bold text-white">{sub.user_name || 'Cliente'}</span>
+                          <span className="text-[9px] text-muted-foreground">{sub.user_email || sub.user_id?.substring(0, 8) + '...'}</span>
                         </div>
-                        <span className="text-muted-foreground">{sub.plan}</span>
-                        <span className="text-muted-foreground">{sub.next}</span>
-                        <span className="text-right">
+                        <span className="text-muted-foreground">{sub.plan_name || sub.plan}</span>
+                        <span className="text-muted-foreground">{sub.next_billing}</span>
+                        <span className="text-right flex items-center justify-end gap-2">
                           <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                            sub.status === 'activa' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                            sub.status === 'active' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
                           }`}>
-                            {sub.status}
+                            {sub.status === 'active' ? 'Activa' : 'Cancelada'}
                           </span>
+                          {sub.status === 'active' && (
+                            <button
+                              onClick={() => {
+                                if (confirm('¿Desea cancelar esta membresía?')) {
+                                  const updated = subscriptions.map((s: any) => s.id === sub.id ? { ...s, status: 'cancelled' } : s);
+                                  // Update db and state
+                                  const db = require('@/lib/db').default;
+                                  db.save('subscriptions', updated);
+                                  setSubscriptions(updated);
+                                }
+                              }}
+                              className="bg-red-500/10 text-red-500 hover:bg-red-500/20 px-2 py-1 rounded-md text-[9px] uppercase font-bold transition-colors"
+                            >
+                              Cancelar
+                            </button>
+                          )}
                         </span>
                       </div>
                     ))}
