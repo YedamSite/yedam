@@ -1908,7 +1908,12 @@ function loadFromLocalStorage(): boolean {
     }
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      const parsed = JSON.parse(saved);
+      let stringified = saved;
+      if (stringified.toLowerCase().includes('yedam')) {
+        stringified = stringified.replace(/YEDAM/g, 'CHEOTNUN').replace(/Yedam/g, 'Cheotnun').replace(/yedam/g, 'cheotnun');
+        localStorage.setItem(STORAGE_KEY, stringified);
+      }
+      const parsed = JSON.parse(stringified);
       memoryDb = {
         ...DEFAULT_STATE,
         ...parsed,
