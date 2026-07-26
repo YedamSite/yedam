@@ -364,7 +364,7 @@ export default function CheckoutWizard() {
     };
 
     const customerId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
-    const customerEmail = currentUser ? currentUser.email : 'cliente@example.com';
+    const customerEmail = currentUser?.email || email || 'cliente@example.com';
 
     // 1. Create the pending order record
     const res = await submitOrderAction({
