@@ -132,7 +132,7 @@ export default function Footer() {
         {/* Top row: Copyright and Credits */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <p>
-            &copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.
+            &copy; {new Date().getFullYear()} {t('Cheotnun K-Beauty')}. {t('Todos los derechos reservados')}.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">

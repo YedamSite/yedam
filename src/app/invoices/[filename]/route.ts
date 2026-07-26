@@ -108,7 +108,7 @@ export async function GET(
     phone: '+34 912 345 678',
     email: 'hola@cheotnun.com'
   };
-  doc.text(company.name || 'Cheotnun K-Beauty S.L.', 15, 47);
+  doc.text('Cheotnun K-Beauty S.L.', 15, 47);
   doc.text(company.address || 'Calle Gran Vía 12, Madrid, España', 15, 51);
   doc.text(`Phone: ${company.phone || '+34 912 345 678'}`, 15, 55);
   doc.text(`Email: ${company.email || 'hola@cheotnun.com'}`, 15, 59);
