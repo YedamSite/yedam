@@ -21,7 +21,12 @@ export const additionalTranslations = {
     'Reenviando...': 'Reenviando...',
     'Aguarde alguns minutos antes de reenviar.': 'Espera algunos minutos antes de reenviar.',
     'Erro ao reenviar e-mail.': 'Error al reenviar e-mail.',
+    // LiveChat
+    'Você': 'Tú',
+    'Atendimento': 'Atención',
     // ReservationModal (Portuguese keys → Spanish)
+    'Nome Completo': 'Nombre Completo',
+    'Telefone': 'Teléfono',
     'Reservar Experiência': 'Reservar Experiencia',
     'Seu nome': 'Tu nombre',
     'seu@email.com': 'tu@email.com',
@@ -970,6 +975,10 @@ export const additionalTranslations = {
     'Personalizar': 'Personalizar',
     'Rechazar Todo': 'Recusar Tudo',
     'Aceptar Todo': 'Aceitar Tudo',
+    // LiveChat (Spanish → Portuguese)
+    'Respondemos enseguida': 'Respondemos em seguida',
+    '¡Hola! ¿En qué podemos ayudarte hoy?': 'Olá! Como podemos ajudar você hoje?',
+    'Escribe tu mensaje...': 'Escreva sua mensagem...',
   },
   en: {
     // Header
@@ -1878,6 +1887,10 @@ export const additionalTranslations = {
     'Personalizar': 'Customize',
     'Rechazar Todo': 'Reject All',
     'Aceptar Todo': 'Accept All',
+    // LiveChat (Spanish → English)
+    'Respondemos enseguida': 'We reply shortly',
+    '¡Hola! ¿En qué podemos ayudarte hoy?': 'Hello! How can we help you today?',
+    'Escribe tu mensaje...': 'Write your message...',
     // Admin Login (Portuguese → English)
     'CHEOTNUN ENTERPRISE': 'CHEOTNUN ENTERPRISE',
     'Painel Administrativo - Acesso Restrito': 'Admin Panel - Restricted Access',

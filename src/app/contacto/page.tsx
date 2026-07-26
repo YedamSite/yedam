@@ -84,7 +84,7 @@ export default function ContactoPage() {
   const methods = [
     { icon: 'MessageCircle', title: c?.contactMethods?.whatsapp?.label || 'WhatsApp', desc: c?.contactMethods?.whatsapp?.desc || 'La forma más rápida de hablar con nuestro equipo.', btn: c?.contactMethods?.whatsapp?.btn || 'ESCRIBIR AHORA', link: c?.contactMethods?.whatsapp?.link || '#contacto-form', footer: c?.contactMethods?.whatsapp?.value || '+55 11 98765-4321' },
     { icon: 'Mail', title: c?.contactMethods?.email?.label || 'Correo electrónico', desc: c?.contactMethods?.email?.desc || 'Envíanos un e-mail y te responderemos pronto.', btn: c?.contactMethods?.email?.btn || 'ENVIAR E-MAIL', link: c?.contactMethods?.email?.link || 'mailto:hola@cheotnun.com', footer: c?.contactMethods?.email?.value || 'hola@cheotnun.com' },
-    { icon: 'Instagram', title: c?.contactMethods?.instagram?.label || 'Instagram', desc: c?.contactMethods?.instagram?.desc || 'Envíanos un mensaje directo en Instagram.', btn: c?.contactMethods?.instagram?.btn || 'IR AL INSTAGRAM', link: c?.contactMethods?.instagram?.link || 'https://instagram.com/cheotnun.kbeauty', footer: c?.contactMethods?.instagram?.value || '@cheotnun.kbeauty' },
+    { icon: 'Instagram', title: c?.contactMethods?.instagram?.label || 'Instagram', desc: c?.contactMethods?.instagram?.desc || 'Envíanos un mensaje directo en Instagram.', btn: c?.contactMethods?.instagram?.btn || 'IR AL INSTAGRAM', link: c?.contactMethods?.instagram?.link || 'https://www.instagram.com/lacheotnun/', footer: c?.contactMethods?.instagram?.value || '@lacheotnun' },
     { icon: 'Clock', title: c?.contactMethods?.hours?.label || 'Horario de atención', desc: c?.contactMethods?.hours?.desc || 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: c?.contactMethods?.hours?.btn || 'VER HORARIOS', link: c?.contactMethods?.hours?.link || '#', footer: c?.contactMethods?.hours?.value || 'Excepto feriados' },
     { icon: 'MapPin', title: c?.contactMethods?.address?.label || 'Nuestra dirección', desc: c?.contactMethods?.address?.desc || 'Oficina administrativa', btn: c?.contactMethods?.address?.btn || 'VER EN EL MAPA', link: c?.contactMethods?.address?.link || '#', footer: c?.contactMethods?.address?.value || 'Atención online' }
   ];
@@ -288,7 +288,7 @@ export default function ContactoPage() {
                  <p className="text-[11px] text-[#1c2838]/70 leading-relaxed mb-6">
                    {t(c?.community?.desc || 'Síguenos en nuestras redes sociales y sé la primera en descubrir lanzamientos, promociones y consejos de belleza.')}
                  </p>
-                 <a href={c?.community?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[9px] tracking-widest px-6 py-3 rounded-md uppercase transition-all">
+                 <a href={c?.community?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-[#1c2838] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[9px] tracking-widest px-6 py-3 rounded-md uppercase transition-all">
                     <Instagram className="w-3.5 h-3.5" /> {t(c?.community?.buttonText || 'SEGUIR EN INSTAGRAM')}
                  </a>
               </div>
@@ -296,7 +296,7 @@ export default function ContactoPage() {
               {communityImages.length > 0 && (
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                   {communityImages.map((img: string, idx: number) => (
-                     <a key={idx} href={c?.community?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer" className="relative h-32 md:h-40 rounded-xl overflow-hidden group">
+                     <a key={idx} href={c?.community?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer" className="relative h-32 md:h-40 rounded-xl overflow-hidden group">
                         <Image src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                            <Instagram className="w-5 h-5 text-white" />

@@ -32,79 +32,79 @@ const DEFAULT_STATE: DbState = {
     { id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', email: 'cliente@example.com', name: 'Jaque Customer', role: 'customer' }
   ],
   categories: [
-    { id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', name: 'Cuidado Facial', slug: 'cuidado-facial', description: 'Produtos de limpeza, t+¦nicos, s+®runs e hidratantes para o rosto.', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
-    { id: '20eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Cuidado Corporal', slug: 'cuidado-corporal', description: 'Hidrata+º+úo e tratamento para todo o corpo.', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400' },
-    { id: '30eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Cuidado Capilar', slug: 'cuidado-capilar', description: 'Shampoos, condicionadores e m+íscaras capilares.', image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=400' },
+    { id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', name: 'Cuidado Facial', slug: 'cuidado-facial', description: 'Produtos de limpeza, t+ï¿½nicos, s+ï¿½runs e hidratantes para o rosto.', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
+    { id: '20eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Cuidado Corporal', slug: 'cuidado-corporal', description: 'Hidrata+ï¿½+ï¿½o e tratamento para todo o corpo.', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400' },
+    { id: '30eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Cuidado Capilar', slug: 'cuidado-capilar', description: 'Shampoos, condicionadores e m+ï¿½scaras capilares.', image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=400' },
     { id: '40eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Maquillaje', slug: 'maquillaje', description: 'Bases, corretivos, batons e maquiagens premium.', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
-    { id: '50eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Cuidado de U+¦as', slug: 'cuidado-de-unas', description: 'Esmaltes e fortalecedores de unhas.', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' },
-    { id: '60eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Protecci+¦n Solar', slug: 'proteccion-solar', description: 'Protetores solares faciais e corporais de alta tecnologia.', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' }
+    { id: '50eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Cuidado de U+ï¿½as', slug: 'cuidado-de-unas', description: 'Esmaltes e fortalecedores de unhas.', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' },
+    { id: '60eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Protecci+ï¿½n Solar', slug: 'proteccion-solar', description: 'Protetores solares faciais e corporais de alta tecnologia.', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' }
   ],
   brands: [
-    { id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Round Lab', slug: 'round-lab', description: 'Produtos formulados com +ígua do fundo do mar e ingredientes naturais.', is_featured: true },
-    { id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Beauty of Joseon', slug: 'beauty-of-joseon', description: 'Cosm+®ticos inspirados na medicina tradicional coreana (Hanbang).', is_featured: true },
+    { id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Round Lab', slug: 'round-lab', description: 'Produtos formulados com +ï¿½gua do fundo do mar e ingredientes naturais.', is_featured: true },
+    { id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Beauty of Joseon', slug: 'beauty-of-joseon', description: 'Cosm+ï¿½ticos inspirados na medicina tradicional coreana (Hanbang).', is_featured: true },
     { id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'COSRX', slug: 'cosrx', description: 'Produtos focados em alta performance e ingredientes ativos como Centella e Baba de Caracol.', is_featured: true },
-    { id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Anua', slug: 'anua', description: 'F+¦rmula limpa e minimalista para acalmar a barreira da pele.', is_featured: true },
-    { id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', name: 'Skin1004', slug: 'skin1004', description: 'Produtos baseados em extrato puro de Centella Asi+ítica de Madagascar.', is_featured: true }
+    { id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Anua', slug: 'anua', description: 'F+ï¿½rmula limpa e minimalista para acalmar a barreira da pele.', is_featured: true },
+    { id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', name: 'Skin1004', slug: 'skin1004', description: 'Produtos baseados em extrato puro de Centella Asi+ï¿½tica de Madagascar.', is_featured: true }
   ],
   products: [
-    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidrataci+¦n.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, price_brl: 90.00, price_promo_brl: 81.00, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
-    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'S+®rum iluminador dise+¦ado para combatir la pigmentaci+¦n y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, price_brl: 114.50, price_promo_brl: 99.50, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' },
-    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cut+ínea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, price_brl: 95.00, price_promo_brl: 90.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' },
-    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'T+¦nico calmante ideal para pieles sensibles y con tendencia al acn+®.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, price_brl: 105.00, price_promo_brl: 97.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
-    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asi+ítica para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, price_brl: 115.00, price_promo_brl: 105.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' }
+    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidrataci+ï¿½n.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, price_brl: 90.00, price_promo_brl: 81.00, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
+    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'S+ï¿½rum iluminador dise+ï¿½ado para combatir la pigmentaci+ï¿½n y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, price_brl: 114.50, price_promo_brl: 99.50, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' },
+    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cut+ï¿½nea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, price_brl: 95.00, price_promo_brl: 90.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' },
+    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'T+ï¿½nico calmante ideal para pieles sensibles y con tendencia al acn+ï¿½.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, price_brl: 105.00, price_promo_brl: 97.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
+    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asi+ï¿½tica para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, price_brl: 115.00, price_promo_brl: 105.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' }
   ],
   product_images: [],
   addresses: [
-    { id: 'addr-1', user_id: 'a0000000-0000-4000-a000-000000000001', address_type: 'shipping', first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', complement: 'Apt 4B', city: 'Madrid', state: 'Madrid', postal_code: '28013', country: 'Espa+¦a', phone: '+34600111222', document_type: 'nif', document_number: '12345678Z' }
+    { id: 'addr-1', user_id: 'a0000000-0000-4000-a000-000000000001', address_type: 'shipping', first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', complement: 'Apt 4B', city: 'Madrid', state: 'Madrid', postal_code: '28013', country: 'Espa+ï¿½a', phone: '+34600111222', document_type: 'nif', document_number: '12345678Z' }
   ],
   orders: [
     {
       id: 'ord-001', customer_id: 'a0000000-0000-4000-a000-000000000001', status: 'aguardando_confirmacao', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 2, price: 18.00 }],
       subtotal: 36.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 51.00, gateway: 'stripe', carrier: null, tracking_code: null, document_type: 'nif', document_number: '12345678Z', commercial_invoice_url: '/invoices/cheotnun-inv-ord-001.pdf',
-      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
-      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
+      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
+      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
       created_at: new Date(Date.now() - 0 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-002', customer_id: 'a0000000-0000-4000-a000-000000000002', status: 'aguardando_confirmacao', items: [{ product_id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Glow Deep Serum', quantity: 1, price: 22.90 }],
       subtotal: 22.90, shipping_amount: 15.00, discount_amount: 0, total_amount: 37.90, gateway: 'stripe', carrier: null, tracking_code: null, document_type: 'nif', document_number: '87654321X', commercial_invoice_url: '/invoices/cheotnun-inv-ord-002.pdf',
-      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
-      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
+      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
+      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
       created_at: new Date(Date.now() - 1 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-003', customer_id: 'a0000000-0000-4000-a000-000000000003', status: 'aguardando_confirmacao', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }],
       subtotal: 19.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 34.00, gateway: 'paypal', carrier: null, tracking_code: null, document_type: 'nie', document_number: 'Y1234567Z', commercial_invoice_url: '/invoices/cheotnun-inv-ord-003.pdf',
-      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
-      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
+      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
+      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
       created_at: new Date(Date.now() - 2 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-004', customer_id: 'a0000000-0000-4000-a000-000000000004', status: 'preparando_envio', items: [{ product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 2, price: 21.00 }, { product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 1, price: 23.00 }],
       subtotal: 65.00, shipping_amount: 15.00, discount_amount: 5.00, total_amount: 75.00, gateway: 'stripe', carrier: 'DHL', tracking_code: 'LX123456789KR', document_type: 'ci', document_number: '1234567-8', commercial_invoice_url: '/invoices/cheotnun-inv-ord-004.pdf',
-      shipping_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'S+úo Paulo', state: 'SP', country: 'Brasil' },
-      billing_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'S+úo Paulo', state: 'SP', country: 'Brasil' },
+      shipping_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'S+ï¿½o Paulo', state: 'SP', country: 'Brasil' },
+      billing_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'S+ï¿½o Paulo', state: 'SP', country: 'Brasil' },
       created_at: new Date(Date.now() - 5 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-005', customer_id: 'a0000000-0000-4000-a000-000000000005', status: 'enviado', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 3, price: 18.00 }],
       subtotal: 54.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 69.00, gateway: 'stripe', carrier: 'FedEx', tracking_code: 'FX987654321KR', document_type: 'nif', document_number: 'A12345678', commercial_invoice_url: '/invoices/cheotnun-inv-ord-005.pdf',
-      shipping_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
-      billing_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'Espa+¦a' },
+      shipping_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
+      billing_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'Espa+ï¿½a' },
       created_at: new Date(Date.now() - 10 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-006', customer_id: 'a0000000-0000-4000-a000-000000000006', status: 'entregue', items: [{ product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 2, price: 23.00 }],
       subtotal: 46.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 61.00, gateway: 'paypal', carrier: 'EMS Korea', tracking_code: 'EM555555555KR', document_type: 'nif', document_number: 'B98765432', commercial_invoice_url: '/invoices/cheotnun-inv-ord-006.pdf',
-      shipping_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Catalu+¦a', country: 'Espa+¦a' },
-      billing_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Catalu+¦a', country: 'Espa+¦a' },
+      shipping_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Catalu+ï¿½a', country: 'Espa+ï¿½a' },
+      billing_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Catalu+ï¿½a', country: 'Espa+ï¿½a' },
       created_at: new Date(Date.now() - 20 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
     {
       id: 'ord-007', customer_id: 'a0000000-0000-4000-a000-000000000007', status: 'enviado', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }, { product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 1, price: 21.00 }],
       subtotal: 40.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 55.00, gateway: 'stripe', carrier: 'DHL Express', tracking_code: 'DH333333333KR', document_type: 'rut', document_number: '12.345.678-9', commercial_invoice_url: '/invoices/cheotnun-inv-ord-007.pdf',
-      shipping_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogot+í', state: 'Cundinamarca', country: 'Colombia' },
-      billing_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogot+í', state: 'Cundinamarca', country: 'Colombia' },
+      shipping_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogot+ï¿½', state: 'Cundinamarca', country: 'Colombia' },
+      billing_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogot+ï¿½', state: 'Cundinamarca', country: 'Colombia' },
       created_at: new Date(Date.now() - 45 * 86400000).toISOString(), updated_at: new Date().toISOString()
     },
   ],
@@ -117,15 +117,15 @@ const DEFAULT_STATE: DbState = {
       id: 'routine-1',
       title: 'Rutina Hidratante y Calmante',
       slug: 'rutina-hidratante-calmante',
-      description: 'Rutina de d+¡a recomendada para pieles secas y sensibles.',
+      description: 'Rutina de d+ï¿½a recomendada para pieles secas y sensibles.',
       skin_type: 'Piel Sensible',
       steps: [
         { step: 1, action: 'Limpieza', product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', instruction: 'Limpiar suavemente el rostro con agua tibia.' },
-        { step: 2, action: 'Tonificaci+¦n', product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', instruction: 'Aplicar a golpecitos con las manos.' },
+        { step: 2, action: 'Tonificaci+ï¿½n', product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', instruction: 'Aplicar a golpecitos con las manos.' },
         { step: 3, action: 'Ampolla', product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', instruction: 'Aplicar una pipeta completa y esparcir.' },
-        { step: 4, action: 'Hidrataci+¦n y Reparaci+¦n', product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', instruction: 'Masajear para sellar la hidrataci+¦n.' }
+        { step: 4, action: 'Hidrataci+ï¿½n y Reparaci+ï¿½n', product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', instruction: 'Masajear para sellar la hidrataci+ï¿½n.' }
       ],
-      video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      video_url: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
       status: 'active'
     }
   ],
@@ -137,7 +137,7 @@ const DEFAULT_STATE: DbState = {
       block_type: 'hero',
       content: {
         title: 'Tu belleza. Tu ritual. Tu momento.',
-        subtitle: 'Cosm+®ticos coreanos aut+®nticos para cada etapa de tu cuidado.',
+        subtitle: 'Cosm+ï¿½ticos coreanos aut+ï¿½nticos para cada etapa de tu cuidado.',
         btnBuyText: 'COMPRAR AHORA',
         btnBuyLink: '/tienda',
         btnRoutineText: 'DESCUBRIR RUTINAS',
@@ -155,9 +155,9 @@ const DEFAULT_STATE: DbState = {
       content: {
         items: [
           { icon: 'ShieldCheck', title: '100% ORIGINALES', text: 'Directo desde Corea' },
-          { icon: 'Truck', title: 'ENV+ìOS INTERNACIONALES', text: 'A toda Am+®rica Latina' },
+          { icon: 'Truck', title: 'ENV+ï¿½OS INTERNACIONALES', text: 'A toda Am+ï¿½rica Latina' },
           { icon: 'ShieldAlert', title: 'PAGOS SEGUROS', text: 'Protegemos tu compra' },
-          { icon: 'Heart', title: 'ATENCI+ôN PREMIUM', text: 'Estamos para ayudarte' }
+          { icon: 'Heart', title: 'ATENCI+ï¿½N PREMIUM', text: 'Estamos para ayudarte' }
         ]
       },
       sort_order: 1,
@@ -170,7 +170,7 @@ const DEFAULT_STATE: DbState = {
         titleLine1: 'Tu belleza.',
         titleLine2: 'Tu ritual.',
         titleLine3: 'Tu momento.',
-        subtitle: 'Cosm+®ticos coreanos aut+®nticos seleccionados para cada etapa de tu cuidado facial. F+¦rmulas bot+ínicas que revelan tu luminosidad natural.',
+        subtitle: 'Cosm+ï¿½ticos coreanos aut+ï¿½nticos seleccionados para cada etapa de tu cuidado facial. F+ï¿½rmulas bot+ï¿½nicas que revelan tu luminosidad natural.',
         btnBuyText: 'COMPRAR AHORA',
         btnBuyLink: '/tienda',
         btnRoutineText: 'DESCUBRIR RUTINAS',
@@ -181,55 +181,55 @@ const DEFAULT_STATE: DbState = {
       highlights: {
         items: [
           { icon: 'ShieldCheck', title: '100% ORIGINALES', text: 'Directo desde Corea' },
-          { icon: 'Truck', title: 'ENV+ìOS INTERNACIONALES', text: 'A toda Am+®rica Latina' },
+          { icon: 'Truck', title: 'ENV+ï¿½OS INTERNACIONALES', text: 'A toda Am+ï¿½rica Latina' },
           { icon: 'ShieldAlert', title: 'PASOS SEGUROS', text: 'Protegemos tu compra' },
-          { icon: 'Heart', title: 'ATENCI+ôN PERSONALIZADA', text: 'Estamos para ayudarte' }
+          { icon: 'Heart', title: 'ATENCI+ï¿½N PERSONALIZADA', text: 'Estamos para ayudarte' }
         ]
       },
       categories: {
-        preTitle: 'Colecci+¦n Curada',
+        preTitle: 'Colecci+ï¿½n Curada',
         title: 'Descubre lo mejor del K-Beauty',
-        subtitle: 'Productos aut+®nticos para realzar tu belleza natural.',
-        buttonText: 'VER TODAS LAS CATEGOR+ìAS'
+        subtitle: 'Productos aut+ï¿½nticos para realzar tu belleza natural.',
+        buttonText: 'VER TODAS LAS CATEGOR+ï¿½AS'
       },
       bestSellers: {
         preTitle: 'Favoritos de la Comunidad',
-        title: 'M+ís vendidos',
-        subtitle: 'Los favoritos de nuestra comunidad internacional. F+¦rmulas probadas que entregan resultados visibles.',
+        title: 'M+ï¿½s vendidos',
+        subtitle: 'Los favoritos de nuestra comunidad internacional. F+ï¿½rmulas probadas que entregan resultados visibles.',
         buttonText: 'VER TODOS'
       },
       experiencias: {
         preTitle: 'Experiencias Cheotnun',
-        title: 'Vive la belleza coreana m+ís all+í de los productos',
+        title: 'Vive la belleza coreana m+ï¿½s all+ï¿½ de los productos',
         cards: [
           {
             badge: 'CHEOTNUN EXPERIENCE',
             badgeColor: 'accent',
             title: 'Prueba, siente y descubre.',
-            text: 'Damos a probar productos exclusivos en experiencias +¦nicas en Corea del Sur.',
-            buttonText: 'SABER M+üS',
+            text: 'Damos a probar productos exclusivos en experiencias +ï¿½nicas en Corea del Sur.',
+            buttonText: 'SABER M+ï¿½S',
             image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400'
           },
           {
-            badge: 'EN COLABORACI+ôN CON MAEUM',
+            badge: 'EN COLABORACI+ï¿½N CON MAEUM',
             badgeColor: 'blue',
             title: 'Viajes que transforman.',
-            text: 'Viaja a Corea y vive la cultura, la belleza y el bienestar de una forma aut+®ntica.',
+            text: 'Viaja a Corea y vive la cultura, la belleza y el bienestar de una forma aut+ï¿½ntica.',
             buttonText: 'EXPLORAR VIAJES',
             image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400'
           },
           {
             badge: 'BEAUTY & CULTURA',
             badgeColor: 'accent',
-            title: 'M+ís que belleza, una conexi+¦n.',
-            text: 'Sum+®rgete en la cultura coreana y descubre el origen de tu rutina de belleza.',
+            title: 'M+ï¿½s que belleza, una conexi+ï¿½n.',
+            text: 'Sum+ï¿½rgete en la cultura coreana y descubre el origen de tu rutina de belleza.',
             buttonText: 'VER EXPERIENCIAS',
             image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400'
           }
         ]
       },
       routines: {
-        preTitle: 'Tratamientos Espec+¡ficos',
+        preTitle: 'Tratamientos Espec+ï¿½ficos',
         title: 'Rutinas para cada necesidad',
         subtitle: 'Encuentra la rutina ideal para tu tipo de piel y estilo de vida.',
         buttonText: 'VER TODAS LAS RUTINAS',
@@ -237,23 +237,23 @@ const DEFAULT_STATE: DbState = {
           { name: 'Piel Hidratada', icon: 'Droplet' },
           { name: 'Piel Iluminada', icon: 'Sparkles' },
           { name: 'Piel Sensible', icon: 'Smile' },
-          { name: 'Anti-acn+®', icon: 'ShieldCheck' },
+          { name: 'Anti-acn+ï¿½', icon: 'ShieldCheck' },
           { name: 'Anti-edad', icon: 'Hourglass' },
           { name: 'Rutina Completa', icon: 'ClipboardList' }
         ],
         badges: [
           { icon: 'ShieldCheck', title: 'Ingredientes seguros' },
-          { icon: 'Droplet', title: 'F+¦rmulas efectivas' },
+          { icon: 'Droplet', title: 'F+ï¿½rmulas efectivas' },
           { icon: 'Star', title: 'Resultados reales' },
-          { icon: 'Compass', title: 'Inspirado en la tradici+¦n' },
+          { icon: 'Compass', title: 'Inspirado en la tradici+ï¿½n' },
           { icon: 'Smile', title: 'Desarrollado con ciencia' }
         ]
       },
       instagram: {
-        title: '+Ünete a nuestra comunidad',
-        subtitle: 'Tips, rutinas, lanzamientos y mucho m+ís en Instagram.',
+        title: '+ï¿½nete a nuestra comunidad',
+        subtitle: 'Tips, rutinas, lanzamientos y mucho m+ï¿½s en Instagram.',
         buttonText: 'SEGUIR EN INSTAGRAM',
-        buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+        buttonLink: 'https://www.instagram.com/lacheotnun/',
         images: [
           'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
           'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400',
@@ -264,15 +264,15 @@ const DEFAULT_STATE: DbState = {
       },
       newsletter: {
         preTitle: 'CHEOTNUN CLUB',
-        title: 'S+® la primera en descubrir nuevos lanzamientos y ofertas.',
+        title: 'S+ï¿½ la primera en descubrir nuevos lanzamientos y ofertas.',
         buttonText: 'SUSCRIBIRSE',
-        successMessage: 'Ô£ô -íTe has suscrito con +®xito! Bienvenido al Cheotnun Club.'
+        successMessage: 'Ô£ï¿½ -ï¿½Te has suscrito con +ï¿½xito! Bienvenido al Cheotnun Club.'
       }
     },
     header: {
-      announcementText: 'Belleza que nace de la tradici+¦n. Cosm+®tica que transforma.',
-      shippingText: 'Env+¡os para toda Am+®rica Latina',
-      attentionText: 'Atenci+¦n',
+      announcementText: 'Belleza que nace de la tradici+ï¿½n. Cosm+ï¿½tica que transforma.',
+      shippingText: 'Env+ï¿½os para toda Am+ï¿½rica Latina',
+      attentionText: 'Atenci+ï¿½n',
       logoUrl: '/images/cheotnun-logo.webp',
       navLinks: [
         { label: 'Inicio', href: '/' },
@@ -285,11 +285,11 @@ const DEFAULT_STATE: DbState = {
       ]
     },
     footer: {
-      description: 'Importamos los cosm+®ticos coreanos m+ís exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
+      description: 'Importamos los cosm+ï¿½ticos coreanos m+ï¿½s exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
       social: {
-        instagram: 'https://instagram.com/cheotnun.kbeauty',
+        instagram: 'https://www.instagram.com/lacheotnun/',
         youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
-        tiktok: 'https://www.tiktok.com/@lacheotnun'
+        tiktok: 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98Av3TtdgVI'
       },
       columns: [
         {
@@ -297,49 +297,49 @@ const DEFAULT_STATE: DbState = {
           links: [
             { label: 'Todos los productos', href: '/tienda' },
             { label: 'Cuidado Facial', href: '/tienda?category=cuidado-facial' },
-            { label: 'Protecci+¦n Solar', href: '/tienda?category=proteccion-solar' },
-            { label: 'C+¦mo funciona', href: '/como-funciona' },
+            { label: 'Protecci+ï¿½n Solar', href: '/tienda?category=proteccion-solar' },
+            { label: 'C+ï¿½mo funciona', href: '/como-funciona' },
             { label: 'Rutinas Recomendadas', href: '/rutinas' },
             { label: 'Blog', href: '/blog' }
           ]
         },
         {
-          title: 'Ayuda & Pol+¡ticas',
+          title: 'Ayuda & Pol+ï¿½ticas',
           links: [
-            { label: 'Env+¡os y Entregas', href: '/ayuda/envios' },
+            { label: 'Env+ï¿½os y Entregas', href: '/ayuda/envios' },
             { label: 'Cambios y Devoluciones', href: '/ayuda/devoluciones' },
             { label: 'Contacto', href: '/contacto' },
-            { label: 'Pol+¡tica de Privacidad', href: '/politica-de-privacidad' },
-            { label: 'T+®rminos y Condiciones', href: '/terminos' }
+            { label: 'Pol+ï¿½tica de Privacidad', href: '/politica-de-privacidad' },
+            { label: 'T+ï¿½rminos y Condiciones', href: '/terminos' }
           ]
         },
         {
-          title: 'Atenci+¦n al Cliente',
+          title: 'Atenci+ï¿½n al Cliente',
           links: [
             { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
             { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
-            { label: 'Calle Gran V+¡a 12, Madrid, Espa+¦a', href: '#', icon: 'MapPin' }
+            { label: 'Calle Gran V+ï¿½a 12, Madrid, Espa+ï¿½a', href: '#', icon: 'MapPin' }
           ]
         }
       ],
       marcas: {
         testimonials: {
           title: 'Lo que dicen nuestras clientas',
-          buttonText: 'VER M+üS OPINIONES',
-          buttonLink: 'https://www.instagram.com/lacheotnun',
+          buttonText: 'VER M+ï¿½S OPINIONES',
+          buttonLink: 'https://www.instagram.com/lacheotnun/',
           list: [
-            { name: 'Mar+¡a G.', text: 'Los productos llegaron super bien empacados y antes del tiempo estimado. -íTodo 100% original!', country: 'M+®xico', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150' },
-            { name: 'Carolina R.', text: 'Me encanta la atenci+¦n, siempre me ayudan a elegir lo mejor para mi piel. -íRecomendad+¡simas!', country: 'Chile', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150' },
+            { name: 'Mar+ï¿½a G.', text: 'Los productos llegaron super bien empacados y antes del tiempo estimado. -ï¿½Todo 100% original!', country: 'M+ï¿½xico', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150' },
+            { name: 'Carolina R.', text: 'Me encanta la atenci+ï¿½n, siempre me ayudan a elegir lo mejor para mi piel. -ï¿½Recomendad+ï¿½simas!', country: 'Chile', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150' },
             { name: 'Valeria P.', text: 'Cheotnun se ha convertido en mi tienda favorita de K-Beauty.', country: 'Colombia', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150' },
             { name: 'Daniela S.', text: 'La calidad de los productos es impecable. Se nota todo el cuidado en cada detalle.', country: 'Argentina', img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=150' }
           ]
         },
         trustBadges: [
           { icon: 'Leaf', text: 'Ingredientes seguros\ny efectivos' },
-          { icon: 'FlaskConical', text: 'F+¦rmulas probadas\ndermatol+¦gicamente' },
+          { icon: 'FlaskConical', text: 'F+ï¿½rmulas probadas\ndermatol+ï¿½gicamente' },
           { icon: 'Rabbit', text: 'No testeado\nen animales' },
           { icon: 'Recycle', text: 'Empaques responsables\ny reciclables' },
-          { icon: 'Flower2', text: 'Inspirado en la tradici+¦n,\nmejorado por la ciencia' }
+          { icon: 'Flower2', text: 'Inspirado en la tradici+ï¿½n,\nmejorado por la ciencia' }
         ],
         hero: {
           title: 'Marcas Coreanas',
@@ -348,17 +348,17 @@ const DEFAULT_STATE: DbState = {
           imageMobile: '/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp'
         },
         features: [
-          { title: 'Marcas aut+®nticas', text: 'Productos 100% originales comprados directamente en Corea del Sur.', icon: 'Award' },
-          { title: 'Innovaci+¦n y calidad', text: 'Marcas reconocidas por su tecnolog+¡a avanzada y resultados comprobados.', icon: 'Beaker' },
-          { title: 'Belleza consciente', text: 'F+¦rmulas seguras, ingredientes eficaces y respeto por tu piel y el medio ambiente.', icon: 'Heart' }
+          { title: 'Marcas aut+ï¿½nticas', text: 'Productos 100% originales comprados directamente en Corea del Sur.', icon: 'Award' },
+          { title: 'Innovaci+ï¿½n y calidad', text: 'Marcas reconocidas por su tecnolog+ï¿½a avanzada y resultados comprobados.', icon: 'Beaker' },
+          { title: 'Belleza consciente', text: 'F+ï¿½rmulas seguras, ingredientes eficaces y respeto por tu piel y el medio ambiente.', icon: 'Heart' }
         ],
         whyChooseUs: {
-          title: '-+Por qu+® elegir Cheotnun?',
+          title: '-+Por qu+ï¿½ elegir Cheotnun?',
           items: [
             { title: 'Productos 100% originales', text: 'Garantizamos autenticidad en cada producto.', icon: 'ShieldCheck' },
             { title: 'Compra directa en Corea', text: 'Seleccionamos y compramos personalmente para ti.', icon: 'ShoppingBag' },
-            { title: 'Atenci+¦n personalizada', text: 'Te acompa+¦amos en todo el proceso de compra.', icon: 'Headset' },
-            { title: 'Selecci+¦n exclusiva', text: 'Productos elegidos con criterio y mucho cari+¦o.', icon: 'Gift' }
+            { title: 'Atenci+ï¿½n personalizada', text: 'Te acompa+ï¿½amos en todo el proceso de compra.', icon: 'Headset' },
+            { title: 'Selecci+ï¿½n exclusiva', text: 'Productos elegidos con criterio y mucho cari+ï¿½o.', icon: 'Gift' }
           ],
           conclusionTitle: 'Seleccionamos con amor, entregamos con confianza.',
           conclusionText: 'Nuestro compromiso es que vivas la mejor experiencia de K-Beauty, desde Corea hasta ti.',
@@ -367,15 +367,15 @@ const DEFAULT_STATE: DbState = {
       },
       comoFunciona: {
         hero: {
-          title: 'C+¦mo funciona',
-          subtitle: 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, pr+íctica y confiable.',
+          title: 'C+ï¿½mo funciona',
+          subtitle: 'Hemos simplificado cada paso para que tu experiencia de compra sea segura, pr+ï¿½ctica y confiable.',
           image: '/images/como-funciona-hero.webp',
           imageMobile: '/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp'
         },
         steps: [
           { number: '01', title: 'Eliges\ntus productos', text: 'Explora nuestra tienda\ny selecciona tus favoritos.' },
           { number: '02', title: 'Procesamos\ntu pedido', text: 'Preparamos todo con\nmucho cuidado desde Corea.' },
-          { number: '03', title: 'Enviamos\na tu pa+¡s', text: 'Env+¡o internacional\nseguro y con seguimiento.' },
+          { number: '03', title: 'Enviamos\na tu pa+ï¿½s', text: 'Env+ï¿½o internacional\nseguro y con seguimiento.' },
           { number: '04', title: 'Recibes\ny disfrutas', text: 'Tu rutina de K-Beauty\nlista para usar.' }
         ],
         paymentsInfo: {
@@ -384,30 +384,30 @@ const DEFAULT_STATE: DbState = {
           logos: ['Visa', 'Mastercard', 'Amex', 'PayPal']
         },
         shippingInfo: {
-          title: 'Env+¡os internacionales',
-          subtitle: 'Llegamos a toda Am+®rica Latina.',
+          title: 'Env+ï¿½os internacionales',
+          subtitle: 'Llegamos a toda Am+ï¿½rica Latina.',
           items: [
-            { title: 'Env+¡os seguros y rastreables', text: 'Trabajamos con transportadoras confiables para que tu pedido llegue hasta ti.' },
-            { title: 'Tiempo estimado de entrega', text: 'De 7 a 20 d+¡as h+íbiles, dependiendo de tu pa+¡s.' },
-            { title: 'Te mantenemos informada', text: 'Recibir+ís tu n+¦mero de seguimiento para acompa+¦ar cada paso de tu pedido.' }
+            { title: 'Env+ï¿½os seguros y rastreables', text: 'Trabajamos con transportadoras confiables para que tu pedido llegue hasta ti.' },
+            { title: 'Tiempo estimado de entrega', text: 'De 7 a 20 d+ï¿½as h+ï¿½biles, dependiendo de tu pa+ï¿½s.' },
+            { title: 'Te mantenemos informada', text: 'Recibir+ï¿½s tu n+ï¿½mero de seguimiento para acompa+ï¿½ar cada paso de tu pedido.' }
           ]
         },
         faq: {
           title: 'Preguntas frecuentes',
-          subtitle: 'Resolvemos tus dudas m+ís comunes.',
+          subtitle: 'Resolvemos tus dudas m+ï¿½s comunes.',
           buttonText: 'VER TODAS LAS PREGUNTAS',
           items: [
             '-+Los productos son originales?',
-            '-+Cu+ínto tarda en llegar mi pedido?',
-            '-+Hacen env+¡os a mi pa+¡s?',
+            '-+Cu+ï¿½nto tarda en llegar mi pedido?',
+            '-+Hacen env+ï¿½os a mi pa+ï¿½s?',
             '-+Puedo cambiar o devolver un producto?',
-            '-+Qu+® m+®todos de pago aceptan?',
-            '-+C+¦mo s+® el estado de mi pedido?'
+            '-+Qu+ï¿½ m+ï¿½todos de pago aceptan?',
+            '-+C+ï¿½mo s+ï¿½ el estado de mi pedido?'
           ]
         },
         promises: {
           title: 'Productos 100 % originales',
-          subtitle: 'Solo trabajamos con marcas coreanas aut+®nticas y autorizadas. Garantizamos la calidad y procedencia de cada producto que llega a tus manos.',
+          subtitle: 'Solo trabajamos con marcas coreanas aut+ï¿½nticas y autorizadas. Garantizamos la calidad y procedencia de cada producto que llega a tus manos.',
           image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600',
           items: [
             { icon: 'ShieldCheck', title: 'Marcas oficiales' },
@@ -417,10 +417,10 @@ const DEFAULT_STATE: DbState = {
           ]
         },
         community: {
-          title: '+Ünete a nuestra comunidad',
-          desc: 'Descubre rutinas, tips, lanzamientos y mucho m+ís en Instagram.',
+          title: '+ï¿½nete a nuestra comunidad',
+          desc: 'Descubre rutinas, tips, lanzamientos y mucho m+ï¿½s en Instagram.',
           buttonText: 'SEGUIR EN INSTAGRAM',
-          buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+          buttonLink: 'https://www.instagram.com/lacheotnun/',
           images: [
             'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
             'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -429,9 +429,9 @@ const DEFAULT_STATE: DbState = {
           ]
         },
         newsletter: {
-          title: 'S+® la primera en enterarte',
+          title: 'S+ï¿½ la primera en enterarte',
           subtitle: 'Nuevos lanzamientos, ofertas exclusivas y contenido especial directamente en tu correo.',
-          placeholder: 'Tu correo electr+¦nico',
+          placeholder: 'Tu correo electr+ï¿½nico',
           buttonText: 'SUSCRIBIRME',
           disclaimer: 'Prometemos no enviar spam. Solo compartimos lo mejor del K-Beauty.'
         }
@@ -440,57 +440,57 @@ const DEFAULT_STATE: DbState = {
         hero: {
           image: '/images/cheotnun-k-beauty-contato-atendimento.webp',
           imageMobile: '/images/mobile/cheotnun-k-beauty-contato-atendimento.webp',
-          title: 'Estamos aqu+¡\npara ti',
-          subtitle: '-+Tienes preguntas, necesitas ayuda con tu pedido o quieres m+ís informaci+¦n sobre nuestros productos? Nuestro equipo est+í listo para ayudarte.',
-          buttonText: 'RESPUESTA R+üPIDA Y PERSONALIZADA',
+          title: 'Estamos aqu+ï¿½\npara ti',
+          subtitle: '-+Tienes preguntas, necesitas ayuda con tu pedido o quieres m+ï¿½s informaci+ï¿½n sobre nuestros productos? Nuestro equipo est+ï¿½ listo para ayudarte.',
+          buttonText: 'RESPUESTA R+ï¿½PIDA Y PERSONALIZADA',
           badges: [
-            { icon: 'Clock', text: 'Atenci+¦n en espa+¦ol' },
+            { icon: 'Clock', text: 'Atenci+ï¿½n en espa+ï¿½ol' },
             { icon: 'Clock', text: 'Respuesta en menos de 24h' },
-            { icon: 'CheckCircle2', text: 'Tu satisfacci+¦n es nuestra prioridad' }
+            { icon: 'CheckCircle2', text: 'Tu satisfacci+ï¿½n es nuestra prioridad' }
           ]
         },
         contactMethods: {
           title: 'Formas de contacto',
-          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma m+ís r+ípida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form' },
-          email: { label: 'Env+¡anos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Env+¡anos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:hola@cheotnun.com' },
-          instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Env+¡anos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
-          hours: { label: 'Horario de atenci+¦n', value: 'Excepto feriados', time: '', desc: 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#' },
-          address: { label: 'Sede Principal', value: 'Se+¦l, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: '#' }
+          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma m+ï¿½s r+ï¿½pida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form' },
+          email: { label: 'Env+ï¿½anos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Env+ï¿½anos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:hola@cheotnun.com' },
+          instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Env+ï¿½anos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
+          hours: { label: 'Horario de atenci+ï¿½n', value: 'Excepto feriados', time: '', desc: 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#' },
+          address: { label: 'Sede Principal', value: 'Se+ï¿½l, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: '#' }
         },
         form: {
-          title: 'Env+¡anos un mensaje',
+          title: 'Env+ï¿½anos un mensaje',
           nameLabel: 'Nombre completo',
           emailLabel: 'E-mail',
           subjectLabel: 'Asunto',
           subjectOptions: ['Selecciona un asunto', 'Dudas sobre productos', 'Estado de mi pedido', 'Devoluciones', 'Otros'],
           messageLabel: 'Tu mensaje',
           submitText: 'ENVIAR MENSAJE',
-          securityNotice: 'Tu informaci+¦n est+í segura con nosotros y no ser+í compartida.',
-          successAlert: '-íMensaje enviado con +®xito! Nos pondremos en contacto pronto.'
+          securityNotice: 'Tu informaci+ï¿½n est+ï¿½ segura con nosotros y no ser+ï¿½ compartida.',
+          successAlert: '-ï¿½Mensaje enviado con +ï¿½xito! Nos pondremos en contacto pronto.'
         },
         faq: {
-          title: '-+En qu+® podemos ayudarte?',
-          subtitle: 'Preguntas frecuentes r+ípidas',
+          title: '-+En qu+ï¿½ podemos ayudarte?',
+          subtitle: 'Preguntas frecuentes r+ï¿½pidas',
           buttonText: 'VER TODAS LAS PREGUNTAS FRECUENTES',
           topics: [
-            { icon: 'Info', title: 'Informaci+¦n sobre productos', desc: 'Dudas sobre ingredientes, beneficios y recomendaciones.' },
-            { icon: 'PackageSearch', title: 'Pedidos y env+¡os', desc: 'Consulta sobre el estado de tu pedido, env+¡os y entregas.' },
-            { icon: 'CreditCard', title: 'Pagos y facturaci+¦n', desc: 'Informaci+¦n sobre m+®todos de pago, facturas y reembolsos.' },
-            { icon: 'RefreshCw', title: 'Devoluciones y cambios', desc: 'Dudas sobre cambios, devoluciones y garant+¡as.' },
-            { icon: 'Handshake', title: 'Colaboraciones y prensa', desc: 'Propuestas de colaboraci+¦n, eventos y prensa.' }
+            { icon: 'Info', title: 'Informaci+ï¿½n sobre productos', desc: 'Dudas sobre ingredientes, beneficios y recomendaciones.' },
+            { icon: 'PackageSearch', title: 'Pedidos y env+ï¿½os', desc: 'Consulta sobre el estado de tu pedido, env+ï¿½os y entregas.' },
+            { icon: 'CreditCard', title: 'Pagos y facturaci+ï¿½n', desc: 'Informaci+ï¿½n sobre m+ï¿½todos de pago, facturas y reembolsos.' },
+            { icon: 'RefreshCw', title: 'Devoluciones y cambios', desc: 'Dudas sobre cambios, devoluciones y garant+ï¿½as.' },
+            { icon: 'Handshake', title: 'Colaboraciones y prensa', desc: 'Propuestas de colaboraci+ï¿½n, eventos y prensa.' }
           ],
           quickItems: [
-            '-+Cu+ínto tiempo tarda en llegar mi pedido?',
-            '-+Qu+® m+®todos de pago aceptan?',
-            '-+Realizan env+¡os a mi pa+¡s?',
+            '-+Cu+ï¿½nto tiempo tarda en llegar mi pedido?',
+            '-+Qu+ï¿½ m+ï¿½todos de pago aceptan?',
+            '-+Realizan env+ï¿½os a mi pa+ï¿½s?',
             '-+Puedo cambiar o devolver un producto?'
           ]
         },
         community: {
-          title: '+Ünete a nuestra comunidad',
-          desc: 'S+¡guenos en nuestras redes sociales y s+® la primera en descubrir lanzamientos, promociones y consejos de belleza.',
+          title: '+ï¿½nete a nuestra comunidad',
+          desc: 'S+ï¿½guenos en nuestras redes sociales y s+ï¿½ la primera en descubrir lanzamientos, promociones y consejos de belleza.',
           buttonText: 'SEGUIR EN INSTAGRAM',
-          buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+          buttonLink: 'https://www.instagram.com/lacheotnun/',
           images: [
             'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
             'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -501,68 +501,68 @@ const DEFAULT_STATE: DbState = {
       },
       ayudaDevoluciones: {
         hero: {
-          badge: 'Pol+¡tica de Devoluci+¦n',
+          badge: 'Pol+ï¿½tica de Devoluci+ï¿½n',
           title: 'Cambios y Devoluciones',
-          subtitle: 'Compra con confianza. Tienes 14 d+¡as para devolver tus productos sin compromiso.',
+          subtitle: 'Compra con confianza. Tienes 14 d+ï¿½as para devolver tus productos sin compromiso.',
           steps: [
-            { step: '01', icon: 'Clock', title: 'Solicitud (14 d+¡as)', desc: 'Tienes 14 d+¡as naturales desde la recepci+¦n para solicitar la devoluci+¦n. Escr+¡benos con tu n+¦mero de pedido y motivo.' },
-            { step: '02', icon: 'Package', title: 'Preparaci+¦n', desc: 'Te enviaremos las instrucciones y etiqueta de devoluci+¦n. Empaqueta los productos en su embalaje original, sin usar y precintados.' },
-            { step: '03', icon: 'RotateCw', title: 'Env+¡o Gratis', desc: 'Para productos defectuosos o errores nuestros, cubrimos el coste de env+¡o. Para cambios de opini+¦n, el coste corre por tu cuenta.' },
-            { step: '04', icon: 'ShieldCheck', title: 'Reembolso (5-7 d+¡as)', desc: 'Una vez recibido y verificado, procesamos el reembolso en 5-7 d+¡as h+íbiles a tu m+®todo de pago original.' }
+            { step: '01', icon: 'Clock', title: 'Solicitud (14 d+ï¿½as)', desc: 'Tienes 14 d+ï¿½as naturales desde la recepci+ï¿½n para solicitar la devoluci+ï¿½n. Escr+ï¿½benos con tu n+ï¿½mero de pedido y motivo.' },
+            { step: '02', icon: 'Package', title: 'Preparaci+ï¿½n', desc: 'Te enviaremos las instrucciones y etiqueta de devoluci+ï¿½n. Empaqueta los productos en su embalaje original, sin usar y precintados.' },
+            { step: '03', icon: 'RotateCw', title: 'Env+ï¿½o Gratis', desc: 'Para productos defectuosos o errores nuestros, cubrimos el coste de env+ï¿½o. Para cambios de opini+ï¿½n, el coste corre por tu cuenta.' },
+            { step: '04', icon: 'ShieldCheck', title: 'Reembolso (5-7 d+ï¿½as)', desc: 'Una vez recibido y verificado, procesamos el reembolso en 5-7 d+ï¿½as h+ï¿½biles a tu m+ï¿½todo de pago original.' }
           ],
           summary: [
-            { icon: 'Clock', title: '14 D+¡as', text: 'Para solicitar devoluci+¦n desde la recepci+¦n' },
+            { icon: 'Clock', title: '14 D+ï¿½as', text: 'Para solicitar devoluci+ï¿½n desde la recepci+ï¿½n' },
             { icon: 'Package', title: 'Producto Sin Usar', text: 'Con embalaje original y precintado' },
-            { icon: 'CheckCircle', title: 'Reembolso R+ípido', text: '5-7 d+¡as h+íbiles tras verificaci+¦n' }
+            { icon: 'CheckCircle', title: 'Reembolso R+ï¿½pido', text: '5-7 d+ï¿½as h+ï¿½biles tras verificaci+ï¿½n' }
           ],
-          sectionTitle: 'Proceso de Devoluci+¦n',
-          conditionsTitle: 'Condiciones para Devoluci+¦n',
+          sectionTitle: 'Proceso de Devoluci+ï¿½n',
+          conditionsTitle: 'Condiciones para Devoluci+ï¿½n',
           conditions: [
             'Producto sin usar, sin abrir y en perfecto estado',
             'Embalaje original intacto con todos los precintos',
             'Ticket o comprobante de compra',
-            'Solicitud dentro de los 14 d+¡as naturales',
-            'Formulario de devoluci+¦n completado'
+            'Solicitud dentro de los 14 d+ï¿½as naturales',
+            'Formulario de devoluci+ï¿½n completado'
           ],
           notAcceptedTitle: 'No Aceptamos Devoluciones de',
           notAccepted: [
             'Productos abiertos o usados',
-            'Art+¡culos en oferta o liquidaci+¦n (salvo defecto)',
-            'Tarjetas regalo y cajas de suscripci+¦n',
+            'Art+ï¿½culos en oferta o liquidaci+ï¿½n (salvo defecto)',
+            'Tarjetas regalo y cajas de suscripci+ï¿½n',
             'Productos sin embalaje original',
-            'Devoluciones despu+®s de 14 d+¡as'
+            'Devoluciones despu+ï¿½s de 14 d+ï¿½as'
           ],
           contactTitle: '-+Necesitas Ayuda?',
-          contactText: 'Nuestro equipo de atenci+¦n al cliente est+í disponible para ayudarte con cualquier duda sobre cambios o devoluciones.',
+          contactText: 'Nuestro equipo de atenci+ï¿½n al cliente est+ï¿½ disponible para ayudarte con cualquier duda sobre cambios o devoluciones.',
           contactEmail: 'hola@cheotnun.com',
           contactWhatsapp: '+34 600 111 222'
         }
       },
       envios: {
         hero: {
-          title: 'Env+¡os y Pagos',
+          title: 'Env+ï¿½os y Pagos',
           subtitle: 'Transparencia, seguridad y cumplimiento en cada paso de tu compra.',
-          text: 'Realizamos env+¡os internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada pa+¡s destino, para que tu experiencia sea segura y sin complicaciones.',
+          text: 'Realizamos env+ï¿½os internacionales cumpliendo con todas las regulaciones de Corea del Sur y de cada pa+ï¿½s destino, para que tu experiencia sea segura y sin complicaciones.',
           image: '/images/cheotnun-k-beauty-politica-envios.webp',
           imageMobile: '/images/mobile/cheotnun-k-beauty-politica-envios.webp'
         },
         features: [
-          { text: 'Env+¡os seguros a\ntoda Am+®rica Latina y Europa', icon: 'PlaneTakeoff' },
-          { text: 'Pagos protegidos\ny m+¦ltiples opciones', icon: 'ShieldCheck' }
+          { text: 'Env+ï¿½os seguros a\ntoda Am+ï¿½rica Latina y Europa', icon: 'PlaneTakeoff' },
+          { text: 'Pagos protegidos\ny m+ï¿½ltiples opciones', icon: 'ShieldCheck' }
         ],
         shipping: {
-          title: 'C+¦mo funciona el env+¡o',
-          text: 'Te proporcionamos un n+¦mero de seguimiento para que puedas rastrear tu pedido en todo momento.',
-          tableTitle: 'Env+¡os internacionales',
-          tableSubtitle: 'Realizamos env+¡os a todos estos pa+¡ses y m+ís.'
+          title: 'C+ï¿½mo funciona el env+ï¿½o',
+          text: 'Te proporcionamos un n+ï¿½mero de seguimiento para que puedas rastrear tu pedido en todo momento.',
+          tableTitle: 'Env+ï¿½os internacionales',
+          tableSubtitle: 'Realizamos env+ï¿½os a todos estos pa+ï¿½ses y m+ï¿½s.'
         },
         payments: {
           title: 'Pagos seguros',
-          subtitle: 'Ofrecemos m+¦ltiples opciones de pago para tu comodidad.',
+          subtitle: 'Ofrecemos m+ï¿½ltiples opciones de pago para tu comodidad.',
           methods: [
-            { name: 'Tarjetas de cr+®dito', desc: 'Aceptamos Visa, Mastercard, American Express y m+ís.' },
-            { name: 'PayPal', desc: 'Paga de forma r+ípida y segura con tu cuenta de PayPal.' },
-            { name: 'Transferencia bancaria', desc: 'Disponibles para algunos pa+¡ses. Cont+íctanos para m+ís informaci+¦n.' }
+            { name: 'Tarjetas de cr+ï¿½dito', desc: 'Aceptamos Visa, Mastercard, American Express y m+ï¿½s.' },
+            { name: 'PayPal', desc: 'Paga de forma r+ï¿½pida y segura con tu cuenta de PayPal.' },
+            { name: 'Transferencia bancaria', desc: 'Disponibles para algunos pa+ï¿½ses. Cont+ï¿½ctanos para m+ï¿½s informaci+ï¿½n.' }
           ]
         }
       }
@@ -725,82 +725,82 @@ const DEFAULT_STATE: DbState = {
     terminos: {
       hero: {
         badge: 'Marco Legal',
-        title: 'T+®rminos y Condiciones',
-        subtitle: 'Conoce las reglas que rigen el uso de nuestra plataforma y la relaci+¦n con nuestros clientes.'
+        title: 'T+ï¿½rminos y Condiciones',
+        subtitle: 'Conoce las reglas que rigen el uso de nuestra plataforma y la relaci+ï¿½n con nuestros clientes.'
       },
       intro: {
-        p1: 'Bienvenido a Cheotnun K-Beauty. Al acceder y utilizar este sitio web, aceptas cumplir con los siguientes t+®rminos y condiciones. Si no est+ís de acuerdo con alguno de estos t+®rminos, te recomendamos no utilizar nuestros servicios.',
+        p1: 'Bienvenido a Cheotnun K-Beauty. Al acceder y utilizar este sitio web, aceptas cumplir con los siguientes t+ï¿½rminos y condiciones. Si no est+ï¿½s de acuerdo con alguno de estos t+ï¿½rminos, te recomendamos no utilizar nuestros servicios.',
         brand: 'Cheotnun K-Beauty',
-        p2: 'Estos t+®rminos establecen los derechos y obligaciones entre Cheotnun K-Beauty y los usuarios de nuestra tienda online especializada en cosm+®tica coreana.'
+        p2: 'Estos t+ï¿½rminos establecen los derechos y obligaciones entre Cheotnun K-Beauty y los usuarios de nuestra tienda online especializada en cosm+ï¿½tica coreana.'
       },
       company: {
         name: 'Cheotnun K-Beauty',
         nif: 'B-12345678',
-        address: 'Calle Gran V+¡a 12, Madrid, Espa+¦a',
+        address: 'Calle Gran V+ï¿½a 12, Madrid, Espa+ï¿½a',
         email: 'hola@cheotnun.com',
         phone: '+34 600 111 222'
       },
       additional: {
-        ageTitle: 'Edad M+¡nima',
-        ageDesc: 'Debes ser mayor de 18 a+¦os o contar con autorizaci+¦n legal para realizar compras en nuestra tienda. Al registrarte, confirmas que cumples con este requisito.',
+        ageTitle: 'Edad M+ï¿½nima',
+        ageDesc: 'Debes ser mayor de 18 a+ï¿½os o contar con autorizaci+ï¿½n legal para realizar compras en nuestra tienda. Al registrarte, confirmas que cumples con este requisito.',
         accountTitle: 'Cuentas de Usuario',
-        accountDesc: 'Eres responsable de mantener la confidencialidad de tus credenciales de acceso. Notif+¡canos inmediatamente sobre cualquier uso no autorizado de tu cuenta.'
+        accountDesc: 'Eres responsable de mantener la confidencialidad de tus credenciales de acceso. Notif+ï¿½canos inmediatamente sobre cualquier uso no autorizado de tu cuenta.'
       },
       contact: {
         title: 'Consultas Legales',
-        desc: 'Para cualquier duda sobre estos t+®rminos, puedes contactar a nuestro equipo legal.',
+        desc: 'Para cualquier duda sobre estos t+ï¿½rminos, puedes contactar a nuestro equipo legal.',
         email: 'legal@cheotnun.com',
         phone: '+34 912 345 678'
       },
       sections: [
-        { icon: 'ShoppingBag', title: 'Productos y Precios', content: 'Todos los productos est+ín sujetos a disponibilidad. Nos reservamos el derecho de modificar precios sin previo aviso. Los precios mostrados incluyen impuestos aplicables pero no incluyen gastos de env+¡o.' },
-        { icon: 'CreditCard', title: 'Pagos y Facturaci+¦n', content: 'Aceptamos pagos a trav+®s de Stripe, PayPal y transferencia bancaria. El cargo se realizar+í en el momento de la compra. Emitimos factura electr+¦nica para todos los pedidos.' },
-        { icon: 'Truck', title: 'Env+¡os y Entregas', content: 'Realizamos env+¡os a toda Am+®rica Latina y Europa. Los plazos de entrega var+¡an seg+¦n el destino. No nos responsabilizamos por retrasos aduaneros una vez que el paquete ha salido de Corea del Sur.' },
-        { icon: 'RotateCcw', title: 'Devoluciones y Reembolsos', content: 'Aceptamos devoluciones dentro de los 14 d+¡as posteriores a la recepci+¦n. El producto debe estar sin usar y en su embalaje original. Los gastos de devoluci+¦n corren por cuenta del cliente salvo productos defectuosos.' },
-        { icon: 'ShieldCheck', title: 'Propiedad Intelectual', content: 'Todo el contenido de este sitio web, incluyendo im+ígenes, textos y logotipos, es propiedad de Cheotnun K-Beauty y est+í protegido por leyes de propiedad intelectual.' },
-        { icon: 'Scale', title: 'Limitaci+¦n de Responsabilidad', content: 'Cheotnun K-Beauty no se hace responsable por da+¦os indirectos derivados del uso de nuestros productos. Cada producto incluye instrucciones de uso que deben ser seguidas cuidadosamente.' }
+        { icon: 'ShoppingBag', title: 'Productos y Precios', content: 'Todos los productos est+ï¿½n sujetos a disponibilidad. Nos reservamos el derecho de modificar precios sin previo aviso. Los precios mostrados incluyen impuestos aplicables pero no incluyen gastos de env+ï¿½o.' },
+        { icon: 'CreditCard', title: 'Pagos y Facturaci+ï¿½n', content: 'Aceptamos pagos a trav+ï¿½s de Stripe, PayPal y transferencia bancaria. El cargo se realizar+ï¿½ en el momento de la compra. Emitimos factura electr+ï¿½nica para todos los pedidos.' },
+        { icon: 'Truck', title: 'Env+ï¿½os y Entregas', content: 'Realizamos env+ï¿½os a toda Am+ï¿½rica Latina y Europa. Los plazos de entrega var+ï¿½an seg+ï¿½n el destino. No nos responsabilizamos por retrasos aduaneros una vez que el paquete ha salido de Corea del Sur.' },
+        { icon: 'RotateCcw', title: 'Devoluciones y Reembolsos', content: 'Aceptamos devoluciones dentro de los 14 d+ï¿½as posteriores a la recepci+ï¿½n. El producto debe estar sin usar y en su embalaje original. Los gastos de devoluci+ï¿½n corren por cuenta del cliente salvo productos defectuosos.' },
+        { icon: 'ShieldCheck', title: 'Propiedad Intelectual', content: 'Todo el contenido de este sitio web, incluyendo im+ï¿½genes, textos y logotipos, es propiedad de Cheotnun K-Beauty y est+ï¿½ protegido por leyes de propiedad intelectual.' },
+        { icon: 'Scale', title: 'Limitaci+ï¿½n de Responsabilidad', content: 'Cheotnun K-Beauty no se hace responsable por da+ï¿½os indirectos derivados del uso de nuestros productos. Cada producto incluye instrucciones de uso que deben ser seguidas cuidadosamente.' }
       ]
     },
     privacidad: {
       hero: {
         badge: 'Transparencia y Seguridad',
-        title: 'Pol+¡tica de Privacidad',
-        subtitle: 'Tus datos est+ín seguros con nosotros. Conoce c+¦mo recopilamos, usamos y protegemos tu informaci+¦n personal.'
+        title: 'Pol+ï¿½tica de Privacidad',
+        subtitle: 'Tus datos est+ï¿½n seguros con nosotros. Conoce c+ï¿½mo recopilamos, usamos y protegemos tu informaci+ï¿½n personal.'
       },
       intro: {
-        p1: 'En Cheotnun K-Beauty nos tomamos muy en serio tu privacidad. Esta pol+¡tica describe c+¦mo recopilamos, utilizamos y protegemos tus datos personales cuando utilizas nuestra tienda online.',
+        p1: 'En Cheotnun K-Beauty nos tomamos muy en serio tu privacidad. Esta pol+ï¿½tica describe c+ï¿½mo recopilamos, utilizamos y protegemos tus datos personales cuando utilizas nuestra tienda online.',
         brand: 'Cheotnun K-Beauty',
-        p2: 'Al usar nuestra web, aceptas las pr+ícticas descritas en esta pol+¡tica. Te recomendamos leerla detenidamente.',
+        p2: 'Al usar nuestra web, aceptas las pr+ï¿½cticas descritas en esta pol+ï¿½tica. Te recomendamos leerla detenidamente.',
         p3: 'Nuestro compromiso es garantizar la confidencialidad y seguridad de tus datos personales de acuerdo con la normativa aplicable.'
       },
       security: {
         title: 'Seguridad de Datos',
-        p1: 'Implementamos medidas de seguridad t+®cnicas y organizativas para proteger tus datos personales contra accesos no autorizados, p+®rdida o destrucci+¦n.',
-        p2: 'Aunque usamos las mejores pr+ícticas, ninguna transmisi+¦n por Internet es 100% segura. Hacemos todo lo posible para proteger tu informaci+¦n.'
+        p1: 'Implementamos medidas de seguridad t+ï¿½cnicas y organizativas para proteger tus datos personales contra accesos no autorizados, p+ï¿½rdida o destrucci+ï¿½n.',
+        p2: 'Aunque usamos las mejores pr+ï¿½cticas, ninguna transmisi+ï¿½n por Internet es 100% segura. Hacemos todo lo posible para proteger tu informaci+ï¿½n.'
       },
       cookies: {
         title: 'Uso de Cookies',
-        p1: 'Usamos cookies propias y de terceros para mejorar tu experiencia de navegaci+¦n, analizar el tr+ífico y personalizar contenido.',
-        p2: 'Puedes configurar tu navegador para rechazar cookies, aunque esto podr+¡a afectar la funcionalidad de algunas partes del sitio.'
+        p1: 'Usamos cookies propias y de terceros para mejorar tu experiencia de navegaci+ï¿½n, analizar el tr+ï¿½fico y personalizar contenido.',
+        p2: 'Puedes configurar tu navegador para rechazar cookies, aunque esto podr+ï¿½a afectar la funcionalidad de algunas partes del sitio.'
       },
       contact: {
         title: '-+Dudas sobre Privacidad?',
-        desc: 'Nuestro Delegado de Protecci+¦n de Datos est+í disponible para resolver cualquier consulta.',
+        desc: 'Nuestro Delegado de Protecci+ï¿½n de Datos est+ï¿½ disponible para resolver cualquier consulta.',
         email: 'dpo@cheotnun.com',
-        address: 'Calle Gran V+¡a 12, Madrid, Espa+¦a'
+        address: 'Calle Gran V+ï¿½a 12, Madrid, Espa+ï¿½a'
       },
       sections: [
-        { icon: 'FileText', title: 'Informaci+¦n que Recopilamos', content: 'Recopilamos informaci+¦n que nos proporcionas directamente (nombre, email, direcci+¦n) e informaci+¦n de navegaci+¦n (cookies, p+íginas visitadas).' },
-        { icon: 'ShieldCheck', title: 'Uso de tu Informaci+¦n', content: 'Utilizamos tus datos para procesar pedidos, mejorar nuestros servicios, enviar comunicaciones comerciales (con tu consentimiento) y cumplir obligaciones legales.' },
-        { icon: 'Share2', title: 'Compartir Informaci+¦n', content: 'No vendemos tus datos personales. Compartimos informaci+¦n solo con proveedores de servicios esenciales (procesamiento de pagos, log+¡stica de env+¡os) bajo estrictos acuerdos de confidencialidad.' },
-        { icon: 'Clock', title: 'Retenci+¦n de Datos', content: 'Conservamos tus datos mientras mantengas una cuenta activa o durante el tiempo necesario para cumplir con obligaciones legales y fiscales.' },
+        { icon: 'FileText', title: 'Informaci+ï¿½n que Recopilamos', content: 'Recopilamos informaci+ï¿½n que nos proporcionas directamente (nombre, email, direcci+ï¿½n) e informaci+ï¿½n de navegaci+ï¿½n (cookies, p+ï¿½ginas visitadas).' },
+        { icon: 'ShieldCheck', title: 'Uso de tu Informaci+ï¿½n', content: 'Utilizamos tus datos para procesar pedidos, mejorar nuestros servicios, enviar comunicaciones comerciales (con tu consentimiento) y cumplir obligaciones legales.' },
+        { icon: 'Share2', title: 'Compartir Informaci+ï¿½n', content: 'No vendemos tus datos personales. Compartimos informaci+ï¿½n solo con proveedores de servicios esenciales (procesamiento de pagos, log+ï¿½stica de env+ï¿½os) bajo estrictos acuerdos de confidencialidad.' },
+        { icon: 'Clock', title: 'Retenci+ï¿½n de Datos', content: 'Conservamos tus datos mientras mantengas una cuenta activa o durante el tiempo necesario para cumplir con obligaciones legales y fiscales.' },
         { icon: 'UserCheck', title: 'Tus Derechos', content: 'Tienes derecho a acceder, rectificar, cancelar y oponerte al tratamiento de tus datos. Puedes ejercer estos derechos escribiendo a dpo@cheotnun.com.' },
-        { icon: 'Globe', title: 'Transferencias Internacionales', content: 'Al ser una tienda con operaciones internacionales, tus datos pueden ser transferidos y almacenados en servidores fuera de tu pa+¡s de residencia.' }
+        { icon: 'Globe', title: 'Transferencias Internacionales', content: 'Al ser una tienda con operaciones internacionales, tus datos pueden ser transferidos y almacenados en servidores fuera de tu pa+ï¿½s de residencia.' }
       ]
     },
     blog: {
       pageTitle: 'Blog Cheotnun K-Beauty',
-      pageSubtitle: 'Art+¡culos, gu+¡as y secretos del skincare coreano.'
+      pageSubtitle: 'Art+ï¿½culos, gu+ï¿½as y secretos del skincare coreano.'
     },
     translations: {
       pt: {
@@ -809,7 +809,7 @@ const DEFAULT_STATE: DbState = {
             titleLine1: 'Sua beleza.',
             titleLine2: 'Seu ritual.',
             titleLine3: 'Seu momento.',
-            subtitle: 'Cosm+®ticos coreanos aut+¬nticos selecionados para cada etapa do seu cuidado facial. F+¦rmulas bot+ónicas que revelam sua luminosidade natural.',
+            subtitle: 'Cosm+ï¿½ticos coreanos aut+ï¿½nticos selecionados para cada etapa do seu cuidado facial. F+ï¿½rmulas bot+ï¿½nicas que revelam sua luminosidade natural.',
             btnBuyText: 'COMPRAR AGORA',
             btnBuyLink: '/tienda',
             btnRoutineText: 'DESCUBRIR ROTINAS',
@@ -819,30 +819,30 @@ const DEFAULT_STATE: DbState = {
           highlights: {
             items: [
               { icon: 'ShieldCheck', title: '100% ORIGINAIS', text: 'Direto da Coreia' },
-              { icon: 'Truck', title: 'ENVIOS INTERNACIONAIS', text: 'Para toda a Am+®rica Latina' },
+              { icon: 'Truck', title: 'ENVIOS INTERNACIONAIS', text: 'Para toda a Am+ï¿½rica Latina' },
               { icon: 'ShieldAlert', title: 'PASSOS SEGUROS', text: 'Protegemos sua compra' },
-              { icon: 'Heart', title: 'ATENDIMENTO PERSONALIZADO', text: 'Estamos para ajudar voc+¬' }
+              { icon: 'Heart', title: 'ATENDIMENTO PERSONALIZADO', text: 'Estamos para ajudar voc+ï¿½' }
             ]
           },
           categories: {
             preTitle: 'CATEGORIAS',
             title: 'Explorar por Categoria',
-            subtitle: 'Descubra nossa sele+º+úo completa de produtos K-Beauty organizados por categoria para encontrar exatamente o que sua pele precisa.',
+            subtitle: 'Descubra nossa sele+ï¿½+ï¿½o completa de produtos K-Beauty organizados por categoria para encontrar exatamente o que sua pele precisa.',
             buttonText: 'VER MAIS'
           },
           bestSellers: {
             preTitle: 'MAIS VENDIDOS',
             title: 'Os Favoritos',
-            subtitle: 'Os produtos que est+úo conquistando o cora+º+úo das nossas clientes.',
+            subtitle: 'Os produtos que est+ï¿½o conquistando o cora+ï¿½+ï¿½o das nossas clientes.',
             buttonText: 'VER MAIS'
           },
           experiencias: {
-            preTitle: 'EXPERI+èNCIAS',
+            preTitle: 'EXPERI+ï¿½NCIAS',
             title: 'Viva o K-Beauty',
             cards: [
               { badge: 'WORKSHOP', title: 'Aprenda Conosco', text: 'Participe de workshops exclusivos sobre skincare coreano.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=600', badgeColor: 'bg-pink-500' },
-              { badge: 'VIAGEM', title: 'Explore a Coreia', text: 'Viaje para Coreia do Sul com experi+¬ncias +¦nicas de beleza e cultura.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600', badgeColor: 'bg-purple-500' },
-              { badge: 'EVENTO', title: 'Eventos Exclusivos', text: 'Eventos privados para grupos que desejam uma experi+¬ncia personalizada.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600', badgeColor: 'bg-amber-500' }
+              { badge: 'VIAGEM', title: 'Explore a Coreia', text: 'Viaje para Coreia do Sul com experi+ï¿½ncias +ï¿½nicas de beleza e cultura.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=600', badgeColor: 'bg-purple-500' },
+              { badge: 'EVENTO', title: 'Eventos Exclusivos', text: 'Eventos privados para grupos que desejam uma experi+ï¿½ncia personalizada.', buttonText: 'SAIBA MAIS', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600', badgeColor: 'bg-amber-500' }
             ]
           },
           routines: {
@@ -852,11 +852,11 @@ const DEFAULT_STATE: DbState = {
             buttonText: 'VER ROTINAS',
             items: [
               { icon: 'Droplets', name: 'Double Cleansing' },
-              { icon: 'Sparkles', name: 'Esfolia+º+úo' },
-              { icon: 'FlaskConical', name: 'T+¦nico' },
-              { icon: 'Droplet', name: 'Ess+¬ncia' },
-              { icon: 'Gem', name: 'S+®rum' },
-              { icon: 'Snowflake', name: 'Hidrata+º+úo' }
+              { icon: 'Sparkles', name: 'Esfolia+ï¿½+ï¿½o' },
+              { icon: 'FlaskConical', name: 'T+ï¿½nico' },
+              { icon: 'Droplet', name: 'Ess+ï¿½ncia' },
+              { icon: 'Gem', name: 'S+ï¿½rum' },
+              { icon: 'Snowflake', name: 'Hidrata+ï¿½+ï¿½o' }
             ],
             badges: [
               { icon: 'Sun', title: 'Protetor Solar' },
@@ -867,7 +867,7 @@ const DEFAULT_STATE: DbState = {
           instagram: {
             title: 'Siga-nos no Instagram',
             subtitle: 'Compartilhamos dicas, novidades e bastidores do K-Beauty.',
-            buttonLink: 'https://www.instagram.com/lacheotnun',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             buttonText: '@lacheotnun',
             images: [
               'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
@@ -884,17 +884,17 @@ const DEFAULT_STATE: DbState = {
           }
         },
         header: {
-          topBar: 'Frete gr+ítis para compras acima de R\$ 297 para todo o Brasil',
+          topBar: 'Frete gr+ï¿½tis para compras acima de R\$ 297 para todo o Brasil',
           logoText: 'CHEOTNUN',
           logoSubtext: 'Corean Beauty',
           ctaText: 'COMECE AQUI',
           ctaLink: '/tienda',
           navLinks: [
-            { label: 'In+¡cio', href: '/' },
+            { label: 'In+ï¿½cio', href: '/' },
             { label: 'Loja', href: '/tienda' },
             { label: 'Marcas', href: '/marcas' },
             { label: 'Rotinas', href: '/rutinas' },
-            { label: 'Experi+¬ncias', href: '/experiencias' },
+            { label: 'Experi+ï¿½ncias', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
             { label: 'Contato', href: '/contacto' }
           ]
@@ -902,27 +902,27 @@ const DEFAULT_STATE: DbState = {
         footer: {
           logoText: 'CHEOTNUN',
           logoSubtext: 'K-Beauty',
-          description: 'Sua loja online de cosm+®ticos coreanos aut+¬nticos. Produtos originais direto da Coreia.',
-          copyright: '-® 2026 Cheotnun K-Beauty. Todos os direitos reservados.',
+          description: 'Sua loja online de cosm+ï¿½ticos coreanos aut+ï¿½nticos. Produtos originais direto da Coreia.',
+          copyright: '-ï¿½ 2026 Cheotnun K-Beauty. Todos os direitos reservados.',
           columns: [
             { title: 'PRODUTOS', links: [
               { label: 'Todos os Produtos', href: '/tienda' },
               { label: 'Mais Vendidos', href: '/tienda' },
-              { label: 'Lan+ºamentos', href: '/tienda' },
+              { label: 'Lan+ï¿½amentos', href: '/tienda' },
               { label: 'Marcas', href: '/marcas' },
-              { label: 'Promo+º+Áes', href: '/tienda' }
+              { label: 'Promo+ï¿½+ï¿½es', href: '/tienda' }
             ]},
             { title: 'AJUDA', links: [
               { label: 'Como Comprar', href: '/como-funciona' },
-              { label: 'Env+¡os e Pagamentos', href: '/ayuda/envios' },
+              { label: 'Env+ï¿½os e Pagamentos', href: '/ayuda/envios' },
               { label: 'Devoluciones', href: '/ayuda/devoluciones' },
               { label: 'Perguntas Frequentes', href: '/como-funciona' },
               { label: 'Contato', href: '/contacto' }
             ]},
             { title: 'LEGAL', links: [
-              { label: 'T+®rminos e Condi+º+Áes', href: '/terminos' },
-              { label: 'Pol+¡tica de Privacidade', href: '/politica-de-privacidad' },
-              { label: 'Pol+¡tica de Cookies', href: '/politica-de-privacidad' }
+              { label: 'T+ï¿½rminos e Condi+ï¿½+ï¿½es', href: '/terminos' },
+              { label: 'Pol+ï¿½tica de Privacidade', href: '/politica-de-privacidad' },
+              { label: 'Pol+ï¿½tica de Cookies', href: '/politica-de-privacidad' }
             ]}
           ]
         },
@@ -930,34 +930,34 @@ const DEFAULT_STATE: DbState = {
           hero: {
             image: '/images/marcas-hero.webp',
             title: 'Nossas Marcas',
-            subtitle: 'Trabalhamos com as melhores marcas coreanas para levar at+® voc+¬ o que h+í de mais aut+¬ntico e inovador em K-Beauty.'
+            subtitle: 'Trabalhamos com as melhores marcas coreanas para levar at+ï¿½ voc+ï¿½ o que h+ï¿½ de mais aut+ï¿½ntico e inovador em K-Beauty.'
           },
           features: [
-            { icon: 'ShieldCheck', title: '100% Original', text: 'Todos os produtos s+úo adquiridos diretamente de distribuidores oficiais na Coreia.' },
-            { icon: 'Truck', title: 'Envio Seguro', text: 'Embalagem especial para garantir que seu produto chegue em perfeitas condi+º+Áes.' },
+            { icon: 'ShieldCheck', title: '100% Original', text: 'Todos os produtos s+ï¿½o adquiridos diretamente de distribuidores oficiais na Coreia.' },
+            { icon: 'Truck', title: 'Envio Seguro', text: 'Embalagem especial para garantir que seu produto chegue em perfeitas condi+ï¿½+ï¿½es.' },
             { icon: 'Award', title: 'Qualidade Garantida', text: 'Selecionamos apenas marcas com trayectoria comprovada e ingredientes de alta qualidade.' }
           ],
           whyChooseUs: {
             title: 'Por que escolher a Cheotnun?',
             items: [
-              { icon: 'MapPin', title: 'Conex+úo Direta com a Coreia', text: 'Nossa equipe viaja regularmente +á Coreia para selecionar pessoalmente cada produto.' },
+              { icon: 'MapPin', title: 'Conex+ï¿½o Direta com a Coreia', text: 'Nossa equipe viaja regularmente +ï¿½ Coreia para selecionar pessoalmente cada produto.' },
               { icon: 'ShieldCheck', title: 'Autenticidade Garantida', text: 'Certificados de autenticidade e selos originais em cada produto.' },
-              { icon: 'Sparkles', title: 'Curadoria Especializada', text: 'Cada produto +® testado e aprovado por nossa equipe de especialistas em skincare.' },
-              { icon: 'HeartHandshake', title: 'Atendimento Personalizado', text: 'Suporte dedicado para ajudar voc+¬ a encontrar a rotina perfeita para sua pele.' }
+              { icon: 'Sparkles', title: 'Curadoria Especializada', text: 'Cada produto +ï¿½ testado e aprovado por nossa equipe de especialistas em skincare.' },
+              { icon: 'HeartHandshake', title: 'Atendimento Personalizado', text: 'Suporte dedicado para ajudar voc+ï¿½ a encontrar a rotina perfeita para sua pele.' }
             ],
             conclusionImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600',
-            conclusionTitle: 'Qualidade que voc+¬ pode confiar',
-            conclusionText: 'Mais de 10.000 clientes satisfeitas na Am+®rica Latina confiam na Cheotnun para cuidar da sua pele com o melhor do K-Beauty.'
+            conclusionTitle: 'Qualidade que voc+ï¿½ pode confiar',
+            conclusionText: 'Mais de 10.000 clientes satisfeitas na Am+ï¿½rica Latina confiam na Cheotnun para cuidar da sua pele com o melhor do K-Beauty.'
           },
           testimonials: {
             title: 'O que dizem nossas clientes',
             list: [
-              { text: 'Amei os produtos! Minha pele nunca esteve t+úo radiante. A entrega foi super r+ípida.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', name: 'Ana Silva', country: 'Brasil' },
+              { text: 'Amei os produtos! Minha pele nunca esteve t+ï¿½o radiante. A entrega foi super r+ï¿½pida.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200', name: 'Ana Silva', country: 'Brasil' },
               { text: 'Produtos originais e embalagem perfeita. Recomendo para todas que querem skincare de verdade.', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200', name: 'Mariana Costa', country: 'Brasil' },
-              { text: 'A Cheotnun mudou minha rotina de skincare. Agora entendo porque o K-Beauty +® t+úo famoso.', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200', name: 'Juliana Oliveira', country: 'Brasil' }
+              { text: 'A Cheotnun mudou minha rotina de skincare. Agora entendo porque o K-Beauty +ï¿½ t+ï¿½o famoso.', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200', name: 'Juliana Oliveira', country: 'Brasil' }
             ],
             buttonLink: '/contacto',
-            buttonText: 'COMPARTILHE SUA EXPERI+èNCIA'
+            buttonText: 'COMPARTILHE SUA EXPERI+ï¿½NCIA'
           },
           trustBadges: [
             { icon: 'ShieldCheck', text: 'Produtos Originais' },
@@ -967,39 +967,39 @@ const DEFAULT_STATE: DbState = {
           ]
         },
         comoFunciona: {
-          hero: { image: '/images/como-funciona-hero.webp', title: 'Como Funciona', subtitle: 'Simples, r+ípido e seguro. Veja como +® f+ícil comprar na Cheotnun.' },
+          hero: { image: '/images/como-funciona-hero.webp', title: 'Como Funciona', subtitle: 'Simples, r+ï¿½pido e seguro. Veja como +ï¿½ f+ï¿½cil comprar na Cheotnun.' },
           steps: [
             { number: '01', icon: 'Search', title: 'Explore', text: 'Navegue por nossas categorias e descubra os produtos perfeitos para sua pele.' },
             { number: '02', icon: 'ShoppingCart', title: 'Escolha', text: 'Selecione seus produtos favoritos e adicione ao carrinho.' },
-            { number: '03', icon: 'CreditCard', title: 'Pague', text: 'Escolha seu m+®todo de pagamento preferido (cart+úo, PayPal ou transfer+¬ncia).' },
-            { number: '04', icon: 'Package', title: 'Receba', text: 'Seu pedido chega na sua casa com toda seguran+ºa e rastreamento.' }
+            { number: '03', icon: 'CreditCard', title: 'Pague', text: 'Escolha seu m+ï¿½todo de pagamento preferido (cart+ï¿½o, PayPal ou transfer+ï¿½ncia).' },
+            { number: '04', icon: 'Package', title: 'Receba', text: 'Seu pedido chega na sua casa com toda seguran+ï¿½a e rastreamento.' }
           ],
-          paymentsInfo: { title: 'M+®todos de Pagamento', subtitle: 'Aceitamos diversas formas de pagamento para sua comodidade.' },
+          paymentsInfo: { title: 'M+ï¿½todos de Pagamento', subtitle: 'Aceitamos diversas formas de pagamento para sua comodidade.' },
           shippingInfo: {
-            title: 'Informa+º+Áes de Envio',
-            subtitle: 'Envio para toda Am+®rica Latina com seguro e rastreamento inclusos.',
+            title: 'Informa+ï¿½+ï¿½es de Envio',
+            subtitle: 'Envio para toda Am+ï¿½rica Latina com seguro e rastreamento inclusos.',
             items: [
-              { title: 'Prazo de Entrega', text: '7 a 15 dias +¦teis dependendo do destino. Trabalhamos com transportadoras parceiras que atuam em toda a regi+úo.' },
-              { title: 'Rastreamento', text: 'Fornecemos c+¦digo de rastreamento para todos os pedidos. Voc+¬ acompanha cada etapa at+® receber.' },
-              { title: 'Seguro', text: 'Todos os envios incluem seguro contra extravio ou danos. Sua compra est+í protegida do in+¡cio ao fim.' }
+              { title: 'Prazo de Entrega', text: '7 a 15 dias +ï¿½teis dependendo do destino. Trabalhamos com transportadoras parceiras que atuam em toda a regi+ï¿½o.' },
+              { title: 'Rastreamento', text: 'Fornecemos c+ï¿½digo de rastreamento para todos os pedidos. Voc+ï¿½ acompanha cada etapa at+ï¿½ receber.' },
+              { title: 'Seguro', text: 'Todos os envios incluem seguro contra extravio ou danos. Sua compra est+ï¿½ protegida do in+ï¿½cio ao fim.' }
             ]
           },
           faq: {
             title: 'Perguntas frequentes',
-            subtitle: 'Resolvemos suas d+¦vidas mais comuns.',
+            subtitle: 'Resolvemos suas d+ï¿½vidas mais comuns.',
             buttonText: 'VER TODAS AS PERGUNTAS',
             items: [
-              'Os produtos s+úo originais?',
+              'Os produtos s+ï¿½o originais?',
               'Quanto tempo leva para meu pedido chegar?',
-              'Voc+¬s fazem envios para meu pa+¡s?',
+              'Voc+ï¿½s fazem envios para meu pa+ï¿½s?',
               'Posso trocar ou devolver um produto?',
-              'Quais m+®todos de pagamento aceitam?',
+              'Quais m+ï¿½todos de pagamento aceitam?',
               'Como saber o status do meu pedido?'
             ]
           },
           promises: {
             title: 'Produtos 100% originais',
-            subtitle: 'Trabalhamos apenas com marcas coreanas aut+¬nticas e autorizadas. Garantimos a qualidade e proced+¬ncia de cada produto.',
+            subtitle: 'Trabalhamos apenas com marcas coreanas aut+ï¿½nticas e autorizadas. Garantimos a qualidade e proced+ï¿½ncia de cada produto.',
             image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600',
             items: [
               { icon: 'ShieldCheck', title: 'Marcas oficiais' },
@@ -1009,10 +1009,10 @@ const DEFAULT_STATE: DbState = {
             ]
           },
           community: {
-            title: 'Junte-se +á nossa comunidade',
-            desc: 'Descubra rotinas, dicas, lan+ºamentos e muito mais no Instagram.',
+            title: 'Junte-se +ï¿½ nossa comunidade',
+            desc: 'Descubra rotinas, dicas, lan+ï¿½amentos e muito mais no Instagram.',
             buttonText: 'SEGUIR NO INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1022,56 +1022,56 @@ const DEFAULT_STATE: DbState = {
           },
           newsletter: {
             title: 'Seja a primeira a saber',
-            subtitle: 'Novos lan+ºamentos, ofertas exclusivas e conte+¦do especial direto no seu e-mail.',
+            subtitle: 'Novos lan+ï¿½amentos, ofertas exclusivas e conte+ï¿½do especial direto no seu e-mail.',
             placeholder: 'Seu melhor e-mail',
             buttonText: 'QUERO RECEBER',
-            disclaimer: 'Prometemos n+úo enviar spam. Compartilhamos apenas o melhor do K-Beauty.'
+            disclaimer: 'Prometemos n+ï¿½o enviar spam. Compartilhamos apenas o melhor do K-Beauty.'
           }
         },
         contacto: {
-          hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Fale Conosco', subtitle: 'Estamos aqui para ajudar voc+¬ com d+¦vidas, sugest+Áes ou qualquer necessidade.', buttonText: 'RESPOSTA R+üPIDA E PERSONALIZADA', badges: [{ icon: 'Clock', text: 'Atendimento em portugu+¬s' }, { icon: 'Clock', text: 'Resposta em menos de 24h' }, { icon: 'CheckCircle2', text: 'Sua satisfa+º+úo +® nossa prioridade' }] },
+          hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Fale Conosco', subtitle: 'Estamos aqui para ajudar voc+ï¿½ com d+ï¿½vidas, sugest+ï¿½es ou qualquer necessidade.', buttonText: 'RESPOSTA R+ï¿½PIDA E PERSONALIZADA', badges: [{ icon: 'Clock', text: 'Atendimento em portugu+ï¿½s' }, { icon: 'Clock', text: 'Resposta em menos de 24h' }, { icon: 'CheckCircle2', text: 'Sua satisfa+ï¿½+ï¿½o +ï¿½ nossa prioridade' }] },
           contactMethods: {
             title: 'Formas de contato',
-            whatsapp: { label: 'WhatsApp', value: '+55 (11) 99999-9999', time: 'Seg a Sex, 9h +ás 18h (GMT-3)', desc: 'A forma mais r+ípida de falar com nossa equipe.', btn: 'FALAR AGORA', link: '#contacto-form' },
+            whatsapp: { label: 'WhatsApp', value: '+55 (11) 99999-9999', time: 'Seg a Sex, 9h +ï¿½s 18h (GMT-3)', desc: 'A forma mais r+ï¿½pida de falar com nossa equipe.', btn: 'FALAR AGORA', link: '#contacto-form' },
             email: { label: 'E-mail', value: 'ola@cheotnun.com', time: 'Resposta em menos de 24h', desc: 'Envie um e-mail e responderemos em breve.', btn: 'ENVIAR E-MAIL', link: 'mailto:ola@cheotnun.com' },
-            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
-            hours: { label: 'Hor+írio de atendimento', value: 'Exceto feriados', time: '', desc: 'Segunda a sexta 9h +ás 18h (GMT-3)', btn: 'VER HOR+üRIOS', link: '#' },
-            address: { label: 'Endere+ºo', value: 'S+úo Paulo, SP, Brasil', time: '', desc: 'Escrit+¦rio administrativo', btn: 'VER NO MAPA', link: '#' }
+            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
+            hours: { label: 'Hor+ï¿½rio de atendimento', value: 'Exceto feriados', time: '', desc: 'Segunda a sexta 9h +ï¿½s 18h (GMT-3)', btn: 'VER HOR+ï¿½RIOS', link: '#' },
+            address: { label: 'Endere+ï¿½o', value: 'S+ï¿½o Paulo, SP, Brasil', time: '', desc: 'Escrit+ï¿½rio administrativo', btn: 'VER NO MAPA', link: '#' }
           },
           form: {
             title: 'Envie uma mensagem',
             nameLabel: 'Nome completo',
             emailLabel: 'E-mail',
             subjectLabel: 'Assunto',
-            subjectOptions: ['Selecione um assunto', 'D+¦vidas sobre produtos', 'Status do meu pedido', 'Devolu+º+Áes', 'Outros'],
+            subjectOptions: ['Selecione um assunto', 'D+ï¿½vidas sobre produtos', 'Status do meu pedido', 'Devolu+ï¿½+ï¿½es', 'Outros'],
             messageLabel: 'Sua mensagem',
             submitText: 'ENVIAR MENSAGEM',
-            securityNotice: 'Suas informa+º+Áes est+úo seguras conosco e n+úo ser+úo compartilhadas.',
+            securityNotice: 'Suas informa+ï¿½+ï¿½es est+ï¿½o seguras conosco e n+ï¿½o ser+ï¿½o compartilhadas.',
             successAlert: 'Mensagem enviada com sucesso! Entraremos em contato em breve.'
           },
           faq: {
             title: 'Em que podemos ajudar?',
-            subtitle: 'Perguntas frequentes r+ípidas',
+            subtitle: 'Perguntas frequentes r+ï¿½pidas',
             buttonText: 'VER TODAS AS PERGUNTAS FREQUENTES',
             topics: [
-              { icon: 'Info', title: 'Informa+º+Áes sobre produtos', desc: 'D+¦vidas sobre ingredientes, benef+¡cios e recomenda+º+Áes.' },
+              { icon: 'Info', title: 'Informa+ï¿½+ï¿½es sobre produtos', desc: 'D+ï¿½vidas sobre ingredientes, benef+ï¿½cios e recomenda+ï¿½+ï¿½es.' },
               { icon: 'PackageSearch', title: 'Pedidos e envios', desc: 'Consulte o status do seu pedido, prazos de entrega.' },
-              { icon: 'CreditCard', title: 'Pagamentos e faturamento', desc: 'Informa+º+Áes sobre m+®todos de pagamento, notas fiscais e reembolsos.' },
-              { icon: 'RefreshCw', title: 'Devolu+º+Áes e trocas', desc: 'D+¦vidas sobre trocas, devolu+º+Áes e garantias.' },
-              { icon: 'Handshake', title: 'Colabora+º+Áes e imprensa', desc: 'Propostas de colabora+º+úo, eventos e imprensa.' }
+              { icon: 'CreditCard', title: 'Pagamentos e faturamento', desc: 'Informa+ï¿½+ï¿½es sobre m+ï¿½todos de pagamento, notas fiscais e reembolsos.' },
+              { icon: 'RefreshCw', title: 'Devolu+ï¿½+ï¿½es e trocas', desc: 'D+ï¿½vidas sobre trocas, devolu+ï¿½+ï¿½es e garantias.' },
+              { icon: 'Handshake', title: 'Colabora+ï¿½+ï¿½es e imprensa', desc: 'Propostas de colabora+ï¿½+ï¿½o, eventos e imprensa.' }
             ],
             quickItems: [
               'Quanto tempo leva para meu pedido chegar?',
-              'Quais m+®todos de pagamento voc+¬s aceitam?',
-              'Voc+¬s fazem envios para todo o Brasil?',
+              'Quais m+ï¿½todos de pagamento voc+ï¿½s aceitam?',
+              'Voc+ï¿½s fazem envios para todo o Brasil?',
               'Posso trocar ou devolver um produto?'
             ]
           },
           community: {
-            title: 'Junte-se +á nossa comunidade',
-            desc: 'Siga-nos nas redes sociais e seja a primeira a descobrir lan+ºamentos, promo+º+Áes e dicas de beleza.',
+            title: 'Junte-se +ï¿½ nossa comunidade',
+            desc: 'Siga-nos nas redes sociais e seja a primeira a descobrir lan+ï¿½amentos, promo+ï¿½+ï¿½es e dicas de beleza.',
             buttonText: 'SEGUIR NO INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1081,106 +1081,106 @@ const DEFAULT_STATE: DbState = {
           }
         },
         envios: {
-          hero: { image: '/images/envios-hero.webp', title: 'Env+¡os e Pagamentos', subtitle: 'Toda a informa+º+úo sobre prazos, custos e m+®todos de pagamento.', text: 'Na Cheotnun queremos que sua experi+¬ncia de compra seja tranquila e segura.' },
+          hero: { image: '/images/envios-hero.webp', title: 'Env+ï¿½os e Pagamentos', subtitle: 'Toda a informa+ï¿½+ï¿½o sobre prazos, custos e m+ï¿½todos de pagamento.', text: 'Na Cheotnun queremos que sua experi+ï¿½ncia de compra seja tranquila e segura.' },
           features: [
-            { text: 'Envio para toda Am+®rica Latina e Europa', icon: 'Globe' },
+            { text: 'Envio para toda Am+ï¿½rica Latina e Europa', icon: 'Globe' },
             { text: 'Pagamento 100% seguro com criptografia SSL', icon: 'ShieldCheck' }
           ],
           shipping: {
             title: 'Como funciona o envio',
-            text: 'Trabalhamos com parceiros log+¡sticos internacionais para garantir que seu pedido chegue r+ípido e com seguran+ºa.',
+            text: 'Trabalhamos com parceiros log+ï¿½sticos internacionais para garantir que seu pedido chegue r+ï¿½pido e com seguran+ï¿½a.',
             tableTitle: 'Prazos e Custos de Envio',
-            tableSubtitle: 'Valores e prazos estimados por regi+úo.'
+            tableSubtitle: 'Valores e prazos estimados por regi+ï¿½o.'
           },
           payments: {
-            title: 'M+®todos de Pagamento',
+            title: 'M+ï¿½todos de Pagamento',
             subtitle: 'Aceitamos diversas formas de pagamento para sua comodidade.',
             methods: [
-              { name: 'Cart+úo de Cr+®dito', desc: 'Visa, Mastercard, American Express e Diners Club. Parcelamento em at+® 6x.' },
-              { name: 'PayPal', desc: 'Pague com sua conta PayPal de forma r+ípida e segura.' },
-              { name: 'Transfer+¬ncia Banc+íria', desc: 'Transfer+¬ncia direta para nossa conta. Consulte os dados ap+¦s finalizar a compra.' },
-              { name: 'Pix', desc: 'Pagamento instant+óneo para clientes no Brasil.' }
+              { name: 'Cart+ï¿½o de Cr+ï¿½dito', desc: 'Visa, Mastercard, American Express e Diners Club. Parcelamento em at+ï¿½ 6x.' },
+              { name: 'PayPal', desc: 'Pague com sua conta PayPal de forma r+ï¿½pida e segura.' },
+              { name: 'Transfer+ï¿½ncia Banc+ï¿½ria', desc: 'Transfer+ï¿½ncia direta para nossa conta. Consulte os dados ap+ï¿½s finalizar a compra.' },
+              { name: 'Pix', desc: 'Pagamento instant+ï¿½neo para clientes no Brasil.' }
             ]
           }
         },
         ayudaDevoluciones: {
           hero: {
-            badge: 'Pol+¡tica de Devolu+º+úo',
+            badge: 'Pol+ï¿½tica de Devolu+ï¿½+ï¿½o',
             title: 'Devoluciones e Reembolsos',
-            subtitle: 'Na Cheotnun sua satisfa+º+úo +® nossa prioridade. Se por algum motivo voc+¬ n+úo ficar satisfeita, estamos aqui para ajudar.',
+            subtitle: 'Na Cheotnun sua satisfa+ï¿½+ï¿½o +ï¿½ nossa prioridade. Se por algum motivo voc+ï¿½ n+ï¿½o ficar satisfeita, estamos aqui para ajudar.',
             steps: [
-              { icon: 'Mail', number: '1', title: 'Solicite', desc: 'Envie um e-mail para devoluciones@cheotnun.com com seu n+¦mero de pedido e motivo da devolu+º+úo.' },
-              { icon: 'ClipboardCheck', number: '2', title: 'Aprovamos', desc: 'Nossa equipe analisar+í sua solicita+º+úo em at+® 48 horas +¦teis.' },
-              { icon: 'Package', number: '3', title: 'Envie', desc: 'Ap+¦s aprova+º+úo, enviaremos as instru+º+Áes para devolu+º+úo do produto.' },
+              { icon: 'Mail', number: '1', title: 'Solicite', desc: 'Envie um e-mail para devoluciones@cheotnun.com com seu n+ï¿½mero de pedido e motivo da devolu+ï¿½+ï¿½o.' },
+              { icon: 'ClipboardCheck', number: '2', title: 'Aprovamos', desc: 'Nossa equipe analisar+ï¿½ sua solicita+ï¿½+ï¿½o em at+ï¿½ 48 horas +ï¿½teis.' },
+              { icon: 'Package', number: '3', title: 'Envie', desc: 'Ap+ï¿½s aprova+ï¿½+ï¿½o, enviaremos as instru+ï¿½+ï¿½es para devolu+ï¿½+ï¿½o do produto.' },
               { icon: 'RefreshCw', number: '4', title: 'Reembolsamos', desc: 'Assim que recebermos e verificarmos o produto, processaremos o reembolso.' }
             ],
-            sectionTitle: 'Processo de Devolu+º+úo',
+            sectionTitle: 'Processo de Devolu+ï¿½+ï¿½o',
             summary: [
-              { title: 'Prazo', text: 'At+® 14 dias ap+¦s o recebimento do pedido.' },
-              { title: 'Condi+º+úo', text: 'Produto sem uso, na embalagem original e com todos os lacres.' },
+              { title: 'Prazo', text: 'At+ï¿½ 14 dias ap+ï¿½s o recebimento do pedido.' },
+              { title: 'Condi+ï¿½+ï¿½o', text: 'Produto sem uso, na embalagem original e com todos os lacres.' },
               { title: 'Custo', text: 'Gratuito para produtos com defeito. O cliente arca com o frete nos demais casos.' }
             ],
-            conditionsTitle: 'Condi+º+Áes para Devolu+º+úo',
+            conditionsTitle: 'Condi+ï¿½+ï¿½es para Devolu+ï¿½+ï¿½o',
             conditions: [
               'O produto deve estar sem uso e na embalagem original.',
               'Todos os lacres e selos de garantia devem estar intactos.',
-              'A solicita+º+úo deve ser feita em at+® 14 dias corridos ap+¦s o recebimento.',
-              'Produtos em promo+º+úo ou em kit podem ter condi+º+Áes especiais de devolu+º+úo.',
-              'O reembolso ser+í processado no mesmo m+®todo de pagamento utilizado na compra.'
+              'A solicita+ï¿½+ï¿½o deve ser feita em at+ï¿½ 14 dias corridos ap+ï¿½s o recebimento.',
+              'Produtos em promo+ï¿½+ï¿½o ou em kit podem ter condi+ï¿½+ï¿½es especiais de devolu+ï¿½+ï¿½o.',
+              'O reembolso ser+ï¿½ processado no mesmo m+ï¿½todo de pagamento utilizado na compra.'
             ],
-            notAcceptedTitle: 'N+úo Aceitamos Devolu+º+úo de:',
+            notAcceptedTitle: 'N+ï¿½o Aceitamos Devolu+ï¿½+ï¿½o de:',
             notAccepted: [
-              'Produtos com sinais de uso ou viola+º+úo do lacre de seguran+ºa.',
-              'Produtos em promo+º+úo ou liquida+º+úo com aviso de n+úo aceita+º+úo de devolu+º+úo.',
-              'Amostras gr+ítis ou brindes promocionais.',
-              'Pedidos com mais de 30 dias ap+¦s o recebimento.',
+              'Produtos com sinais de uso ou viola+ï¿½+ï¿½o do lacre de seguran+ï¿½a.',
+              'Produtos em promo+ï¿½+ï¿½o ou liquida+ï¿½+ï¿½o com aviso de n+ï¿½o aceita+ï¿½+ï¿½o de devolu+ï¿½+ï¿½o.',
+              'Amostras gr+ï¿½tis ou brindes promocionais.',
+              'Pedidos com mais de 30 dias ap+ï¿½s o recebimento.',
               'Produtos que foram danificados por mau uso ou armazenamento inadequado.'
             ],
-            contactTitle: 'Contato para Devolu+º+Áes',
-            contactText: 'Tem alguma d+¦vida sobre o processo de devolu+º+úo? Estamos aqui para ajudar.',
+            contactTitle: 'Contato para Devolu+ï¿½+ï¿½es',
+            contactText: 'Tem alguma d+ï¿½vida sobre o processo de devolu+ï¿½+ï¿½o? Estamos aqui para ajudar.',
             contactEmail: 'devoluciones@cheotnun.com',
             contactWhatsapp: '+55 (11) 98888-7777'
           }
         },
         rutinasPage: {
           hero: { image: '/images/rutinas-hero.webp', badge: 'ROTINAS K-BEAUTY', title: 'Sua Rotina de Skincare', subtitle: 'Descubra a rotina coreana passo a passo e transforme sua pele.', buttonText: 'COMECE SUA ROTINA' },
-          stepsSection: { title: 'Os Passos do K-Beauty', subtitle: 'A rotina coreana de skincare pode ter de 5 a 12 passos. Aqui est+úo os essenciais.', footerText: 'Ô£¿ Cada pele +® +¦nica. Adapte os passos conforme sua necessidade.' },
+          stepsSection: { title: 'Os Passos do K-Beauty', subtitle: 'A rotina coreana de skincare pode ter de 5 a 12 passos. Aqui est+ï¿½o os essenciais.', footerText: 'Ô£ï¿½ Cada pele +ï¿½ +ï¿½nica. Adapte os passos conforme sua necessidade.' },
           steps: [
-            { icon: 'Droplets', title: 'Double Cleansing', desc: 'O primeiro passo +® a limpeza dupla: primeiro um +¦leo removedor de maquiagem, depois um cleanser +á base de +ígua.' },
-            { icon: 'Sparkles', title: 'Esfolia+º+úo', desc: 'Remove c+®lulas mortas e renova a pele. Recomendamos 1-2 vezes por semana.' },
-            { icon: 'FlaskConical', title: 'T+¦nico', desc: 'Equilibra o pH da pele e prepara para receber os pr+¦ximos passos.' },
-            { icon: 'Droplet', title: 'Ess+¬ncia', desc: 'Um passo exclusivamente coreano, mais leve que um s+®rum, que hidrata e prepara a pele.' },
-            { icon: 'Gem', title: 'S+®rum', desc: 'Concentrado de ativos para tratar necessidades espec+¡ficas: vitamina C, +ícido hialur+¦nico, retinol.' },
-            { icon: 'Snowflake', title: 'Hidrata+º+úo', desc: 'Creme hidratante que sela todos os passos anteriores e mant+®m a pele macia.' }
+            { icon: 'Droplets', title: 'Double Cleansing', desc: 'O primeiro passo +ï¿½ a limpeza dupla: primeiro um +ï¿½leo removedor de maquiagem, depois um cleanser +ï¿½ base de +ï¿½gua.' },
+            { icon: 'Sparkles', title: 'Esfolia+ï¿½+ï¿½o', desc: 'Remove c+ï¿½lulas mortas e renova a pele. Recomendamos 1-2 vezes por semana.' },
+            { icon: 'FlaskConical', title: 'T+ï¿½nico', desc: 'Equilibra o pH da pele e prepara para receber os pr+ï¿½ximos passos.' },
+            { icon: 'Droplet', title: 'Ess+ï¿½ncia', desc: 'Um passo exclusivamente coreano, mais leve que um s+ï¿½rum, que hidrata e prepara a pele.' },
+            { icon: 'Gem', title: 'S+ï¿½rum', desc: 'Concentrado de ativos para tratar necessidades espec+ï¿½ficas: vitamina C, +ï¿½cido hialur+ï¿½nico, retinol.' },
+            { icon: 'Snowflake', title: 'Hidrata+ï¿½+ï¿½o', desc: 'Creme hidratante que sela todos os passos anteriores e mant+ï¿½m a pele macia.' }
           ],
-          ingredientsSection: { title: 'Ingredientes Coreanos', subtitle: 'Conhe+ºa os ingredientes estrela da cosm+®tica coreana.' },
+          ingredientsSection: { title: 'Ingredientes Coreanos', subtitle: 'Conhe+ï¿½a os ingredientes estrela da cosm+ï¿½tica coreana.' },
           ingredients: [
             { img: 'https://images.unsplash.com/photo-1615391978149-9fce07b0d447?q=80&w=200', name: 'Snail Mucin', desc: 'Hidrata, regenera e repara a pele. O ingrediente favorito do K-Beauty.' },
-            { img: 'https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=200', name: 'Centella Asiatica', desc: 'Acalma, cicatriza e reduz inflama+º+Áes. Perfeita para peles sens+¡veis.' },
-            { img: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=200', name: '+ücido Hialur+¦nico', desc: 'Hidrata+º+úo profunda que ret+®m a umidade na pele.' },
+            { img: 'https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=200', name: 'Centella Asiatica', desc: 'Acalma, cicatriza e reduz inflama+ï¿½+ï¿½es. Perfeita para peles sens+ï¿½veis.' },
+            { img: 'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?q=80&w=200', name: '+ï¿½cido Hialur+ï¿½nico', desc: 'Hidrata+ï¿½+ï¿½o profunda que ret+ï¿½m a umidade na pele.' },
             { img: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=200', name: 'Niacinamida', desc: 'Clareia manchas, controla oleosidade e fortalece a barreira da pele.' },
-            { img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=200', name: 'Pr+¦polis', desc: 'Antibacteriano natural, hidrata e d+í luminosidade.' },
+            { img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=200', name: 'Pr+ï¿½polis', desc: 'Antibacteriano natural, hidrata e d+ï¿½ luminosidade.' },
             { img: 'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=200', name: 'Vitamina C', desc: 'Poderoso antioxidante que ilumina e uniformiza o tom da pele.' },
-            { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200', name: 'Ceramidas', desc: 'Restauram a barreira de prote+º+úo da pele, evitando a perda de umidade.' },
-            { img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=200', name: 'Retinol', desc: 'Antienvelhecimento potente que estimula col+ígeno e renova as c+®lulas.' }
+            { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200', name: 'Ceramidas', desc: 'Restauram a barreira de prote+ï¿½+ï¿½o da pele, evitando a perda de umidade.' },
+            { img: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=200', name: 'Retinol', desc: 'Antienvelhecimento potente que estimula col+ï¿½geno e renova as c+ï¿½lulas.' }
           ],
-          routineSection: { title: 'Ordem da Rotina', boxTitle: 'Sua rotina pode ser +¦nica.', boxDesc: 'Comece com o b+ísico e adicione passos conforme sua pele se acostuma. O segredo +® a consist+¬ncia nos cuidados di+írios.' },
+          routineSection: { title: 'Ordem da Rotina', boxTitle: 'Sua rotina pode ser +ï¿½nica.', boxDesc: 'Comece com o b+ï¿½sico e adicione passos conforme sua pele se acostuma. O segredo +ï¿½ a consist+ï¿½ncia nos cuidados di+ï¿½rios.' },
           routineSteps: [
-            { num: '1', title: 'Limpeza', icon: 'Droplets', sub: '+ôleo + Water Cleanser' },
-            { num: '2', title: 'Esfolia+º+úo', icon: 'Sparkles', sub: '1-2x/semana' },
-            { num: '3', title: 'T+¦nico + Ess+¬ncia', icon: 'FlaskConical', sub: 'Equilibrar + Preparar' },
-            { num: '4', title: 'S+®rum + Ampola', icon: 'Gem', sub: 'Tratamento espec+¡fico' },
-            { num: '5', title: 'Hidrata+º+úo', icon: 'Snowflake', sub: 'Creme + +ôleo' },
-            { num: '6', title: 'Prote+º+úo', icon: 'Sun', sub: 'Protetor Solar (manh+ú)' }
+            { num: '1', title: 'Limpeza', icon: 'Droplets', sub: '+ï¿½leo + Water Cleanser' },
+            { num: '2', title: 'Esfolia+ï¿½+ï¿½o', icon: 'Sparkles', sub: '1-2x/semana' },
+            { num: '3', title: 'T+ï¿½nico + Ess+ï¿½ncia', icon: 'FlaskConical', sub: 'Equilibrar + Preparar' },
+            { num: '4', title: 'S+ï¿½rum + Ampola', icon: 'Gem', sub: 'Tratamento espec+ï¿½fico' },
+            { num: '5', title: 'Hidrata+ï¿½+ï¿½o', icon: 'Snowflake', sub: 'Creme + +ï¿½leo' },
+            { num: '6', title: 'Prote+ï¿½+ï¿½o', icon: 'Sun', sub: 'Protetor Solar (manh+ï¿½)' }
           ],
           tipsSection: { title: 'Dicas Essenciais' },
           tips: [
-            { title: 'Conhe+ºa seu Tipo de Pele', desc: 'Antes de come+ºar qualquer rotina, identifique se sua pele +® oleosa, seca, mista ou sens+¡vel.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Search' },
-            { title: 'Introduza um Passo de Cada Vez', desc: 'Comece com limpeza, hidrata+º+úo e protetor solar. Depois adicione s+®rum, esfolia+º+úo e tratamentos.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'ArrowRight' },
-            { title: 'Seja Consistente', desc: 'Resultados reais v+¬m com o uso di+írio. D+¬ +á sua pele tempo para se adaptar aos novos produtos.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Clock' },
-            { title: 'Protetor Solar +® Inegoci+ível', desc: 'Use todos os dias, mesmo em casa. A prote+º+úo solar previne envelhecimento precoce e manchas.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Sun' }
+            { title: 'Conhe+ï¿½a seu Tipo de Pele', desc: 'Antes de come+ï¿½ar qualquer rotina, identifique se sua pele +ï¿½ oleosa, seca, mista ou sens+ï¿½vel.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Search' },
+            { title: 'Introduza um Passo de Cada Vez', desc: 'Comece com limpeza, hidrata+ï¿½+ï¿½o e protetor solar. Depois adicione s+ï¿½rum, esfolia+ï¿½+ï¿½o e tratamentos.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'ArrowRight' },
+            { title: 'Seja Consistente', desc: 'Resultados reais v+ï¿½m com o uso di+ï¿½rio. D+ï¿½ +ï¿½ sua pele tempo para se adaptar aos novos produtos.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Clock' },
+            { title: 'Protetor Solar +ï¿½ Inegoci+ï¿½vel', desc: 'Use todos os dias, mesmo em casa. A prote+ï¿½+ï¿½o solar previne envelhecimento precoce e manchas.', img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=400', icon: 'Sun' }
           ],
-          makeupSection: { title: 'Universo Maquiagem', subtitle: 'A maquiagem coreana +® conhecida por sua leveza e acabamento natural.', buttonText: 'SAIBA MAIS' },
+          makeupSection: { title: 'Universo Maquiagem', subtitle: 'A maquiagem coreana +ï¿½ conhecida por sua leveza e acabamento natural.', buttonText: 'SAIBA MAIS' },
           makeup: [
             { name: 'Base Leve', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
             { name: 'Corretivo', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
@@ -1188,102 +1188,102 @@ const DEFAULT_STATE: DbState = {
             { name: 'Batom', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
             { name: 'Sombra', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
             { name: 'Delineador', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
-            { name: 'M+íscara de C+¡lios', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
-            { name: 'P+¦ Transl+¦cido', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' }
+            { name: 'M+ï¿½scara de C+ï¿½lios', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' },
+            { name: 'P+ï¿½ Transl+ï¿½cido', img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=200' }
           ],
           categoriesSection: { title: 'Categorias' },
           categories: [
             { icon: 'Droplets', name: 'Limpeza' },
-            { icon: 'Sparkles', name: 'Esfolia+º+úo' },
-            { icon: 'FlaskConical', name: 'T+¦nico' },
-            { icon: 'Droplet', name: 'Ess+¬ncia' },
-            { icon: 'Gem', name: 'S+®rum' },
-            { icon: 'Snowflake', name: 'Hidrata+º+úo' },
+            { icon: 'Sparkles', name: 'Esfolia+ï¿½+ï¿½o' },
+            { icon: 'FlaskConical', name: 'T+ï¿½nico' },
+            { icon: 'Droplet', name: 'Ess+ï¿½ncia' },
+            { icon: 'Gem', name: 'S+ï¿½rum' },
+            { icon: 'Snowflake', name: 'Hidrata+ï¿½+ï¿½o' },
             { icon: 'Sun', name: 'Protetor Solar' },
             { icon: 'Moon', name: 'Cuidado Noturno' }
           ],
           faqSection: { title: 'Perguntas Frequentes' },
           faq: [
-            { q: 'Quantos passos uma rotina coreana tem?', a: 'A rotina tradicional coreana tem entre 5 e 12 passos. Recomendamos come+ºar com o essencial e adicionar conforme sua pele se adapta.' },
-            { q: 'Posso misturar produtos de marcas diferentes?', a: 'Sim! O importante +® escolher produtos adequados ao seu tipo de pele e necessidades, independente da marca.' },
-            { q: 'Qual a diferen+ºa entre ess+¬ncia e s+®rum?', a: 'A ess+¬ncia +® mais l+¡quida e hidrata superficialmente. O s+®rum +® mais concentrado e trata problemas espec+¡ficos.' },
-            { q: 'Com que idade devo come+ºar a usar antienvelhecimento?', a: 'A preven+º+úo pode come+ºar aos 20-25 anos com antioxidantes como vitamina C. Retinol e ativos mais potentes geralmente a partir dos 30.' }
+            { q: 'Quantos passos uma rotina coreana tem?', a: 'A rotina tradicional coreana tem entre 5 e 12 passos. Recomendamos come+ï¿½ar com o essencial e adicionar conforme sua pele se adapta.' },
+            { q: 'Posso misturar produtos de marcas diferentes?', a: 'Sim! O importante +ï¿½ escolher produtos adequados ao seu tipo de pele e necessidades, independente da marca.' },
+            { q: 'Qual a diferen+ï¿½a entre ess+ï¿½ncia e s+ï¿½rum?', a: 'A ess+ï¿½ncia +ï¿½ mais l+ï¿½quida e hidrata superficialmente. O s+ï¿½rum +ï¿½ mais concentrado e trata problemas espec+ï¿½ficos.' },
+            { q: 'Com que idade devo come+ï¿½ar a usar antienvelhecimento?', a: 'A preven+ï¿½+ï¿½o pode come+ï¿½ar aos 20-25 anos com antioxidantes como vitamina C. Retinol e ativos mais potentes geralmente a partir dos 30.' }
           ],
-          newsletter: { title: 'Receba dicas exclusivas', subtitle: 'e fique por dentro das novidades do universo K-Beauty.', buttonText: 'QUERO RECEBER', disclaimer: 'Prometemos n+úo enviar spam. Voc+¬ pode cancelar a qualquer momento.', image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=400' }
+          newsletter: { title: 'Receba dicas exclusivas', subtitle: 'e fique por dentro das novidades do universo K-Beauty.', buttonText: 'QUERO RECEBER', disclaimer: 'Prometemos n+ï¿½o enviar spam. Voc+ï¿½ pode cancelar a qualquer momento.', image: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=400' }
         },
         experienciasPage: {
-          hero: { title: 'Experi+¬ncias Cheotnun', subtitle: 'Muito mais que produtos, uma conex+úo com a cultura coreana.', buttonText: 'Conecte-se com a cultura coreana', image: '/images/cheotnun-k-beauty-experiencias-viagens.webp' },
-          experiences: { title: 'Descubra nossas experi+¬ncias' },
+          hero: { title: 'Experi+ï¿½ncias Cheotnun', subtitle: 'Muito mais que produtos, uma conex+ï¿½o com a cultura coreana.', buttonText: 'Conecte-se com a cultura coreana', image: '/images/cheotnun-k-beauty-experiencias-viagens.webp' },
+          experiences: { title: 'Descubra nossas experi+ï¿½ncias' },
           experiencesList: [
             { icon: 'FlaskConical', title: 'Beauty Experience', desc: 'Descubra a origem dos seus produtos favoritos e mergulhe na cultura coreana do cuidado da pele.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400' },
-            { icon: 'Award', title: 'Workshops Exclusivos', desc: 'Aprenda t+®cnicas de beleza coreana com especialistas e profissionais certificados.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400' },
-            { icon: 'PlaneTakeoff', title: 'Viagens Culturais', desc: 'Explore a Coreia do Sul atrav+®s de experi+¬ncias +¦nicas que conectam beleza, cultura e bem-estar.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400' },
-            { icon: 'Users', title: 'Eventos Privados', desc: 'Organizamos eventos exclusivos para grupos que desejam uma experi+¬ncia personalizada.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=400' },
-            { icon: 'Heart', title: 'Retiros de Bem-Estar', desc: 'Programas imersivos que combinam skincare, bem-estar e conex+úo com a natureza.', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400' }
+            { icon: 'Award', title: 'Workshops Exclusivos', desc: 'Aprenda t+ï¿½cnicas de beleza coreana com especialistas e profissionais certificados.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400' },
+            { icon: 'PlaneTakeoff', title: 'Viagens Culturais', desc: 'Explore a Coreia do Sul atrav+ï¿½s de experi+ï¿½ncias +ï¿½nicas que conectam beleza, cultura e bem-estar.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400' },
+            { icon: 'Users', title: 'Eventos Privados', desc: 'Organizamos eventos exclusivos para grupos que desejam uma experi+ï¿½ncia personalizada.', img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=400' },
+            { icon: 'Heart', title: 'Retiros de Bem-Estar', desc: 'Programas imersivos que combinam skincare, bem-estar e conex+ï¿½o com a natureza.', img: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400' }
           ],
           maeum: {
             badge: 'Em parceria com',
             title: 'MAEUM GLOBAL',
             subtitle: 'Viagens que transformam.',
-            desc: 'Maeum Global leva voc+¬ +á Coreia para viver experi+¬ncias +¦nicas de beleza, cultura e bem-estar.',
+            desc: 'Maeum Global leva voc+ï¿½ +ï¿½ Coreia para viver experi+ï¿½ncias +ï¿½nicas de beleza, cultura e bem-estar.',
             points: [
               'Roteiros personalizados de K-Beauty',
               'Acompanhamento de especialistas locais',
-              'Visitas a f+íbricas e boutiques exclusivas',
+              'Visitas a f+ï¿½bricas e boutiques exclusivas',
               'Aulas de maquiagem e skincare coreano'
             ],
             buttonLink: 'https://www.maeumglobal.com.br',
             buttonText: 'SAIBA MAIS',
             cards: [
-              { title: 'Imers+úo Cultural', desc: 'Conhe+ºa a Coreia al+®m do skincare: hist+¦ria, gastronomia e muito mais.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400', icon: 'Compass' },
-              { title: 'Beauty Tour', desc: 'Visite as principais lojas e cl+¡nicas de beleza em Seoul e Busan.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400', icon: 'Sparkles' },
-              { title: 'Aprendizado', desc: 'Workshops pr+íticos com maquiadores e dermatologistas coreanos.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400', icon: 'BookOpen' }
+              { title: 'Imers+ï¿½o Cultural', desc: 'Conhe+ï¿½a a Coreia al+ï¿½m do skincare: hist+ï¿½ria, gastronomia e muito mais.', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400', icon: 'Compass' },
+              { title: 'Beauty Tour', desc: 'Visite as principais lojas e cl+ï¿½nicas de beleza em Seoul e Busan.', img: 'https://images.unsplash.com/photo-1519098635131-4c8c6f31c9a6?q=80&w=400', icon: 'Sparkles' },
+              { title: 'Aprendizado', desc: 'Workshops pr+ï¿½ticos com maquiadores e dermatologistas coreanos.', img: 'https://images.unsplash.com/photo-1558980395-be8a5fcb4251?q=80&w=400', icon: 'BookOpen' }
             ]
           },
           testimonials: {
             title: 'Depoimentos',
-            buttonText: 'COMPARTILHE SUA EXPERI+èNCIA',
+            buttonText: 'COMPARTILHE SUA EXPERI+ï¿½NCIA',
             list: [
-              { quote: 'Uma experi+¬ncia que mudou minha forma de ver a beleza. Coreia +® m+ígico.', name: 'Camila R.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200' },
-              { quote: 'Os workshops de maquiagem coreana foram incr+¡veis. Aprendi muito.', name: 'Sofia M.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200' },
-              { quote: 'Viajar com Maeum Global e Cheotnun foi a melhor decis+úo. Repetirei sem d+¦vidas.', name: 'Valentina L.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }
+              { quote: 'Uma experi+ï¿½ncia que mudou minha forma de ver a beleza. Coreia +ï¿½ m+ï¿½gico.', name: 'Camila R.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200' },
+              { quote: 'Os workshops de maquiagem coreana foram incr+ï¿½veis. Aprendi muito.', name: 'Sofia M.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200' },
+              { quote: 'Viajar com Maeum Global e Cheotnun foi a melhor decis+ï¿½o. Repetirei sem d+ï¿½vidas.', name: 'Valentina L.', country: 'Brasil', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200' }
             ]
           },
           newsletter: {
             title: 'Seja a primeira a saber',
-            subtitle: 'de novas experi+¬ncias e viagens exclusivas.',
+            subtitle: 'de novas experi+ï¿½ncias e viagens exclusivas.',
             buttonText: 'INSCREVER-ME',
-            disclaimer: 'Prometemos n+úo enviar spam. Voc+¬ pode cancelar quando quiser.'
+            disclaimer: 'Prometemos n+ï¿½o enviar spam. Voc+ï¿½ pode cancelar quando quiser.'
           }
         },
         terminos: {
-          hero: { badge: 'Marco Legal', title: 'Termos e Condi+º+Áes', subtitle: 'Conhe+ºa as regras que regem o uso da nossa plataforma e a rela+º+úo com nossos clientes.' },
-          intro: { p1: 'Bem-vindo +á Cheotnun K-Beauty. Ao acessar e utilizar este site, voc+¬ aceita cumprir os seguintes termos e condi+º+Áes. Se n+úo concordar com algum destes termos, recomendamos n+úo utilizar nossos servi+ºos.', brand: 'Cheotnun K-Beauty', p2: 'Estes termos estabelecem os direitos e obriga+º+Áes entre Cheotnun K-Beauty e os usu+írios de nossa loja online especializada em cosm+®ticos coreanos.' },
-          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: 'S+úo Paulo, SP, Brasil', email: 'ola@cheotnun.com', phone: '+55 (11) 99999-9999' },
-          additional: { ageTitle: 'Idade M+¡nima', ageDesc: 'Voc+¬ deve ser maior de 18 anos ou ter autoriza+º+úo legal para realizar compras em nossa loja. Ao se registrar, confirma que cumpre este requisito.', accountTitle: 'Contas de Usu+írio', accountDesc: 'Voc+¬ +® respons+ível por manter a confidencialidade de suas credenciais de acesso. Notifique-nos imediatamente sobre qualquer uso n+úo autorizado de sua conta.' },
-          contact: { title: 'Consultas Legais', desc: 'Para qualquer d+¦vida sobre estes termos, entre em contato com nossa equipe jur+¡dica.', email: 'legal@cheotnun.com', phone: '+55 (11) 91234-5678' },
+          hero: { badge: 'Marco Legal', title: 'Termos e Condi+ï¿½+ï¿½es', subtitle: 'Conhe+ï¿½a as regras que regem o uso da nossa plataforma e a rela+ï¿½+ï¿½o com nossos clientes.' },
+          intro: { p1: 'Bem-vindo +ï¿½ Cheotnun K-Beauty. Ao acessar e utilizar este site, voc+ï¿½ aceita cumprir os seguintes termos e condi+ï¿½+ï¿½es. Se n+ï¿½o concordar com algum destes termos, recomendamos n+ï¿½o utilizar nossos servi+ï¿½os.', brand: 'Cheotnun K-Beauty', p2: 'Estes termos estabelecem os direitos e obriga+ï¿½+ï¿½es entre Cheotnun K-Beauty e os usu+ï¿½rios de nossa loja online especializada em cosm+ï¿½ticos coreanos.' },
+          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: 'S+ï¿½o Paulo, SP, Brasil', email: 'ola@cheotnun.com', phone: '+55 (11) 99999-9999' },
+          additional: { ageTitle: 'Idade M+ï¿½nima', ageDesc: 'Voc+ï¿½ deve ser maior de 18 anos ou ter autoriza+ï¿½+ï¿½o legal para realizar compras em nossa loja. Ao se registrar, confirma que cumpre este requisito.', accountTitle: 'Contas de Usu+ï¿½rio', accountDesc: 'Voc+ï¿½ +ï¿½ respons+ï¿½vel por manter a confidencialidade de suas credenciais de acesso. Notifique-nos imediatamente sobre qualquer uso n+ï¿½o autorizado de sua conta.' },
+          contact: { title: 'Consultas Legais', desc: 'Para qualquer d+ï¿½vida sobre estes termos, entre em contato com nossa equipe jur+ï¿½dica.', email: 'legal@cheotnun.com', phone: '+55 (11) 91234-5678' },
           sections: [
-            { icon: 'ShoppingBag', title: 'Produtos e Pre+ºos', content: 'Todos os produtos est+úo sujeitos +á disponibilidade. Reservamo-nos o direito de modificar pre+ºos sem aviso pr+®vio. Os pre+ºos exibidos incluem impostos aplic+íveis mas n+úo incluem frete.' },
-            { icon: 'CreditCard', title: 'Pagamentos e Faturamento', content: 'Aceitamos pagamentos via cart+úo de cr+®dito, PayPal e Pix. O pagamento ser+í processado no momento da compra. Emitimos nota fiscal para todos os pedidos.' },
-            { icon: 'Truck', title: 'Envios e Entregas', content: 'Realizamos envios para todo o Brasil e Am+®rica Latina. Os prazos de entrega variam conforme o destino. N+úo nos responsabilizamos por atrasos alfandeg+írios ap+¦s o pacote sair da Coreia do Sul.' },
-            { icon: 'RotateCcw', title: 'Devolu+º+Áes e Reembolsos', content: 'Aceitamos devolu+º+Áes dentro de 14 dias ap+¦s o recebimento. O produto deve estar sem uso e na embalagem original. O frete de devolu+º+úo +® por conta do cliente, exceto para produtos com defeito.' },
-            { icon: 'ShieldCheck', title: 'Propriedade Intelectual', content: 'Todo o conte+¦do deste site, incluindo imagens, textos e logotipos, +® propriedade da Cheotnun K-Beauty e est+í protegido por leis de propriedade intelectual.' },
-            { icon: 'Scale', title: 'Limita+º+úo de Responsabilidade', content: 'A Cheotnun K-Beauty n+úo se responsabiliza por danos indiretos decorrentes do uso de nossos produtos. Cada produto inclui instru+º+Áes de uso que devem ser seguidas cuidadosamente.' }
+            { icon: 'ShoppingBag', title: 'Produtos e Pre+ï¿½os', content: 'Todos os produtos est+ï¿½o sujeitos +ï¿½ disponibilidade. Reservamo-nos o direito de modificar pre+ï¿½os sem aviso pr+ï¿½vio. Os pre+ï¿½os exibidos incluem impostos aplic+ï¿½veis mas n+ï¿½o incluem frete.' },
+            { icon: 'CreditCard', title: 'Pagamentos e Faturamento', content: 'Aceitamos pagamentos via cart+ï¿½o de cr+ï¿½dito, PayPal e Pix. O pagamento ser+ï¿½ processado no momento da compra. Emitimos nota fiscal para todos os pedidos.' },
+            { icon: 'Truck', title: 'Envios e Entregas', content: 'Realizamos envios para todo o Brasil e Am+ï¿½rica Latina. Os prazos de entrega variam conforme o destino. N+ï¿½o nos responsabilizamos por atrasos alfandeg+ï¿½rios ap+ï¿½s o pacote sair da Coreia do Sul.' },
+            { icon: 'RotateCcw', title: 'Devolu+ï¿½+ï¿½es e Reembolsos', content: 'Aceitamos devolu+ï¿½+ï¿½es dentro de 14 dias ap+ï¿½s o recebimento. O produto deve estar sem uso e na embalagem original. O frete de devolu+ï¿½+ï¿½o +ï¿½ por conta do cliente, exceto para produtos com defeito.' },
+            { icon: 'ShieldCheck', title: 'Propriedade Intelectual', content: 'Todo o conte+ï¿½do deste site, incluindo imagens, textos e logotipos, +ï¿½ propriedade da Cheotnun K-Beauty e est+ï¿½ protegido por leis de propriedade intelectual.' },
+            { icon: 'Scale', title: 'Limita+ï¿½+ï¿½o de Responsabilidade', content: 'A Cheotnun K-Beauty n+ï¿½o se responsabiliza por danos indiretos decorrentes do uso de nossos produtos. Cada produto inclui instru+ï¿½+ï¿½es de uso que devem ser seguidas cuidadosamente.' }
           ]
         },
         privacidad: {
-          hero: { badge: 'Transpar+¬ncia e Seguran+ºa', title: 'Pol+¡tica de Privacidade', subtitle: 'Seus dados est+úo seguros conosco. Saiba como coletamos, usamos e protegemos suas informa+º+Áes pessoais.' },
-          intro: { p1: 'Na Cheotnun K-Beauty levamos sua privacidade muito a s+®rio. Esta pol+¡tica descreve como coletamos, utilizamos e protegemos seus dados pessoais ao utilizar nossa loja online.', brand: 'Cheotnun K-Beauty', p2: 'Ao usar nosso site, voc+¬ aceita as pr+íticas descritas nesta pol+¡tica. Recomendamos a leitura atenta.', p3: 'Nosso compromisso +® garantir a confidencialidade e seguran+ºa dos seus dados pessoais de acordo com a legisla+º+úo aplic+ível.' },
-          security: { title: 'Seguran+ºa de Dados', p1: 'Implementamos medidas de seguran+ºa t+®cnicas e organizacionais para proteger seus dados pessoais contra acessos n+úo autorizados, perda ou destrui+º+úo.', p2: 'Embora usemos as melhores pr+íticas, nenhuma transmiss+úo pela Internet +® 100% segura. Fazemos todo o poss+¡vel para proteger suas informa+º+Áes.' },
-          cookies: { title: 'Uso de Cookies', p1: 'Utilizamos cookies pr+¦prios e de terceiros para melhorar sua experi+¬ncia de navega+º+úo, analisar o tr+ífego e personalizar conte+¦do.', p2: 'Voc+¬ pode configurar seu navegador para recusar cookies, embora isso possa afetar a funcionalidade de algumas partes do site.' },
-          contact: { title: 'D+¦vidas sobre Privacidade?', desc: 'Nosso Encarregado de Prote+º+úo de Dados est+í dispon+¡vel para responder qualquer d+¦vida.', email: 'dpo@cheotnun.com', address: 'S+úo Paulo, SP, Brasil' },
+          hero: { badge: 'Transpar+ï¿½ncia e Seguran+ï¿½a', title: 'Pol+ï¿½tica de Privacidade', subtitle: 'Seus dados est+ï¿½o seguros conosco. Saiba como coletamos, usamos e protegemos suas informa+ï¿½+ï¿½es pessoais.' },
+          intro: { p1: 'Na Cheotnun K-Beauty levamos sua privacidade muito a s+ï¿½rio. Esta pol+ï¿½tica descreve como coletamos, utilizamos e protegemos seus dados pessoais ao utilizar nossa loja online.', brand: 'Cheotnun K-Beauty', p2: 'Ao usar nosso site, voc+ï¿½ aceita as pr+ï¿½ticas descritas nesta pol+ï¿½tica. Recomendamos a leitura atenta.', p3: 'Nosso compromisso +ï¿½ garantir a confidencialidade e seguran+ï¿½a dos seus dados pessoais de acordo com a legisla+ï¿½+ï¿½o aplic+ï¿½vel.' },
+          security: { title: 'Seguran+ï¿½a de Dados', p1: 'Implementamos medidas de seguran+ï¿½a t+ï¿½cnicas e organizacionais para proteger seus dados pessoais contra acessos n+ï¿½o autorizados, perda ou destrui+ï¿½+ï¿½o.', p2: 'Embora usemos as melhores pr+ï¿½ticas, nenhuma transmiss+ï¿½o pela Internet +ï¿½ 100% segura. Fazemos todo o poss+ï¿½vel para proteger suas informa+ï¿½+ï¿½es.' },
+          cookies: { title: 'Uso de Cookies', p1: 'Utilizamos cookies pr+ï¿½prios e de terceiros para melhorar sua experi+ï¿½ncia de navega+ï¿½+ï¿½o, analisar o tr+ï¿½fego e personalizar conte+ï¿½do.', p2: 'Voc+ï¿½ pode configurar seu navegador para recusar cookies, embora isso possa afetar a funcionalidade de algumas partes do site.' },
+          contact: { title: 'D+ï¿½vidas sobre Privacidade?', desc: 'Nosso Encarregado de Prote+ï¿½+ï¿½o de Dados est+ï¿½ dispon+ï¿½vel para responder qualquer d+ï¿½vida.', email: 'dpo@cheotnun.com', address: 'S+ï¿½o Paulo, SP, Brasil' },
           sections: [
-            { icon: 'FileText', title: 'Informa+º+Áes que Coletamos', content: 'Coletamos informa+º+Áes que voc+¬ nos fornece diretamente (nome, e-mail, endere+ºo) e informa+º+Áes de navega+º+úo (cookies, p+íginas visitadas).' },
-            { icon: 'ShieldCheck', title: 'Uso das suas Informa+º+Áes', content: 'Utilizamos seus dados para processar pedidos, melhorar nossos servi+ºos, enviar comunica+º+Áes comerciais (com seu consentimento) e cumprir obriga+º+Áes legais.' },
-            { icon: 'Share2', title: 'Compartilhamento de Informa+º+Áes', content: 'N+úo vendemos seus dados pessoais. Compartilhamos informa+º+Áes apenas com provedores de servi+ºos essenciais (processamento de pagamentos, log+¡stica de envios) sob estritos acordos de confidencialidade.' },
-            { icon: 'Clock', title: 'Reten+º+úo de Dados', content: 'Mantemos seus dados enquanto voc+¬ tiver uma conta ativa ou pelo tempo necess+írio para cumprir obriga+º+Áes legais e fiscais.' },
-            { icon: 'UserCheck', title: 'Seus Direitos', content: 'Voc+¬ tem direito de acessar, retificar, cancelar e se opor ao tratamento de seus dados. Exercite esses direitos escrevendo para dpo@cheotnun.com.' },
-            { icon: 'Globe', title: 'Transfer+¬ncias Internacionais', content: 'Por ser uma loja com opera+º+Áes internacionais, seus dados podem ser transferidos e armazenados em servidores fora do seu pa+¡s de resid+¬ncia.' }
+            { icon: 'FileText', title: 'Informa+ï¿½+ï¿½es que Coletamos', content: 'Coletamos informa+ï¿½+ï¿½es que voc+ï¿½ nos fornece diretamente (nome, e-mail, endere+ï¿½o) e informa+ï¿½+ï¿½es de navega+ï¿½+ï¿½o (cookies, p+ï¿½ginas visitadas).' },
+            { icon: 'ShieldCheck', title: 'Uso das suas Informa+ï¿½+ï¿½es', content: 'Utilizamos seus dados para processar pedidos, melhorar nossos servi+ï¿½os, enviar comunica+ï¿½+ï¿½es comerciais (com seu consentimento) e cumprir obriga+ï¿½+ï¿½es legais.' },
+            { icon: 'Share2', title: 'Compartilhamento de Informa+ï¿½+ï¿½es', content: 'N+ï¿½o vendemos seus dados pessoais. Compartilhamos informa+ï¿½+ï¿½es apenas com provedores de servi+ï¿½os essenciais (processamento de pagamentos, log+ï¿½stica de envios) sob estritos acordos de confidencialidade.' },
+            { icon: 'Clock', title: 'Reten+ï¿½+ï¿½o de Dados', content: 'Mantemos seus dados enquanto voc+ï¿½ tiver uma conta ativa ou pelo tempo necess+ï¿½rio para cumprir obriga+ï¿½+ï¿½es legais e fiscais.' },
+            { icon: 'UserCheck', title: 'Seus Direitos', content: 'Voc+ï¿½ tem direito de acessar, retificar, cancelar e se opor ao tratamento de seus dados. Exercite esses direitos escrevendo para dpo@cheotnun.com.' },
+            { icon: 'Globe', title: 'Transfer+ï¿½ncias Internacionais', content: 'Por ser uma loja com opera+ï¿½+ï¿½es internacionais, seus dados podem ser transferidos e armazenados em servidores fora do seu pa+ï¿½s de resid+ï¿½ncia.' }
           ]
         },
         blog: {
@@ -1355,7 +1355,7 @@ const DEFAULT_STATE: DbState = {
           instagram: {
             title: 'Follow us on Instagram',
             subtitle: 'We share tips, news and behind-the-scenes of K-Beauty.',
-            buttonLink: 'https://www.instagram.com/lacheotnun',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             buttonText: '@lacheotnun',
             images: [
               'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
@@ -1391,7 +1391,7 @@ const DEFAULT_STATE: DbState = {
           logoText: 'CHEOTNUN',
           logoSubtext: 'K-Beauty',
           description: 'Your online store for authentic Korean cosmetics. Original products direct from Korea.',
-          copyright: '-® 2026 Cheotnun K-Beauty. All rights reserved.',
+          copyright: '-ï¿½ 2026 Cheotnun K-Beauty. All rights reserved.',
           columns: [
             { title: 'PRODUCTS', links: [
               { label: 'All Products', href: '/tienda' },
@@ -1500,7 +1500,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Join our community',
             desc: 'Discover routines, tips, launches and more on Instagram.',
             buttonText: 'FOLLOW ON INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1522,7 +1522,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Contact Methods',
             whatsapp: { label: 'WhatsApp', value: '+1 (555) 123-4567', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: '#contacto-form' },
             email: { label: 'Email', value: 'hello@cheotnun.com', time: 'Response in under 24h', desc: 'Send us an email and we will reply shortly.', btn: 'SEND EMAIL', link: 'mailto:hello@cheotnun.com' },
-            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
             hours: { label: 'Business Hours', value: 'Except holidays', time: '', desc: 'Monday to Friday 9am to 6pm (EST)', btn: 'VIEW HOURS', link: '#' },
             address: { label: 'Address', value: 'Miami, FL, USA', time: '', desc: 'Administrative office', btn: 'VIEW ON MAP', link: '#' }
           },
@@ -1559,7 +1559,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Join our community',
             desc: 'Follow us on social media and be the first to discover launches, promotions and beauty tips.',
             buttonText: 'FOLLOW ON INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1632,7 +1632,7 @@ const DEFAULT_STATE: DbState = {
         },
         rutinasPage: {
           hero: { image: '/images/rutinas-hero.webp', badge: 'K-BEAUTY ROUTINES', title: 'Your Skincare Routine', subtitle: 'Discover the Korean routine step by step and transform your skin.', buttonText: 'START YOUR ROUTINE' },
-          stepsSection: { title: 'Steps of K-Beauty', subtitle: 'The Korean skincare routine can have 5 to 12 steps. Here are the essentials.', footerText: 'Ô£¿ Every skin is unique. Adapt the steps to your needs.' },
+          stepsSection: { title: 'Steps of K-Beauty', subtitle: 'The Korean skincare routine can have 5 to 12 steps. Here are the essentials.', footerText: 'Ô£ï¿½ Every skin is unique. Adapt the steps to your needs.' },
           steps: [
             { icon: 'Droplets', title: 'Double Cleansing', desc: 'The first step is double cleansing: first an oil-based makeup remover, then a water-based cleanser.' },
             { icon: 'Sparkles', title: 'Exfoliation', desc: 'Removes dead skin cells and renews the skin. Recommended 1-2 times per week.' },
@@ -1805,15 +1805,15 @@ const DEFAULT_STATE: DbState = {
       phone: '+34 912 345 678',
       whatsapp: '+34600000000',
       email: 'sac@cheotnun.com',
-      address: 'Calle Gran V+¡a 12, Madrid, Espa+¦a',
+      address: 'Calle Gran V+ï¿½a 12, Madrid, Espa+ï¿½a',
       social: {
-        instagram: 'https://instagram.com/cheotnun.kbeauty',
+        instagram: 'https://www.instagram.com/lacheotnun/',
         youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured'
       }
     },
     seo: {
       titleSuffix: '| Cheotnun K-Beauty',
-      metaDescription: 'Cosm+®ticos coreanos de alta performance seleccionados para tu rutina.',
+      metaDescription: 'Cosm+ï¿½ticos coreanos de alta performance seleccionados para tu rutina.',
       googleAnalyticsId: ''
     },
     smtp: {
@@ -1824,11 +1824,11 @@ const DEFAULT_STATE: DbState = {
     
     shipping_zones: [
       { country: 'Brasil', methods: [{ name: 'K-Packet', days: '15-25', price: 15.00 }, { name: 'EMS', days: '7-10', price: 35.00 }] },
-      { country: 'M+®xico', methods: [{ name: 'K-Packet', days: '15-20', price: 15.00 }] },
+      { country: 'M+ï¿½xico', methods: [{ name: 'K-Packet', days: '15-20', price: 15.00 }] },
       { country: 'Chile', methods: [{ name: 'K-Packet', days: '12-20', price: 18.00 }] },
       { country: 'Colombia', methods: [{ name: 'K-Packet', days: '15-25', price: 18.00 }] },
       { country: 'Argentina', methods: [{ name: 'K-Packet', days: '20-30', price: 20.00 }] },
-      { country: 'Espa+¦a', methods: [{ name: 'Correos', days: '5-10', price: 10.00 }] }
+      { country: 'Espa+ï¿½a', methods: [{ name: 'Correos', days: '5-10', price: 10.00 }] }
     ],
     payments: {
       stripePublicKey: 'pk_live_51M3c...'
@@ -1838,11 +1838,11 @@ const DEFAULT_STATE: DbState = {
         title: 'FACTURA COMERCIAL',
         seller: 'Vendedor',
         buyer: 'Comprador',
-        description: 'Descripci+¦n',
+        description: 'Descripci+ï¿½n',
         quantity: 'Cantidad',
         unitPrice: 'Precio Unitario',
         total: 'Total',
-        shipping: 'Env+¡o',
+        shipping: 'Env+ï¿½o',
         subtotal: 'Subtotal',
         grandTotal: 'Gran Total'
       },
@@ -1865,8 +1865,8 @@ const DEFAULT_STATE: DbState = {
     { id: '2', code: 'KBEAUTY5', discount: 5.00, type: 'fixed', status: 'active' }
   ],
   blog_posts: [
-    { id: '1', title: '5 Secretos del Skincare Coreano para una Piel Radiante', slug: '5-secretos-skincare-coreano', subtitle: 'Descubre los principios fundamentales de la rutina coreana que transformar+ín tu piel.', content: '<p>El skincare coreano no es solo una moda, es una filosof+¡a de cuidado. Aqu+¡ te revelamos los 5 secretos mejor guardados que toda rutina K-Beauty debe incluir para lograr una piel luminosa y saludable.</p><h3>1. Doble Limpieza</h3><p>El primer paso y el m+ís importante. Consiste en usar primero un limpiador a base de aceite para eliminar maquillaje y protector solar, seguido de un limpiador a base de agua para limpiar profundamente los poros.</p><h3>2. Exfoliaci+¦n Suave</h3><p>Olv+¡date de los exfoliantes agresivos. En Corea se prefiere la exfoliaci+¦n qu+¡mica suave con ingredientes como +ícido l+íctico o PHA que renuevan la piel sin da+¦arla.</p><h3>3. Esencias y S+®rums</h3><p>Las esencias son el coraz+¦n de la rutina coreana. Aplicadas despu+®s del t+¦nico, preparan la piel para absorber mejor los s+®rums y tratamientos posteriores.</p><h3>4. Hidrataci+¦n en Capas</h3><p>La clave est+í en aplicar m+¦ltiples capas ligeras de hidrataci+¦n en lugar de una sola crema pesada. Esto permite que cada producto penetre mejor.</p><h3>5. Protecci+¦n Solar Diaria</h3><p>El paso m+ís importante. Un buen protector solar coreano no solo protege, sino que tambi+®n cuida y nutre la piel mientras la defiende de los rayos UV.</p>', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1200', author: 'Dr. Park', seo_title: '5 Secretos del Skincare Coreano | K-Beauty Tips', seo_description: 'Descubre los 5 secretos fundamentales del skincare coreano para transformar tu rutina de belleza. Aprende sobre doble limpieza, s+®rums y m+ís.', created_at: '2026-07-08', status: 'published' },
-    { id: '2', title: 'C+¦mo Aplicar el Dokdo Cleanser de Round Lab', slug: 'como-aplicar-dokdo-cleanser-round-lab', subtitle: 'Gu+¡a paso a paso para usar correctamente el limpiador facial m+ís popular de Round Lab.', content: '<p>El Dokdo Cleanser de Round Lab se ha convertido en un producto imprescindible en muchas rutinas coreanas. Te ense+¦amos c+¦mo aplicarlo correctamente para obtener los mejores resultados.</p><h3>-+Por qu+® es tan especial?</h3><p>Formulado con agua del mar profundo de la isla Dokdo, este limpiador elimina impurezas mientras mantiene la hidrataci+¦n natural de la piel gracias a sus ingredientes minerales.</p><h3>Paso a Paso</h3><p><strong>Paso 1:</strong> Humedece tu rostro con agua tibia para abrir los poros.</p><p><strong>Paso 2:</strong> Aplica una peque+¦a cantidad de producto en la palma de tu mano.</p><p><strong>Paso 3:</strong> Masajea suavemente en c+¡rculos durante 30-60 segundos.</p><p><strong>Paso 4:</strong> Enjuaga con agua tibia y seca suavemente con una toalla limpia.</p><h3>Consejos Extra</h3><p>Util+¡zalo tanto en tu rutina de ma+¦ana como de noche. Por la ma+¦ana eliminar+í el exceso de grasa nocturna, y por la noche retirar+í las impurezas acumuladas durante el d+¡a.</p>', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=1200', author: 'Kim Min-seo', seo_title: 'C+¦mo Aplicar Dokdo Cleanser | Gu+¡a Round Lab', seo_description: 'Aprende a aplicar correctamente el Dokdo Cleanser de Round Lab. Gu+¡a paso a paso con consejos profesionales para maximizar sus beneficios.', created_at: '2026-07-09', status: 'published' }
+    { id: '1', title: '5 Secretos del Skincare Coreano para una Piel Radiante', slug: '5-secretos-skincare-coreano', subtitle: 'Descubre los principios fundamentales de la rutina coreana que transformar+ï¿½n tu piel.', content: '<p>El skincare coreano no es solo una moda, es una filosof+ï¿½a de cuidado. Aqu+ï¿½ te revelamos los 5 secretos mejor guardados que toda rutina K-Beauty debe incluir para lograr una piel luminosa y saludable.</p><h3>1. Doble Limpieza</h3><p>El primer paso y el m+ï¿½s importante. Consiste en usar primero un limpiador a base de aceite para eliminar maquillaje y protector solar, seguido de un limpiador a base de agua para limpiar profundamente los poros.</p><h3>2. Exfoliaci+ï¿½n Suave</h3><p>Olv+ï¿½date de los exfoliantes agresivos. En Corea se prefiere la exfoliaci+ï¿½n qu+ï¿½mica suave con ingredientes como +ï¿½cido l+ï¿½ctico o PHA que renuevan la piel sin da+ï¿½arla.</p><h3>3. Esencias y S+ï¿½rums</h3><p>Las esencias son el coraz+ï¿½n de la rutina coreana. Aplicadas despu+ï¿½s del t+ï¿½nico, preparan la piel para absorber mejor los s+ï¿½rums y tratamientos posteriores.</p><h3>4. Hidrataci+ï¿½n en Capas</h3><p>La clave est+ï¿½ en aplicar m+ï¿½ltiples capas ligeras de hidrataci+ï¿½n en lugar de una sola crema pesada. Esto permite que cada producto penetre mejor.</p><h3>5. Protecci+ï¿½n Solar Diaria</h3><p>El paso m+ï¿½s importante. Un buen protector solar coreano no solo protege, sino que tambi+ï¿½n cuida y nutre la piel mientras la defiende de los rayos UV.</p>', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1200', author: 'Dr. Park', seo_title: '5 Secretos del Skincare Coreano | K-Beauty Tips', seo_description: 'Descubre los 5 secretos fundamentales del skincare coreano para transformar tu rutina de belleza. Aprende sobre doble limpieza, s+ï¿½rums y m+ï¿½s.', created_at: '2026-07-08', status: 'published' },
+    { id: '2', title: 'C+ï¿½mo Aplicar el Dokdo Cleanser de Round Lab', slug: 'como-aplicar-dokdo-cleanser-round-lab', subtitle: 'Gu+ï¿½a paso a paso para usar correctamente el limpiador facial m+ï¿½s popular de Round Lab.', content: '<p>El Dokdo Cleanser de Round Lab se ha convertido en un producto imprescindible en muchas rutinas coreanas. Te ense+ï¿½amos c+ï¿½mo aplicarlo correctamente para obtener los mejores resultados.</p><h3>-+Por qu+ï¿½ es tan especial?</h3><p>Formulado con agua del mar profundo de la isla Dokdo, este limpiador elimina impurezas mientras mantiene la hidrataci+ï¿½n natural de la piel gracias a sus ingredientes minerales.</p><h3>Paso a Paso</h3><p><strong>Paso 1:</strong> Humedece tu rostro con agua tibia para abrir los poros.</p><p><strong>Paso 2:</strong> Aplica una peque+ï¿½a cantidad de producto en la palma de tu mano.</p><p><strong>Paso 3:</strong> Masajea suavemente en c+ï¿½rculos durante 30-60 segundos.</p><p><strong>Paso 4:</strong> Enjuaga con agua tibia y seca suavemente con una toalla limpia.</p><h3>Consejos Extra</h3><p>Util+ï¿½zalo tanto en tu rutina de ma+ï¿½ana como de noche. Por la ma+ï¿½ana eliminar+ï¿½ el exceso de grasa nocturna, y por la noche retirar+ï¿½ las impurezas acumuladas durante el d+ï¿½a.</p>', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=1200', author: 'Kim Min-seo', seo_title: 'C+ï¿½mo Aplicar Dokdo Cleanser | Gu+ï¿½a Round Lab', seo_description: 'Aprende a aplicar correctamente el Dokdo Cleanser de Round Lab. Gu+ï¿½a paso a paso con consejos profesionales para maximizar sus beneficios.', created_at: '2026-07-09', status: 'published' }
   ],
   newsletter_subscribers: [],
   subscriptions: []
@@ -1890,7 +1890,7 @@ function persistToLocalStorage() {
 function loadFromLocalStorage(): boolean {
   if (typeof window === 'undefined') return false;
   try {
-    // Apenas marca versao, nunca destr+¦i dados do usuario
+    // Apenas marca versao, nunca destr+ï¿½i dados do usuario
     if (!localStorage.getItem('cheotnun_db_version')) {
       localStorage.setItem('cheotnun_db_version', SEED_VERSION);
     }

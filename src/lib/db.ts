@@ -125,7 +125,7 @@ const DEFAULT_STATE: DbState = {
         { step: 3, action: 'Ampolla', product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', instruction: 'Aplicar una pipeta completa y esparcir.' },
         { step: 4, action: 'Hidratación y Reparación', product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', instruction: 'Masajear para sellar la hidratación.' }
       ],
-      video_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      video_url: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
       status: 'active'
     }
   ],
@@ -253,7 +253,7 @@ const DEFAULT_STATE: DbState = {
         title: 'Únete a nuestra comunidad',
         subtitle: 'Tips, rutinas, lanzamientos y mucho más en Instagram.',
         buttonText: 'SEGUIR EN INSTAGRAM',
-        buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+        buttonLink: 'https://www.instagram.com/lacheotnun/',
         images: [
           'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
           'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400',
@@ -287,9 +287,9 @@ const DEFAULT_STATE: DbState = {
     footer: {
       description: 'Importamos los cosméticos coreanos más exclusivos y galardonados a nivel internacional para transformar tu rutina diaria de skincare en un ritual de lujo.',
       social: {
-        instagram: 'https://instagram.com/cheotnun.kbeauty',
+        instagram: 'https://www.instagram.com/lacheotnun/',
         youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
-        tiktok: 'https://www.tiktok.com/@lacheotnun'
+        tiktok: 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98Av3TtdgVI'
       },
       col1: {
         title: 'Tienda',
@@ -325,7 +325,7 @@ const DEFAULT_STATE: DbState = {
         testimonials: {
           title: 'Lo que dicen nuestras clientas',
           buttonText: 'VER MÁS OPINIONES',
-          buttonLink: 'https://www.instagram.com/lacheotnun',
+          buttonLink: 'https://www.instagram.com/lacheotnun/',
           list: [
             { name: 'María G.', text: 'Los productos llegaron super bien empacados y antes del tiempo estimado. ¡Todo 100% original!', country: 'México', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150' },
             { name: 'Carolina R.', text: 'Me encanta la atención, siempre me ayudan a elegir lo mejor para mi piel. ¡Recomendadísimas!', country: 'Chile', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150' },
@@ -419,7 +419,7 @@ const DEFAULT_STATE: DbState = {
           title: 'Únete a nuestra comunidad',
           desc: 'Descubre rutinas, tips, lanzamientos y mucho más en Instagram.',
           buttonText: 'SEGUIR EN INSTAGRAM',
-          buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+          buttonLink: 'https://www.instagram.com/lacheotnun/',
           images: [
             'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
             'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -452,7 +452,7 @@ const DEFAULT_STATE: DbState = {
           title: 'Formas de contacto',
           whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma más rápida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form' },
           email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Envíanos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:hola@cheotnun.com' },
-          instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envíanos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+          instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Envíanos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
           hours: { label: 'Horario de atención', value: 'Excepto feriados', time: '', desc: 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#' },
           address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: '#' }
         },
@@ -489,7 +489,7 @@ const DEFAULT_STATE: DbState = {
           title: 'Únete a nuestra comunidad',
           desc: 'Síguenos en nuestras redes sociales y sé la primera en descubrir lanzamientos, promociones y consejos de belleza.',
           buttonText: 'SEGUIR EN INSTAGRAM',
-          buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+          buttonLink: 'https://www.instagram.com/lacheotnun/',
           images: [
             'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
             'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -865,7 +865,7 @@ const DEFAULT_STATE: DbState = {
           instagram: {
             title: 'Siga-nos no Instagram',
             subtitle: 'Compartilhamos dicas, novidades e bastidores do K-Beauty.',
-            buttonLink: 'https://www.instagram.com/lacheotnun',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             buttonText: '@lacheotnun',
             images: [
               'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
@@ -1009,7 +1009,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Junte-se à nossa comunidade',
             desc: 'Descubra rotinas, dicas, lançamentos e muito mais no Instagram.',
             buttonText: 'SEGUIR NO INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1031,7 +1031,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Formas de contato',
             whatsapp: { label: 'WhatsApp', value: '+55 (11) 99999-9999', time: 'Seg a Sex, 9h às 18h (GMT-3)', desc: 'A forma mais rápida de falar com nossa equipe.', btn: 'FALAR AGORA', link: '#contacto-form' },
             email: { label: 'E-mail', value: 'ola@cheotnun.com', time: 'Resposta em menos de 24h', desc: 'Envie um e-mail e responderemos em breve.', btn: 'ENVIAR E-MAIL', link: 'mailto:ola@cheotnun.com' },
-            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
             hours: { label: 'Horário de atendimento', value: 'Exceto feriados', time: '', desc: 'Segunda a sexta 9h às 18h (GMT-3)', btn: 'VER HORÁRIOS', link: '#' },
             address: { label: 'Endereço', value: 'São Paulo, SP, Brasil', time: '', desc: 'Escritório administrativo', btn: 'VER NO MAPA', link: '#' }
           },
@@ -1068,7 +1068,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Junte-se à nossa comunidade',
             desc: 'Siga-nos nas redes sociais e seja a primeira a descobrir lançamentos, promoções e dicas de beleza.',
             buttonText: 'SEGUIR NO INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1352,7 +1352,7 @@ const DEFAULT_STATE: DbState = {
           instagram: {
             title: 'Follow us on Instagram',
             subtitle: 'We share tips, news and behind-the-scenes of K-Beauty.',
-            buttonLink: 'https://www.instagram.com/lacheotnun',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             buttonText: '@lacheotnun',
             images: [
               'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
@@ -1496,7 +1496,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Join our community',
             desc: 'Discover routines, tips, launches and more on Instagram.',
             buttonText: 'FOLLOW ON INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1518,7 +1518,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Contact Methods',
             whatsapp: { label: 'WhatsApp', value: '+1 (555) 123-4567', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: '#contacto-form' },
             email: { label: 'Email', value: 'hello@cheotnun.com', time: 'Response in under 24h', desc: 'Send us an email and we will reply shortly.', btn: 'SEND EMAIL', link: 'mailto:hello@cheotnun.com' },
-            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
+            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
             hours: { label: 'Business Hours', value: 'Except holidays', time: '', desc: 'Monday to Friday 9am to 6pm (EST)', btn: 'VIEW HOURS', link: '#' },
             address: { label: 'Address', value: 'Miami, FL, USA', time: '', desc: 'Administrative office', btn: 'VIEW ON MAP', link: '#' }
           },
@@ -1555,7 +1555,7 @@ const DEFAULT_STATE: DbState = {
             title: 'Join our community',
             desc: 'Follow us on social media and be the first to discover launches, promotions and beauty tips.',
             buttonText: 'FOLLOW ON INSTAGRAM',
-            buttonLink: 'https://instagram.com/cheotnun.kbeauty',
+            buttonLink: 'https://www.instagram.com/lacheotnun/',
             images: [
               'https://images.unsplash.com/photo-1615397323281-a6cecd55dbf7?q=80&w=300',
               'https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?q=80&w=300',
@@ -1803,8 +1803,9 @@ const DEFAULT_STATE: DbState = {
       email: 'sac@cheotnun.com',
       address: 'Calle Gran Vía 12, Madrid, España',
       social: {
-        instagram: 'https://instagram.com/cheotnun.kbeauty',
-        youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured'
+        instagram: 'https://www.instagram.com/lacheotnun/',
+        youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
+        tiktok: 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98Av3TtdgVI'
       }
     },
     seo: {

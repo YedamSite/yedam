@@ -318,7 +318,7 @@ export default function ComoFuncionaPage() {
                  <p className="text-[11px] text-white/60 leading-relaxed mb-6">
                    {t(c?.community?.desc || 'Descubre rutinas, tips, lanzamientos y mucho más en Instagram.')}
                  </p>
-                 <a href={c?.community?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/5 text-white font-bold text-[9px] tracking-widest px-6 py-3 rounded-sm uppercase transition-all">
+                 <a href={c?.community?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border border-white/20 hover:bg-white/5 text-white font-bold text-[9px] tracking-widest px-6 py-3 rounded-sm uppercase transition-all">
                     <Instagram className="w-4 h-4" /> {t(c?.community?.buttonText || 'SEGUIR EN INSTAGRAM')}
                  </a>
               </div>
@@ -330,7 +330,7 @@ export default function ComoFuncionaPage() {
                    'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=300',
                    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
                  ]).map((img: string, idx: number) => (
-                    <a key={idx} href={c?.community?.buttonLink || 'https://instagram.com/cheotnun.kbeauty'} target="_blank" rel="noreferrer" className="relative h-40 md:h-48 rounded-xl overflow-hidden group">
+                    <a key={idx} href={c?.community?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer" className="relative h-40 md:h-48 rounded-xl overflow-hidden group">
                        <Image src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Instagram className="w-6 h-6 text-white" />

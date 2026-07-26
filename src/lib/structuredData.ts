@@ -35,10 +35,10 @@ export function generateOrganizationSchema() {
       "areaServed": ["ES", "BR", "MX", "CL", "CO", "AR", "US"]
     },
     "sameAs": [
-      "https://www.instagram.com/cheotnun.kbeauty",
+      "https://www.instagram.com/lacheotnun/",
       "https://www.youtube.com/@enquantoaconteceoficial/featured",
       "https://www.facebook.com/cheotnun.kbeauty",
-      "https://www.tiktok.com/@cheotnun.kbeauty"
+      "https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98Av3TtdgVI"
     ],
     "areaServed": [
       "https://www.cheotnun.com/es",
