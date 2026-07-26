@@ -23,6 +23,7 @@ import ImageUpload from '@/components/ImageUpload';
 import ShippingTab from '@/components/admin/ShippingTab';
 import LiveChatTab from '@/components/admin/LiveChatTab';
 import ClientesTab from '@/components/admin/ClientesTab';
+import RichTextEditor from '@/components/RichTextEditor';
 import { MessageCircle } from 'lucide-react';
 import { getNewsletterSubscribersFromSupabase, deleteNewsletterSubscriberFromSupabase } from '@/lib/newsletterService';
 import { deleteOrderFromSupabase } from '@/actions/shopActions';
@@ -1917,13 +1918,12 @@ if (!authorized) {
 
                         {/* Content */}
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-bold uppercase text-accent">Contenido (HTML)</label>
-                          <textarea
+                          <label className="text-[10px] font-bold uppercase text-accent">Contenido del Artículo</label>
+                          <RichTextEditor
                             value={newPostContent}
-                            onChange={e => setNewPostContent(e.target.value)}
-                            rows={8}
-                            className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[150px]"
-                            placeholder="<p>Escribe aquí el contenido del artículo...</p>"
+                            onChange={setNewPostContent}
+                            placeholder="Escreva aquí el contenido del artículo..."
+                            folder="blog"
                           />
                         </div>
 
@@ -1975,16 +1975,15 @@ if (!authorized) {
 
                         {/* Content */}
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-bold uppercase text-accent">Contenido (HTML - {blogActiveLang.toUpperCase()})</label>
-                          <textarea
+                          <label className="text-[10px] font-bold uppercase text-accent">Contenido ({blogActiveLang.toUpperCase()})</label>
+                          <RichTextEditor
                             value={blogTranslations[blogActiveLang].content}
-                            onChange={e => setBlogTranslations(prev => ({
+                            onChange={v => setBlogTranslations(prev => ({
                               ...prev,
-                              [blogActiveLang]: { ...prev[blogActiveLang], content: e.target.value }
+                              [blogActiveLang]: { ...prev[blogActiveLang], content: v }
                             }))}
-                            rows={8}
-                            className="w-full bg-black/30 border border-white/10 rounded-xl p-3 text-[11px] text-white font-mono placeholder-gray-500 outline-none focus:border-accent resize-y min-h-[150px]"
                             placeholder={`[ES]: ${newPostContent}`}
+                            folder="blog"
                           />
                         </div>
 

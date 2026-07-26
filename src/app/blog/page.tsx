@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { db } from '@/lib/db';
@@ -10,17 +10,25 @@ import { useLanguage } from '@/context/LanguageContext';
 
 export default function BlogPage() {
   const { t, locale } = useLanguage();
-  const rawPosts = (db.get('blog_posts') || []).filter((p: any) => p.status === 'published');
-  const posts = rawPosts.map((p: any) => db.getTranslatedRecord(p, locale));
-
-  const siteContent = db.get('site_content');
-  const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
-  const pageTitle = translatedContent.blog?.pageTitle || t('Blog Cheotnun K-Beauty');
-  const pageSubtitle = translatedContent.blog?.pageSubtitle || t('Artículos, guías y secretos del skincare coreano.');
+  const [posts, setPosts] = useState<any[]>([]);
+  const [pageTitle, setPageTitle] = useState('Blog Cheotnun K-Beauty');
+  const [pageSubtitle, setPageSubtitle] = useState('Artículos, guías y secretos del skincare coreano.');
 
   useEffect(() => {
-    document.title = `${pageTitle} ${t('| Cheotnun K-Beauty')}`;
-  }, [pageTitle, locale]);
+    // Read from db inside useEffect so localStorage is available
+    const rawPosts = (db.get('blog_posts') || []).filter((p: any) => p.status === 'published');
+    const translated = rawPosts.map((p: any) => db.getTranslatedRecord(p, locale));
+    setPosts(translated);
+
+    const siteContent = db.get('site_content');
+    const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
+    setPageTitle(translatedContent.blog?.pageTitle || 'Blog Cheotnun K-Beauty');
+    setPageSubtitle(translatedContent.blog?.pageSubtitle || 'Artículos, guías y secretos del skincare coreano.');
+  }, [locale]);
+
+  useEffect(() => {
+    document.title = `${pageTitle} | Cheotnun K-Beauty`;
+  }, [pageTitle]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -31,8 +39,8 @@ export default function BlogPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-background" />
           <div className="relative z-10 text-center px-4 max-w-3xl mx-auto py-20">
             <span className="text-[10px] font-bold text-accent tracking-[0.25em] uppercase">{t('Cheotnun Journal')}</span>
-            <h1 className="font-heading text-4xl md:text-6xl font-light text-white mt-4 mb-4 uppercase">{pageTitle}</h1>
-            <p className="text-sm text-foreground/60 max-w-xl mx-auto leading-relaxed">{pageSubtitle}</p>
+            <h1 className="font-heading text-4xl md:text-6xl font-light text-white mt-4 mb-4 uppercase">{t(pageTitle)}</h1>
+            <p className="text-sm text-foreground/60 max-w-xl mx-auto leading-relaxed">{t(pageSubtitle)}</p>
           </div>
         </section>
 
@@ -51,7 +59,7 @@ export default function BlogPage() {
                   className="group flex flex-col rounded-3xl border border-white/5 overflow-hidden bg-card hover:border-accent/30 transition-all duration-500 hover:-translate-y-1"
                 >
                   <div className="relative h-52 overflow-hidden">
-                    <Image
+                    <SafeImage
                       src={post.image || 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=600'}
                       alt={post.title}
                       fill

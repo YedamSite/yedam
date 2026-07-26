@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { useParams, notFound } from 'next/navigation';
+import SafeImage from '@/components/SafeImage';
+import { useParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { db } from '@/lib/db';
@@ -13,27 +13,65 @@ import DOMPurify from 'isomorphic-dompurify';
 export default function BlogPostPage() {
   const { t, locale } = useLanguage();
   const { slug } = useParams<{ slug: string }>();
-  const posts = db.get('blog_posts') || [];
-  const rawPost = posts.find((p: any) => p.slug === slug);
-  const post = rawPost ? db.getTranslatedRecord(rawPost, locale) : null;
-
-  if (!post || post.status !== 'published') {
-    notFound();
-  }
+  const [post, setPost] = useState<any>(null);
+  const [notFoundState, setNotFoundState] = useState(false);
 
   useEffect(() => {
-    document.title = post.seo_title || `${post.title} ${t('| Cheotnun K-Beauty')}`;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (post.seo_description) {
-      if (metaDesc) metaDesc.setAttribute('content', post.seo_description);
-      else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = post.seo_description;
-        document.head.appendChild(meta);
+    const posts = db.get('blog_posts') || [];
+    const rawPost = posts.find((p: any) => p.slug === slug);
+    const translated = rawPost ? db.getTranslatedRecord(rawPost, locale) : null;
+
+    if (!translated || translated.status !== 'published') {
+      setNotFoundState(true);
+    } else {
+      setPost(translated);
+    }
+  }, [slug, locale]);
+
+  useEffect(() => {
+    if (post) {
+      document.title = post.seo_title || `${post.title} | Cheotnun K-Beauty`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (post.seo_description) {
+        if (metaDesc) metaDesc.setAttribute('content', post.seo_description);
+        else {
+          const meta = document.createElement('meta');
+          meta.name = 'description';
+          meta.content = post.seo_description;
+          document.head.appendChild(meta);
+        }
       }
     }
-  }, [post.seo_title, post.seo_description, post.title]);
+  }, [post]);
+
+  if (notFoundState) {
+    return (
+      <div className="flex flex-col min-h-screen bg-background">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center py-20">
+            <h1 className="font-heading text-3xl text-white mb-4">{t('Artículo no encontrado')}</h1>
+            <Link href="/blog" className="text-accent hover:underline text-sm">{t('Volver al Blog')}</Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="flex flex-col min-h-screen bg-background">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center py-20">
+            <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -67,7 +105,7 @@ export default function BlogPostPage() {
           {/* Featured Image */}
           {post.image && (
             <div className="relative w-full h-[300px] md:h-[400px] rounded-3xl overflow-hidden mb-12 border border-white/5">
-              <Image
+              <SafeImage
                 src={post.image}
                 alt={post.title}
                 fill
@@ -88,7 +126,7 @@ export default function BlogPostPage() {
               prose-a:text-accent prose-a:no-underline hover:prose-a:underline
               prose-li:text-foreground/70
               prose-img:rounded-2xl prose-img:my-8"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }}
           />
 
           {/* Footer */}
