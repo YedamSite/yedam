@@ -741,14 +741,13 @@ if (!authorized) {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Link href="/">
-                <Button
-                  variant="outline"
-                  className="border-white/10 hover:bg-white/5 text-white font-bold text-xs px-4 py-2 rounded-xl"
-                >
-                  {t('Voltar ao Site')}
-                </Button>
-              </Link>
+              <Button
+                variant="outline"
+                className="border-white/10 hover:bg-white/5 text-white font-bold text-xs px-4 py-2 rounded-xl"
+                onClick={() => window.location.href = '/'}
+              >
+                {t('Voltar ao Site')}
+              </Button>
               <Button
                 onClick={() => {
                   fetch('/api/auth/cookie', {
