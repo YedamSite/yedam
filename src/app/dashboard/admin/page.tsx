@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import {
   Settings, Palette, Layers, Database, Users, Shield,
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
@@ -738,21 +739,31 @@ if (!authorized) {
                 <h1 className="font-heading text-lg md:text-xl font-light text-white">Cheotnun</h1>
               </div>
             </div>
-            <Button
-              onClick={() => {
-                fetch('/api/auth/cookie', {
-                  method: 'DELETE',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ type: 'admin' })
-                }).then(() => {
-                  window.location.href = '/dashboard/admin/login';
-                });
-              }}
-              variant="outline"
-              className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"
-            >
-              Sair do Painel
-            </Button>
+            <div className="flex items-center gap-3">
+              <Link href="/">
+                <Button
+                  variant="outline"
+                  className="border-white/10 hover:bg-white/5 text-white font-bold text-xs px-4 py-2 rounded-xl"
+                >
+                  Voltar ao Site
+                </Button>
+              </Link>
+              <Button
+                onClick={() => {
+                  fetch('/api/auth/cookie', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'admin' })
+                  }).then(() => {
+                    window.location.href = '/dashboard/admin/login';
+                  });
+                }}
+                variant="outline"
+                className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"
+              >
+                Sair do Painel
+              </Button>
+            </div>
           </div>
         </div>
 
