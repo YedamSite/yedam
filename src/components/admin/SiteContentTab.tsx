@@ -124,9 +124,10 @@ export default function SiteContentTab() {
       }
 
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
-      const parentObj = isRootSec ? root : root.home;
 
       if (!isRootSec && !root.home) root.home = {};
+      const parentObj = isRootSec ? root : root.home;
+
       if (!parentObj[section]) parentObj[section] = {};
       // Ensure the nested array path exists
       const arrContainer = ensureNested(parentObj[section], arrayField.split('.').slice(0, -1).join('.'));
@@ -169,9 +170,10 @@ export default function SiteContentTab() {
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
-      const parentObj = isRootSec ? updated : updated.home;
 
       if (!isRootSec && !updated.home) updated.home = {};
+      const parentObj = isRootSec ? updated : updated.home;
+
       if (!parentObj[section]) parentObj[section] = {};
       const arrContainer = ensureNested(parentObj[section], arrayField.split('.').slice(0, -1).join('.'));
       const arrKey = arrayField.split('.').pop() || arrayField;
