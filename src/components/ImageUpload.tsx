@@ -17,10 +17,11 @@ export default function ImageUpload({
   currentUrl,
   onUrlChange,
   folder = 'general',
-  label = t('Imagem'),
+  label,
   className = '',
 }: ImageUploadProps) {
   const { t } = useLanguage();
+  const displayLabel = label || t('Imagem');
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [urlInput, setUrlInput] = useState(currentUrl || '');
@@ -82,7 +83,7 @@ export default function ImageUpload({
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <label className="text-[10px] font-bold uppercase text-accent">{label}</label>
+      <label className="text-[10px] font-bold uppercase text-accent">{displayLabel}</label>
 
       {/* Current image preview */}
       {displayUrl && (
