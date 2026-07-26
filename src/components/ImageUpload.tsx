@@ -17,7 +17,7 @@ export default function ImageUpload({
   currentUrl,
   onUrlChange,
   folder = 'general',
-  label = 'Imagem',
+  label = t('Imagem'),
   className = '',
 }: ImageUploadProps) {
   const { t } = useLanguage();
@@ -89,7 +89,7 @@ export default function ImageUpload({
         <div className="relative w-full h-32 rounded-lg overflow-hidden border border-white/10 bg-secondary group">
           <img
             src={displayUrl}
-            alt="Preview"
+            alt={t('Preview')}
             className="w-full h-full object-cover"
             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
           />

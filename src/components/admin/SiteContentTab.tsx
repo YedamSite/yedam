@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
 import ImageUpload from '@/components/ImageUpload';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function SiteContentTab() {
   const [content, setContent] = useState<any>(null);
   const [activeSection, setActiveSection] = useState('hero');
   const [activeLang, setActiveLang] = useState<'es' | 'pt' | 'en'>('es');
   const [saved, setSaved] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const c = db.get('site_content');
@@ -98,7 +100,8 @@ export default function SiteContentTab() {
   };
 
   const ensureNested = (obj: any, path: string): any => {
-    if (!obj || !path) return undefined;
+    if (!obj) return undefined;
+    if (!path) return obj;
     const parts = path.split('.');
     let current = obj;
     for (const part of parts) {
@@ -367,29 +370,29 @@ export default function SiteContentTab() {
     );
   };
 
-  if (!content) return <div className="text-xs text-muted-foreground">Carregando...</div>;
+  if (!content) return <div className="text-xs text-muted-foreground">{t('Carregando...')}</div>;
 
   const sections = [
-    { id: 'hero', label: 'Hero / Banner Principal' },
-    { id: 'highlights', label: 'Barra de Destaques' },
-    { id: 'categories', label: 'Seção Categorias' },
-    { id: 'bestSellers', label: 'Seção Mais Vendidos' },
-    { id: 'experiencias', label: 'Experiencias Cheotnun' },
-    { id: 'routines', label: 'Seção Rutinas' },
-    { id: 'instagram', label: 'Seção Instagram' },
-    { id: 'newsletter', label: 'Newsletter' },
-    { id: 'header', label: 'Header / Topo' },
-    { id: 'footer', label: 'Footer / Rodapé' },
-    { id: 'marcas', label: 'Página: Marcas' },
-    { id: 'comoFunciona', label: 'Página: Como Funciona' },
-    { id: 'contacto', label: 'Página: Contacto' },
-    { id: 'ayudaDevoluciones', label: 'Página: Devoluciones' },
-    { id: 'envios', label: 'Página: Envíos' },
-    { id: 'rutinasPage', label: 'Página: Rutinas' },
-    { id: 'experienciasPage', label: 'Página: Experiencias' },
-    { id: 'terminos', label: 'Página: Términos' },
-    { id: 'privacidad', label: 'Página: Privacidad' },
-    { id: 'blog', label: 'Página: Blog' },
+    { id: 'hero', label: t('Hero / Banner Principal') },
+    { id: 'highlights', label: t('Barra de Destaques') },
+    { id: 'categories', label: t('Seção Categorias') },
+    { id: 'bestSellers', label: t('Seção Mais Vendidos') },
+    { id: 'experiencias', label: t('Experiencias Cheotnun') },
+    { id: 'routines', label: t('Seção Rutinas') },
+    { id: 'instagram', label: t('Seção Instagram') },
+    { id: 'newsletter', label: t('Newsletter') },
+    { id: 'header', label: t('Header / Topo') },
+    { id: 'footer', label: t('Footer / Rodapé') },
+    { id: 'marcas', label: t('Página: Marcas') },
+    { id: 'comoFunciona', label: t('Página: Como Funciona') },
+    { id: 'contacto', label: t('Página: Contacto') },
+    { id: 'ayudaDevoluciones', label: t('Página: Devoluciones') },
+    { id: 'envios', label: t('Página: Envíos') },
+    { id: 'rutinasPage', label: t('Página: Rutinas') },
+    { id: 'experienciasPage', label: t('Página: Experiencias') },
+    { id: 'terminos', label: t('Página: Términos') },
+    { id: 'privacidad', label: t('Página: Privacidad') },
+    { id: 'blog', label: t('Página: Blog') },
   ];
 
   // Base lengths for loop consistency in translation tab
@@ -419,16 +422,16 @@ export default function SiteContentTab() {
   return (
     <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
       <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
-        <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">Conteúdo do Site</h2>
+        <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">{t('Conteúdo do Site')}</h2>
         <Button onClick={handleSave} className="bg-accent hover:bg-accentHover text-background font-bold text-xs px-6 py-2 rounded-xl flex items-center gap-2">
           <Save className="h-4 w-4" />
-          {saved ? '✓ SALVO!' : 'SALVAR TUDO'}
+          {saved ? t('✓ SALVO!') : t('SALVAR TUDO')}
         </Button>
       </div>
 
       {saved && (
         <div className="bg-green-50/10 border border-green-50/20 text-green-400 text-xs rounded-xl p-3.5 mb-6">
-          ✓ Todo o conteúdo foi salvo com sucesso!
+          {t('✓ Todo o conteúdo foi salvo com sucesso!')}
         </div>
       )}
 
@@ -445,7 +448,7 @@ export default function SiteContentTab() {
                 : 'text-muted-foreground hover:text-white'
             }`}
           >
-            {lang === 'es' ? 'Español (ES)' : lang === 'pt' ? 'Português (PT)' : 'English (EN)'}
+            {lang === 'es' ? t('Español (ES)') : lang === 'pt' ? t('Português (PT)') : t('English (EN)')}
           </button>
         ))}
       </div>
@@ -470,28 +473,28 @@ export default function SiteContentTab() {
         {/* HERO */}
         {activeSection === 'hero' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Hero / Banner Principal</h3>
-            {renderInput('Linha 1 do Título', 'hero', 'titleLine1')}
-            {renderInput('Linha 2 do Título (itálico)', 'hero', 'titleLine2')}
-            {renderInput('Linha 3 do Título', 'hero', 'titleLine3')}
-            {renderInput('Subtítulo', 'hero', 'subtitle', { rows: 3, placeholder: 'Descrição abaixo do título...' })}
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Hero / Banner Principal')}</h3>
+            {renderInput(t('Linha 1 do Título'), 'hero', 'titleLine1')}
+            {renderInput(t('Linha 2 do Título (itálico)'), 'hero', 'titleLine2')}
+            {renderInput(t('Linha 3 do Título'), 'hero', 'titleLine3')}
+            {renderInput(t('Subtítulo'), 'hero', 'subtitle', { rows: 3, placeholder: t('Descrição abaixo do título...') })}
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Texto Botão Comprar', 'hero', 'btnBuyText')}
-              {renderInput('Link Botão Comprar', 'hero', 'btnBuyLink')}
-              {renderInput('Texto Botão Rutinas', 'hero', 'btnRoutineText')}
-              {renderInput('Link Botão Rutinas', 'hero', 'btnRoutineLink')}
+              {renderInput(t('Texto Botão Comprar'), 'hero', 'btnBuyText')}
+              {renderInput(t('Link Botão Comprar'), 'hero', 'btnBuyLink')}
+              {renderInput(t('Texto Botão Rutinas'), 'hero', 'btnRoutineText')}
+              {renderInput(t('Link Botão Rutinas'), 'hero', 'btnRoutineLink')}
             </div>
             <ImageUpload
               currentUrl={getBaseValue('hero', 'bgImage')}
               onUrlChange={v => handleChange('hero', 'bgImage', v)}
               folder="hero"
-              label="Imagem de Fundo do Hero (Desktop)"
+              label={t('Imagem de Fundo do Hero (Desktop)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('hero', 'bgImageMobile')}
               onUrlChange={v => handleChange('hero', 'bgImageMobile', v)}
               folder="hero"
-              label="Imagem de Fundo do Hero (Mobile)"
+              label={t('Imagem de Fundo do Hero (Mobile)')}
             />
           </div>
         )}
@@ -500,12 +503,12 @@ export default function SiteContentTab() {
         {activeSection === 'highlights' && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Barra de Destaques</h3>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Barra de Destaques')}</h3>
               <Button onClick={() => addArrayItem('highlights', 'items', { icon: 'ShieldCheck', title: 'NOVO', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                <Plus className="h-3 w-3" /> ADICIONAR
+                <Plus className="h-3 w-3" /> {t('ADICIONAR')}
               </Button>
             </div>
-            <p className="text-[10px] text-muted-foreground">Ícones disponíveis: ShieldCheck, Truck, ShieldAlert, Heart, Droplet, Sparkles, Smile, Hourglass, ClipboardList, Star, Compass</p>
+            <p className="text-[10px] text-muted-foreground">{t('Ícones disponíveis: ShieldCheck, Truck, ShieldAlert, Heart, Droplet, Sparkles, Smile, Hourglass, ClipboardList, Star, Compass')}</p>
             {highlightsItems.map((item: any, idx: number) => (
               <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                 <div className="flex items-center justify-between">
@@ -513,9 +516,9 @@ export default function SiteContentTab() {
                   <button onClick={() => removeArrayItem('highlights', 'items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                  {renderArrayInput('Ícone', 'highlights', 'items', idx, 'icon')}
-                  {renderArrayInput('Título', 'highlights', 'items', idx, 'title')}
-                  {renderArrayInput('Texto', 'highlights', 'items', idx, 'text')}
+                  {renderArrayInput(t('Ícone'), 'highlights', 'items', idx, 'icon')}
+                  {renderArrayInput(t('Título'), 'highlights', 'items', idx, 'title')}
+                  {renderArrayInput(t('Texto'), 'highlights', 'items', idx, 'text')}
                 </div>
               </div>
             ))}
@@ -525,26 +528,26 @@ export default function SiteContentTab() {
         {/* CATEGORIES SECTION TEXT */}
         {activeSection === 'categories' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Seção de Categorias</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção de Categorias')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Pré-título', 'categories', 'preTitle')}
-              {renderInput('Título', 'categories', 'title')}
-              {renderInput('Subtítulo', 'categories', 'subtitle')}
-              {renderInput('Texto do Botão', 'categories', 'buttonText')}
+              {renderInput(t('Pré-título'), 'categories', 'preTitle')}
+              {renderInput(t('Título'), 'categories', 'title')}
+              {renderInput(t('Subtítulo'), 'categories', 'subtitle')}
+              {renderInput(t('Texto do Botão'), 'categories', 'buttonText')}
             </div>
-            <p className="text-[10px] text-muted-foreground border-t border-white/5 pt-3">As categorias em si são gerenciadas na aba "Categorias".</p>
+            <p className="text-[10px] text-muted-foreground border-t border-white/5 pt-3">{t('As categorias em si são gerenciadas na aba "Categorias".')}</p>
           </div>
         )}
 
         {/* BEST SELLERS */}
         {activeSection === 'bestSellers' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Seção Mais Vendidos</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção Mais Vendidos')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Pré-título', 'bestSellers', 'preTitle')}
-              {renderInput('Título', 'bestSellers', 'title')}
-              {renderInput('Subtítulo', 'bestSellers', 'subtitle', { rows: 2 })}
-              {renderInput('Texto do Botão', 'bestSellers', 'buttonText')}
+              {renderInput(t('Pré-título'), 'bestSellers', 'preTitle')}
+              {renderInput(t('Título'), 'bestSellers', 'title')}
+              {renderInput(t('Subtítulo'), 'bestSellers', 'subtitle', { rows: 2 })}
+              {renderInput(t('Texto do Botão'), 'bestSellers', 'buttonText')}
             </div>
           </div>
         )}
@@ -553,44 +556,44 @@ export default function SiteContentTab() {
         {activeSection === 'experiencias' && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Experiencias Cheotnun</h3>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Experiencias Cheotnun')}</h3>
               <Button onClick={() => addArrayItem('experiencias', 'cards', { badge: 'NOVA', badgeColor: 'accent', title: 'Nova Experiência', text: 'Descrição', buttonText: 'SABER MÁS', image: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                <Plus className="h-3 w-3" /> ADICIONAR CARD
+                <Plus className="h-3 w-3" /> {t('ADICIONAR CARD')}
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Pré-título da Seção', 'experiencias', 'preTitle')}
-              {renderInput('Título da Seção', 'experiencias', 'title')}
+              {renderInput(t('Pré-título da Seção'), 'experiencias', 'preTitle')}
+              {renderInput(t('Título da Seção'), 'experiencias', 'title')}
             </div>
             <div className="border-t border-white/5 pt-4 space-y-6">
               {experiencesCards.map((card: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Card #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Card')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('experiencias', 'cards', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    {renderArrayInput('Badge', 'experiencias', 'cards', idx, 'badge')}
+                    {renderArrayInput(t('Badge'), 'experiencias', 'cards', idx, 'badge')}
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Cor do Badge</label>
+                      <label className="text-[10px] font-bold uppercase text-accent">{t('Cor do Badge')}</label>
                       <select 
                         value={getArrayValue('experiencias', 'cards', idx, 'badgeColor') || 'accent'} 
                         onChange={e => handleArrayItemChange('experiencias', 'cards', idx, 'badgeColor', e.target.value)} 
                         className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white"
                       >
-                        <option value="accent">Dourado (accent)</option>
-                        <option value="blue">Azul</option>
+                        <option value="accent">{t('Dourado (accent)')}</option>
+                        <option value="blue">{t('Azul')}</option>
                       </select>
                     </div>
-                    {renderArrayInput('Título', 'experiencias', 'cards', idx, 'title')}
-                    {renderArrayInput('Texto do Botão', 'experiencias', 'cards', idx, 'buttonText')}
+                    {renderArrayInput(t('Título'), 'experiencias', 'cards', idx, 'title')}
+                    {renderArrayInput(t('Texto do Botão'), 'experiencias', 'cards', idx, 'buttonText')}
                   </div>
-                  {renderArrayInput('Texto', 'experiencias', 'cards', idx, 'text', { rows: 2 })}
+                  {renderArrayInput(t('Texto'), 'experiencias', 'cards', idx, 'text', { rows: 2 })}
                   <ImageUpload
                     currentUrl={getBaseArrayValue('experiencias', 'cards', idx, 'image')}
                     onUrlChange={v => handleArrayItemChange('experiencias', 'cards', idx, 'image', v)}
                     folder="experiencias"
-                    label="Imagem do Card"
+                    label={t('Imagem do Card')}
                   />
                 </div>
               ))}
@@ -601,19 +604,19 @@ export default function SiteContentTab() {
         {/* ROUTINES */}
         {activeSection === 'routines' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Seção Rutinas</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção Rutinas')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Pré-título', 'routines', 'preTitle')}
-              {renderInput('Título', 'routines', 'title')}
-              {renderInput('Subtítulo', 'routines', 'subtitle')}
-              {renderInput('Texto do Botão', 'routines', 'buttonText')}
+              {renderInput(t('Pré-título'), 'routines', 'preTitle')}
+              {renderInput(t('Título'), 'routines', 'title')}
+              {renderInput(t('Subtítulo'), 'routines', 'subtitle')}
+              {renderInput(t('Texto do Botão'), 'routines', 'buttonText')}
             </div>
 
             <div className="border-t border-white/5 pt-4">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-[10px] font-bold text-accent uppercase">Itens de Rutina</h4>
+                <h4 className="text-[10px] font-bold text-accent uppercase">{t('Itens de Rutina')}</h4>
                 <Button onClick={() => addArrayItem('routines', 'items', { name: 'Nova Rutina', icon: 'Sparkles' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -624,13 +627,13 @@ export default function SiteContentTab() {
                         value={getArrayValue('routines', 'items', idx, 'name')} 
                         onChange={e => handleArrayItemChange('routines', 'items', idx, 'name', e.target.value)} 
                         className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
-                        placeholder={activeLang !== 'es' && getBaseArrayValue('routines', 'items', idx, 'name') ? `[ES]: ${getBaseArrayValue('routines', 'items', idx, 'name')}` : "Nome"} 
+                        placeholder={activeLang !== 'es' && getBaseArrayValue('routines', 'items', idx, 'name') ? `[ES]: ${getBaseArrayValue('routines', 'items', idx, 'name')}` : t("Nome")} 
                       />
                       <input 
                         value={getArrayValue('routines', 'items', idx, 'icon')} 
                         onChange={e => handleArrayItemChange('routines', 'items', idx, 'icon', e.target.value)} 
                         className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
-                        placeholder="Ícone" 
+                        placeholder={t("Ícone")} 
                       />
                     </div>
                     <button onClick={() => removeArrayItem('routines', 'items', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
@@ -641,9 +644,9 @@ export default function SiteContentTab() {
 
             <div className="border-t border-white/5 pt-4">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-[10px] font-bold text-accent uppercase">Badges Inferiores</h4>
+                <h4 className="text-[10px] font-bold text-accent uppercase">{t('Badges Inferiores')}</h4>
                 <Button onClick={() => addArrayItem('routines', 'badges', { icon: 'ShieldCheck', title: 'NOVO BADGE' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -654,13 +657,13 @@ export default function SiteContentTab() {
                         value={getArrayValue('routines', 'badges', idx, 'title')} 
                         onChange={e => handleArrayItemChange('routines', 'badges', idx, 'title', e.target.value)} 
                         className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
-                        placeholder={activeLang !== 'es' && getBaseArrayValue('routines', 'badges', idx, 'title') ? `[ES]: ${getBaseArrayValue('routines', 'badges', idx, 'title')}` : "Título"} 
+                        placeholder={activeLang !== 'es' && getBaseArrayValue('routines', 'badges', idx, 'title') ? `[ES]: ${getBaseArrayValue('routines', 'badges', idx, 'title')}` : t("Título")} 
                       />
                       <input 
                         value={getArrayValue('routines', 'badges', idx, 'icon')} 
                         onChange={e => handleArrayItemChange('routines', 'badges', idx, 'icon', e.target.value)} 
                         className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" 
-                        placeholder="Ícone" 
+                        placeholder={t("Ícone")} 
                       />
                     </div>
                     <button onClick={() => removeArrayItem('routines', 'badges', idx)} className="text-red-500"><Trash2 className="h-3 w-3" /></button>
@@ -674,18 +677,18 @@ export default function SiteContentTab() {
         {/* INSTAGRAM */}
         {activeSection === 'instagram' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Seção Instagram</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção Instagram')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Título', 'instagram', 'title')}
-              {renderInput('Subtítulo', 'instagram', 'subtitle')}
-              {renderInput('Texto do Botão', 'instagram', 'buttonText')}
-              {renderInput('Link do Botão', 'instagram', 'buttonLink')}
+              {renderInput(t('Título'), 'instagram', 'title')}
+              {renderInput(t('Subtítulo'), 'instagram', 'subtitle')}
+              {renderInput(t('Texto do Botão'), 'instagram', 'buttonText')}
+              {renderInput(t('Link do Botão'), 'instagram', 'buttonLink')}
             </div>
             <div className="border-t border-white/5 pt-4">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-[10px] font-bold text-accent uppercase">Imagens do Feed</h4>
+                <h4 className="text-[10px] font-bold text-accent uppercase">{t('Imagens do Feed')}</h4>
                 <Button onClick={() => addArrayItem('instagram', 'images', 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               <div className="grid grid-cols-1 gap-3">
@@ -696,7 +699,7 @@ export default function SiteContentTab() {
                         currentUrl={url}
                         onUrlChange={v => handleArrayItemChange('instagram', 'images', idx, '', v)}
                         folder="instagram"
-                        label={`Imagem ${idx + 1}`}
+                        label={t('Imagem') + ` ${idx + 1}`}
                       />
                     </div>
                     <button onClick={() => removeArrayItem('instagram', 'images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
@@ -710,12 +713,12 @@ export default function SiteContentTab() {
         {/* NEWSLETTER */}
         {activeSection === 'newsletter' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Newsletter</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Newsletter')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Pré-título', 'newsletter', 'preTitle')}
-              {renderInput('Título', 'newsletter', 'title')}
-              {renderInput('Texto do Botão', 'newsletter', 'buttonText')}
-              {renderInput('Mensagem de Sucesso', 'newsletter', 'successMessage')}
+              {renderInput(t('Pré-título'), 'newsletter', 'preTitle')}
+              {renderInput(t('Título'), 'newsletter', 'title')}
+              {renderInput(t('Texto do Botão'), 'newsletter', 'buttonText')}
+              {renderInput(t('Mensagem de Sucesso'), 'newsletter', 'successMessage')}
             </div>
           </div>
         )}
@@ -723,16 +726,16 @@ export default function SiteContentTab() {
         {/* HEADER */}
         {activeSection === 'header' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Header / Topo do Site</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Header / Topo do Site')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Texto do Anúncio (barra superior)', 'header', 'announcementText')}
-              {renderInput('Texto "Envíos"', 'header', 'shippingText')}
-              {renderInput('Texto "Atención"', 'header', 'attentionText')}
+              {renderInput(t('Texto do Anúncio (barra superior)'), 'header', 'announcementText')}
+              {renderInput(t('Texto "Envíos"'), 'header', 'shippingText')}
+              {renderInput(t('Texto "Atención"'), 'header', 'attentionText')}
               <ImageUpload
                 currentUrl={getBaseValue('header', 'logoUrl')}
                 onUrlChange={v => handleChange('header', 'logoUrl', v)}
                 folder="logo"
-                label="Logo do Site"
+                label={t('Logo do Site')}
               />
             </div>
           </div>
@@ -741,24 +744,24 @@ export default function SiteContentTab() {
         {/* FOOTER */}
         {activeSection === 'footer' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Footer / Rodapé</h3>
-            {renderInput('Descrição da Marca', 'footer', 'description', { rows: 3 })}
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Footer / Rodapé')}</h3>
+            {renderInput(t('Descrição da Marca'), 'footer', 'description', { rows: 3 })}
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('URL Instagram', 'footer', 'social.instagram')}
-              {renderInput('URL YouTube', 'footer', 'social.youtube')}
-              {renderInput('URL TikTok', 'footer', 'social.tiktok')}
+              {renderInput(t('URL Instagram'), 'footer', 'social.instagram')}
+              {renderInput(t('URL YouTube'), 'footer', 'social.youtube')}
+              {renderInput(t('URL TikTok'), 'footer', 'social.tiktok')}
             </div>
 
             <div className="border-t border-white/5 pt-4 space-y-6">
               {['col1', 'col2', 'col3'].map((colKey, cIdx) => (
                 <div key={colKey} className="border border-white/5 rounded-xl p-4 bg-secondary/30">
-                  <h4 className="text-[10px] font-bold text-accent uppercase mb-3">Coluna {cIdx + 1}</h4>
-                  {renderInput('Título da Coluna', 'footer', `${colKey}.title`)}
+                  <h4 className="text-[10px] font-bold text-accent uppercase mb-3">{t('Coluna')} {cIdx + 1}</h4>
+                  {renderInput(t('Título da Coluna'), 'footer', `${colKey}.title`)}
                   
                   <div className="flex items-center justify-between mt-4 mb-2">
-                    <h5 className="text-[10px] font-bold text-white/70 uppercase">Links da Coluna</h5>
+                    <h5 className="text-[10px] font-bold text-white/70 uppercase">{t('Links da Coluna')}</h5>
                     <Button onClick={() => addArrayItem('footer', `${colKey}.links`, { label: 'Novo Link', href: '#' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                      <Plus className="h-3 w-3" /> ADICIONAR LINK
+                      <Plus className="h-3 w-3" /> {t('ADICIONAR LINK')}
                     </Button>
                   </div>
                   
@@ -766,8 +769,8 @@ export default function SiteContentTab() {
                     {((content.footer as any)?.[colKey]?.links || []).map((_: any, idx: number) => (
                       <div key={idx} className="flex gap-2 items-center">
                         <div className="flex-1 grid grid-cols-2 gap-2">
-                          {renderArrayInput('Label (Texto)', 'footer', `${colKey}.links`, idx, 'label')}
-                          {renderArrayInput('URL / Link', 'footer', `${colKey}.links`, idx, 'href')}
+                          {renderArrayInput(t('Label (Texto)'), 'footer', `${colKey}.links`, idx, 'label')}
+                          {renderArrayInput(t('URL / Link'), 'footer', `${colKey}.links`, idx, 'href')}
                         </div>
                         <button onClick={() => removeArrayItem('footer', `${colKey}.links`, idx)} className="text-red-500 mt-5"><Trash2 className="h-3.5 w-3.5" /></button>
                       </div>
@@ -782,135 +785,135 @@ export default function SiteContentTab() {
         {/* MARCAS */}
         {activeSection === 'marcas' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Marcas</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Página: Marcas')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Título do Hero', 'marcas', 'hero.title')}
-              {renderInput('Subtítulo do Hero', 'marcas', 'hero.subtitle')}
-              {renderInput('Texto do Botão Hero', 'marcas', 'hero.buttonText')}
+              {renderInput(t('Título do Hero'), 'marcas', 'hero.title')}
+              {renderInput(t('Subtítulo do Hero'), 'marcas', 'hero.subtitle')}
+              {renderInput(t('Texto do Botão Hero'), 'marcas', 'hero.buttonText')}
             </div>
             <ImageUpload
               currentUrl={getBaseValue('marcas', 'hero.image')}
               onUrlChange={v => handleChange('marcas', 'hero.image', v)}
               folder="marcas"
-              label="Imagem Hero Desktop (Marcas)"
+              label={t('Imagem Hero Desktop (Marcas)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('marcas', 'hero.imageMobile')}
               onUrlChange={v => handleChange('marcas', 'hero.imageMobile', v)}
               folder="marcas"
-              label="Imagem Hero Mobile (Marcas)"
+              label={t('Imagem Hero Mobile (Marcas)')}
             />
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Recursos (Features)</h4>
-              <p className="text-[9px] text-muted-foreground">Ícones disponíveis: Award, Beaker, Heart, ShieldCheck, ShoppingBag, Headset, Gift, Star</p>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Recursos (Features)')}</h4>
+              <p className="text-[9px] text-muted-foreground">{t('Ícones disponíveis: Award, Beaker, Heart, ShieldCheck, ShoppingBag, Headset, Gift, Star')}</p>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-accent font-bold uppercase">Lista de Recursos</span>
+                <span className="text-[10px] text-accent font-bold uppercase">{t('Lista de Recursos')}</span>
                 <Button onClick={() => addArrayItem('marcas', 'features', { title: 'Novo', text: 'Descrição', icon: 'Award' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               {(content?.marcas?.features || []).map((feat: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Feature #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Feature')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('marcas', 'features', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-3 gap-3">
-                    {renderArrayInput('Ícone', 'marcas', 'features', idx, 'icon', { placeholder: 'Award, Beaker, Heart...' })}
-                    {renderArrayInput('Título', 'marcas', 'features', idx, 'title')}
-                    {renderArrayInput('Texto', 'marcas', 'features', idx, 'text')}
+                    {renderArrayInput(t('Ícone'), 'marcas', 'features', idx, 'icon', { placeholder: t('Award, Beaker, Heart...') })}
+                    {renderArrayInput(t('Título'), 'marcas', 'features', idx, 'title')}
+                    {renderArrayInput(t('Texto'), 'marcas', 'features', idx, 'text')}
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Por que nos escolher (Why Choose Us)</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Por que nos escolher (Why Choose Us)')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título da Seção', 'marcas', 'whyChooseUs.title')}
-                {renderInput('Texto de Conclusão (Título)', 'marcas', 'whyChooseUs.conclusionTitle')}
-                {renderInput('Texto de Conclusão', 'marcas', 'whyChooseUs.conclusionText', { rows: 2 })}
+                {renderInput(t('Título da Seção'), 'marcas', 'whyChooseUs.title')}
+                {renderInput(t('Texto de Conclusão (Título)'), 'marcas', 'whyChooseUs.conclusionTitle')}
+                {renderInput(t('Texto de Conclusão'), 'marcas', 'whyChooseUs.conclusionText', { rows: 2 })}
               </div>
               <ImageUpload
                 currentUrl={getBaseValue('marcas', 'whyChooseUs.image')}
                 onUrlChange={v => handleChange('marcas', 'whyChooseUs.image', v)}
                 folder="marcas"
-                label="Imagem Why Choose Us"
+                label={t('Imagem Why Choose Us')}
               />
               <div className="flex items-center justify-between mt-4">
-                <span className="text-[10px] text-accent font-bold uppercase">Itens</span>
+                <span className="text-[10px] text-accent font-bold uppercase">{t('Itens')}</span>
                 <Button onClick={() => addArrayItem('marcas', 'whyChooseUs.items', { title: 'Novo', text: 'Descrição', icon: 'ShieldCheck' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               {(content?.marcas?.whyChooseUs?.items || []).map((item: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Item')} #{idx + 1}</span>
                     <button onClick={() => { removeArrayItem('marcas', 'whyChooseUs.items', idx); }} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-3 gap-3">
-                    {renderArrayInput('Ícone', 'marcas', 'whyChooseUs.items', idx, 'icon')}
-                    {renderArrayInput('Título', 'marcas', 'whyChooseUs.items', idx, 'title')}
-                    {renderArrayInput('Texto', 'marcas', 'whyChooseUs.items', idx, 'text')}
+                    {renderArrayInput(t('Ícone'), 'marcas', 'whyChooseUs.items', idx, 'icon')}
+                    {renderArrayInput(t('Título'), 'marcas', 'whyChooseUs.items', idx, 'title')}
+                    {renderArrayInput(t('Texto'), 'marcas', 'whyChooseUs.items', idx, 'text')}
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Depoimentos (Testimonials)</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Depoimentos (Testimonials)')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título da Seção', 'marcas', 'testimonials.title')}
-                {renderInput('Texto do Botão', 'marcas', 'testimonials.buttonText')}
-                {renderInput('Link do Botão', 'marcas', 'testimonials.buttonLink')}
+                {renderInput(t('Título da Seção'), 'marcas', 'testimonials.title')}
+                {renderInput(t('Texto do Botão'), 'marcas', 'testimonials.buttonText')}
+                {renderInput(t('Link do Botão'), 'marcas', 'testimonials.buttonLink')}
               </div>
               <div className="flex items-center justify-between mt-4">
-                <span className="text-[10px] text-accent font-bold uppercase">Lista de Depoimentos</span>
+                <span className="text-[10px] text-accent font-bold uppercase">{t('Lista de Depoimentos')}</span>
                 <Button onClick={() => addArrayItem('marcas', 'testimonials.list', { name: 'Nome', text: 'Depoimento', country: 'País', img: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               {(content?.marcas?.testimonials?.list || []).map((item: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Depoimento #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Depoimento')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('marcas', 'testimonials.list', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-3 gap-3">
-                    {renderArrayInput('Nome', 'marcas', 'testimonials.list', idx, 'name')}
-                    {renderArrayInput('País', 'marcas', 'testimonials.list', idx, 'country')}
+                    {renderArrayInput(t('Nome'), 'marcas', 'testimonials.list', idx, 'name')}
+                    {renderArrayInput(t('País'), 'marcas', 'testimonials.list', idx, 'country')}
                   </div>
-                  {renderArrayInput('Texto', 'marcas', 'testimonials.list', idx, 'text', { rows: 2 })}
+                  {renderArrayInput(t('Texto'), 'marcas', 'testimonials.list', idx, 'text', { rows: 2 })}
                   <ImageUpload
                     currentUrl={getBaseArrayValue('marcas', 'testimonials.list', idx, 'img')}
                     onUrlChange={v => handleArrayItemChange('marcas', 'testimonials.list', idx, 'img', v)}
                     folder="marcas"
-                    label="Foto do Depoimento"
+                    label={t('Foto do Depoimento')}
                   />
                 </div>
               ))}
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Sellos de Confiança (Trust Badges)</h4>
-              <p className="text-[9px] text-muted-foreground">Ícones: Leaf, FlaskConical, Rabbit, Recycle, Flower2, Award, Beaker, Heart, ShieldCheck</p>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Sellos de Confiança (Trust Badges)')}</h4>
+              <p className="text-[9px] text-muted-foreground">{t('Ícones: Leaf, FlaskConical, Rabbit, Recycle, Flower2, Award, Beaker, Heart, ShieldCheck')}</p>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-accent font-bold uppercase">Badges</span>
+                <span className="text-[10px] text-accent font-bold uppercase">{t('Badges')}</span>
                 <Button onClick={() => addArrayItem('marcas', 'trustBadges', { icon: 'Leaf', text: 'Nuevo badge' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               {(content?.marcas?.trustBadges || []).map((item: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Badge #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Badge')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('marcas', 'trustBadges', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    {renderArrayInput('Ícone', 'marcas', 'trustBadges', idx, 'icon')}
-                    {renderArrayInput('Texto', 'marcas', 'trustBadges', idx, 'text')}
+                    {renderArrayInput(t('Ícone'), 'marcas', 'trustBadges', idx, 'icon')}
+                    {renderArrayInput(t('Texto'), 'marcas', 'trustBadges', idx, 'text')}
                   </div>
                 </div>
               ))}
@@ -921,154 +924,154 @@ export default function SiteContentTab() {
         {/* COMO FUNCIONA */}
         {activeSection === 'comoFunciona' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Como Funciona</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Página: Como Funciona')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Título do Hero', 'comoFunciona', 'hero.title')}
-              {renderInput('Subtítulo do Hero', 'comoFunciona', 'hero.subtitle')}
-              {renderInput('Título da Qualidade', 'comoFunciona', 'qualityInfo.title')}
-              {renderInput('Subtítulo da Qualidade', 'comoFunciona', 'qualityInfo.subtitle')}
-              {renderInput('Título de Pagamentos', 'comoFunciona', 'paymentsInfo.title')}
-              {renderInput('Subtítulo de Pagamentos', 'comoFunciona', 'paymentsInfo.subtitle')}
-              {renderInput('Título de Envíos', 'comoFunciona', 'shippingInfo.title')}
-              {renderInput('Subtítulo de Envíos', 'comoFunciona', 'shippingInfo.subtitle')}
+              {renderInput(t('Título do Hero'), 'comoFunciona', 'hero.title')}
+              {renderInput(t('Subtítulo do Hero'), 'comoFunciona', 'hero.subtitle')}
+              {renderInput(t('Título da Qualidade'), 'comoFunciona', 'qualityInfo.title')}
+              {renderInput(t('Subtítulo da Qualidade'), 'comoFunciona', 'qualityInfo.subtitle')}
+              {renderInput(t('Título de Pagamentos'), 'comoFunciona', 'paymentsInfo.title')}
+              {renderInput(t('Subtítulo de Pagamentos'), 'comoFunciona', 'paymentsInfo.subtitle')}
+              {renderInput(t('Título de Envíos'), 'comoFunciona', 'shippingInfo.title')}
+              {renderInput(t('Subtítulo de Envíos'), 'comoFunciona', 'shippingInfo.subtitle')}
             </div>
             <ImageUpload
               currentUrl={getBaseValue('comoFunciona', 'hero.image')}
               onUrlChange={v => handleChange('comoFunciona', 'hero.image', v)}
               folder="como-funciona"
-              label="Imagem Hero Desktop (Como Funciona)"
+              label={t('Imagem Hero Desktop (Como Funciona)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('comoFunciona', 'hero.imageMobile')}
               onUrlChange={v => handleChange('comoFunciona', 'hero.imageMobile', v)}
               folder="como-funciona"
-              label="Imagem Hero Mobile (Como Funciona)"
+              label={t('Imagem Hero Mobile (Como Funciona)')}
             />
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Passos (Steps)</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Passos (Steps)')}</h4>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-accent font-bold uppercase">Lista de Passos</span>
+                <span className="text-[10px] text-accent font-bold uppercase">{t('Lista de Passos')}</span>
                 <Button onClick={() => addArrayItem('comoFunciona', 'steps', { number: '1', icon: 'ShoppingBag', title: 'Novo Passo', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               {comoFuncionaSteps.map((item: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Passo #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Passo')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('comoFunciona', 'steps', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    {renderArrayInput('Número', 'comoFunciona', 'steps', idx, 'number')}
-                    {renderArrayInput('Ícone', 'comoFunciona', 'steps', idx, 'icon')}
-                    {renderArrayInput('Título', 'comoFunciona', 'steps', idx, 'title')}
-                    {renderArrayInput('Texto', 'comoFunciona', 'steps', idx, 'text', { rows: 2 })}
+                    {renderArrayInput(t('Número'), 'comoFunciona', 'steps', idx, 'number')}
+                    {renderArrayInput(t('Ícone'), 'comoFunciona', 'steps', idx, 'icon')}
+                    {renderArrayInput(t('Título'), 'comoFunciona', 'steps', idx, 'title')}
+                    {renderArrayInput(t('Texto'), 'comoFunciona', 'steps', idx, 'text', { rows: 2 })}
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Informações de Envio (Shipping Info Items)</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Informações de Envio (Shipping Info Items)')}</h4>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-accent font-bold uppercase">Itens de Envio</span>
+                <span className="text-[10px] text-accent font-bold uppercase">{t('Itens de Envio')}</span>
                 <Button onClick={() => addArrayItem('comoFunciona', 'shippingInfo.items', { title: 'Novo Título', text: 'Descrição' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
               {shippingItems.map((item: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Item')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('comoFunciona', 'shippingInfo.items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
-                  {renderArrayInput('Título', 'comoFunciona', 'shippingInfo.items', idx, 'title')}
-                  {renderArrayInput('Texto', 'comoFunciona', 'shippingInfo.items', idx, 'text', { rows: 2 })}
+                  {renderArrayInput(t('Título'), 'comoFunciona', 'shippingInfo.items', idx, 'title')}
+                  {renderArrayInput(t('Texto'), 'comoFunciona', 'shippingInfo.items', idx, 'text', { rows: 2 })}
                 </div>
               ))}
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">FAQ - Perguntas Frequentes</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('FAQ - Perguntas Frequentes')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título FAQ', 'comoFunciona', 'faq.title')}
-                {renderInput('Subtítulo FAQ', 'comoFunciona', 'faq.subtitle')}
-                {renderInput('Texto Botão', 'comoFunciona', 'faq.buttonText')}
+                {renderInput(t('Título FAQ'), 'comoFunciona', 'faq.title')}
+                {renderInput(t('Subtítulo FAQ'), 'comoFunciona', 'faq.subtitle')}
+                {renderInput(t('Texto Botão'), 'comoFunciona', 'faq.buttonText')}
               </div>
               <div className="mt-4 space-y-4">
-                <h5 className="text-[10px] font-bold text-white/70 uppercase">Perguntas</h5>
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">{t('Perguntas')}</h5>
                 {(content?.comoFunciona?.faq?.items || []).map((q: string, idx: number) => (
                   <div key={idx} className="flex gap-2 items-center">
-                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'faq.items', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'faq.items', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="Pergunta" /></div>
+                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'faq.items', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'faq.items', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder={t('Pergunta')} /></div>
                     <button onClick={() => removeArrayItem('comoFunciona', 'faq.items', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
                 <Button onClick={() => addArrayItem('comoFunciona', 'faq.items', 'Nova pergunta')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR PERGUNTA
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR PERGUNTA')}
                 </Button>
               </div>
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Promessas / Qualidade</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Promessas / Qualidade')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título', 'comoFunciona', 'promises.title')}
-                {renderInput('Subtítulo', 'comoFunciona', 'promises.subtitle', { rows: 2 })}
+                {renderInput(t('Título'), 'comoFunciona', 'promises.title')}
+                {renderInput(t('Subtítulo'), 'comoFunciona', 'promises.subtitle', { rows: 2 })}
                 <div className="col-span-2">
-                  <ImageUpload currentUrl={getBaseValue('comoFunciona', 'promises.image')} onUrlChange={v => handleChange('comoFunciona', 'promises.image', v)} folder="como-funciona" label="Imagem Promessas" />
+                  <ImageUpload currentUrl={getBaseValue('comoFunciona', 'promises.image')} onUrlChange={v => handleChange('comoFunciona', 'promises.image', v)} folder="como-funciona" label={t('Imagem Promessas')} />
                 </div>
               </div>
               <div className="mt-4 space-y-4">
-                <h5 className="text-[10px] font-bold text-white/70 uppercase">Itens de Qualidade</h5>
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">{t('Itens de Qualidade')}</h5>
                 {(content?.comoFunciona?.promises?.items || []).map((item: any, idx: number) => (
                   <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-accent uppercase">Item #{idx + 1}</span>
+                  <span className="text-[10px] font-bold text-accent uppercase">{t('Item')} #{idx + 1}</span>
                       <button onClick={() => removeArrayItem('comoFunciona', 'promises.items', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                      {renderArrayInput('Ícone', 'comoFunciona', 'promises.items', idx, 'icon')}
-                      {renderArrayInput('Título', 'comoFunciona', 'promises.items', idx, 'title')}
+                      {renderArrayInput(t('Ícone'), 'comoFunciona', 'promises.items', idx, 'icon')}
+                      {renderArrayInput(t('Título'), 'comoFunciona', 'promises.items', idx, 'title')}
                     </div>
                   </div>
                 ))}
                 <Button onClick={() => addArrayItem('comoFunciona', 'promises.items', { icon: 'ShieldCheck', title: 'Novo item' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR ITEM
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR ITEM')}
                 </Button>
               </div>
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Comunidade / Instagram</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Comunidade / Instagram')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título', 'comoFunciona', 'community.title')}
-                {renderInput('Descrição', 'comoFunciona', 'community.desc', { rows: 2 })}
-                {renderInput('Texto Botão', 'comoFunciona', 'community.buttonText')}
-                {renderInput('Link Instagram', 'comoFunciona', 'community.buttonLink')}
+                {renderInput(t('Título'), 'comoFunciona', 'community.title')}
+                {renderInput(t('Descrição'), 'comoFunciona', 'community.desc', { rows: 2 })}
+                {renderInput(t('Texto Botão'), 'comoFunciona', 'community.buttonText')}
+                {renderInput(t('Link Instagram'), 'comoFunciona', 'community.buttonLink')}
               </div>
               <div className="mt-4 space-y-4">
-                <h5 className="text-[10px] font-bold text-white/70 uppercase">Imagens (URLs)</h5>
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">{t('Imagens (URLs)')}</h5>
                 {(content?.comoFunciona?.community?.images || []).map((img: string, idx: number) => (
                   <div key={idx} className="flex gap-2 items-center">
-                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'community.images', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'community.images', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="URL da imagem" /></div>
+                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'community.images', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'community.images', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder={t('URL da imagem')} /></div>
                     <button onClick={() => removeArrayItem('comoFunciona', 'community.images', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
                 <Button onClick={() => addArrayItem('comoFunciona', 'community.images', 'https://')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                  <Plus className="h-3 w-3" /> ADICIONAR IMAGEM
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR IMAGEM')}
                 </Button>
               </div>
             </div>
 
             <div className="border-t border-white/5 pt-6 space-y-4">
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider">Newsletter</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t('Newsletter')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título', 'comoFunciona', 'newsletter.title')}
-                {renderInput('Subtítulo', 'comoFunciona', 'newsletter.subtitle', { rows: 2 })}
-                {renderInput('Placeholder Email', 'comoFunciona', 'newsletter.placeholder')}
-                {renderInput('Texto Botão', 'comoFunciona', 'newsletter.buttonText')}
-                {renderInput('Disclaimer', 'comoFunciona', 'newsletter.disclaimer', { rows: 2 })}
+                {renderInput(t('Título'), 'comoFunciona', 'newsletter.title')}
+                {renderInput(t('Subtítulo'), 'comoFunciona', 'newsletter.subtitle', { rows: 2 })}
+                {renderInput(t('Placeholder Email'), 'comoFunciona', 'newsletter.placeholder')}
+                {renderInput(t('Texto Botão'), 'comoFunciona', 'newsletter.buttonText')}
+                {renderInput(t('Disclaimer'), 'comoFunciona', 'newsletter.disclaimer', { rows: 2 })}
               </div>
             </div>
           </div>
@@ -1077,69 +1080,69 @@ export default function SiteContentTab() {
         {/* CONTACTO */}
         {activeSection === 'contacto' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Contacto</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Página: Contacto')}</h3>
             <div className="grid grid-cols-2 gap-4">
-              {renderInput('Título do Hero', 'contacto', 'hero.title', { rows: 2 })}
-              {renderInput('Subtítulo do Hero', 'contacto', 'hero.subtitle', { rows: 3 })}
-              {renderInput('Texto do Botão Hero', 'contacto', 'hero.buttonText')}
+              {renderInput(t('Título do Hero'), 'contacto', 'hero.title', { rows: 2 })}
+              {renderInput(t('Subtítulo do Hero'), 'contacto', 'hero.subtitle', { rows: 3 })}
+              {renderInput(t('Texto do Botão Hero'), 'contacto', 'hero.buttonText')}
             </div>
             <ImageUpload
               currentUrl={getBaseValue('contacto', 'hero.image')}
               onUrlChange={v => handleChange('contacto', 'hero.image', v)}
               folder="contacto"
-              label="Imagem Hero Desktop (Contacto)"
+              label={t('Imagem Hero Desktop (Contacto)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('contacto', 'hero.imageMobile')}
               onUrlChange={v => handleChange('contacto', 'hero.imageMobile', v)}
               folder="contacto"
-              label="Imagem Hero Mobile (Contacto)"
+              label={t('Imagem Hero Mobile (Contacto)')}
             />
 
             <div className="border-t border-white/5 pt-4 space-y-4">
-              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Badges do Hero</h4>
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">{t('Badges do Hero')}</h4>
               {(content?.contacto?.hero?.badges || []).map((badge: any, idx: number) => (
                 <div key={idx} className="border border-white/5 rounded-xl p-4 bg-secondary/30 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-accent uppercase">Badge #{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-accent uppercase">{t('Badge')} #{idx + 1}</span>
                     <button onClick={() => removeArrayItem('contacto', 'hero.badges', idx)} className="text-red-500 hover:text-red-400"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
-                    {renderArrayInput('Ícone', 'contacto', 'hero.badges', idx, 'icon')}
-                    {renderArrayInput('Texto', 'contacto', 'hero.badges', idx, 'text')}
+                    {renderArrayInput(t('Ícone'), 'contacto', 'hero.badges', idx, 'icon')}
+                    {renderArrayInput(t('Texto'), 'contacto', 'hero.badges', idx, 'text')}
                   </div>
                 </div>
               ))}
               <Button onClick={() => addArrayItem('contacto', 'hero.badges', { icon: 'Clock', text: 'Novo badge' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
-                <Plus className="h-3 w-3" /> ADICIONAR BADGE
+                <Plus className="h-3 w-3" /> {t('ADICIONAR BADGE')}
               </Button>
             </div>
             
             <div className="border-t border-white/5 pt-4">
-              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">Informações de Contato</h4>
+              <h4 className="text-[10px] font-bold text-accent uppercase mb-2">{t('Informações de Contato')}</h4>
               <div className="grid grid-cols-2 gap-4">
-                {renderInput('Título da Seção', 'contacto', 'contactMethods.title')}
-                {renderInput('Número do WhatsApp', 'contacto', 'contactMethods.whatsapp.value')}
-                {renderInput('Horário de Atendimento', 'contacto', 'contactMethods.whatsapp.time')}
-                {renderInput('Descrição WhatsApp', 'contacto', 'contactMethods.whatsapp.desc', { rows: 2 })}
-                {renderInput('Texto Botão WhatsApp', 'contacto', 'contactMethods.whatsapp.btn')}
-                {renderInput('Link WhatsApp', 'contacto', 'contactMethods.whatsapp.link')}
-                {renderInput('Endereço de E-mail', 'contacto', 'contactMethods.email.value')}
-                {renderInput('Descrição E-mail', 'contacto', 'contactMethods.email.desc', { rows: 2 })}
-                {renderInput('Texto Botão E-mail', 'contacto', 'contactMethods.email.btn')}
-                {renderInput('Link E-mail', 'contacto', 'contactMethods.email.link')}
-                {renderInput('Instagram Label', 'contacto', 'contactMethods.instagram.label')}
-                {renderInput('Instagram @', 'contacto', 'contactMethods.instagram.value')}
-                {renderInput('Descrição Instagram', 'contacto', 'contactMethods.instagram.desc', { rows: 2 })}
-                {renderInput('Texto Botão Instagram', 'contacto', 'contactMethods.instagram.btn')}
-                {renderInput('Link Instagram', 'contacto', 'contactMethods.instagram.link')}
-                {renderInput('Horário Label', 'contacto', 'contactMethods.hours.label')}
-                {renderInput('Descrição Horário', 'contacto', 'contactMethods.hours.desc', { rows: 2 })}
-                {renderInput('Texto Botão Horário', 'contacto', 'contactMethods.hours.btn')}
-                {renderInput('Endereço Label', 'contacto', 'contactMethods.address.label')}
-                {renderInput('Descrição Endereço', 'contacto', 'contactMethods.address.desc', { rows: 2 })}
-                {renderInput('Texto Botão Endereço', 'contacto', 'contactMethods.address.btn')}
-                {renderInput('Link Endereço', 'contacto', 'contactMethods.address.link')}
+                {renderInput(t('Título da Seção'), 'contacto', 'contactMethods.title')}
+                {renderInput(t('Número do WhatsApp'), 'contacto', 'contactMethods.whatsapp.value')}
+                {renderInput(t('Horário de Atendimento'), 'contacto', 'contactMethods.whatsapp.time')}
+                {renderInput(t('Descrição WhatsApp'), 'contacto', 'contactMethods.whatsapp.desc', { rows: 2 })}
+                {renderInput(t('Texto Botão WhatsApp'), 'contacto', 'contactMethods.whatsapp.btn')}
+                {renderInput(t('Link WhatsApp'), 'contacto', 'contactMethods.whatsapp.link')}
+                {renderInput(t('Endereço de E-mail'), 'contacto', 'contactMethods.email.value')}
+                {renderInput(t('Descrição E-mail'), 'contacto', 'contactMethods.email.desc', { rows: 2 })}
+                {renderInput(t('Texto Botão E-mail'), 'contacto', 'contactMethods.email.btn')}
+                {renderInput(t('Link E-mail'), 'contacto', 'contactMethods.email.link')}
+                {renderInput(t('Instagram Label'), 'contacto', 'contactMethods.instagram.label')}
+                {renderInput(t('Instagram @'), 'contacto', 'contactMethods.instagram.value')}
+                {renderInput(t('Descrição Instagram'), 'contacto', 'contactMethods.instagram.desc', { rows: 2 })}
+                {renderInput(t('Texto Botão Instagram'), 'contacto', 'contactMethods.instagram.btn')}
+                {renderInput(t('Link Instagram'), 'contacto', 'contactMethods.instagram.link')}
+                {renderInput(t('Horário Label'), 'contacto', 'contactMethods.hours.label')}
+                {renderInput(t('Descrição Horário'), 'contacto', 'contactMethods.hours.desc', { rows: 2 })}
+                {renderInput(t('Texto Botão Horário'), 'contacto', 'contactMethods.hours.btn')}
+                {renderInput(t('Endereço Label'), 'contacto', 'contactMethods.address.label')}
+                {renderInput(t('Descrição Endereço'), 'contacto', 'contactMethods.address.desc', { rows: 2 })}
+                {renderInput(t('Texto Botão Endereço'), 'contacto', 'contactMethods.address.btn')}
+                {renderInput(t('Link Endereço'), 'contacto', 'contactMethods.address.link')}
               </div>
             </div>
 

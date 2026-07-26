@@ -166,7 +166,7 @@ export default function LiveChatTab() {
                     </p>
                   )}
                   <p className="text-[10px] text-muted-foreground line-clamp-1">
-                    <strong className="text-accent">{chat.lastMessage.sender === 'admin' ? 'Tu: ' : 'Cliente: '}</strong>
+                    <strong className="text-accent">{chat.lastMessage.sender === 'admin' ? `${t('Tu')}: ` : `${t('Cliente')}: `}</strong>
                     {chat.lastMessage.content}
                   </p>
                 </button>

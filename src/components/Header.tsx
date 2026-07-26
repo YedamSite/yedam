@@ -10,8 +10,10 @@ import { db } from '@/lib/db';
 import AuthModal from './AuthModal';
 import { useLanguage } from '@/context/LanguageContext';
 
-const FlagES = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="Español">
+const FlagES = () => {
+  const { t } = useLanguage();
+  return (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label={t('Español')}>
     <rect width="24" height="18" fill="#C60B1E"/>
     <rect y="4" width="24" height="10" fill="#FFC400"/>
     <g transform="translate(12,9)">
@@ -20,10 +22,13 @@ const FlagES = () => (
       <rect x="-0.5" y="2" width="1" height="2" fill="#C60B1E"/>
     </g>
   </svg>
-);
+  );
+};
 
-const FlagPT = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="Português (Brasil)">
+const FlagPT = () => {
+  const { t } = useLanguage();
+  return (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label={t('Português (Brasil)')}>
     <rect width="24" height="18" fill="#009739"/>
     <polygon points="12,1 23,9 12,17 1,9" fill="#FFD700"/>
     <circle cx="12" cy="9" r="4.5" fill="#002776"/>
@@ -34,10 +39,13 @@ const FlagPT = () => (
     <circle cx="10.5" cy="9.5" r="0.3" fill="#FFFFFF"/>
     <circle cx="13.5" cy="9.5" r="0.3" fill="#FFFFFF"/>
   </svg>
-);
+  );
+};
 
-const FlagEN = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label="English">
+const FlagEN = () => {
+  const { t } = useLanguage();
+  return (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18" width="18" height="14" aria-label={t('English')}>
     <rect width="24" height="18" fill="#012169"/>
     <path d="M0,0 L24,18 M24,0 L0,18" stroke="#FFFFFF" strokeWidth="2.4"/>
     <path d="M0,0 L24,18 M24,0 L0,18" stroke="#C8102E" strokeWidth="1"/>
@@ -46,7 +54,8 @@ const FlagEN = () => (
     <rect x="10.2" width="3.6" height="18" fill="#FFFFFF"/>
     <rect x="11.1" width="1.8" height="18" fill="#C8102E"/>
   </svg>
-);
+  );
+};
 
 export default function Header() {
   const pathname = usePathname();
@@ -173,7 +182,7 @@ export default function Header() {
               data-language-selector
             >
               {locale === 'es' ? <FlagES /> : locale === 'pt' ? <FlagPT /> : <FlagEN />}
-              <span className="text-[10px] font-bold">{locale === 'es' ? 'ES' : locale === 'pt' ? 'PT' : 'EN'}</span>
+              <span className="text-[10px] font-bold">{locale === 'es' ? t('ES') : locale === 'pt' ? t('PT') : t('EN')}</span>
               <span className="text-[8px] opacity-60">▾</span>
             </button>
             
@@ -519,7 +528,7 @@ export default function Header() {
                     }`}
                   >
                     {lang === 'es' ? <FlagES /> : lang === 'pt' ? <FlagPT /> : <FlagEN />}
-                    <span>{lang === 'es' ? 'ES' : lang === 'pt' ? 'PT' : 'EN'}</span>
+                    <span>{lang === 'es' ? t('ES') : lang === 'pt' ? t('PT') : t('EN')}</span>
                   </button>
                 ))}
               </div>

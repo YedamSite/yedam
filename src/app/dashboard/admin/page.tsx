@@ -669,7 +669,7 @@ if (!authorized) {
             <Settings className="h-4 w-4 text-accent" />
           </div>
           <div>
-            <p className="text-[7px] font-bold text-accent uppercase tracking-widest leading-tight">CMS & Sales</p>
+            <p className="text-[7px] font-bold text-accent uppercase tracking-widest leading-tight">{t('CMS & Sales')}</p>
             <p className="text-sm font-bold text-white leading-tight">Cheotnun</p>
           </div>
           <button onClick={() => setSidebarOpen(false)} className="ml-auto lg:hidden text-muted-foreground hover:text-white">
@@ -680,22 +680,22 @@ if (!authorized) {
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-0.5 custom-scrollbar">
           {[
-            { id: 'dashboard', label: 'Dashboard Geral', icon: BarChart3 },
-            { id: 'clientes', label: 'Clientes & CRM', icon: Users },
-            { id: 'chat', label: 'Live Chat', icon: MessageCircle },
-            { id: 'visual', label: 'Estilo Visual', icon: Palette },
-            { id: 'builder', label: 'Page Builder (Home)', icon: Layers },
-            { id: 'sitecontent', label: 'Conteúdo do Site', icon: PenTool },
-            { id: 'categories', label: 'Categorias', icon: Grid3X3 },
-            { id: 'brands', label: 'Marcas', icon: Grid3X3 },
-            { id: 'products', label: 'CRUD Productos & Stock', icon: Database },
-            { id: 'orders', label: 'Pedidos & Invoices', icon: ShoppingCart },
-            { id: 'suscripciones', label: 'Membresías Club', icon: Sparkles },
-            { id: 'newsletter', label: 'Newsletter & Leads', icon: Mail },
-            { id: 'coupons', label: 'Cupones & Promos', icon: Tag },
-            { id: 'blog', label: 'Blog & Artículos', icon: BookOpen },
-            { id: 'shipping', label: 'Fretes e Zonas', icon: Globe },
-            { id: 'stats', label: 'Reportes Básicos', icon: TrendingUp },
+            { id: 'dashboard', label: t('Dashboard Geral'), icon: BarChart3 },
+            { id: 'clientes', label: t('Clientes & CRM'), icon: Users },
+            { id: 'chat', label: t('Live Chat'), icon: MessageCircle },
+            { id: 'visual', label: t('Estilo Visual'), icon: Palette },
+            { id: 'builder', label: t('Page Builder (Home)'), icon: Layers },
+            { id: 'sitecontent', label: t('Conteúdo do Site'), icon: PenTool },
+            { id: 'categories', label: t('Categorias'), icon: Grid3X3 },
+            { id: 'brands', label: t('Marcas'), icon: Grid3X3 },
+            { id: 'products', label: t('CRUD Productos & Stock'), icon: Database },
+            { id: 'orders', label: t('Pedidos & Invoices'), icon: ShoppingCart },
+            { id: 'suscripciones', label: t('Membresías Club'), icon: Sparkles },
+            { id: 'newsletter', label: t('Newsletter & Leads'), icon: Mail },
+            { id: 'coupons', label: t('Cupones & Promos'), icon: Tag },
+            { id: 'blog', label: t('Blog & Artículos'), icon: BookOpen },
+            { id: 'shipping', label: t('Fretes e Zonas'), icon: Globe },
+            { id: 'stats', label: t('Reportes Básicos'), icon: TrendingUp },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -735,7 +735,7 @@ if (!authorized) {
                 <Menu className="h-5 w-5" />
               </button>
               <div>
-                <span className="text-[9px] font-bold text-accent uppercase tracking-widest">Panel Administrativo</span>
+                <span className="text-[9px] font-bold text-accent uppercase tracking-widest">{t('Panel Administrativo')}</span>
                 <h1 className="font-heading text-lg md:text-xl font-light text-white">Cheotnun</h1>
               </div>
             </div>
@@ -745,7 +745,7 @@ if (!authorized) {
                   variant="outline"
                   className="border-white/10 hover:bg-white/5 text-white font-bold text-xs px-4 py-2 rounded-xl"
                 >
-                  Voltar ao Site
+                  {t('Voltar ao Site')}
                 </Button>
               </Link>
               <Button
@@ -761,7 +761,7 @@ if (!authorized) {
                 variant="outline"
                 className="border-red-500/20 hover:bg-red-500/10 text-red-400 font-bold text-xs px-4 py-2 rounded-xl"
               >
-                Sair do Painel
+                {t('Sair do Painel')}
               </Button>
             </div>
           </div>
@@ -827,8 +827,8 @@ if (!authorized) {
                           <BarChart3 className="h-8 w-8 text-accent" />
                         </div>
                         <div>
-                          <h1 className="font-heading text-2xl md:text-3xl font-light text-white uppercase tracking-wide">Dashboard Geral</h1>
-                          <p className="text-xs text-muted-foreground mt-1">Visão completa do desempenho da sua loja Cheotnun K-Beauty</p>
+                          <h1 className="font-heading text-2xl md:text-3xl font-light text-white uppercase tracking-wide">{t('Dashboard Geral')}</h1>
+                          <p className="text-xs text-muted-foreground mt-1">{t('Visão completa do desempenho da sua loja Cheotnun K-Beauty')}</p>
                         </div>
                       </div>
                     </div>
@@ -837,53 +837,53 @@ if (!authorized) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Hoje</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Faturamento Hoje')}</span>
                           <DollarSign className="h-4 w-4 text-green-400" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueToday.toFixed(2)}</h3>
                         <div className="flex items-center gap-1 mt-2">
                           <ArrowUp className="h-3 w-3 text-green-400" />
                           <span className="text-[9px] text-green-400 font-bold">{growthDaily}%</span>
-                          <span className="text-[8px] text-muted-foreground">vs. ontem</span>
+                          <span className="text-[8px] text-muted-foreground">{t('vs. ontem')}</span>
                         </div>
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Semana</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Faturamento Semana')}</span>
                           <Clock className="h-4 w-4 text-blue-400" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueWeek.toFixed(2)}</h3>
                         <div className="flex items-center gap-1 mt-2">
                           <ArrowUp className="h-3 w-3 text-green-400" />
                           <span className="text-[9px] text-green-400 font-bold">5.2%</span>
-                          <span className="text-[8px] text-muted-foreground">vs. semana anterior</span>
+                          <span className="text-[8px] text-muted-foreground">{t('vs. semana anterior')}</span>
                         </div>
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Mês</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Faturamento Mês')}</span>
                           <Calendar className="h-4 w-4 text-purple-400" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueMonth.toFixed(2)}</h3>
                         <div className="flex items-center gap-1 mt-2">
                           <ArrowUp className="h-3 w-3 text-green-400" />
                           <span className="text-[9px] text-green-400 font-bold">{growthMonthly}%</span>
-                          <span className="text-[8px] text-muted-foreground">vs. mês anterior</span>
+                          <span className="text-[8px] text-muted-foreground">{t('vs. mês anterior')}</span>
                         </div>
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Faturamento Ano</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Faturamento Ano')}</span>
                           <TrendingUp className="h-4 w-4 text-accent" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-accent">US$ {revenueYear.toFixed(2)}</h3>
                         <div className="flex items-center gap-1 mt-2">
                           <ArrowUp className="h-3 w-3 text-green-400" />
                           <span className="text-[9px] text-green-400 font-bold">15.3%</span>
-                          <span className="text-[8px] text-muted-foreground">vs. ano anterior</span>
+                          <span className="text-[8px] text-muted-foreground">{t('vs. ano anterior')}</span>
                         </div>
                       </div>
                     </div>
@@ -892,29 +892,29 @@ if (!authorized) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Total Faturado</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Total Faturado')}</span>
                           <CreditCard className="h-4 w-4 text-green-400" />
                         </div>
                         <h3 className="font-heading text-3xl font-bold text-white">US$ {revenueTotal.toFixed(2)}</h3>
-                        <p className="text-[9px] text-muted-foreground mt-2">{allOrders.length} pedidos realizados</p>
+                        <p className="text-[9px] text-muted-foreground mt-2">{allOrders.length} {t('pedidos realizados')}</p>
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Ticket Médio</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Ticket Médio')}</span>
                           <DollarSign className="h-4 w-4 text-accent" />
                         </div>
                         <h3 className="font-heading text-3xl font-bold text-white">US$ {avgTicket.toFixed(2)}</h3>
-                        <p className="text-[9px] text-muted-foreground mt-2">valor médio por pedido</p>
+                        <p className="text-[9px] text-muted-foreground mt-2">{t('valor médio por pedido')}</p>
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Produtos em Estoque</span>
+                          <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">{t('Produtos em Estoque')}</span>
                           <Package className="h-4 w-4 text-blue-400" />
                         </div>
                         <h3 className="font-heading text-3xl font-bold text-white">{totalStock} un.</h3>
-                        <p className="text-[9px] text-muted-foreground mt-2">{totalProducts} produtos cadastrados</p>
+                        <p className="text-[9px] text-muted-foreground mt-2">{totalProducts} {t('produtos cadastrados')}</p>
                       </div>
                     </div>
 
@@ -922,20 +922,20 @@ if (!authorized) {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">Status dos Pedidos</h3>
+                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">{t('Status dos Pedidos')}</h3>
                           <ShoppingCart className="h-4 w-4 text-accent" />
                         </div>
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
-                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Aguardando Confirmação</span>
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{t('Aguardando Confirmação')}</span>
                             <span className="text-sm font-bold text-accent">{pendingOrders}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
-                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Preparando Envío</span>
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{t('Preparando Envío')}</span>
                             <span className="text-sm font-bold text-blue-400">{preparingOrders}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-secondary/30 rounded-xl">
-                            <span className="text-[10px] text-muted-foreground uppercase font-bold">Enviados/Entregues</span>
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{t('Enviados/Entregues')}</span>
                             <span className="text-sm font-bold text-blue-400">{shippedOrders}</span>
                           </div>
                         </div>
@@ -943,20 +943,20 @@ if (!authorized) {
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">Alertas de Estoque</h3>
+                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">{t('Alertas de Estoque')}</h3>
                           <Shield className="h-4 w-4 text-red-400" />
                         </div>
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
-                            <span className="text-[10px] text-red-400 uppercase font-bold">Sem Estoque</span>
+                            <span className="text-[10px] text-red-400 uppercase font-bold">{t('Sem Estoque')}</span>
                             <span className="text-sm font-bold text-red-400">{outOfStockProducts}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-accent/10 border border-accent/20 rounded-xl">
-                            <span className="text-[10px] text-accent uppercase font-bold">Estoque Baixo ({'<'}20{')'}</span>
+                            <span className="text-[10px] text-accent uppercase font-bold">{t('Estoque Baixo (<20)')}</span>
                             <span className="text-sm font-bold text-accent">{lowStockProducts}</span>
                           </div>
                           <div className="flex items-center justify-between p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
-                            <span className="text-[10px] text-green-400 uppercase font-bold">Estoque Normal</span>
+                            <span className="text-[10px] text-green-400 uppercase font-bold">{t('Estoque Normal')}</span>
                             <span className="text-sm font-bold text-green-400">{totalProducts - lowStockProducts - outOfStockProducts}</span>
                           </div>
                         </div>
@@ -970,7 +970,7 @@ if (!authorized) {
                           <Users className="h-5 w-5 text-purple-400" />
                         </div>
                         <div>
-                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Inscritos Newsletter</p>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">{t('Inscritos Newsletter')}</p>
                           <p className="text-lg font-bold text-white">{allSubscribers.length}</p>
                         </div>
                       </div>
@@ -979,7 +979,7 @@ if (!authorized) {
                           <Grid3X3 className="h-5 w-5 text-blue-400" />
                         </div>
                         <div>
-                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Categorias Ativas</p>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">{t('Categorias Ativas')}</p>
                           <p className="text-lg font-bold text-white">{allCategories.length}</p>
                         </div>
                       </div>
@@ -988,7 +988,7 @@ if (!authorized) {
                           <Tag className="h-5 w-5 text-accent" />
                         </div>
                         <div>
-                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Marcas Ativas</p>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">{t('Marcas Ativas')}</p>
                           <p className="text-lg font-bold text-white">{allBrands.length}</p>
                         </div>
                       </div>
@@ -997,7 +997,7 @@ if (!authorized) {
                           <Activity className="h-5 w-5 text-green-400" />
                         </div>
                         <div>
-                          <p className="text-[9px] text-muted-foreground uppercase font-bold">Conversão</p>
+                          <p className="text-[9px] text-muted-foreground uppercase font-bold">{t('Conversão')}</p>
                           <p className="text-lg font-bold text-white">{allOrders.length > 0 ? ((allOrders.length / (allOrders.length + 50)) * 100).toFixed(1) : 0}%</p>
                         </div>
                       </div>
@@ -1007,18 +1007,18 @@ if (!authorized) {
                     {allOrders.length > 0 && (
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">Últimos Pedidos</h3>
-                          <button onClick={() => setActiveSubTab('orders')} className="text-[9px] text-accent hover:underline font-bold">VER TODOS →</button>
+                          <h3 className="text-xs font-bold text-white uppercase tracking-wider">{t('Últimos Pedidos')}</h3>
+                          <button onClick={() => setActiveSubTab('orders')} className="text-[9px] text-accent hover:underline font-bold">{t('VER TODOS →')}</button>
                         </div>
                         <div className="overflow-x-auto">
                           <table className="w-full text-xs">
                             <thead>
                               <tr className="border-b border-white/5">
-                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Pedido</th>
-                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Cliente</th>
-                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Status</th>
-                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Data</th>
-                                <th className="text-right py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">Total</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">{t('Pedido')}</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">{t('Cliente')}</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">{t('Status')}</th>
+                                <th className="text-left py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">{t('Data')}</th>
+                                <th className="text-right py-3 px-3 text-[9px] text-muted-foreground uppercase tracking-wider font-bold">{t('Total')}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -1040,11 +1040,11 @@ if (!authorized) {
                                       'bg-gray-500/10 text-gray-400 border border-gray-500/20'
                                     }`}>
                                       {({
-                                        'aguardando_confirmacao': 'Aguardando Confirmação',
-                                        'preparando_envio': 'Preparando Envío',
-                                        'enviado': 'Enviado',
-                                        'entregue': 'Entregue',
-                                        'cancelado': 'Cancelado'
+                                        'aguardando_confirmacao': t('Aguardando Confirmação'),
+                                        'preparando_envio': t('Preparando Envío'),
+                                        'enviado': t('Enviado'),
+                                        'entregue': t('Entregue'),
+                                        'cancelado': t('Cancelado')
                                       } as Record<string, string>)[order.status] || order.status}
                                     </span>
                                   </td>
@@ -1068,18 +1068,18 @@ if (!authorized) {
           {/* TAB: VISUAL STYLE */}
           {activeSubTab === 'visual' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">Colores e Identidad del E-Commerce</h2>
-              
+              <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">{t('Colores e Identidad del E-Commerce')}</h2>
+               
               {visualSaved && (
                 <div className="bg-green-50/10 border border-green-50/20 text-green-400 text-xs rounded-xl p-3.5 mb-6">
-                  ✓ ¡Cores de marca modificadas en tempo real a través de CSS variables!
+                  {t('✓ ¡Cores de marca modificadas en tempo real a través de CSS variables!')}
                 </div>
               )}
 
               <form onSubmit={handleSaveTheme} className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs text-muted-foreground">
                 <div className="flex flex-col gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-accent">Color de Fondo Primario</label>
+                    <label className="text-[10px] uppercase font-bold text-accent">{t('Color de Fondo Primario')}</label>
                     <div className="flex gap-2">
                       <Input type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
                       <Input value={bgColor} onChange={e => setBgColor(e.target.value)} />
@@ -1087,7 +1087,7 @@ if (!authorized) {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-accent">Color de Acento (Dorado/Glow)</label>
+                    <label className="text-[10px] uppercase font-bold text-accent">{t('Color de Acento (Dorado/Glow)')}</label>
                     <div className="flex gap-2">
                       <Input type="color" value={accentColor} onChange={e => setAccentColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
                       <Input value={accentColor} onChange={e => setAccentColor(e.target.value)} />
@@ -1095,7 +1095,7 @@ if (!authorized) {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-accent">Color de Cabeceras y Paneles</label>
+                    <label className="text-[10px] uppercase font-bold text-accent">{t('Color de Cabeceras y Paneles')}</label>
                     <div className="flex gap-2">
                       <Input type="color" value={primaryColor} onChange={e => setPrimaryColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
                       <Input value={primaryColor} onChange={e => setPrimaryColor(e.target.value)} />
@@ -1103,7 +1103,7 @@ if (!authorized) {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] uppercase font-bold text-accent">Color de Textos Principales</label>
+                    <label className="text-[10px] uppercase font-bold text-accent">{t('Color de Textos Principales')}</label>
                     <div className="flex gap-2">
                       <Input type="color" value={secondaryColor} onChange={e => setSecondaryColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
                       <Input value={secondaryColor} onChange={e => setSecondaryColor(e.target.value)} />
@@ -1111,17 +1111,17 @@ if (!authorized) {
                   </div>
 
                   <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-3 rounded-xl mt-4">
-                    APLICAR NUEVOS COLORES
+                    {t('APLICAR NUEVOS COLORES')}
                   </Button>
                 </div>
 
                 <div className="border border-white/5 rounded-2xl p-6 bg-secondary/20 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] uppercase font-bold tracking-widest text-accent block mb-4">MOCK-UP PREVIEW</span>
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-accent block mb-4">{t('MOCK-UP PREVIEW')}</span>
                     <div className="border border-white/10 rounded-2xl p-6 shadow-xl" style={{ backgroundColor: bgColor }}>
                       <h4 className="font-heading text-lg font-bold" style={{ color: accentColor }}>CHEOTNUN K-BEAUTY</h4>
                       <p className="text-xs leading-relaxed mt-2" style={{ color: secondaryColor }}>
-                        Demostración del contraste de colores de marca y tipografías en el e-commerce internacional.
+                        {t('Demostración del contraste de colores de marca y tipografías en el e-commerce internacional.')}
                       </p>
                     </div>
                   </div>
@@ -1133,34 +1133,33 @@ if (!authorized) {
           {/* TAB: PAGE BUILDER */}
           {activeSubTab === 'builder' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-              <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">🧱 Page Builder - Secciones de la Homepage</h2>
+              <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide border-b border-white/5 pb-4 mb-6">{t('🧱 Page Builder - Secciones de la Homepage')}</h2>
 
               {/* Explanation Card */}
               <div className="bg-accent/5 border border-accent/10 rounded-2xl p-5 md:p-6 mb-8">
                 <div className="flex items-start gap-3">
                   <Info className="h-5 w-5 text-accent shrink-0 mt-0.5" />
                   <div className="flex flex-col gap-2">
-                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider">O que é o Page Builder?</h3>
+                    <h3 className="text-xs font-bold text-accent uppercase tracking-wider">{t('O que é o Page Builder?')}</h3>
                     <p className="text-[12px] text-foreground/80 leading-relaxed">
-                      O <strong>Page Builder</strong> é a ferramenta que define <strong>quais seções aparecem</strong> na página inicial do site e <strong>em qual ordem</strong> elas são exibidas.
+                      {t('O Page Builder é a ferramenta que define quais seções aparecem na página inicial do site e em qual ordem elas são exibidas.')}
                     </p>
                     <div className="bg-background/40 border border-white/5 rounded-xl p-4 flex flex-col gap-2">
-                      <p className="text-[11px] text-foreground/70 font-bold uppercase tracking-wider text-accent">Exemplos práticos:</p>
+                      <p className="text-[11px] text-foreground/70 font-bold uppercase tracking-wider text-accent">{t('Exemplos práticos:')}</p>
                       <ul className="text-[11px] text-foreground/60 flex flex-col gap-1.5">
                         <li className="flex items-start gap-2">
                           <span className="text-green-400 mt-0.5">✓</span>
-                          <span>Se você <strong>desativar</strong> o bloco "Hero (Banner Principal)", o banner grande do topo da homepage <strong>desaparece</strong>.</span>
+                          <span>{t('Se você desativar o bloco "Hero (Banner Principal)", o banner grande do topo da homepage desaparece.')}</span>
                         </li>
                         <li className="flex items-start gap-2">
                           <span className="text-green-400 mt-0.5">✓</span>
-                          <span>Se você <strong>mover</strong> o bloco "Features" para cima, a barra de ícones (frete, pagamento seguro) aparece <strong>antes</strong> do banner.</span>
+                          <span>{t('Se você mover o bloco "Features" para cima, a barra de ícones (frete, pagamento seguro) aparece antes do banner.')}</span>
                         </li>
                       </ul>
                     </div>
                     <div className="bg-blue-500/5 border border-blue-500/10 rounded-xl p-3">
                       <p className="text-[10px] text-blue-300 leading-relaxed">
-                        💡 <strong>Dica:</strong> O Page Builder mexe apenas na <strong>estrutura</strong> (quais seções e em que ordem). 
-                        Para editar os <strong>textos, imagens e botões</strong> de cada seção, vá até a aba <strong>"Conteúdo do Site"</strong>.
+                        {t('💡 Dica: O Page Builder mexe apenas na estrutura (quais seções e em que ordem). Para editar os textos, imagens e botões de cada seção, vá até a aba "Conteúdo do Site".')}
                       </p>
                     </div>
                   </div>
@@ -1171,7 +1170,7 @@ if (!authorized) {
                 {blocks.length === 0 ? (
                   <div className="border border-dashed border-white/5 rounded-xl p-10 text-center">
                     <Layers className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
-                    <p className="text-xs text-foreground/40">Nenhum bloco encontrado. Os blocos aparecerão aqui quando forem criados no Conteúdo do Site.</p>
+                    <p className="text-xs text-foreground/40">{t('Nenhum bloco encontrado. Os blocos aparecerão aqui quando forem criados no Conteúdo do Site.')}</p>
                   </div>
                 ) : (
                   blocks.map((block, idx) => (
@@ -1189,8 +1188,8 @@ if (!authorized) {
                           {block.section_id === 'hero' ? <Eye className="h-4 w-4 text-accent" /> : <Layout className="h-4 w-4 text-accent" />}
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-white capitalize">{block.section_id === 'hero' ? 'Hero (Banner Principal)' : block.section_id} </h4>
-                          <span className="text-[9px] text-muted-foreground">Orden {idx + 1}</span>
+                          <h4 className="text-sm font-bold text-white capitalize">{block.section_id === 'hero' ? t('Hero (Banner Principal)') : block.section_id} </h4>
+                          <span className="text-[9px] text-muted-foreground">{t('Orden')} {idx + 1}</span>
                         </div>
                       </div>
 
@@ -1198,7 +1197,7 @@ if (!authorized) {
                         <span className={`text-[9px] font-bold uppercase tracking-wider transition-all ${
                           block.active ? 'text-green-400' : 'text-red-400'
                         }`}>
-                          {block.active ? 'Activo' : 'Inactivo'}
+                          {block.active ? t('Activo') : t('Inactivo')}
                         </span>
                         <button
                           onClick={() => toggleBlockActive(idx)}
@@ -1224,9 +1223,9 @@ if (!authorized) {
               {/* Product Form */}
               <div className="bg-card border border-white/5 rounded-3xl p-6 shadow-xl h-fit">
                 <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-3">
-                  <h3 className="font-heading text-xl font-light text-white">{editingProductId ? 'Editar Producto' : 'Nuevo Producto'}</h3>
+                  <h3 className="font-heading text-xl font-light text-white">{editingProductId ? t('Editar Producto') : t('Nuevo Producto')}</h3>
                   {editingProductId && (
-                    <button type="button" onClick={cancelEditProduct} className="text-[10px] text-red-400 hover:text-red-300 font-bold uppercase">✕ Cancelar</button>
+                    <button type="button" onClick={cancelEditProduct} className="text-[10px] text-red-400 hover:text-red-300 font-bold uppercase">{t('✕ Cancelar')}</button>
                   )}
                 </div>
                 <form onSubmit={handleCreateProduct} className="flex flex-col gap-4 text-xs text-muted-foreground">
@@ -1249,14 +1248,14 @@ if (!authorized) {
                   {prodActiveLang === 'es' ? (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-bold uppercase text-accent">Nombre de Producto (ES)</label>
-                        <Input required value={prodName} onChange={e => setProdName(e.target.value)} placeholder="Ej: Hydrating Emulsion" />
+                        <label className="text-[10px] font-bold uppercase text-accent">{t('Nombre de Producto (ES)')}</label>
+                        <Input required value={prodName} onChange={e => setProdName(e.target.value)} placeholder={t('Ej: Hydrating Emulsion')} />
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-bold uppercase text-accent">Nombre de Producto ({prodActiveLang.toUpperCase()})</label>
+                        <label className="text-[10px] font-bold uppercase text-accent">{t('Nombre de Producto')} ({prodActiveLang.toUpperCase()})</label>
                         <Input 
                           value={prodTranslations[prodActiveLang].name} 
                           onChange={e => setProdTranslations(prev => ({
@@ -1271,7 +1270,7 @@ if (!authorized) {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Categoría</label>
+                        <label className="text-[10px] font-bold uppercase text-accent">{t('Categoría')}</label>
                       <select
                         value={prodCategory}
                         onChange={e => setProdCategory(e.target.value)}
@@ -1283,13 +1282,13 @@ if (!authorized) {
                       </select>
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Marca</label>
+                        <label className="text-[10px] font-bold uppercase text-accent">{t('Marca')}</label>
                       <select
                         value={prodBrand}
                         onChange={e => setProdBrand(e.target.value)}
                         className="flex h-10 w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white"
                       >
-                        <option value="">Sin marca</option>
+                        <option value="">{t('Sin marca')}</option>
                         {brands.map((brand: any) => (
                           <option key={brand.id} value={brand.id}>{brand.name}</option>
                         ))}
@@ -1298,71 +1297,71 @@ if (!authorized) {
                   </div>
                   <div className="grid grid-cols-3 gap-3">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">SKU</label>
-                      <Input value={prodSku} onChange={e => setProdSku(e.target.value)} placeholder="Ej: YD-102" />
+                      <label className="text-[10px] font-bold uppercase text-accent">{t('SKU')}</label>
+                      <Input value={prodSku} onChange={e => setProdSku(e.target.value)} placeholder={t('Ej: YD-102')} />
                     </div>
                     {prodActiveLang === 'pt' ? (
                       <>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-bold uppercase text-accent">Preço (BRL)</label>
-                          <Input required type="number" step="0.01" value={prodPriceBrl || ''} onChange={e => setProdPriceBrl(Number(e.target.value))} placeholder="0.00" />
+                          <label className="text-[10px] font-bold uppercase text-accent">{t('Preço (BRL)')}</label>
+                          <Input required type="number" step="0.01" value={prodPriceBrl || ''} onChange={e => setProdPriceBrl(Number(e.target.value))} placeholder={t('0.00')} />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-bold uppercase text-accent">Preço Promocional (BRL)</label>
-                          <Input type="number" step="0.01" value={prodPricePromoBrl || ''} onChange={e => setProdPricePromoBrl(Number(e.target.value))} placeholder="0.00" />
+                          <label className="text-[10px] font-bold uppercase text-accent">{t('Preço Promocional (BRL)')}</label>
+                          <Input type="number" step="0.01" value={prodPricePromoBrl || ''} onChange={e => setProdPricePromoBrl(Number(e.target.value))} placeholder={t('0.00')} />
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-bold uppercase text-accent">Precio (USD)</label>
-                          <Input required type="number" step="0.01" value={prodPrice || ''} onChange={e => setProdPrice(Number(e.target.value))} placeholder="0.00" />
+                          <label className="text-[10px] font-bold uppercase text-accent">{t('Precio (USD)')}</label>
+                          <Input required type="number" step="0.01" value={prodPrice || ''} onChange={e => setProdPrice(Number(e.target.value))} placeholder={t('0.00')} />
                         </div>
                         <div className="flex flex-col gap-1.5">
-                          <label className="text-[10px] font-bold uppercase text-accent">Precio Promocional (USD)</label>
-                          <Input type="number" step="0.01" value={prodPricePromo || ''} onChange={e => setProdPricePromo(Number(e.target.value))} placeholder="0.00" />
+                          <label className="text-[10px] font-bold uppercase text-accent">{t('Precio Promocional (USD)')}</label>
+                          <Input type="number" step="0.01" value={prodPricePromo || ''} onChange={e => setProdPricePromo(Number(e.target.value))} placeholder={t('0.00')} />
                         </div>
                       </>
                     )}
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Stock Inicial</label>
+                      <label className="text-[10px] font-bold uppercase text-accent">{t('Stock Inicial')}</label>
                       <Input required type="number" value={prodStock} onChange={e => setProdStock(Number(e.target.value))} />
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-3">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Código HS</label>
+                      <label className="text-[10px] font-bold uppercase text-accent">{t('Código HS')}</label>
                       <Input required value={prodHsCode} onChange={e => setProdHsCode(e.target.value)} placeholder="3304.99.90" />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Peso (kg)</label>
+                      <label className="text-[10px] font-bold uppercase text-accent">{t('Peso (kg)')}</label>
                       <Input required type="number" step="0.01" value={prodWeight} onChange={e => setProdWeight(Number(e.target.value))} />
                     </div>
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-bold uppercase text-accent">Volumen</label>
-                      <Input required value={prodVolume} onChange={e => setProdVolume(e.target.value)} placeholder="150ml" />
+                      <label className="text-[10px] font-bold uppercase text-accent">{t('Volumen')}</label>
+                      <Input required value={prodVolume} onChange={e => setProdVolume(e.target.value)} placeholder={t('150ml')} />
                     </div>
                   </div>
                   <ImageUpload
                     currentUrl={prodImage}
                     onUrlChange={setProdImage}
                     folder="products"
-                    label="Imagem do Produto"
+                    label={t('Imagem do Produto')}
                   />
                   
                   {prodActiveLang === 'es' ? (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-bold uppercase text-accent">Descripción (Español)</label>
-                        <textarea value={prodDesc} onChange={e => setProdDesc(e.target.value)} placeholder="Descripción en español..." className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
+                        <label className="text-[10px] font-bold uppercase text-accent">{t('Descripción (Español)')}</label>
+                        <textarea value={prodDesc} onChange={e => setProdDesc(e.target.value)} placeholder={t('Descripción en español...')} className="flex min-h-[60px] w-full rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white" />
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[10px] font-bold uppercase text-accent">Descripción ({prodActiveLang.toUpperCase()})</label>
+                        <label className="text-[10px] font-bold uppercase text-accent">{t('Descripción')} ({prodActiveLang.toUpperCase()})</label>
                         <textarea 
                           value={prodTranslations[prodActiveLang].description} 
                           onChange={e => setProdTranslations(prev => ({
@@ -1377,14 +1376,14 @@ if (!authorized) {
                   )}
 
                   <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-2.5 rounded-xl text-xs mt-2">
-                    {editingProductId ? 'ATUALIZAR PRODUCTO' : 'CREAR PRODUCTO'}
+                    {editingProductId ? t('ATUALIZAR PRODUCTO') : t('CREAR PRODUCTO')}
                   </Button>
                 </form>
               </div>
 
               {/* Product List & Stock Adjustments */}
               <div className="lg:col-span-2 bg-card border border-white/5 rounded-3xl p-6 shadow-xl">
-                <h3 className="font-heading text-xl font-light text-white mb-6 border-b border-white/5 pb-3">Productos & Control de Inventario</h3>
+                <h3 className="font-heading text-xl font-light text-white mb-6 border-b border-white/5 pb-3">{t('Productos & Control de Inventario')}</h3>
                 <div className="flex flex-col gap-3">
                   {products.map((prod) => (
                     <div key={prod.id} className="border border-white/5 rounded-xl p-4 bg-secondary/30 flex items-center justify-between gap-4">
@@ -1426,7 +1425,7 @@ if (!authorized) {
           {activeSubTab === 'orders' && (
             <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 mb-6 gap-3">
-                <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">Pedidos ({orders.length})</h2>
+                <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">{t('Pedidos')} ({orders.length})</h2>
                 <div className="flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground">
                   <button
                     onClick={async () => {
@@ -1435,19 +1434,19 @@ if (!authorized) {
                     }}
                     className="text-[9px] font-bold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 rounded-lg px-3 h-7 transition-all"
                   >
-                    🔄 Sync
+                    {t('🔄 Sync')}
                   </button>
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent inline-block" /> Aguardando</span>
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> Preparando</span>
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> Enviado</span>
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> Entregue</span>
-                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> Cancelado</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent inline-block" /> {t('Aguardando')}</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> {t('Preparando')}</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400 inline-block" /> {t('Enviado')}</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" /> {t('Entregue')}</span>
+                  <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" /> {t('Cancelado')}</span>
                 </div>
               </div>
 
               {orders.length === 0 ? (
                 <div className="text-center text-xs text-muted-foreground py-12 border border-dashed border-white/10 rounded-2xl">
-                  Nenhum pedido registrado no sistema.
+                  {t('Nenhum pedido registrado no sistema.')}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
@@ -1486,7 +1485,7 @@ if (!authorized) {
                                 {order.created_at ? new Date(order.created_at).toLocaleDateString('pt-BR') : '-'}
                               </span>
                               <span className="font-bold text-accent font-heading">US$ {(order.total_amount || 0).toFixed(2)}</span>
-                              {isSelected && <span className="text-[8px] text-accent font-bold uppercase">✓ Selecionado</span>}
+                              {isSelected && <span className="text-[8px] text-accent font-bold uppercase">{t('✓ Selecionado')}</span>}
                             </div>
                           </div>
                         </div>
@@ -1501,7 +1500,7 @@ if (!authorized) {
                         {/* Header with actions */}
                         <div className="border border-white/5 rounded-2xl p-4 bg-secondary/20 flex items-center justify-between">
                           <div>
-                            <span className="text-[9px] text-accent font-bold uppercase tracking-wider">Pedido</span>
+                            <span className="text-[9px] text-accent font-bold uppercase tracking-wider">{t('Pedido')}</span>
                             <h3 className="font-heading text-lg font-bold text-white font-mono mt-0.5">#{selectedOrderForInvoice.id.substring(0, 8)}</h3>
                           </div>
                           <div className="flex items-center gap-2">
@@ -1517,7 +1516,7 @@ if (!authorized) {
                               className="bg-accent hover:bg-accentHover text-background font-bold text-[9px] h-7 px-3 rounded-lg"
                             >
                               <FileText className="h-3 w-3 mr-1" />
-                              INVOICE PDF
+                              {t('INVOICE PDF')}
                             </Button>
                             <Button
                               size="sm"
@@ -1542,21 +1541,21 @@ if (!authorized) {
                               className="bg-red-500/20 hover:bg-red-500/40 text-red-400 font-bold text-[9px] h-7 px-3 rounded-lg border border-red-500/20"
                             >
                               <Trash2 className="h-3 w-3 mr-1" />
-                              EXCLUIR
+                              {t('EXCLUIR')}
                             </Button>
                           </div>
                         </div>
 
                         {/* Status Management */}
                         <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-4">
-                          <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">Status & Envío</h4>
+                          <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">{t('Status & Envío')}</h4>
                           
                           <div className="bg-accent/10 border border-accent/20 rounded-xl px-4 py-3 text-[10px] text-accent leading-relaxed">
-                            ⏱ Prazo operacional: 48h úteis (até 72h em feriados coreanos). O cliente foi informado.
+                            {t('⏱ Prazo operacional: 48h úteis (até 72h em feriados coreanos). O cliente foi informado.')}
                           </div>
 
                           <div className="flex flex-col gap-1.5">
-                            <label className="text-[8px] uppercase font-bold text-muted-foreground">Alterar Status</label>
+                            <label className="text-[8px] uppercase font-bold text-muted-foreground">{t('Alterar Status')}</label>
                             <select
                               value={selectedOrderForInvoice.status}
                               onChange={(e) => {
@@ -1605,11 +1604,11 @@ if (!authorized) {
                               }}
                               className="flex h-9 w-full rounded-lg border border-white/10 bg-background px-3 py-1 text-xs text-white"
                             >
-                              <option value="aguardando_confirmacao">🕐 Aguardando Confirmação (48-72h)</option>
-                              <option value="preparando_envio">📦 Preparando para Envío</option>
-                              <option value="enviado">🚚 Enviado (Shipped)</option>
-                              <option value="entregue">✅ Entregue</option>
-                              <option value="cancelado">❌ Cancelado</option>
+                              <option value="aguardando_confirmacao">{t('🕐 Aguardando Confirmação (48-72h)')}</option>
+                              <option value="preparando_envio">{t('📦 Preparando para Envío')}</option>
+                              <option value="enviado">{t('🚚 Enviado (Shipped)')}</option>
+                              <option value="entregue">{t('✅ Entregue')}</option>
+                              <option value="cancelado">{t('❌ Cancelado')}</option>
                             </select>
                           </div>
 

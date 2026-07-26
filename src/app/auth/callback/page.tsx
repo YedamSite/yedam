@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseAuth';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function AuthCallbackPage() {
+  const { t } = useLanguage();
   const [status, setStatus] = useState<'processing' | 'success' | 'error'>('processing');
 
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function AuthCallbackPage() {
         {status === 'processing' && (
           <>
             <div className="animate-spin h-10 w-10 border-2 border-accent border-t-transparent rounded-full mx-auto mb-4" />
-            <p className="text-accent font-bold text-sm">Autenticando...</p>
+            <p className="text-accent font-bold text-sm">{t('Autenticando...')}</p>
           </>
         )}
         {status === 'success' && (
@@ -80,7 +82,7 @@ export default function AuthCallbackPage() {
             <div className="mx-auto w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mb-4">
               <svg className="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
             </div>
-            <p className="text-green-400 font-bold text-sm">Redirecionando...</p>
+            <p className="text-green-400 font-bold text-sm">{t('Redirecionando...')}</p>
           </>
         )}
         {status === 'error' && (
@@ -88,7 +90,7 @@ export default function AuthCallbackPage() {
             <div className="mx-auto w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
               <svg className="h-8 w-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </div>
-            <p className="text-red-400 font-bold text-sm">Erro ao autenticar. Redirecionando...</p>
+            <p className="text-red-400 font-bold text-sm">{t('Erro ao autenticar. Redirecionando...')}</p>
           </>
         )}
       </div>

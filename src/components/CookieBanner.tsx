@@ -189,7 +189,7 @@ export default function CookieBanner() {
                   <p className="text-xs text-foreground/70 leading-relaxed max-w-2xl">
                     {t('Utilizamos cookies propias y de terceros para mejorar tu experiencia, analizar tráfico y personalizar contenido. Al continuar navegando, aceptas nuestra')}{' '}
                     <Link href="/politica-de-privacidad" className="text-accent hover:underline">
-                      Política de Privacidad
+                      {t('Política de Privacidad')}
                     </Link>
                     .
                   </p>

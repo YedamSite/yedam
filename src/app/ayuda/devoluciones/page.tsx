@@ -79,9 +79,9 @@ export default function DevolucionesPage() {
         <section className="relative w-full min-h-[30vh] flex items-center justify-center overflow-hidden border-b border-white/5">
           <div className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-background" />
           <div className="relative z-10 text-center px-4 max-w-3xl mx-auto py-16">
-            <span className="text-[10px] font-bold text-accent tracking-[0.25em] uppercase">{badge}</span>
-            <h1 className="font-heading text-4xl md:text-5xl font-light text-white mt-4 mb-4 uppercase">{title}</h1>
-            <p className="text-sm text-foreground/60 max-w-xl mx-auto leading-relaxed">{subtitle}</p>
+            <span className="text-[10px] font-bold text-accent tracking-[0.25em] uppercase">{t(badge)}</span>
+            <h1 className="font-heading text-4xl md:text-5xl font-light text-white mt-4 mb-4 uppercase">{t(title)}</h1>
+            <p className="text-sm text-foreground/60 max-w-xl mx-auto leading-relaxed">{t(subtitle)}</p>
           </div>
         </section>
 
@@ -96,8 +96,8 @@ export default function DevolucionesPage() {
                     <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-4">
                       <Icon className="h-8 w-8 text-accent" />
                     </div>
-                    <h3 className="font-heading text-lg font-bold text-white uppercase mb-2">{item.title}</h3>
-                    <p className="text-xs text-foreground/60">{item.text}</p>
+                    <h3 className="font-heading text-lg font-bold text-white uppercase mb-2">{t(item.title)}</h3>
+                    <p className="text-xs text-foreground/60">{t(item.text)}</p>
                   </div>
                 );
               })}
@@ -106,7 +106,7 @@ export default function DevolucionesPage() {
 
           {/* Steps */}
           <div className="mb-16">
-            <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide mb-8">{sectionTitle}</h2>
+            <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide mb-8">{t(sectionTitle)}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {activeSteps.map((item: any, idx: number) => {
                 const Icon = getIcon(item.icon);
@@ -114,8 +114,8 @@ export default function DevolucionesPage() {
                   <div key={idx} className="bg-card border border-white/5 rounded-2xl p-6 relative">
                     <span className="text-5xl font-heading font-bold text-accent/10 absolute top-4 right-4">{item.step}</span>
                     <Icon className="h-8 w-8 text-accent mb-4" />
-                    <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-3">{item.title}</h3>
-                    <p className="text-xs text-foreground/60 leading-relaxed">{item.desc}</p>
+                    <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-3">{t(item.title)}</h3>
+                    <p className="text-xs text-foreground/60 leading-relaxed">{t(item.desc)}</p>
                   </div>
                 );
               })}
@@ -127,13 +127,13 @@ export default function DevolucionesPage() {
             <div className="bg-card border border-white/5 rounded-3xl p-8">
               <h3 className="font-heading text-xl font-light text-white uppercase mb-6 flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-green-400" />
-                {conditionsTitle}
+                {t(conditionsTitle)}
               </h3>
               <ul className="flex flex-col gap-3">
                 {activeConditions.map((condition: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-3 text-xs text-foreground/70">
                     <CheckCircle className="h-4 w-4 text-green-400 shrink-0 mt-0.5" />
-                    <span>{condition}</span>
+                    <span>{t(condition)}</span>
                   </li>
                 ))}
               </ul>
@@ -142,13 +142,13 @@ export default function DevolucionesPage() {
             <div className="bg-card border border-white/5 rounded-3xl p-8">
               <h3 className="font-heading text-xl font-light text-white uppercase mb-6 flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-accent" />
-                {notAcceptedTitle}
+                {t(notAcceptedTitle)}
               </h3>
               <ul className="flex flex-col gap-3">
                 {activeNotAccepted.map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-3 text-xs text-foreground/70">
                     <AlertCircle className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    <span>{item}</span>
+                    <span>{t(item)}</span>
                   </li>
                 ))}
               </ul>
@@ -157,8 +157,8 @@ export default function DevolucionesPage() {
 
           {/* Contact */}
           <div className="bg-secondary/30 border border-white/5 rounded-3xl p-8 text-center">
-            <h3 className="font-heading text-xl font-light text-white uppercase mb-3">{contactTitle}</h3>
-            <p className="text-xs text-foreground/60 mb-6 max-w-lg mx-auto">{contactText}</p>
+            <h3 className="font-heading text-xl font-light text-white uppercase mb-3">{t(contactTitle)}</h3>
+            <p className="text-xs text-foreground/60 mb-6 max-w-lg mx-auto">{t(contactText)}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-xs">
               <a href={`mailto:${contactEmail}`} className="text-accent hover:underline font-bold">
                 ✉️ {contactEmail}

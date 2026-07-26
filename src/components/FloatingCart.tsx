@@ -37,7 +37,7 @@ export default function FloatingCart() {
         <div className="absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] max-w-[300px] sm:w-72 bg-[#07101E] border border-white/10 rounded-2xl p-4 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
           <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
             <span className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Carrito')}</span>
-            <span className="text-[10px] text-muted-foreground">{totalItems} itens</span>
+            <span className="text-[10px] text-muted-foreground">{totalItems} {t('itens')}</span>
           </div>
           <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
             {cartItems.slice(0, 3).map((item: any, idx: number) => (

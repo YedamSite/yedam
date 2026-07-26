@@ -16,7 +16,7 @@ import { authService } from '@/lib/supabaseAuth';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function ClienteDashboard() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [activeTab, setActiveTab] = useState('pedidos');
   const [currentUser, setCurrentUser] = useState<any>(null);
   
@@ -330,7 +330,7 @@ export default function ClienteDashboard() {
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/5 pb-4 gap-3">
                         <div>
                           <span className="text-[10px] text-accent font-bold uppercase tracking-wider">{t('Pedido')} #{order.id.substring(0, 8)}</span>
-                          <span className="text-[10px] text-muted-foreground block mt-0.5">{t('Fecha')}: {new Date(order.created_at).toLocaleDateString('es-ES')}</span>
+                          <span className="text-[10px] text-muted-foreground block mt-0.5">{t('Fecha')}: {new Date(order.created_at).toLocaleDateString(locale === 'pt' ? 'pt-BR' : locale === 'en' ? 'en-US' : 'es-ES')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className={`text-[9px] font-bold px-3 py-1 rounded-full uppercase border ${
@@ -341,11 +341,11 @@ export default function ClienteDashboard() {
                             'bg-accent/10 text-accent border-accent/20'
                           }`}>
                             {({
-                              'aguardando_confirmacao': 'Aguardando Confirmação',
-                              'preparando_envio': 'Preparando Envío',
-                              'enviado': 'Enviado',
-                              'entregue': 'Entregue',
-                              'cancelado': 'Cancelado'
+                              'aguardando_confirmacao': t('Aguardando Confirmação'),
+                              'preparando_envio': t('Preparando Envío'),
+                              'enviado': t('Enviado'),
+                              'entregue': t('Entregue'),
+                              'cancelado': t('Cancelado')
                             } as Record<string, string>)[order.status] || order.status.replace(/_/g, ' ')}
                           </span>
                         </div>
@@ -633,7 +633,7 @@ export default function ClienteDashboard() {
                     <div key={log.id} className="border border-white/5 rounded-2xl p-4 bg-secondary/30 text-xs">
                       <div className="flex justify-between items-center text-[10px] text-accent font-bold uppercase tracking-wider mb-2">
                         <span>{t('Canal')}: {log.type}</span>
-                        <span>{new Date(log.created_at).toLocaleString('es-ES')}</span>
+                        <span>{new Date(log.created_at).toLocaleString(locale === 'pt' ? 'pt-BR' : locale === 'en' ? 'en-US' : 'es-ES')}</span>
                       </div>
                       <h4 className="font-bold text-white mb-1">{log.subject}</h4>
                       <p className="text-muted-foreground">{log.content}</p>
