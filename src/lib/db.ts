@@ -343,7 +343,7 @@ const DEFAULT_STATE: DbState = {
         hero: {
           title: 'Marcas Coreanas',
           subtitle: 'Trabajamos con las mejores marcas de Corea del Sur para ofrecerte lo mejor en cuidado de la piel.',
-          image: '/images/marcas-coreanas.webp',
+          image: '/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp',
           imageMobile: '/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp'
         },
         features: [
@@ -669,7 +669,7 @@ const DEFAULT_STATE: DbState = {
     },
     experienciasPage: {
       hero: {
-        title: 'Experiencias Yedam',
+        title: 'Experiencias Cheotnun',
         subtitle: 'Mucho mas que productos, una conexion con la cultura coreana.',
         buttonText: 'Conecta con la cultura coreana',
         image: '/images/cheotnun-k-beauty-experiencias-viagens.webp',
@@ -916,15 +916,16 @@ const DEFAULT_STATE: DbState = {
               { label: 'Perguntas Frequentes', href: '/como-funciona' },
               { label: 'Contato', href: '/contacto' }
             ]},
-          col3: { title: 'LEGAL', links: [
-              { label: 'Términos e Condições', href: '/terminos' },
-              { label: 'Política de Privacidade', href: '/politica-de-privacidad' },
-              { label: 'Política de Cookies', href: '/politica-de-privacidad' }
+          col3: { title: 'ATENDIMENTO', links: [
+              { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
+              { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
+              { label: 'Calle Gran Vía 12, Madrid, Espanha', href: '#', icon: 'MapPin' }
             ]}
         },
         marcas: {
           hero: {
-            image: '/images/marcas-hero.webp',
+            image: '/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp',
+            imageMobile: '/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp',
             title: 'Nossas Marcas',
             subtitle: 'Trabalhamos com as melhores marcas coreanas para levar até você o que há de mais autêntico e inovador em K-Beauty.'
           },
@@ -1402,15 +1403,16 @@ const DEFAULT_STATE: DbState = {
               { label: 'FAQ', href: '/como-funciona' },
               { label: 'Contact', href: '/contacto' }
             ]},
-          col3: { title: 'LEGAL', links: [
-              { label: 'Terms & Conditions', href: '/terminos' },
-              { label: 'Privacy Policy', href: '/politica-de-privacidad' },
-              { label: 'Cookie Policy', href: '/politica-de-privacidad' }
+          col3: { title: 'CUSTOMER SERVICE', links: [
+              { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
+              { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
+              { label: 'Calle Gran Vía 12, Madrid, Spain', href: '#', icon: 'MapPin' }
             ]}
         },
         marcas: {
           hero: {
-            image: '/images/marcas-hero.webp',
+            image: '/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp',
+            imageMobile: '/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp',
             title: 'Our Brands',
             subtitle: 'We work with the best Korean brands to bring you the most authentic and innovative products in K-Beauty.'
           },

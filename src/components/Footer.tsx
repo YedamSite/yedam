@@ -135,11 +135,19 @@ export default function Footer() {
           </a>
         </p>
         <p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
-        <p>
+        <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider">
+          <Link href="/terminos" className="hover:text-accent transition-colors">
+            {t('Términos y Condiciones')}
+          </Link>
+          <span className="text-white/20">|</span>
           <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
             {t('Política de Privacidad')}
           </Link>
-        </p>
+          <span className="text-white/20">|</span>
+          <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
+            {t('Política de Cookies')}
+          </Link>
+        </div>
         <p>
           {t('En colaboración con')}{' '}
           <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">

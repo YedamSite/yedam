@@ -27,6 +27,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Español': 'Español',
     'Portugués': 'Portugués',
     'Inglés': 'Inglés',
+    'Política de Cookies': 'Política de Cookies',
     // Footer
     'Todos los derechos reservados': 'Todos los derechos reservados',
     'Orgulhosamente desenvolvido por': 'Desarrollado orgullosamente por',
@@ -529,6 +530,7 @@ const translations: Record<Language, Record<string, string>> = {
     'He leído y acepto los': 'Li e aceito os',
     'Términos y Condiciones': 'Termos e Condições',
     'Política de Privacidad': 'Política de Privacidade',
+    'Política de Cookies': 'Política de Cookies',
     // Erros e Sucesso
     'Error': 'Erro',
     'Éxito': 'Sucesso',
@@ -723,6 +725,7 @@ const translations: Record<Language, Record<string, string>> = {
     'He leído y acepto los': 'I have read and accept the',
     'Términos y Condiciones': 'Terms and Conditions',
     'Política de Privacidad': 'Privacy Policy',
+    'Política de Cookies': 'Cookie Policy',
     // Erros e Sucesso
     'Error': 'Error',
     'Éxito': 'Success',
@@ -787,7 +790,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       return translations[locale][key]
     }
     // Depois tenta nas traduções adicionais
-    if (locale !== 'es' && (additionalTranslations as any)[locale]?.[key]) {
+    if ((additionalTranslations as any)[locale]?.[key]) {
       return (additionalTranslations as any)[locale][key]
     }
     // Retorna a chave original se não encontrar
