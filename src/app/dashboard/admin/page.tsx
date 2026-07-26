@@ -1111,9 +1111,37 @@ if (!authorized) {
                     </div>
                   </div>
 
-                  <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-3 rounded-xl mt-4">
-                    {t('APLICAR NUEVOS COLORES')}
-                  </Button>
+                  <div className="flex flex-col gap-2 mt-4">
+                    <Button type="submit" className="bg-accent hover:bg-accentHover text-background font-bold py-3 rounded-xl w-full">
+                      {t('APLICAR NUEVOS COLORES')}
+                    </Button>
+                    <Button 
+                      type="button" 
+                      onClick={() => {
+                        if(confirm(t('¿Restaurar los colores por defecto?'))) {
+                          setBgColor('#08152F');
+                          setAccentColor('#C9C9C9');
+                          setPrimaryColor('#08152F');
+                          setSecondaryColor('#091731');
+                          updateTheme({
+                            colors: {
+                              ...theme.colors,
+                              background: '#08152F',
+                              accent: '#C9C9C9',
+                              accentHover: '#C9C9C9',
+                              primary: '#08152F',
+                              secondary: '#091731'
+                            }
+                          });
+                          setVisualSaved(true);
+                          setTimeout(() => setVisualSaved(false), 3000);
+                        }
+                      }}
+                      className="bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold py-3 rounded-xl w-full border border-red-500/20"
+                    >
+                      {t('RESTAURAR COLORES POR DEFECTO')}
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="border border-white/5 rounded-2xl p-6 bg-secondary/20 flex flex-col justify-between">
