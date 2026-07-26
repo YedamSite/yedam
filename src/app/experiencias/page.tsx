@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -65,21 +66,23 @@ export default function ExperienciasPage() {
         {/* HERO SECTION */}
         <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image 
-              src={c?.hero?.image || "/images/cheotnun-k-beauty-experiencias-viagens.webp"} 
+            <SafeImage
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-experiencias-viagens.webp"}
               alt="Experiencias Cheotnun"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
+              fallbackSrc="/images/cheotnun-k-beauty-experiencias-viagens.webp"
             />
-            <Image 
-              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp"} 
+            <SafeImage
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp"}
               alt="Experiencias Cheotnun Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
+              fallbackSrc="/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp"
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
@@ -149,7 +152,7 @@ export default function ExperienciasPage() {
               return (
                 <div key={idx} className="flex flex-col bg-[#FDF9F4] text-[#1c2838] rounded-xl overflow-hidden shadow-lg border border-transparent">
                   <div className="relative h-36 w-full">
-                    <Image src={item.img} alt={item.title} fill className="object-cover" />
+                    <SafeImage src={item.img} alt={item.title} fill className="object-cover" />
                     <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#1c2838] text-[#FDF9F4] rounded-full flex items-center justify-center border-4 border-[#FDF9F4]">
                        <Icon className="w-5 h-5" strokeWidth={1.5} />
                     </div>
@@ -226,7 +229,7 @@ export default function ExperienciasPage() {
                  return (
                    <div key={idx} className="bg-[#FDF9F4] text-[#1c2838] rounded-xl overflow-hidden shadow-lg flex flex-col relative">
                       <div className="relative h-56 w-full">
-                        <Image src={card.img} alt={card.title} fill className="object-cover" />
+                        <SafeImage src={card.img} alt={card.title} fill className="object-cover" />
                         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-10 h-10 bg-[#FDF9F4] text-[#1c2838] rounded-full flex items-center justify-center shadow-md">
                            <Icon className="w-5 h-5" strokeWidth={1.5} />
                         </div>
@@ -288,7 +291,7 @@ export default function ExperienciasPage() {
                      </div>
                      <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full overflow-hidden relative shrink-0 border border-[#1c2838]/10">
-                           <Image src={test.img} alt={test.name} fill className="object-cover" />
+                           <SafeImage src={test.img} alt={test.name} fill className="object-cover" />
                         </div>
                         <div>
                            <h5 className="text-[11px] font-bold">{test.name}</h5>

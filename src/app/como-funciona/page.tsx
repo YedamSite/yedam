@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Link from 'next/link';
 import { 
   ShoppingBag, 
@@ -93,21 +94,23 @@ export default function ComoFuncionaPage() {
         <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image 
-              src={c?.hero?.image || "/images/cheotnun-k-beauty-como-funciona-guia.webp"} 
+            <SafeImage
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-como-funciona-guia.webp"}
               alt="Productos"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
+              fallbackSrc="/images/cheotnun-k-beauty-como-funciona-guia.webp"
             />
-            <Image 
-              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp"} 
+            <SafeImage
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp"}
               alt="Productos Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
+              fallbackSrc="/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp"
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
@@ -249,9 +252,9 @@ export default function ComoFuncionaPage() {
         <section className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 mb-16">
            <div className="bg-[#EAE4DC] text-[#1c2838] rounded-3xl p-8 lg:p-12 shadow-lg flex flex-col md:flex-row items-center gap-10 overflow-hidden relative">
               <div className="relative w-full md:w-1/3 h-[300px] rounded-2xl overflow-hidden shrink-0">
-                 <Image 
-                   src={c?.promises?.image || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600'} 
-                   alt="Productos originales"
+                 <SafeImage
+                   src={c?.promises?.image || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600'}
+                   alt="Produtos originais"
                    fill
                    className="object-cover"
                  />
@@ -331,7 +334,7 @@ export default function ComoFuncionaPage() {
                    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=300'
                  ]).map((img: string, idx: number) => (
                     <a key={idx} href={c?.community?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer" className="relative h-40 md:h-48 rounded-xl overflow-hidden group">
-                       <Image src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                       <SafeImage src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <Instagram className="w-6 h-6 text-white" />
                        </div>

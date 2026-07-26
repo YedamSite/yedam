@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Link from 'next/link';
 import { 
   MessageCircle, 
@@ -101,21 +102,23 @@ export default function ContactoPage() {
         {/* HERO SECTION */}
         <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image 
-              src={c?.hero?.image || "/images/cheotnun-k-beauty-contato-atendimento.webp"} 
+            <SafeImage
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-contato-atendimento.webp"}
               alt="Contacto"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
+              fallbackSrc="/images/cheotnun-k-beauty-contato-atendimento.webp"
             />
-            <Image 
-              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-contato-atendimento.webp"} 
+            <SafeImage
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-contato-atendimento.webp"}
               alt="Contacto Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
+              fallbackSrc="/images/mobile/cheotnun-k-beauty-contato-atendimento.webp"
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
@@ -297,7 +300,7 @@ export default function ContactoPage() {
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                   {communityImages.map((img: string, idx: number) => (
                      <a key={idx} href={c?.community?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer" className="relative h-32 md:h-40 rounded-xl overflow-hidden group">
-                        <Image src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <SafeImage src={img} alt="Instagram" fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                            <Instagram className="w-5 h-5 text-white" />
                         </div>

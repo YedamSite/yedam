@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -74,21 +75,23 @@ export default function RutinasPage() {
         {/* HERO SECTION */}
         <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image 
-              src={c?.hero?.image || "/images/cheotnun-k-beauty-rutinas-skincare.webp"} 
+            <SafeImage
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-rutinas-skincare.webp"}
               alt="Rutinas Skincare"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
+              fallbackSrc="/images/cheotnun-k-beauty-rutinas-skincare.webp"
             />
-            <Image 
-              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-rutinas-skincare.webp"} 
+            <SafeImage
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-rutinas-skincare.webp"}
               alt="Rutinas Skincare Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
+              fallbackSrc="/images/mobile/cheotnun-k-beauty-rutinas-skincare.webp"
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
@@ -311,7 +314,7 @@ export default function RutinasPage() {
               ]).map((item: any, idx: number) => (
                 <Link key={idx} href={`/tienda?search=${encodeURIComponent(item.name)}`} className="flex flex-col items-center gap-2 group cursor-pointer w-[50px]">
                   <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-[1.5px] border-white/20 group-hover:border-[#C9C9C9] transition-colors relative">
-                    <Image src={item.img} alt={item.name} fill className="object-cover" />
+                    <SafeImage src={item.img} alt={item.name} fill className="object-cover" />
                   </div>
                   <span className="text-[7px] text-white/70 text-center leading-[1.2] group-hover:text-white">{t(item.name)}</span>
                 </Link>
@@ -419,7 +422,7 @@ export default function RutinasPage() {
               <Mail className="absolute right-12 top-10 w-24 h-24 text-white/[0.03] pointer-events-none hidden lg:block z-10" strokeWidth={0.5} />
 
               <div className="absolute bottom-0 right-[5%] w-[40%] h-[90%] z-20 hidden md:block">
-                 <Image 
+                 <SafeImage
                    src={c?.newsletter?.image || "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop"}
                    alt="Newsletter Model"
                    fill

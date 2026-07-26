@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import {
   Truck,
   ShieldCheck,
@@ -93,21 +94,23 @@ export default function EnviosYPagosPage() {
         <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image 
-              src={c?.hero?.image || "/images/cheotnun-k-beauty-politica-envios.webp"} 
+            <SafeImage
+              src={c?.hero?.image || "/images/cheotnun-k-beauty-politica-envios.webp"}
               alt="Envíos"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
+              fallbackSrc="/images/cheotnun-k-beauty-politica-envios.webp"
             />
-            <Image 
-              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-politica-envios.webp"} 
+            <SafeImage
+              src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-politica-envios.webp"}
               alt="Envíos Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
+              fallbackSrc="/images/mobile/cheotnun-k-beauty-politica-envios.webp"
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}

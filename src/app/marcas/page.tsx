@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Link from 'next/link';
 import { 
   Award, 
@@ -45,21 +46,23 @@ export default function MarcasPage() {
         <section className="relative w-full max-w-full h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-center">
           {/* Background Image */}
           <div className="absolute inset-0 z-0 overflow-hidden">
-            <Image
+            <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
               alt="K-Beauty Products"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
               priority
+              fallbackSrc="/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"
             />
-            <Image
+            <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
               alt="K-Beauty Products Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
               priority
+              fallbackSrc="/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"
             />
           </div>
           {/* Overlay: stronger on mobile for text readability */}
@@ -175,7 +178,7 @@ export default function MarcasPage() {
                 </p>
               </div>
               <div className="w-full max-w-[280px] h-[350px] relative rounded-xl overflow-hidden shadow-lg z-10">
-                <Image
+                <SafeImage
                   src={c?.whyChooseUs?.image || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop"}
                   alt="K-Beauty Experience"
                   fill
