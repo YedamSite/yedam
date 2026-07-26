@@ -5,8 +5,10 @@ import { Mail, Lock, Loader2, AlertCircle, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseAuth';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function AdminLoginPage() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ export default function AdminLoginPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ type: 'admin' })
         });
-        setSuccessMsg('✓ Autenticado com sucesso! Redirecionando...');
+          setSuccessMsg(t('✓ Autenticado com sucesso! Redirecionando...'));
         setTimeout(() => {
           window.location.href = '/dashboard/admin';
         }, 1500);
@@ -56,14 +58,14 @@ export default function AdminLoginPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'admin' })
           });
-          setSuccessMsg('✓ Autenticado com sucesso! Redirecionando...');
+        setSuccessMsg(t('✓ Autenticado com sucesso! Redirecionando...'));
           setTimeout(() => {
             window.location.href = '/dashboard/admin';
           }, 1500);
         } else {
           // Signed in but not admin
           await supabase.auth.signOut();
-          throw new Error('Acesso negado. Apenas administradores podem acessar esta área.');
+          throw new Error(t('Acesso negado. Apenas administradores podem acessar esta área.'));
         }
       } else {
         // Fallback local mock authentication
@@ -74,16 +76,16 @@ export default function AdminLoginPage() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'admin' })
           });
-          setSuccessMsg('✓ Autenticado com sucesso! (Modo de Demonstração)');
+          setSuccessMsg(t('✓ Autenticado com sucesso! (Modo de Demonstração)'));
           setTimeout(() => {
             window.location.href = '/dashboard/admin';
           }, 1500);
         } else {
-          throw new Error('E-mail ou senha incorretos para o painel administrativo.');
+          throw new Error(t('E-mail ou senha incorretos para o painel administrativo.'));
         }
       }
     } catch (err: any) {
-      setErrorMsg(err.message || 'Ocorreu um erro ao efetuar login.');
+      setErrorMsg(err.message || t('Ocorreu um erro ao efetuar login.'));
     } finally {
       setLoading(false);
     }
@@ -99,10 +101,10 @@ export default function AdminLoginPage() {
             <Shield className="h-6 w-6" />
           </div>
           <span className="font-heading text-lg font-bold tracking-widest text-accent uppercase block">
-            CHEOTNUN ENTERPRISE
+            {t('CHEOTNUN ENTERPRISE')}
           </span>
           <span className="text-[10px] uppercase font-bold tracking-wider text-muted-foreground mt-1 block">
-            Painel Administrativo - Acesso Restrito
+            {t('Painel Administrativo - Acesso Restrito')}
           </span>
         </div>
 
@@ -121,7 +123,7 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4 text-xs">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] uppercase font-bold text-accent">E-mail Administrativo</label>
+            <label className="text-[9px] uppercase font-bold text-accent">{t('E-mail Administrativo')}</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-4 w-4 text-white/40" />
               <Input
@@ -136,7 +138,7 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="flex flex-col gap-1.5 font-sans">
-            <label className="text-[9px] uppercase font-bold text-accent">Senha de Acesso</label>
+            <label className="text-[9px] uppercase font-bold text-accent">{t('Senha de Acesso')}</label>
             <div className="relative">
               <Lock className="absolute left-3 top-3 h-4 w-4 text-white/40" />
               <Input
@@ -158,16 +160,16 @@ export default function AdminLoginPage() {
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Autenticando...
+                {t('Autenticando...')}
               </>
             ) : (
-              'ENTRAR NO PAINEL'
+              t('ENTRAR NO PAINEL')
             )}
           </Button>
         </form>
 
         <div className="text-center mt-6 text-[9px] text-muted-foreground">
-          © 2026 Cheotnun K-Beauty. Todos os direitos reservados.
+          © 2026 Cheotnun K-Beauty. {t('Todos os direitos reservados.')}
         </div>
       </div>
     </div>

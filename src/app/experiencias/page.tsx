@@ -67,7 +67,7 @@ export default function ExperienciasPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <Image 
               src={c?.hero?.image || "/images/cheotnun-k-beauty-experiencias-viagens.webp"} 
-              alt="Experiencias Yedam"
+              alt="Experiencias Cheotnun"
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -75,7 +75,7 @@ export default function ExperienciasPage() {
             />
             <Image 
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp"} 
-              alt="Experiencias Yedam Mobile"
+              alt="Experiencias Cheotnun Mobile"
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
@@ -88,7 +88,7 @@ export default function ExperienciasPage() {
           <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 lg:py-0 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="max-w-xl">
               <h1 className="text-5xl md:text-6xl font-heading font-light text-white mb-4">
-                {t(c?.hero?.title || 'Experiencias Yedam')}
+                {t(c?.hero?.title || 'Experiencias Cheotnun')}
               </h1>
               <h2 className="text-xl md:text-2xl text-[#C9C9C9] mb-6 font-light">
                 {t(c?.hero?.subtitle || 'Mucho más que productos, vivencias que transforman.')}
@@ -273,7 +273,7 @@ export default function ExperienciasPage() {
                      img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=150'
                    },
                    {
-                     quote: '"Maeum Global y Yedam hicieron que mi sueño de conocer Corea se volviera realidad. ¡Quiero volver pronto!"',
+                     quote: '"Maeum Global y Cheotnun hicieron que mi sueño de conocer Corea se volviera realidad. ¡Quiero volver pronto!"',
                      name: 'Valeria S.',
                      country: 'Argentina',
                      img: 'https://images.unsplash.com/photo-1558222218-b7b54eede3f3?q=80&w=150'

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Cookie, Settings, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface CookiePreferences {
   necessary: boolean;
@@ -11,6 +12,7 @@ interface CookiePreferences {
 }
 
 export default function CookieBanner() {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -81,10 +83,10 @@ export default function CookieBanner() {
                 <div>
                   <h3 className="font-heading text-lg font-bold text-white uppercase tracking-wide flex items-center gap-2">
                     <Settings className="h-5 w-5 text-accent" />
-                    Preferencias de Cookies
+                    {t('Preferencias de Cookies')}
                   </h3>
                   <p className="text-xs text-foreground/60 mt-2">
-                    Elige qué cookies deseas aceptar. Puedes cambiar tu configuración en cualquier momento.
+                    {t('Elige qué cookies deseas aceptar. Puedes cambiar tu configuración en cualquier momento.')}
                   </p>
                 </div>
                 <button
@@ -101,10 +103,10 @@ export default function CookieBanner() {
                 <div className="bg-secondary/50 border border-white/5 rounded-xl p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <CheckCircle className="h-5 w-5 text-green-400" />
-                    <span className="text-xs font-bold text-white uppercase">Necesarios</span>
+                    <span className="text-xs font-bold text-white uppercase">{t('Necesarios')}</span>
                   </div>
                   <p className="text-[10px] text-foreground/60 leading-relaxed mb-3">
-                    Esenciales para el funcionamiento del sitio. No pueden ser desactivados.
+                    {t('Esenciales para el funcionamiento del sitio. No pueden ser desactivados.')}
                   </p>
                   <div className="flex items-center gap-2">
                     <input
@@ -114,7 +116,7 @@ export default function CookieBanner() {
                       className="rounded border-white/20 bg-secondary text-accent focus:ring-accent/20"
                     />
                     <span className="text-[9px] text-muted-foreground uppercase">
-                      Siempre activo
+                      {t('Siempre activo')}
                     </span>
                   </div>
                 </div>
@@ -123,10 +125,10 @@ export default function CookieBanner() {
                 <div className="bg-secondary/50 border border-white/5 rounded-xl p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <Settings className="h-5 w-5 text-blue-400" />
-                    <span className="text-xs font-bold text-white uppercase">Analytics</span>
+                    <span className="text-xs font-bold text-white uppercase">{t('Analytics')}</span>
                   </div>
                   <p className="text-[10px] text-foreground/60 leading-relaxed mb-3">
-                    Google Analytics para entender cómo los visitantes usan el sitio.
+                    {t('Google Analytics para entender cómo los visitantes usan el sitio.')}
                   </p>
                   <div className="flex items-center gap-2">
                     <input
@@ -136,7 +138,7 @@ export default function CookieBanner() {
                       className="rounded border-white/20 bg-secondary text-accent focus:ring-accent/20"
                     />
                     <span className="text-[9px] text-muted-foreground uppercase">
-                      {preferences.analytics ? 'Activado' : 'Desactivado'}
+                      {preferences.analytics ? t('Activado') : t('Desactivado')}
                     </span>
                   </div>
                 </div>
@@ -145,10 +147,10 @@ export default function CookieBanner() {
                 <div className="bg-secondary/50 border border-white/5 rounded-xl p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <Cookie className="h-5 w-5 text-purple-400" />
-                    <span className="text-xs font-bold text-white uppercase">Marketing</span>
+                    <span className="text-xs font-bold text-white uppercase">{t('Marketing')}</span>
                   </div>
                   <p className="text-[10px] text-foreground/60 leading-relaxed mb-3">
-                    Facebook Pixel y Google Ads para anuncios personalizados.
+                    {t('Facebook Pixel y Google Ads para anuncios personalizados.')}
                   </p>
                   <div className="flex items-center gap-2">
                     <input
@@ -158,7 +160,7 @@ export default function CookieBanner() {
                       className="rounded border-white/20 bg-secondary text-accent focus:ring-accent/20"
                     />
                     <span className="text-[9px] text-muted-foreground uppercase">
-                      {preferences.marketing ? 'Activado' : 'Desactivado'}
+                      {preferences.marketing ? t('Activado') : t('Desactivado')}
                     </span>
                   </div>
                 </div>
@@ -169,7 +171,7 @@ export default function CookieBanner() {
                   onClick={handleSavePreferences}
                   className="flex-1 bg-accent hover:bg-accentHover text-background font-bold py-3 rounded-xl text-xs"
                 >
-                  GUARDAR PREFERENCIAS
+                  {t('GUARDAR PREFERENCIAS')}
                 </Button>
               </div>
             </div>
@@ -182,11 +184,10 @@ export default function CookieBanner() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <h3 className="font-heading text-base font-bold text-white uppercase tracking-wide">
-                    Usamos Cookies
+                    {t('Usamos Cookies')}
                   </h3>
                   <p className="text-xs text-foreground/70 leading-relaxed max-w-2xl">
-                    Utilizamos cookies propios y de terceros para mejorar tu experiencia, analizar tráfico y personalizar contenido. 
-                    Al continuar navegando, aceptas nuestra{' '}
+                    {t('Utilizamos cookies propias y de terceros para mejorar tu experiencia, analizar tráfico y personalizar contenido. Al continuar navegando, aceptas nuestra')}{' '}
                     <Link href="/politica-de-privacidad" className="text-accent hover:underline">
                       Política de Privacidad
                     </Link>
@@ -202,20 +203,20 @@ export default function CookieBanner() {
                   className="border-white/10 text-white hover:bg-white/5 font-bold py-3 px-6 rounded-xl text-xs whitespace-nowrap"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Personalizar
+                  {t('Personalizar')}
                 </Button>
                 <Button
                   onClick={handleRejectAll}
                   variant="outline"
                   className="border-white/10 text-white hover:bg-white/5 font-bold py-3 px-6 rounded-xl text-xs whitespace-nowrap"
                 >
-                  Rechazar Todo
+                  {t('Rechazar Todo')}
                 </Button>
                 <Button
                   onClick={handleAcceptAll}
                   className="bg-accent hover:bg-accentHover text-background font-bold py-3 px-6 rounded-xl text-xs whitespace-nowrap"
                 >
-                  Aceptar Todo
+                  {t('Aceptar Todo')}
                 </Button>
               </div>
             </div>

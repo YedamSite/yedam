@@ -147,7 +147,7 @@ export default function RutinasPage() {
           
           <div className="mt-6 flex items-center justify-center gap-2 text-[#C9C9C9]/80 text-[10px]">
              <Sparkle className="w-3.5 h-3.5 text-[#C9C9C9]" strokeWidth={1.5} />
-             {t(c?.stepsSection?.footerText || '* Clique em cada etapa para entender melhor sobre os produtos e encontrar opções disponíveis na Yedam.')}
+             {t(c?.stepsSection?.footerText || '* Clique em cada etapa para entender melhor sobre os produtos e encontrar opções disponíveis na Cheotnun.')}
           </div>
         </section>
 
@@ -362,7 +362,7 @@ export default function RutinasPage() {
               { q: 'O skincare coreano possui uma quantidade obrigatória de etapas?', a: 'Não, as rotinas podem ser adaptadas às necessidades da sua pele. As famosas "10 etapas" são apenas um guia.' },
               { q: 'Posso utilizar apenas alguns produtos?', a: 'Sim! Você pode começar com os passos básicos: limpeza, hidratação e proteção solar.' },
               { q: 'Como escolher um produto?', a: 'Sempre considere seu tipo de pele e as preocupações que deseja tratar, como acne, manchas ou ressecamento.' },
-              { q: 'A Yedam faz diagnóstico de pele?', a: 'Sim, entre em contato com nosso suporte e uma de nossas consultoras ajudará você a montar a rotina perfeita.' },
+              { q: 'A Cheotnun faz diagnóstico de pele?', a: 'Sim, entre em contato com nosso suporte e uma de nossas consultoras ajudará você a montar a rotina perfeita.' },
             ]).map((faq: any, idx: number) => (
               <div key={idx} className="border border-[#1A233A] bg-transparent rounded-sm flex flex-col h-full">
                 <button 

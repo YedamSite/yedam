@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShoppingBag, X } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function FloatingCart() {
+  const { t } = useLanguage();
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -34,7 +36,7 @@ export default function FloatingCart() {
         {/* Mini dropdown on hover/tap */}
         <div className="absolute bottom-full right-0 mb-3 w-[calc(100vw-2rem)] max-w-[300px] sm:w-72 bg-[#07101E] border border-white/10 rounded-2xl p-4 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none group-hover:pointer-events-auto">
           <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
-            <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Carrinho</span>
+            <span className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Carrito')}</span>
             <span className="text-[10px] text-muted-foreground">{totalItems} itens</span>
           </div>
           <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
@@ -48,17 +50,17 @@ export default function FloatingCart() {
             ))}
             {cartItems.length > 3 && (
               <span className="text-[10px] text-muted-foreground text-center">
-                +{cartItems.length - 3} mais itens
+                +{cartItems.length - 3} {t('mais itens')}
               </span>
             )}
           </div>
           <div className="border-t border-white/5 mt-3 pt-3 flex items-center justify-between">
-            <span className="text-[10px] font-bold text-white uppercase">Total</span>
+            <span className="text-[10px] font-bold text-white uppercase">{t('Total')}</span>
             <span className="text-xs font-bold text-accent font-heading">US$ {totalPrice.toFixed(2)}</span>
           </div>
           <Link href="/tienda/carrinho">
             <div className="w-full bg-accent hover:bg-accentHover text-background text-[10px] font-bold text-center py-2.5 rounded-xl mt-3 uppercase tracking-wider transition-all">
-              Ver Carrinho
+              {t('Ver carrito')}
             </div>
           </Link>
         </div>

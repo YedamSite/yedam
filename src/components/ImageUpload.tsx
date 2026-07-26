@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { uploadImage } from '@/lib/supabaseStorage';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ImageUploadProps {
   currentUrl: string;
@@ -19,6 +20,7 @@ export default function ImageUpload({
   label = 'Imagem',
   className = '',
 }: ImageUploadProps) {
+  const { t } = useLanguage();
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [urlInput, setUrlInput] = useState(currentUrl || '');
@@ -36,13 +38,13 @@ export default function ImageUpload({
     if (!file) return;
 
     if (file.size > 10 * 1024 * 1024) {
-      alert('A imagem deve ter no máximo 10MB.');
+      alert(t('A imagem deve ter no máximo 10MB.'));
       return;
     }
 
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!validTypes.includes(file.type)) {
-      alert('Formato não suportado. Use JPG, PNG, WebP ou GIF.');
+      alert(t('Formato não suportado. Use JPG, PNG, WebP ou GIF.'));
       return;
     }
 
@@ -115,7 +117,7 @@ export default function ImageUpload({
           className="flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[10px] font-bold text-white hover:bg-white/10 transition-all disabled:opacity-50"
         >
           <Upload className="h-3.5 w-3.5" />
-          {uploading ? 'Enviando...' : 'Upload do Computador'}
+          {uploading ? t('Enviando...') : t('Upload do Computador')}
         </button>
         <input
           ref={inputRef}
@@ -133,13 +135,13 @@ export default function ImageUpload({
             type="text"
             value={urlInput}
             onChange={e => handleUrlChange(e.target.value)}
-            placeholder="Ou cole uma URL externa..."
+            placeholder={t('Ou cole uma URL externa...')}
             className="w-full h-10 rounded-md border border-white/10 bg-background px-3 py-2 text-[11px] text-white placeholder-gray-500"
           />
         </div>
         {urlInput && (
           <button type="button" onClick={() => { navigator.clipboard.writeText(urlInput); }} className="text-[9px] text-accent hover:text-accentHover font-bold uppercase whitespace-nowrap">
-            Copiar
+            {t('Copiar')}
           </button>
         )}
       </div>
