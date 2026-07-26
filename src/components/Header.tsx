@@ -243,8 +243,8 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav Centered - Responsive Spacing & Scaling */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 px-8 lg:px-12 xl:px-16">
-            <div className="flex items-center justify-center gap-5 lg:gap-8 xl:gap-12 w-full">
+          <nav className="hidden lg:flex items-center justify-center flex-1 px-2 xl:px-8">
+            <div className="flex items-center justify-center gap-3 lg:gap-4 xl:gap-8 w-full">
               {navItems.map((item: any) => (
                 <Link
                   key={item.href + '-' + item.label}
@@ -259,7 +259,7 @@ export default function Header() {
           </nav>
 
           {/* Action Buttons - Right */}
-          <div className="hidden md:flex items-center gap-3 xl:gap-5 shrink-0">
+          <div className="hidden md:flex items-center gap-2 xl:gap-4 shrink-0">
             {/* Action Icons Group */}
             <div className="flex items-center gap-3 xl:gap-4">
               {/* Dynamic Search Bar with Autocomplete */}
@@ -406,7 +406,7 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 xl:gap-3">
+              <div className="flex items-center gap-1 xl:gap-2">
                 <button
                   onClick={() => openAuth('login')}
                   className="text-[10px] xl:text-xs font-bold uppercase tracking-wider text-foreground/80 hover:text-accent px-2.5 py-1.5 transition-all whitespace-nowrap"
@@ -415,7 +415,7 @@ export default function Header() {
                 </button>
                 <button
                   onClick={() => openAuth('register')}
-                  className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] xl:text-xs uppercase tracking-wider px-4 xl:px-5 py-2 rounded-full shadow-lg transition-all hover:scale-105 whitespace-nowrap"
+                  className="bg-accent hover:bg-accentHover text-background font-bold text-[10px] xl:text-xs uppercase tracking-wider px-3 xl:px-5 py-1.5 xl:py-2 rounded-full shadow-lg transition-all hover:scale-105 whitespace-nowrap"
                 >
                   {t('Crear Cuenta')}
                 </button>
