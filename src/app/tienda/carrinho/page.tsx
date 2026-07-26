@@ -800,12 +800,23 @@ export default function CheckoutWizard() {
                 )}
                 {step === 3 && (
                   <div className="flex flex-col gap-2">
+                    {!currentUser && (
+                      <div className="bg-accent/10 border border-accent/30 rounded-xl p-3 text-[10px] text-accent text-center leading-relaxed">
+                        {t('⚠ Você precisa estar logado para finalizar a compra.')}
+                      </div>
+                    )}
                     <Button
-                      onClick={handleCheckoutSubmit}
+                      onClick={() => {
+                        if (!currentUser) {
+                          setAuthModalOpen(true);
+                          return;
+                        }
+                        handleCheckoutSubmit();
+                      }}
                       disabled={loading || stripeLoading}
                       className="w-full bg-accent hover:bg-accentHover text-background font-bold rounded-xl flex items-center justify-center gap-2"
                     >
-                      {loading || stripeLoading ? t('Procesando...') : t('PAGAR CON STRIPE')}
+                      {loading || stripeLoading ? t('Procesando...') : !currentUser ? t('LOGIN PARA PAGAR') : t('PAGAR CON STRIPE')}
                     </Button>
                     {stripeLoading && (
                       <span className="text-[9px] text-center text-muted-foreground animate-pulse">{t('Redirigiendo a Stripe...')}</span>
