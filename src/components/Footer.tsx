@@ -127,15 +127,12 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-10 flex flex-col items-center text-center text-[10px] text-muted-foreground gap-3">
-        <p>
-          {t('Orgulhosamente desenvolvido por')}{' '}
-          <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">
-            VOLTRIS
-          </a>
+      <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-8 pb-4 flex flex-col md:flex-row flex-wrap items-center justify-between text-center md:text-left text-[10px] text-muted-foreground gap-4">
+        <p className="order-2 md:order-1">
+          &copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.
         </p>
-        <p>&copy; {new Date().getFullYear()} {t(company.name || 'CHEOTNUN K-BEAUTY')}. {t('Todos los derechos reservados')}.</p>
-        <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider">
+
+        <div className="flex flex-wrap justify-center items-center gap-3 text-[10px] uppercase tracking-wider order-1 md:order-2">
           <Link href="/terminos" className="hover:text-accent transition-colors">
             {t('Términos y Condiciones')}
           </Link>
@@ -148,13 +145,22 @@ export default function Footer() {
             {t('Política de Cookies')}
           </Link>
         </div>
-        <p>
-          {t('En colaboración con')}{' '}
-          <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
-            Maeum Global Agency
-          </a>
-          .
-        </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-4 order-3">
+          <p>
+            {t('Orgulhosamente desenvolvido por')}{' '}
+            <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">
+              VOLTRIS
+            </a>
+          </p>
+          <span className="hidden md:inline text-white/20">|</span>
+          <p>
+            {t('En colaboración con')}{' '}
+            <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
+              Maeum Global Agency
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );
