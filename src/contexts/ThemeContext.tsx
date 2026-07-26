@@ -120,18 +120,23 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
         colors: { ...prev.colors, ...newTheme.colors },
         typography: { ...prev.typography, ...newTheme.typography }
       } as ThemeSettings;
-      localStorage.setItem('cheotnun_theme', JSON.stringify(updated));
+      
+      // Defere os side-effects para fora da fase de renderização do React
+      setTimeout(() => {
+        localStorage.setItem('cheotnun_theme', JSON.stringify(updated));
 
-      const settings = db.get('system_settings');
-      settings.visual_theme = {
-        colors: updated.colors,
-        typography: updated.typography,
-        logo_url: updated.logo_url,
-        favicon_url: updated.favicon_url,
-      };
-      db.save('system_settings', settings);
+        const settings = db.get('system_settings');
+        settings.visual_theme = {
+          colors: updated.colors,
+          typography: updated.typography,
+          logo_url: updated.logo_url,
+          favicon_url: updated.favicon_url,
+        };
+        db.save('system_settings', settings);
 
-      applyTheme(updated);
+        applyTheme(updated);
+      }, 0);
+
       return updated;
     });
   };
