@@ -175,18 +175,26 @@ export default function SiteContentTab() {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parts = field.split('.');
+
+      let root = updated;
+      if (activeLang !== 'es') {
+        if (!updated.translations) updated.translations = {};
+        if (!updated.translations[activeLang]) updated.translations[activeLang] = {};
+        root = updated.translations[activeLang];
+      }
+
       if (isRootSec) {
-        if (!updated[section]) updated[section] = {};
-        let obj = updated[section];
+        if (!root[section]) root[section] = {};
+        let obj = root[section];
         for (let i = 0; i < parts.length - 1; i++) {
           if (!obj[parts[i]]) obj[parts[i]] = {};
           obj = obj[parts[i]];
         }
         obj[parts[parts.length - 1]] = value;
       } else {
-        if (!updated.home) updated.home = {};
-        if (!updated.home[section]) updated.home[section] = {};
-        let obj = updated.home[section];
+        if (!root.home) root.home = {};
+        if (!root.home[section]) root.home[section] = {};
+        let obj = root.home[section];
         for (let i = 0; i < parts.length - 1; i++) {
           if (!obj[parts[i]]) obj[parts[i]] = {};
           obj = obj[parts[i]];
@@ -201,7 +209,15 @@ export default function SiteContentTab() {
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
-      const parentObj = isRootSec ? updated : (updated.home = updated.home || {});
+      
+      let root = updated;
+      if (activeLang !== 'es') {
+        if (!updated.translations) updated.translations = {};
+        if (!updated.translations[activeLang]) updated.translations[activeLang] = {};
+        root = updated.translations[activeLang];
+      }
+
+      const parentObj = isRootSec ? root : (root.home = root.home || {});
       if (!parentObj[section]) parentObj[section] = {};
       const arrContainer = ensureNested(parentObj[section], arrayField.split('.').slice(0, -1).join('.'));
       const arrKey = arrayField.split('.').pop() || arrayField;
