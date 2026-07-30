@@ -1134,11 +1134,18 @@ export default function SiteContentTab() {
                 {renderInput(t('Link Instagram'), 'comoFunciona', 'community.buttonLink')}
               </div>
               <div className="mt-4 space-y-4">
-                <h5 className="text-[10px] font-bold text-white/70 uppercase">{t('Imagens (URLs)')}</h5>
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">{t('Imagens Instagram')}</h5>
                 {(content?.comoFunciona?.community?.images || []).map((img: string, idx: number) => (
-                  <div key={idx} className="flex gap-2 items-center">
-                    <div className="flex-1"><input value={getArrayValue('comoFunciona', 'community.images', idx, '')} onChange={e => handleArrayItemChange('comoFunciona', 'community.images', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder={t('URL da imagem')} /></div>
-                    <button onClick={() => removeArrayItem('comoFunciona', 'community.images', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <div key={idx} className="flex gap-2 items-start">
+                    <div className="flex-1">
+                      <ImageUpload
+                        currentUrl={getBaseArrayValue('comoFunciona', 'community.images', idx, '')}
+                        onUrlChange={v => handleArrayImageChange('comoFunciona', 'community.images', idx, '', v)}
+                        folder="como-funciona"
+                        label={t('Imagem') + ` ${idx + 1}`}
+                      />
+                    </div>
+                    <button onClick={() => removeArrayItem('comoFunciona', 'community.images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
                 <Button onClick={() => addArrayItem('comoFunciona', 'community.images', 'https://')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
@@ -1305,11 +1312,18 @@ export default function SiteContentTab() {
                 {renderInput('Link Instagram', 'contacto', 'community.buttonLink')}
               </div>
               <div className="mt-4 space-y-4">
-                <h5 className="text-[10px] font-bold text-white/70 uppercase">Imagens Instagram (URLs)</h5>
+                <h5 className="text-[10px] font-bold text-white/70 uppercase">Imagens Instagram</h5>
                 {(content?.contacto?.community?.images || []).map((img: string, idx: number) => (
-                  <div key={idx} className="flex gap-2 items-center">
-                    <div className="flex-1"><input value={getArrayValue('contacto', 'community.images', idx, '')} onChange={e => handleArrayItemChange('contacto', 'community.images', idx, '', e.target.value)} className="w-full bg-black/30 border border-white/10 rounded px-2 py-1 text-[10px] text-white" placeholder="URL da imagem" /></div>
-                    <button onClick={() => removeArrayItem('contacto', 'community.images', idx)} className="text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <div key={idx} className="flex gap-2 items-start">
+                    <div className="flex-1">
+                      <ImageUpload
+                        currentUrl={getBaseArrayValue('contacto', 'community.images', idx, '')}
+                        onUrlChange={v => handleArrayImageChange('contacto', 'community.images', idx, '', v)}
+                        folder="contacto"
+                        label={t('Imagem') + ` ${idx + 1}`}
+                      />
+                    </div>
+                    <button onClick={() => removeArrayItem('contacto', 'community.images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
                 <Button onClick={() => addArrayItem('contacto', 'community.images', 'https://')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
