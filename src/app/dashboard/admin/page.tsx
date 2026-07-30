@@ -2152,9 +2152,9 @@ if (!authorized) {
                               <span>📅 {post.created_at}</span>
                               <button
                                 onClick={() => handlePublishToggle(post.id, post.status)}
-                                className={`font-bold ${post.status === 'published' ? 'text-green-400' : 'text-accent'}`}
+                                className={`font-bold px-2 py-0.5 rounded-md text-[10px] transition-colors border shadow-sm ${post.status === 'published' ? 'bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20' : 'bg-accent/10 text-accent border-accent/20 hover:bg-accent/20'}`}
                               >
-                                {post.status === 'published' ? '🟢 Publicado' : '🟡 Borrador'}
+                                {post.status === 'published' ? '✓ Publicado' : '⨯ Borrador'}
                               </button>
                             </div>
                             {post.slug && (
