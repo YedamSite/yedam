@@ -2049,7 +2049,12 @@ async function tryLoadFromSupabase() {
         changed = true;
       }
     }
-    if (changed) persistToLocalStorage();
+    if (changed) {
+      persistToLocalStorage();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { source: 'supabase_sync' } }));
+      }
+    }
     await loadSettingsFromSupabase();
   } catch (e) {
     console.warn('Supabase sync unavailable, using localStorage:', e);
@@ -2084,11 +2089,18 @@ async function loadSettingsFromSupabase() {
       body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content'] }),
     });
     if (!resp.ok) return;
-    const json = await resp.json();
-    if (json.data?.visual_theme) memoryDb.system_settings.visual_theme = json.data.visual_theme;
-    if (json.data?.company_details) memoryDb.system_settings.company_details = json.data.company_details;
-    if (json.data?.seo) memoryDb.system_settings.seo = json.data.seo;
-    if (json.data?.site_content) memoryDb.site_content = deepMerge(DEFAULT_STATE.site_content, json.data.site_content);
+    let changedSettings = false;
+    if (json.data?.visual_theme) { memoryDb.system_settings.visual_theme = json.data.visual_theme; changedSettings = true; }
+    if (json.data?.company_details) { memoryDb.system_settings.company_details = json.data.company_details; changedSettings = true; }
+    if (json.data?.seo) { memoryDb.system_settings.seo = json.data.seo; changedSettings = true; }
+    if (json.data?.site_content) { memoryDb.site_content = deepMerge(DEFAULT_STATE.site_content, json.data.site_content); changedSettings = true; }
+    
+    if (changedSettings) {
+      persistToLocalStorage();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { source: 'supabase_sync_settings' } }));
+      }
+    }
   } catch {}
 }
 

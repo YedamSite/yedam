@@ -43,7 +43,7 @@ export default function RutinasPage() {
   const loadContent = () => {
     const siteContent = db.get('site_content');
     const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
-    setContent(translatedContent.rutinas || null);
+    setContent(translatedContent.rutinasPage || null);
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function RutinasPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
-  const c = content || db.get('site_content')?.rutinas || {};
+  const c = content || db.get('site_content')?.rutinasPage || {};
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
