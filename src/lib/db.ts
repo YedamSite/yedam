@@ -2089,6 +2089,7 @@ async function loadSettingsFromSupabase() {
       body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content'] }),
     });
     if (!resp.ok) return;
+    const json = await resp.json();
     let changedSettings = false;
     if (json.data?.visual_theme) { memoryDb.system_settings.visual_theme = json.data.visual_theme; changedSettings = true; }
     if (json.data?.company_details) { memoryDb.system_settings.company_details = json.data.company_details; changedSettings = true; }
