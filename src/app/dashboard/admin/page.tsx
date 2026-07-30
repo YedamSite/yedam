@@ -40,6 +40,8 @@ export default function AdminDashboard() {
   const [secondaryColor, setSecondaryColor] = useState(theme.colors.secondary);
   const [accentColor, setAccentColor] = useState(theme.colors.accent);
   const [bgColor, setBgColor] = useState(theme.colors.background);
+  const [blogHeadingColor, setBlogHeadingColor] = useState('#ffffff');
+  const [blogContentColor, setBlogContentColor] = useState('#e2e8f0');
   const [visualSaved, setVisualSaved] = useState(false);
 
   // Chat notification state
@@ -192,6 +194,12 @@ export default function AdminDashboard() {
     setBlogPosts(db.get('blog_posts') || []);
     setSubscribers(db.get('newsletter_subscribers') || []);
     setSubscriptions(db.get('subscriptions') || []);
+    
+    const siteContent = db.get('site_content') || {};
+    if (siteContent.blog) {
+      setBlogHeadingColor(siteContent.blog.headingTextColor || '#ffffff');
+      setBlogContentColor(siteContent.blog.contentTextColor || '#e2e8f0');
+    }
 
     setProdCategory(prev => {
       if (prev && cats.some((c: any) => c.id === prev)) return prev;
@@ -300,6 +308,15 @@ export default function AdminDashboard() {
         card: theme.colors.card
       }
     });
+
+    // Save blog colors to site_content
+    const siteContent = db.get('site_content') || {};
+    siteContent.blog = {
+      ...siteContent.blog,
+      headingTextColor: blogHeadingColor,
+      contentTextColor: blogContentColor
+    };
+    db.save('site_content', siteContent);
     setVisualSaved(true);
     setTimeout(() => setVisualSaved(false), 3000);
   };
@@ -1109,6 +1126,22 @@ if (!authorized) {
                     <div className="flex gap-2">
                       <Input type="color" value={secondaryColor} onChange={e => setSecondaryColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
                       <Input value={secondaryColor} onChange={e => setSecondaryColor(e.target.value)} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 border-t border-white/5 pt-4 mt-2">
+                    <label className="text-[10px] uppercase font-bold text-accent">{t('Color de Títulos del Blog')}</label>
+                    <div className="flex gap-2">
+                      <Input type="color" value={blogHeadingColor} onChange={e => setBlogHeadingColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
+                      <Input value={blogHeadingColor} onChange={e => setBlogHeadingColor(e.target.value)} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] uppercase font-bold text-accent">{t('Color de Textos del Blog')}</label>
+                    <div className="flex gap-2">
+                      <Input type="color" value={blogContentColor} onChange={e => setBlogContentColor(e.target.value)} className="w-12 h-10 p-0 border border-white/10 cursor-pointer" />
+                      <Input value={blogContentColor} onChange={e => setBlogContentColor(e.target.value)} />
                     </div>
                   </div>
 
