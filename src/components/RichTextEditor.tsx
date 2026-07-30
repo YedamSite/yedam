@@ -146,6 +146,21 @@ export default function RichTextEditor({ value, onChange, placeholder, folder = 
 
         <div className="w-px h-5 bg-white/10 mx-1" />
 
+        {/* Text Color */}
+        <label title="Cor do Texto" className="w-7 h-7 flex items-center justify-center rounded transition-colors cursor-pointer hover:bg-white/10">
+          <input 
+            type="color" 
+            className="opacity-0 w-0 h-0 absolute"
+            onChange={(e) => exec('foreColor', e.target.value)}
+          />
+          <div className="w-4 h-4 rounded border border-white/20 overflow-hidden flex flex-col items-center justify-center bg-transparent">
+             <span className="text-[10px] font-bold leading-none text-white font-serif -mt-[1px]">A</span>
+             <div className="w-full h-1 bg-gradient-to-r from-red-500 via-green-500 to-blue-500 mt-auto"></div>
+          </div>
+        </label>
+
+        <div className="w-px h-5 bg-white/10 mx-1" />
+
         {/* Lists */}
         <ToolbarButton onClick={() => exec('insertUnorderedList')} title="Lista com marcadores">
           <List className="w-3.5 h-3.5" />
