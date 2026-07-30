@@ -46,6 +46,22 @@ export default function RichTextEditor({ value, onChange, placeholder, folder = 
   const editorRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isInternalUpdate = useRef(false);
+  const savedSelection = useRef<Range | null>(null);
+
+  const saveSelection = useCallback(() => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      savedSelection.current = selection.getRangeAt(0);
+    }
+  }, []);
+
+  const restoreSelection = useCallback(() => {
+    if (savedSelection.current) {
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(savedSelection.current);
+    }
+  }, []);
 
   // Sync external value into editor (only when it changes from outside)
   useEffect(() => {
@@ -147,13 +163,20 @@ export default function RichTextEditor({ value, onChange, placeholder, folder = 
         <div className="w-px h-5 bg-white/10 mx-1" />
 
         {/* Text Color */}
-        <label title="Cor do Texto" className="w-7 h-7 flex items-center justify-center rounded transition-colors cursor-pointer hover:bg-white/10">
+        <label 
+          title="Cor do Texto" 
+          className="w-7 h-7 flex items-center justify-center rounded transition-colors cursor-pointer hover:bg-white/10"
+          onMouseDown={() => saveSelection()}
+        >
           <input 
             type="color" 
             className="opacity-0 w-0 h-0 absolute"
-            onChange={(e) => exec('foreColor', e.target.value)}
+            onChange={(e) => {
+              restoreSelection();
+              exec('foreColor', e.target.value);
+            }}
           />
-          <div className="w-4 h-4 rounded border border-white/20 overflow-hidden flex flex-col items-center justify-center bg-transparent">
+          <div className="w-4 h-4 rounded border border-white/20 overflow-hidden flex flex-col items-center justify-center bg-transparent pointer-events-none">
              <span className="text-[10px] font-bold leading-none text-white font-serif -mt-[1px]">A</span>
              <div className="w-full h-1 bg-gradient-to-r from-red-500 via-green-500 to-blue-500 mt-auto"></div>
           </div>
