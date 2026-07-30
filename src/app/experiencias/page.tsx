@@ -47,6 +47,7 @@ const BranchBlossom = ({ className }: { className?: string }) => (
 export default function ExperienciasPage() {
   const { t, locale } = useLanguage();
   const [content, setContent] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   const loadContent = () => {
     const siteContent = db.get('site_content');
@@ -56,6 +57,7 @@ export default function ExperienciasPage() {
 
   useEffect(() => {
     loadContent();
+    setMounted(true);
     window.addEventListener('cheotnun_db_change', loadContent);
     window.addEventListener('storage', loadContent);
     return () => {
@@ -70,7 +72,7 @@ export default function ExperienciasPage() {
   const IconMap: any = { FlaskConical, Award, Gift, Fan, Coffee, MapPin, Camera };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground font-sans">
+    <div className={`flex flex-col min-h-screen bg-background text-foreground font-sans transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <Header />
 
       <main className="flex-1 w-full flex flex-col items-center">

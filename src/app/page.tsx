@@ -27,6 +27,7 @@ const ICON_MAP: Record<string, React.ComponentType<any>> = {
 
 export default function Home() {
   const [content, setContent] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
   const { t, locale } = useLanguage();
   const [products, setProducts] = useState<any[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -48,6 +49,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setMounted(true);
     loadData();
     window.addEventListener('cheotnun_db_change', loadData);
     window.addEventListener('storage', loadData);
@@ -81,7 +83,7 @@ export default function Home() {
   const brandMap = Object.fromEntries(allBrands.map((b: any) => [b.id, db.getTranslatedRecord(b, locale)?.name || b.name]));
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#020617] text-white relative">
+    <div className={`flex flex-col min-h-screen bg-[#020617] text-white relative transition-opacity duration-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
       <div className="absolute top-[5%] left-[10%] w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-[40%] right-[5%] w-[600px] h-[600px] bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 

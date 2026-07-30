@@ -211,11 +211,6 @@ export default function SiteContentTab() {
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       
       let root = updated;
-      if (activeLang !== 'es') {
-        if (!updated.translations) updated.translations = {};
-        if (!updated.translations[activeLang]) updated.translations[activeLang] = {};
-        root = updated.translations[activeLang];
-      }
 
       const parentObj = isRootSec ? root : (root.home = root.home || {});
       if (!parentObj[section]) parentObj[section] = {};
