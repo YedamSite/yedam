@@ -593,6 +593,7 @@ export default function AdminDashboard() {
         seo_description: newPostSeoDesc,
         status: 'draft',
         created_at: now,
+        updated_at: new Date().toISOString(),
         translations: postTranslations
       });
     }
@@ -641,6 +642,7 @@ export default function AdminDashboard() {
     const idx = allPosts.findIndex((p: any) => p.id === id);
     if (idx !== -1) {
       allPosts[idx].status = currentStatus === 'published' ? 'draft' : 'published';
+      allPosts[idx].updated_at = new Date().toISOString();
       db.save('blog_posts', allPosts);
       setBlogPosts(db.get('blog_posts'));
     }
