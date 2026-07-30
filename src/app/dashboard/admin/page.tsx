@@ -708,14 +708,14 @@ if (!authorized) {
             { id: 'sitecontent', label: t('Conteúdo do Site'), icon: PenTool },
             { id: 'categories', label: t('Categorias'), icon: Grid3X3 },
             { id: 'brands', label: t('Marcas'), icon: Grid3X3 },
-            { id: 'products', label: t('CRUD Productos & Stock'), icon: Database },
-            { id: 'orders', label: t('Pedidos & Invoices'), icon: ShoppingCart },
-            { id: 'suscripciones', label: t('Membresías Club'), icon: Sparkles },
+            { id: 'products', label: t('Produtos & Estoque'), icon: Database },
+            { id: 'orders', label: t('Pedidos & Faturas'), icon: ShoppingCart },
+            { id: 'suscripciones', label: t('Clube de Membros'), icon: Sparkles },
             { id: 'newsletter', label: t('Newsletter & Leads'), icon: Mail },
-            { id: 'coupons', label: t('Cupones & Promos'), icon: Tag },
-            { id: 'blog', label: t('Blog & Artículos'), icon: BookOpen },
-            { id: 'shipping', label: t('Fretes e Zonas'), icon: Globe },
-            { id: 'stats', label: t('Reportes Básicos'), icon: TrendingUp },
+            { id: 'coupons', label: t('Cupons & Promoções'), icon: Tag },
+            { id: 'blog', label: t('Blog & Artigos'), icon: BookOpen },
+            { id: 'shipping', label: t('Fretes & Zonas'), icon: Globe },
+            { id: 'stats', label: t('Relatórios Básicos'), icon: TrendingUp },
           ].map((tab) => {
             const Icon = tab.icon;
             return (
