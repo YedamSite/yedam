@@ -166,6 +166,71 @@ export default function SiteContentTab() {
     });
   };
 
+  // ── Image-specific handlers ────────────────────────────────────────────────
+  // Images are always stored in the BASE (es) object, never in translations.
+  // This prevents images uploaded while PT/EN tab is active from being lost.
+
+  const handleImageChange = (section: string, field: string, value: string) => {
+    setContent((prev: any) => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+      const parts = field.split('.');
+      if (isRootSec) {
+        if (!updated[section]) updated[section] = {};
+        let obj = updated[section];
+        for (let i = 0; i < parts.length - 1; i++) {
+          if (!obj[parts[i]]) obj[parts[i]] = {};
+          obj = obj[parts[i]];
+        }
+        obj[parts[parts.length - 1]] = value;
+      } else {
+        if (!updated.home) updated.home = {};
+        if (!updated.home[section]) updated.home[section] = {};
+        let obj = updated.home[section];
+        for (let i = 0; i < parts.length - 1; i++) {
+          if (!obj[parts[i]]) obj[parts[i]] = {};
+          obj = obj[parts[i]];
+        }
+        obj[parts[parts.length - 1]] = value;
+      }
+      return updated;
+    });
+  };
+
+  const handleArrayImageChange = (section: string, arrayField: string, index: number, field: string, value: string) => {
+    setContent((prev: any) => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
+      const parentObj = isRootSec ? updated : (updated.home = updated.home || {});
+      if (!parentObj[section]) parentObj[section] = {};
+      const arrContainer = ensureNested(parentObj[section], arrayField.split('.').slice(0, -1).join('.'));
+      const arrKey = arrayField.split('.').pop() || arrayField;
+      if (!arrContainer[arrKey]) {
+        const baseParent = isRootSec ? updated : updated.home;
+        const baseArr = getNested(baseParent?.[section], arrayField) || [];
+        arrContainer[arrKey] = JSON.parse(JSON.stringify(baseArr));
+      }
+      const arr = arrContainer[arrKey];
+      if (arr) {
+        while (arr.length <= index) arr.push({});
+        if (field === '') {
+          arr[index] = value;
+        } else {
+          const parts = field.split('.');
+          let obj = arr[index];
+          if (typeof obj !== 'object' || obj === null) { arr[index] = {}; obj = arr[index]; }
+          for (let i = 0; i < parts.length - 1; i++) {
+            if (!obj[parts[i]]) obj[parts[i]] = {};
+            obj = obj[parts[i]];
+          }
+          obj[parts[parts.length - 1]] = value;
+        }
+      }
+      return updated;
+    });
+  };
+  // ─────────────────────────────────────────────────────────────────────────
+
   const addArrayItem = (section: string, arrayField: string, template: any) => {
     setContent((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
@@ -488,13 +553,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('hero', 'bgImage')}
-              onUrlChange={v => handleChange('hero', 'bgImage', v)}
+              onUrlChange={v => handleImageChange('hero', 'bgImage', v)}
               folder="hero"
               label={t('Imagem de Fundo do Hero (Desktop)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('hero', 'bgImageMobile')}
-              onUrlChange={v => handleChange('hero', 'bgImageMobile', v)}
+              onUrlChange={v => handleImageChange('hero', 'bgImageMobile', v)}
               folder="hero"
               label={t('Imagem de Fundo do Hero (Mobile)')}
             />
@@ -593,7 +658,7 @@ export default function SiteContentTab() {
                   {renderArrayInput(t('Texto'), 'experiencias', 'cards', idx, 'text', { rows: 2 })}
                   <ImageUpload
                     currentUrl={getBaseArrayValue('experiencias', 'cards', idx, 'image')}
-                    onUrlChange={v => handleArrayItemChange('experiencias', 'cards', idx, 'image', v)}
+                    onUrlChange={v => handleArrayImageChange('experiencias', 'cards', idx, 'image', v)}
                     folder="experiencias"
                     label={t('Imagem do Card')}
                   />
@@ -699,7 +764,7 @@ export default function SiteContentTab() {
                     <div className="flex-1">
                       <ImageUpload
                         currentUrl={url}
-                        onUrlChange={v => handleArrayItemChange('instagram', 'images', idx, '', v)}
+                        onUrlChange={v => handleArrayImageChange('instagram', 'images', idx, '', v)}
                         folder="instagram"
                         label={t('Imagem') + ` ${idx + 1}`}
                       />
@@ -735,7 +800,7 @@ export default function SiteContentTab() {
               {renderInput(t('Texto "Atención"'), 'header', 'attentionText')}
               <ImageUpload
                 currentUrl={getBaseValue('header', 'logoUrl')}
-                onUrlChange={v => handleChange('header', 'logoUrl', v)}
+                onUrlChange={v => handleImageChange('header', 'logoUrl', v)}
                 folder="logo"
                 label={t('Logo do Site')}
               />
@@ -795,13 +860,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('marcas', 'hero.image')}
-              onUrlChange={v => handleChange('marcas', 'hero.image', v)}
+              onUrlChange={v => handleImageChange('marcas', 'hero.image', v)}
               folder="marcas"
               label={t('Imagem Hero Desktop (Marcas)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('marcas', 'hero.imageMobile')}
-              onUrlChange={v => handleChange('marcas', 'hero.imageMobile', v)}
+              onUrlChange={v => handleImageChange('marcas', 'hero.imageMobile', v)}
               folder="marcas"
               label={t('Imagem Hero Mobile (Marcas)')}
             />
@@ -839,7 +904,7 @@ export default function SiteContentTab() {
               </div>
               <ImageUpload
                 currentUrl={getBaseValue('marcas', 'whyChooseUs.image')}
-                onUrlChange={v => handleChange('marcas', 'whyChooseUs.image', v)}
+                onUrlChange={v => handleImageChange('marcas', 'whyChooseUs.image', v)}
                 folder="marcas"
                 label={t('Imagem Why Choose Us')}
               />
@@ -890,7 +955,7 @@ export default function SiteContentTab() {
                   {renderArrayInput(t('Texto'), 'marcas', 'testimonials.list', idx, 'text', { rows: 2 })}
                   <ImageUpload
                     currentUrl={getBaseArrayValue('marcas', 'testimonials.list', idx, 'img')}
-                    onUrlChange={v => handleArrayItemChange('marcas', 'testimonials.list', idx, 'img', v)}
+                    onUrlChange={v => handleArrayImageChange('marcas', 'testimonials.list', idx, 'img', v)}
                     folder="marcas"
                     label={t('Foto do Depoimento')}
                   />
@@ -939,13 +1004,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('comoFunciona', 'hero.image')}
-              onUrlChange={v => handleChange('comoFunciona', 'hero.image', v)}
+              onUrlChange={v => handleImageChange('comoFunciona', 'hero.image', v)}
               folder="como-funciona"
               label={t('Imagem Hero Desktop (Como Funciona)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('comoFunciona', 'hero.imageMobile')}
-              onUrlChange={v => handleChange('comoFunciona', 'hero.imageMobile', v)}
+              onUrlChange={v => handleImageChange('comoFunciona', 'hero.imageMobile', v)}
               folder="como-funciona"
               label={t('Imagem Hero Mobile (Como Funciona)')}
             />
@@ -1021,7 +1086,7 @@ export default function SiteContentTab() {
                 {renderInput(t('Título'), 'comoFunciona', 'promises.title')}
                 {renderInput(t('Subtítulo'), 'comoFunciona', 'promises.subtitle', { rows: 2 })}
                 <div className="col-span-2">
-                  <ImageUpload currentUrl={getBaseValue('comoFunciona', 'promises.image')} onUrlChange={v => handleChange('comoFunciona', 'promises.image', v)} folder="como-funciona" label={t('Imagem Promessas')} />
+                  <ImageUpload currentUrl={getBaseValue('comoFunciona', 'promises.image')} onUrlChange={v => handleImageChange('comoFunciona', 'promises.image', v)} folder="como-funciona" label={t('Imagem Promessas')} />
                 </div>
               </div>
               <div className="mt-4 space-y-4">
@@ -1090,13 +1155,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('contacto', 'hero.image')}
-              onUrlChange={v => handleChange('contacto', 'hero.image', v)}
+              onUrlChange={v => handleImageChange('contacto', 'hero.image', v)}
               folder="contacto"
               label={t('Imagem Hero Desktop (Contacto)')}
             />
             <ImageUpload
               currentUrl={getBaseValue('contacto', 'hero.imageMobile')}
-              onUrlChange={v => handleChange('contacto', 'hero.imageMobile', v)}
+              onUrlChange={v => handleImageChange('contacto', 'hero.imageMobile', v)}
               folder="contacto"
               label={t('Imagem Hero Mobile (Contacto)')}
             />
@@ -1370,13 +1435,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('envios', 'hero.image')}
-              onUrlChange={v => handleChange('envios', 'hero.image', v)}
+              onUrlChange={v => handleImageChange('envios', 'hero.image', v)}
               folder="envios"
               label="Imagem Hero Desktop (Envíos)"
             />
             <ImageUpload
               currentUrl={getBaseValue('envios', 'hero.imageMobile')}
-              onUrlChange={v => handleChange('envios', 'hero.imageMobile', v)}
+              onUrlChange={v => handleImageChange('envios', 'hero.imageMobile', v)}
               folder="envios"
               label="Imagem Hero Mobile (Envíos)"
             />
@@ -1394,13 +1459,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('rutinasPage', 'hero.image')}
-              onUrlChange={v => handleChange('rutinasPage', 'hero.image', v)}
+              onUrlChange={v => handleImageChange('rutinasPage', 'hero.image', v)}
               folder="rutinas"
               label="Imagem Hero Desktop (Rutinas)"
             />
             <ImageUpload
               currentUrl={getBaseValue('rutinasPage', 'hero.imageMobile')}
-              onUrlChange={v => handleChange('rutinasPage', 'hero.imageMobile', v)}
+              onUrlChange={v => handleImageChange('rutinasPage', 'hero.imageMobile', v)}
               folder="rutinas"
               label="Imagem Hero Mobile (Rutinas)"
             />
@@ -1466,7 +1531,7 @@ export default function SiteContentTab() {
                   </div>
                   <ImageUpload
                     currentUrl={getBaseArrayValue('rutinasPage', 'ingredients', idx, 'img')}
-                    onUrlChange={v => handleArrayItemChange('rutinasPage', 'ingredients', idx, 'img', v)}
+                    onUrlChange={v => handleArrayImageChange('rutinasPage', 'ingredients', idx, 'img', v)}
                     folder="rutinas"
                     label="Imagem do Ingrediente"
                   />
@@ -1529,7 +1594,7 @@ export default function SiteContentTab() {
                   </div>
                   <ImageUpload
                     currentUrl={getBaseArrayValue('rutinasPage', 'tips', idx, 'img')}
-                    onUrlChange={v => handleArrayItemChange('rutinasPage', 'tips', idx, 'img', v)}
+                    onUrlChange={v => handleArrayImageChange('rutinasPage', 'tips', idx, 'img', v)}
                     folder="rutinas"
                     label="Imagem da Dica"
                   />
@@ -1560,7 +1625,7 @@ export default function SiteContentTab() {
                   {renderArrayInput('Nome', 'rutinasPage', 'makeup', idx, 'name')}
                   <ImageUpload
                     currentUrl={getBaseArrayValue('rutinasPage', 'makeup', idx, 'img')}
-                    onUrlChange={v => handleArrayItemChange('rutinasPage', 'makeup', idx, 'img', v)}
+                    onUrlChange={v => handleArrayImageChange('rutinasPage', 'makeup', idx, 'img', v)}
                     folder="rutinas"
                     label="Imagem da Maquiagem"
                   />
@@ -1634,7 +1699,7 @@ export default function SiteContentTab() {
               </div>
               <ImageUpload
                 currentUrl={getBaseValue('rutinasPage', 'newsletter.image')}
-                onUrlChange={v => handleChange('rutinasPage', 'newsletter.image', v)}
+                onUrlChange={v => handleImageChange('rutinasPage', 'newsletter.image', v)}
                 folder="rutinas"
                 label="Imagem da Newsletter"
               />
@@ -1654,13 +1719,13 @@ export default function SiteContentTab() {
             </div>
             <ImageUpload
               currentUrl={getBaseValue('experienciasPage', 'hero.image')}
-              onUrlChange={v => handleChange('experienciasPage', 'hero.image', v)}
+              onUrlChange={v => handleImageChange('experienciasPage', 'hero.image', v)}
               folder="experiencias"
               label="Imagem Hero Desktop (Experiencias)"
             />
             <ImageUpload
               currentUrl={getBaseValue('experienciasPage', 'hero.imageMobile')}
-              onUrlChange={v => handleChange('experienciasPage', 'hero.imageMobile', v)}
+              onUrlChange={v => handleImageChange('experienciasPage', 'hero.imageMobile', v)}
               folder="experiencias"
               label="Imagem Hero Mobile (Experiencias)"
             />
@@ -1688,7 +1753,7 @@ export default function SiteContentTab() {
                 </div>
                 <ImageUpload
                   currentUrl={getBaseArrayValue('experienciasPage', 'experiencesList', idx, 'img')}
-                  onUrlChange={v => handleArrayItemChange('experienciasPage', 'experiencesList', idx, 'img', v)}
+                  onUrlChange={v => handleArrayImageChange('experienciasPage', 'experiencesList', idx, 'img', v)}
                   folder="experiencias"
                   label="Imagem do Card"
                 />
@@ -1747,7 +1812,7 @@ export default function SiteContentTab() {
                 </div>
                 <ImageUpload
                   currentUrl={getBaseArrayValue('experienciasPage', 'maeum.cards', idx, 'img')}
-                  onUrlChange={v => handleArrayItemChange('experienciasPage', 'maeum.cards', idx, 'img', v)}
+                  onUrlChange={v => handleArrayImageChange('experienciasPage', 'maeum.cards', idx, 'img', v)}
                   folder="experiencias"
                   label="Imagem do Card"
                 />
@@ -1782,7 +1847,7 @@ export default function SiteContentTab() {
                 </div>
                 <ImageUpload
                   currentUrl={getBaseArrayValue('experienciasPage', 'testimonials.list', idx, 'img')}
-                  onUrlChange={v => handleArrayItemChange('experienciasPage', 'testimonials.list', idx, 'img', v)}
+                  onUrlChange={v => handleArrayImageChange('experienciasPage', 'testimonials.list', idx, 'img', v)}
                   folder="experiencias"
                   label="Foto do Depoimento"
                 />
@@ -1922,6 +1987,50 @@ export default function SiteContentTab() {
             <div className="grid grid-cols-2 gap-4">
               {renderInput('Título da Página', 'blog', 'pageTitle')}
               {renderInput('Subtítulo da Página', 'blog', 'pageSubtitle', { rows: 3 })}
+            </div>
+
+            <div className="border-t border-white/5 pt-4 space-y-4">
+              <h4 className="text-[10px] font-bold text-accent uppercase">Aparência dos Artigos</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold uppercase text-accent">Cor do Texto do Conteúdo</label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="color"
+                      value={content?.blog?.contentTextColor || '#e2e8f0'}
+                      onChange={e => handleImageChange('blog', 'contentTextColor', e.target.value)}
+                      className="h-10 w-12 rounded border border-white/10 bg-background cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={content?.blog?.contentTextColor || '#e2e8f0'}
+                      onChange={e => handleImageChange('blog', 'contentTextColor', e.target.value)}
+                      placeholder="#ffffff ou rgba(...)"
+                      className="flex-1 h-10 rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white placeholder-gray-500"
+                    />
+                  </div>
+                  <p className="text-[9px] text-muted-foreground">Cor do texto dos parágrafos nos artigos do blog. Padrão: #e2e8f0</p>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold uppercase text-accent">Cor dos Títulos</label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="color"
+                      value={content?.blog?.headingTextColor || '#ffffff'}
+                      onChange={e => handleImageChange('blog', 'headingTextColor', e.target.value)}
+                      className="h-10 w-12 rounded border border-white/10 bg-background cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={content?.blog?.headingTextColor || '#ffffff'}
+                      onChange={e => handleImageChange('blog', 'headingTextColor', e.target.value)}
+                      placeholder="#ffffff"
+                      className="flex-1 h-10 rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-white placeholder-gray-500"
+                    />
+                  </div>
+                  <p className="text-[9px] text-muted-foreground">Cor dos títulos H2/H3 nos artigos. Padrão: #ffffff</p>
+                </div>
+              </div>
             </div>
           </div>
         )}

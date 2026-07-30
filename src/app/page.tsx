@@ -49,6 +49,13 @@ export default function Home() {
 
   useEffect(() => {
     loadData();
+    window.addEventListener('cheotnun_db_change', loadData);
+    window.addEventListener('storage', loadData);
+    return () => {
+      window.removeEventListener('cheotnun_db_change', loadData);
+      window.removeEventListener('storage', loadData);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
   const handleToggleFavorite = async (productId: string) => {

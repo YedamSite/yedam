@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -15,6 +15,7 @@ export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<any>(null);
   const [notFoundState, setNotFoundState] = useState(false);
+  const [blogSettings, setBlogSettings] = useState<any>({});
 
   useEffect(() => {
     const posts = db.get('blog_posts') || [];
@@ -26,6 +27,10 @@ export default function BlogPostPage() {
     } else {
       setPost(translated);
     }
+
+    // Load blog appearance settings from site_content
+    const siteContent = db.get('site_content');
+    setBlogSettings(siteContent?.blog || {});
   }, [slug, locale]);
 
   useEffect(() => {
@@ -43,6 +48,10 @@ export default function BlogPostPage() {
       }
     }
   }, [post]);
+
+  // Colors from admin settings (with sensible defaults)
+  const contentColor = blogSettings?.contentTextColor || '#e2e8f0';
+  const headingColor = blogSettings?.headingTextColor || '#ffffff';
 
   if (notFoundState) {
     return (
@@ -96,9 +105,9 @@ export default function BlogPostPage() {
               <span className="text-foreground/20">·</span>
               <span className="text-foreground/40">{post.author}</span>
             </div>
-            <h1 className="font-heading text-3xl md:text-5xl font-light text-white leading-tight mb-4">{post.title}</h1>
+            <h1 className="font-heading text-3xl md:text-5xl font-light leading-tight mb-4" style={{ color: headingColor }}>{post.title}</h1>
             {post.subtitle && (
-              <p className="text-base text-foreground/60 leading-relaxed max-w-2xl">{post.subtitle}</p>
+              <p className="text-base leading-relaxed max-w-2xl" style={{ color: contentColor }}>{post.subtitle}</p>
             )}
           </header>
 
@@ -115,17 +124,25 @@ export default function BlogPostPage() {
             </div>
           )}
 
-          {/* Content */}
+          {/* Content — colors controlled by admin settings */}
+          <style>{`
+            .blog-content p, .blog-content li, .blog-content td { color: ${contentColor}; }
+            .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 { color: ${headingColor}; }
+            .blog-content strong, .blog-content b { color: ${headingColor}; font-weight: 700; }
+            .blog-content a { color: var(--color-accent); text-decoration: none; }
+            .blog-content a:hover { text-decoration: underline; }
+            .blog-content h2 { font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .blog-content h3 { font-size: 1.125rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+            .blog-content p { line-height: 1.75; margin-bottom: 1.25rem; }
+            .blog-content ul, .blog-content ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+            .blog-content li { margin-bottom: 0.5rem; line-height: 1.7; }
+            .blog-content img { border-radius: 1rem; margin: 2rem 0; max-width: 100%; }
+            .blog-content blockquote { border-left: 3px solid var(--color-accent); padding-left: 1rem; margin: 1.5rem 0; opacity: 0.8; }
+            .blog-content code { background: rgba(255,255,255,0.08); padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.875em; }
+            .blog-content pre { background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.75rem; overflow-x: auto; margin: 1.5rem 0; }
+          `}</style>
           <div
-            className="prose prose-invert prose-sm md:prose-base max-w-none
-              prose-headings:font-heading prose-headings:font-light prose-headings:text-white
-              prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-white/5 prose-h2:pb-3
-              prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3
-              prose-p:text-foreground/70 prose-p:leading-relaxed prose-p:mb-5
-              prose-strong:text-white prose-strong:font-bold
-              prose-a:text-accent prose-a:no-underline hover:prose-a:underline
-              prose-li:text-foreground/70
-              prose-img:rounded-2xl prose-img:my-8"
+            className="blog-content font-sans"
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }}
           />
 

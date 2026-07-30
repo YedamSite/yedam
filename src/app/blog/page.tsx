@@ -14,8 +14,7 @@ export default function BlogPage() {
   const [pageTitle, setPageTitle] = useState('Blog Cheotnun K-Beauty');
   const [pageSubtitle, setPageSubtitle] = useState('Artículos, guías y secretos del skincare coreano.');
 
-  useEffect(() => {
-    // Read from db inside useEffect so localStorage is available
+  const loadContent = () => {
     const rawPosts = (db.get('blog_posts') || []).filter((p: any) => p.status === 'published');
     const translated = rawPosts.map((p: any) => db.getTranslatedRecord(p, locale));
     setPosts(translated);
@@ -24,6 +23,17 @@ export default function BlogPage() {
     const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
     setPageTitle(translatedContent.blog?.pageTitle || 'Blog Cheotnun K-Beauty');
     setPageSubtitle(translatedContent.blog?.pageSubtitle || 'Artículos, guías y secretos del skincare coreano.');
+  };
+
+  useEffect(() => {
+    loadContent();
+    window.addEventListener('cheotnun_db_change', loadContent);
+    window.addEventListener('storage', loadContent);
+    return () => {
+      window.removeEventListener('cheotnun_db_change', loadContent);
+      window.removeEventListener('storage', loadContent);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
   useEffect(() => {

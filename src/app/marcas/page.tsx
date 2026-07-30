@@ -28,10 +28,21 @@ export default function MarcasPage() {
   const { t, locale } = useLanguage();
   const [content, setContent] = useState<any>(null);
 
-  useEffect(() => {
+  const loadContent = () => {
     const siteContent = db.get('site_content');
     const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
     setContent(translatedContent.marcas || null);
+  };
+
+  useEffect(() => {
+    loadContent();
+    window.addEventListener('cheotnun_db_change', loadContent);
+    window.addEventListener('storage', loadContent);
+    return () => {
+      window.removeEventListener('cheotnun_db_change', loadContent);
+      window.removeEventListener('storage', loadContent);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
   const c = content || db.get('site_content')?.marcas || {};
