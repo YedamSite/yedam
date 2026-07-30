@@ -172,7 +172,9 @@ export default function RichTextEditor({ value, onChange, placeholder, folder = 
             type="color" 
             className="opacity-0 w-0 h-0 absolute"
             onChange={(e) => {
+              editorRef.current?.focus();
               restoreSelection();
+              document.execCommand('styleWithCSS', false, 'true');
               exec('foreColor', e.target.value);
             }}
           />
