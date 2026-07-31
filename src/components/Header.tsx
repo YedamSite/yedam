@@ -182,7 +182,7 @@ export default function Header() {
               data-language-selector
             >
               {locale === 'es' ? <FlagES /> : locale === 'pt' ? <FlagPT /> : <FlagEN />}
-              <span className="text-[10px] font-bold">{locale === 'es' ? t('ES') : locale === 'pt' ? t('PT') : t('EN')}</span>
+              <span className="text-[10px] font-bold">{locale === 'es' ? 'ES' : locale === 'pt' ? 'PT' : 'EN'}</span>
               <span className="text-[8px] opacity-60">▾</span>
             </button>
             
@@ -528,7 +528,7 @@ export default function Header() {
                     }`}
                   >
                     {lang === 'es' ? <FlagES /> : lang === 'pt' ? <FlagPT /> : <FlagEN />}
-                    <span>{lang === 'es' ? t('ES') : lang === 'pt' ? t('PT') : t('EN')}</span>
+                    <span>{lang === 'es' ? 'ES' : lang === 'pt' ? 'PT' : 'EN'}</span>
                   </button>
                 ))}
               </div>
