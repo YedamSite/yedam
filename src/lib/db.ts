@@ -2233,7 +2233,7 @@ export function mergeTranslations(base: any, translation: any): any {
   if (!translation) return base;
   const result = { ...base };
   for (const key in translation) {
-    if (['img', 'image', 'icon'].includes(key)) {
+    if (['img', 'image', 'imageMobile', 'icon', 'images', 'bgImage', 'bgImageMobile', 'logoUrl', 'logo_url', 'flagUrl'].includes(key)) {
       continue; // Always force base images and icons, ignore translations
     }
     
