@@ -2233,6 +2233,10 @@ export function mergeTranslations(base: any, translation: any): any {
   if (!translation) return base;
   const result = { ...base };
   for (const key in translation) {
+    if (['img', 'image', 'icon'].includes(key)) {
+      continue; // Always force base images and icons, ignore translations
+    }
+    
     if (translation[key] && typeof translation[key] === 'object' && !Array.isArray(translation[key])) {
       result[key] = mergeTranslations(base[key], translation[key]);
     } else if (Array.isArray(translation[key]) && Array.isArray(base[key])) {
