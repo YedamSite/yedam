@@ -176,12 +176,8 @@ export default function SiteContentTab() {
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parts = field.split('.');
 
+      // ALWAYS save images to the base root object
       let root = updated;
-      if (activeLang !== 'es') {
-        if (!updated.translations) updated.translations = {};
-        if (!updated.translations[activeLang]) updated.translations[activeLang] = {};
-        root = updated.translations[activeLang];
-      }
 
       if (isRootSec) {
         if (!root[section]) root[section] = {};
@@ -235,6 +231,35 @@ export default function SiteContentTab() {
             obj = obj[parts[i]];
           }
           obj[parts[parts.length - 1]] = value;
+        }
+        // Clear from translations so base array image is used
+        if (updated.translations) {
+          Object.keys(updated.translations).forEach(lang => {
+            let tRoot = updated.translations[lang];
+            let tObj = isRootSec ? tRoot[section] : tRoot.home?.[section];
+            if (tObj) {
+              const tArrContainer = getNested(tObj, arrayField.split('.').slice(0, -1).join('.'));
+              const tArrKey = arrayField.split('.').pop() || arrayField;
+              const tArr = tArrContainer?.[tArrKey];
+              if (Array.isArray(tArr) && tArr.length > index) {
+                if (field === '') {
+                  tArr[index] = '';
+                } else {
+                  let obj = tArr[index];
+                  if (obj && typeof obj === 'object') {
+                    const parts = field.split('.');
+                    for (let i = 0; i < parts.length - 1; i++) {
+                      if (!obj[parts[i]]) return;
+                      obj = obj[parts[i]];
+                    }
+                    if (obj[parts[parts.length - 1]] !== undefined) {
+                      obj[parts[parts.length - 1]] = '';
+                    }
+                  }
+                }
+              }
+            }
+          });
         }
       }
       return updated;

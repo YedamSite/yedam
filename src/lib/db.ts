@@ -2237,16 +2237,18 @@ export function mergeTranslations(base: any, translation: any): any {
       result[key] = mergeTranslations(base[key], translation[key]);
     } else if (Array.isArray(translation[key]) && Array.isArray(base[key])) {
       result[key] = base[key].map((item: any, index: number) => {
-        if (translation[key][index]) {
+        if (translation[key][index] !== undefined) {
           if (typeof item === 'object' && typeof translation[key][index] === 'object') {
             return mergeTranslations(item, translation[key][index]);
           }
-          return translation[key][index];
+          return translation[key][index] !== '' ? translation[key][index] : item;
         }
         return item;
       });
     } else {
-      result[key] = translation[key];
+      if (translation[key] !== undefined && translation[key] !== '') {
+        result[key] = translation[key];
+      }
     }
   }
   return result;
