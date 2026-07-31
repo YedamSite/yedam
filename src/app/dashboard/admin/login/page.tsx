@@ -24,65 +24,51 @@ export default function AdminLoginPage() {
     try {
       const cleanEmail = email.trim().toLowerCase();
 
-      // Master bypass for local testing
-      if (cleanEmail === 'mauemglobal@gmail.com' && password === 'Ja@que12') {
-        await fetch('/api/auth/cookie', {
+      if (!supabase) {
+        throw new Error(t('Erro de configuração: Supabase não conectado.'));
+      }
+
+      // Attempt login using Supabase Auth
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password: password,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data.session) {
+        throw new Error(t('Sessão não iniciada.'));
+      }
+
+      // Validate if logged-in user is an admin
+      const adminEmails = ['admin@cheotnun.com', 'mauemglobal@gmail.com'];
+      if (data.user && data.user.email && adminEmails.includes(data.user.email)) {
+        // Success: request secure cookie
+        const response = await fetch('/api/auth/cookie', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'admin' })
+          body: JSON.stringify({ 
+            type: 'admin',
+            access_token: data.session.access_token 
+          })
         });
-          setSuccessMsg(t('✓ Autenticado com sucesso! Redirecionando...'));
+
+        if (!response.ok) {
+          const resError = await response.json();
+          await supabase.auth.signOut();
+          throw new Error(resError.error || t('Falha ao gerar cookie administrativo.'));
+        }
+
+        setSuccessMsg(t('✓ Autenticado com sucesso! Redirecionando...'));
         setTimeout(() => {
           window.location.href = '/dashboard/admin';
         }, 1500);
-        return;
-      }
-
-      if (supabase) {
-        // Attempt login using Supabase Auth
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: cleanEmail,
-          password: password,
-        });
-
-        if (error) {
-          throw error;
-        }
-
-        // Validate if logged-in user is an admin
-        const adminEmails = ['admin@cheotnun.com', 'mauemglobal@gmail.com'];
-        if (data.user && data.user.email && adminEmails.includes(data.user.email)) {
-          // Success
-          await fetch('/api/auth/cookie', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'admin' })
-          });
-        setSuccessMsg(t('✓ Autenticado com sucesso! Redirecionando...'));
-          setTimeout(() => {
-            window.location.href = '/dashboard/admin';
-          }, 1500);
-        } else {
-          // Signed in but not admin
-          await supabase.auth.signOut();
-          throw new Error(t('Acesso negado. Apenas administradores podem acessar esta área.'));
-        }
       } else {
-        // Fallback local mock authentication
-        if ((cleanEmail === 'admin@cheotnun.com' && password === 'admin123') || 
-            (cleanEmail === 'mauemglobal@gmail.com' && password === 'Ja@que12')) {
-          await fetch('/api/auth/cookie', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'admin' })
-          });
-          setSuccessMsg(t('✓ Autenticado com sucesso! (Modo de Demonstração)'));
-          setTimeout(() => {
-            window.location.href = '/dashboard/admin';
-          }, 1500);
-        } else {
-          throw new Error(t('E-mail ou senha incorretos para o painel administrativo.'));
-        }
+        // Signed in but not admin
+        await supabase.auth.signOut();
+        throw new Error(t('Acesso negado. Apenas administradores podem acessar esta área.'));
       }
     } catch (err: any) {
       setErrorMsg(err.message || t('Ocorreu um erro ao efetuar login.'));

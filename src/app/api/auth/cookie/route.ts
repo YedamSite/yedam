@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
   try {
-    const { type, value } = await req.json();
+    const { type, value, access_token } = await req.json();
     
     if (!type) {
       return NextResponse.json({ error: 'Missing cookie type' }, { status: 400 });
@@ -18,6 +18,33 @@ export async function POST(req: NextRequest) {
     };
 
     if (type === 'admin') {
+      if (!access_token) {
+        return NextResponse.json({ error: 'Unauthorized: missing token' }, { status: 401 });
+      }
+
+      // Initialize Supabase client
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseAnonKey) {
+        return NextResponse.json({ error: 'Supabase configuration missing' }, { status: 500 });
+      }
+      
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+      // Verify the JWT token
+      const { data: { user }, error } = await supabase.auth.getUser(access_token);
+      
+      if (error || !user) {
+        return NextResponse.json({ error: 'Unauthorized: invalid token' }, { status: 401 });
+      }
+
+      const adminEmails = ['admin@cheotnun.com', 'mauemglobal@gmail.com'];
+      if (!user.email || !adminEmails.includes(user.email)) {
+        return NextResponse.json({ error: 'Forbidden: not an admin' }, { status: 403 });
+      }
+
       // Set admin session cookie
       cookieStore.set('cheotnun_admin_session', 'true', {
         ...cookieOptions,
