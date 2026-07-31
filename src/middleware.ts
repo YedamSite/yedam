@@ -15,6 +15,11 @@ export function middleware(request: NextRequest) {
     const sessionCookie = request.cookies.get('cheotnun_session');
     const adminCookie = request.cookies.get('cheotnun_admin_session');
 
+    // Se estiver tentando acessar o painel admin e tiver o cookie de admin, permite imediatamente
+    if (path.startsWith('/dashboard/admin') && adminCookie) {
+      return NextResponse.next();
+    }
+
     // Se não houver sessão, redirecionar para login
     if (!sessionCookie) {
       if (path.startsWith('/dashboard/admin')) {
