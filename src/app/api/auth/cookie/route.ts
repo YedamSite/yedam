@@ -46,20 +46,22 @@ export async function POST(req: NextRequest) {
       }
 
       // Set admin session cookie
-      cookieStore.set('cheotnun_admin_session', 'true', {
+      const response = NextResponse.json({ success: true });
+      response.cookies.set('cheotnun_admin_session', 'true', {
         ...cookieOptions,
         maxAge: 7200, // 2 hours
       });
-      return NextResponse.json({ success: true });
+      return response;
     } 
     
     if (type === 'client') {
       // Set client session cookie
-      cookieStore.set('cheotnun_session', encodeURIComponent(JSON.stringify(value)), {
+      const response = NextResponse.json({ success: true });
+      response.cookies.set('cheotnun_session', encodeURIComponent(JSON.stringify(value)), {
         ...cookieOptions,
         maxAge: 86400, // 24 hours
       });
-      return NextResponse.json({ success: true });
+      return response;
     }
 
     return NextResponse.json({ error: 'Invalid cookie type' }, { status: 400 });
