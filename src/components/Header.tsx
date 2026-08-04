@@ -174,7 +174,7 @@ export default function Header() {
         <div className="leading-relaxed">{t(headerContent.announcementText || 'Belleza que nace de la tradición. Cosmética que transforma.')}</div>
         <div className="hidden md:flex items-center gap-6 relative">
           <div>{t(headerContent.shippingText || 'Envíos para toda América Latina')}</div>
-          <div>{t('Atención')}</div>
+          <div>{t(headerContent.attentionText || 'Atención')}</div>
           <div className="relative">
             <button 
               onClick={() => setIsModalOpen(!isModalOpen)}

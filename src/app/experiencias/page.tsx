@@ -211,7 +211,7 @@ export default function ExperienciasPage() {
                    </li>
                  ))}
               </ul>
-              <a href="https://www.maeumglobal.com.br/" target="_blank" rel="noopener noreferrer" className="bg-[#C9C9C9] hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
+              <a href={c?.maeum?.buttonLink || 'https://www.maeumglobal.com.br/'} target="_blank" rel="noopener noreferrer" className="bg-[#C9C9C9] hover:bg-white text-background font-bold text-[10px] tracking-widest px-8 py-3.5 rounded uppercase flex items-center gap-3 transition-colors w-fit">
                  {t(c?.maeum?.buttonText || 'EXPLORAR VIAJES')} <ArrowRight className="w-3 h-3" />
               </a>
             </div>

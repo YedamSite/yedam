@@ -7,7 +7,7 @@ import {
   CheckCircle2, Plus, Trash2, ArrowUp, ArrowDown, FileText, Mail, Info,
   TrendingUp, DollarSign, ShoppingCart, Tag, Percent, Globe, Key, BookOpen, Sparkles,
   Layout, PenTool, Grid3X3, Save, BarChart3, Clock, Activity, CreditCard, Package, Calendar, Loader2,
-  Menu, X, Eye
+  Menu, X, Eye, Star
 } from 'lucide-react';
 import Image from 'next/image';
 import Footer from '@/components/Footer';
@@ -75,6 +75,7 @@ export default function AdminDashboard() {
   const [prodDesc, setProdDesc] = useState('');
   const [prodDescEn, setProdDescEn] = useState('');
   const [prodImage, setProdImage] = useState('');
+  const [prodBestSeller, setProdBestSeller] = useState(false);
   const [prodActiveLang, setProdActiveLang] = useState<'es' | 'pt' | 'en'>('es');
   const [prodTranslations, setProdTranslations] = useState<Record<string, { name: string; description: string }>>({
     pt: { name: '', description: '' },
@@ -365,6 +366,7 @@ export default function AdminDashboard() {
     setProdDesc(prod.description);
     setProdDescEn(prod.description_en);
     setProdImage(prod.image || '');
+    setProdBestSeller(!!prod.is_best_seller);
     setProdTranslations({
       pt: {
         name: prod.translations?.pt?.name || '',
@@ -385,6 +387,7 @@ export default function AdminDashboard() {
     setProdCategory(cats[0]?.id || ''); setProdBrand('');
     setProdSku(''); setProdHsCode('3304.99.90'); setProdWeight(0.15); setProdVolume('50ml');
     setProdDesc(''); setProdDescEn(''); setProdImage('');
+    setProdBestSeller(false);
     setProdTranslations({
       pt: { name: '', description: '' },
       en: { name: '', description: '' }
@@ -442,6 +445,7 @@ export default function AdminDashboard() {
           description: prodDesc,
           description_en: prodTranslations.en.description || prodDescEn || prodDesc,
           image: prodImage || allProds[idx].image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
+          is_best_seller: !!prodBestSeller,
           translations: productTranslations
         };
         db.save('products', allProds);
@@ -470,6 +474,7 @@ export default function AdminDashboard() {
       brand_id: prodBrand || null,
       category_id: selectedCatId,
       image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
+      is_best_seller: !!prodBestSeller,
       translations: productTranslations
     };
 
@@ -491,6 +496,17 @@ export default function AdminDashboard() {
     const idx = allProds.findIndex((p: any) => p.id === id);
     if (idx !== -1) {
       allProds[idx].stock = Math.max(0, allProds[idx].stock + delta);
+      db.save('products', allProds);
+      loadData();
+    }
+  };
+
+  // Toggle "Mais Vendidos" flag
+  const handleToggleBestSeller = (id: string) => {
+    const allProds = db.get('products') || [];
+    const idx = allProds.findIndex((p: any) => p.id === id);
+    if (idx !== -1) {
+      allProds[idx].is_best_seller = !allProds[idx].is_best_seller;
       db.save('products', allProds);
       loadData();
     }
@@ -1414,6 +1430,21 @@ if (!authorized) {
                     label={t('Imagem do Produto')}
                   />
                   
+                  <label className="flex items-center gap-3 border border-white/10 bg-white/5 rounded-xl px-4 py-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={prodBestSeller}
+                      onChange={e => setProdBestSeller(e.target.checked)}
+                      className="h-4 w-4 accent-[color:var(--accent)]"
+                    />
+                    <span className="flex flex-col">
+                      <span className="text-[10px] font-bold uppercase text-accent flex items-center gap-1.5">
+                        <Star className={`h-3.5 w-3.5 ${prodBestSeller ? 'fill-accent' : ''}`} /> {t('Mais Vendidos')}
+                      </span>
+                      <span className="text-[9px] text-muted-foreground">{t('Mostrar o produto na seção "Mais Vendidos" da página inicial.')}</span>
+                    </span>
+                  </label>
+                  
                   {prodActiveLang === 'es' ? (
                     <>
                       <div className="flex flex-col gap-1.5">
@@ -1464,6 +1495,13 @@ if (!authorized) {
                         </div>
 
                         <span className="text-sm font-bold text-accent font-heading">US$ {prod.price.toFixed(2)}</span>
+                        <button
+                          onClick={() => handleToggleBestSeller(prod.id)}
+                          title={t('Mais Vendidos')}
+                          className={`p-2 rounded-lg transition-all ${prod.is_best_seller ? 'text-accent bg-accent/10' : 'text-muted-foreground hover:text-accent hover:bg-accent/5'}`}
+                        >
+                          <Star strokeWidth={1.8} className={`h-4 w-4 ${prod.is_best_seller ? 'fill-accent' : ''}`} />
+                        </button>
                         <button
                           onClick={() => handleEditProduct(prod)}
                           className="text-accent hover:text-accentHover p-2 hover:bg-accent/5 rounded-lg transition-all"

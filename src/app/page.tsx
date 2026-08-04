@@ -198,7 +198,7 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-5 gap-4">
-            {products.slice(0, 5).map((prod) => {
+            {(products.some((p: any) => p.is_best_seller) ? products.filter((p: any) => p.is_best_seller) : products).slice(0, 5).map((prod) => {
               const isFav = favorites.includes(prod.id);
               const brand = brandMap[prod.brand_id] || 'K-Beauty';
 

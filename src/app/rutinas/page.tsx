@@ -150,7 +150,7 @@ export default function RutinasPage() {
                 <div key={idx} className="border border-[#1A233A] bg-[#070D1C] rounded-sm p-6 flex flex-col items-center text-center group">
                   <Icon className="w-7 h-7 text-[#C9C9C9] mb-4" strokeWidth={1} />
                   <h3 className="text-[#C9C9C9] font-serif text-[15px] mb-3 font-medium">{t(step.title)}</h3>
-                  <p className="text-white/70 text-[10px] leading-relaxed mb-6 flex-1 px-1">{t(step.desc)}</p>
+                  <p className="text-white/70 text-[10px] leading-relaxed mb-6 flex-1 px-1">{t(step.description || step.desc)}</p>
                   <Link href={`/tienda?search=${encodeURIComponent(step.title)}`} className="text-[8px] font-bold tracking-widest uppercase border border-[#1A233A] text-white hover:border-[#C9C9C9] py-2.5 px-6 rounded-sm w-max transition-colors flex items-center justify-center gap-2 whitespace-nowrap">
                     {t('SAIBA MAIS')} <ArrowRight className="w-2.5 h-2.5" />
                   </Link>

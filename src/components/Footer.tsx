@@ -48,7 +48,7 @@ export default function Footer() {
   const settings = db.get('system_settings');
   const company = settings?.company_details || {};
 
-  const logoUrl = content?.logoUrl || '/images/cheotnun-k-beauty-logo-oficial.webp';
+  const logoUrl = content?.logoUrl || translatedContent.header?.logoUrl || '/images/cheotnun-k-beauty-logo-oficial.webp';
   const description = content?.description || '';
   const social = content?.social || {};
   const col1 = content?.col1 || { title: 'Tienda', links: [] };

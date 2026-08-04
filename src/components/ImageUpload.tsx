@@ -2,8 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
-import { uploadImage } from '@/lib/supabaseStorage';
+import { uploadImage, deleteImage } from '@/lib/supabaseStorage';
 import { useLanguage } from '@/context/LanguageContext';
+
+function isStoredImage(url: string): boolean {
+  return !!url && !url.startsWith('data:') && url.indexOf('cheotnun-images') !== -1;
+}
 
 interface ImageUploadProps {
   currentUrl: string;
@@ -49,6 +53,9 @@ export default function ImageUpload({
       return;
     }
 
+    // Remember the previous stored image so we can delete it after a successful replacement.
+    const previousUrl = currentUrl;
+
     setUploading(true);
 
     const localPreview = URL.createObjectURL(file);
@@ -59,6 +66,10 @@ export default function ImageUpload({
     setUploading(false);
 
     if (url) {
+      // Free up space in Supabase: remove the previously uploaded image when replaced.
+      if (isStoredImage(previousUrl) && previousUrl !== url) {
+        await deleteImage(previousUrl);
+      }
       onUrlChange(url);
       setUrlInput(url);
       setPreview(null);
@@ -74,6 +85,9 @@ export default function ImageUpload({
   };
 
   const handleRemove = () => {
+    if (isStoredImage(currentUrl)) {
+      deleteImage(currentUrl);
+    }
     onUrlChange('');
     setUrlInput('');
     setPreview(null);
