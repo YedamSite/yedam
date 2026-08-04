@@ -252,7 +252,7 @@ export default function Home() {
           <h2 className="font-heading text-3xl font-light text-white mt-1">{t(c?.experiencias?.title || 'Vive la belleza coreana más allá de los productos')}</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col gap-8">
           {(c?.experiencias?.cards || []).map((card: any, idx: number) => {
             const badgeColor = card.badgeColor === 'blue'
               ? 'bg-blue-500/20 text-blue-400 border-blue-400/35'
