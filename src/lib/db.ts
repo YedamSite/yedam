@@ -1949,6 +1949,36 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
   } catch { return {}; }
 }
 
+// Public catalog sync — uses /api/catalog (no admin cookie required)
+// Used by public-facing pages (home, tienda) to fetch fresh product/category/brand data
+async function publicCatalogSync(): Promise<boolean> {
+  try {
+    const resp = await fetch('/api/catalog?tables=products,categories,brands', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!resp.ok) return false;
+    const json = await resp.json();
+    if (!json.success || !json.data) return false;
+
+    const catalogTables: Array<keyof DbState> = ['products', 'categories', 'brands'];
+    let changed = false;
+    for (const table of catalogTables) {
+      const rows = json.data[table as string];
+      if (!rows || !Array.isArray(rows) || rows.length === 0) continue;
+      if (mergeTableLocalFirst(table as string, rows)) changed = true;
+    }
+
+    if (changed) {
+      persistToLocalStorage();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { source: 'catalog_sync' } }));
+      }
+    }
+    return changed;
+  } catch { return false; }
+}
+
 let supabaseReady = false;
 
 // IDs deletados localmente que nao devem ser ressuscitados pelo Supabase
@@ -2122,6 +2152,9 @@ function setMemoryAndPersist(table: string, data: any) {
 export const db = {
   init: async () => {
     loadFromLocalStorage();
+    // First try the public catalog API (no admin auth needed, works for all visitors)
+    await publicCatalogSync();
+    // Then try the admin Supabase reload (only succeeds if user has admin session)
     await tryLoadFromSupabase();
   },
 

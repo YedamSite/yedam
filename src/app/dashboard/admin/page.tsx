@@ -446,7 +446,8 @@ export default function AdminDashboard() {
           description_en: prodTranslations.en.description || prodDescEn || prodDesc,
           image: prodImage || allProds[idx].image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
           is_best_seller: !!prodBestSeller,
-          translations: productTranslations
+          translations: productTranslations,
+          updated_at: new Date().toISOString(),
         };
         db.save('products', allProds);
         cancelEditProduct();
@@ -455,6 +456,7 @@ export default function AdminDashboard() {
       }
     }
 
+    const now = new Date().toISOString();
     const newProd = {
       id: crypto.randomUUID(),
       sku: prodSku || 'YD-' + Math.floor(Math.random() * 10000),
@@ -475,7 +477,9 @@ export default function AdminDashboard() {
       category_id: selectedCatId,
       image: prodImage || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400',
       is_best_seller: !!prodBestSeller,
-      translations: productTranslations
+      translations: productTranslations,
+      created_at: now,
+      updated_at: now,
     };
 
     allProds.push(newProd);
@@ -496,6 +500,7 @@ export default function AdminDashboard() {
     const idx = allProds.findIndex((p: any) => p.id === id);
     if (idx !== -1) {
       allProds[idx].stock = Math.max(0, allProds[idx].stock + delta);
+      allProds[idx].updated_at = new Date().toISOString();
       db.save('products', allProds);
       loadData();
     }
@@ -507,6 +512,7 @@ export default function AdminDashboard() {
     const idx = allProds.findIndex((p: any) => p.id === id);
     if (idx !== -1) {
       allProds[idx].is_best_seller = !allProds[idx].is_best_seller;
+      allProds[idx].updated_at = new Date().toISOString();
       db.save('products', allProds);
       loadData();
     }

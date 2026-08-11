@@ -36,7 +36,9 @@ export default function Home() {
 
   const loadData = () => {
     const rawProds = db.get('products') || [];
-    setProducts(rawProds.map((p: any) => db.getTranslatedRecord(p, locale)));
+    // Only show active products on public pages
+    const activeProds = rawProds.filter((p: any) => !p.status || p.status === 'active');
+    setProducts(activeProds.map((p: any) => db.getTranslatedRecord(p, locale)));
 
     const siteContent = db.get('site_content');
     const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};

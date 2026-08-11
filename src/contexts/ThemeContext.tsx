@@ -68,7 +68,14 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
   };
 
   useEffect(() => {
-    (async () => { await db.init(); })();
+    (async () => {
+      // Init DB: loads localStorage, syncs catalog from public API, then syncs admin tables
+      await db.init();
+      // After init, dispatch event so all pages re-read fresh data
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { source: 'db_init' } }));
+      }
+    })();
 
     const settings = db.get('system_settings');
     const dbTheme = settings?.visual_theme;

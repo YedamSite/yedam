@@ -65,6 +65,15 @@ function TiendaContent() {
 
   useEffect(() => {
     loadData();
+    // Listen for DB changes (e.g. when admin creates/updates products)
+    const handleDbChange = () => loadData();
+    window.addEventListener('cheotnun_db_change', handleDbChange);
+    window.addEventListener('storage', handleDbChange);
+    return () => {
+      window.removeEventListener('cheotnun_db_change', handleDbChange);
+      window.removeEventListener('storage', handleDbChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale, categoryParam, searchParam]);
 
   const handleToggleFavorite = async (productId: string) => {
@@ -108,10 +117,11 @@ function TiendaContent() {
   };
 
   const filteredProducts = products.filter(p => {
+    const matchesStatus = !p.status || p.status === 'active';
     const matchesBrand = selectedBrand === 'ALL' || p.brand_id === selectedBrand;
     const matchesCategory = selectedCategory === 'ALL' || p.category_id === selectedCategory;
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || (p.description || '').toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesBrand && matchesCategory && matchesSearch;
+    return matchesStatus && matchesBrand && matchesCategory && matchesSearch;
   });
 
   const categoryMap = React.useMemo(() => {
