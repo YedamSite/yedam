@@ -767,14 +767,44 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | null>(null)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Language>('es')
+  const [locale, setLocaleState] = useState<Language>('pt')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  useEffect(() => {
+  // Detects the best language to use based on:
+  // 1. User's saved preference (localStorage) — highest priority
+  // 2. Browser/OS language settings
+  // 3. Fallback: 'pt' (PT-BR as the default for the site)
+  function detectLanguage(): Language {
+    // 1. Check saved user preference first
     const stored = localStorage.getItem('cheotnun_locale') as Language | null
     if (stored === 'es' || stored === 'pt' || stored === 'en') {
-      setLocaleState(stored)
+      return stored
     }
+
+    // 2. Try to read from browser language settings
+    // navigator.languages gives ordered list, navigator.language is the primary
+    const browserLangs = typeof navigator !== 'undefined'
+      ? (navigator.languages?.length ? [...navigator.languages] : [navigator.language])
+      : []
+
+    for (const lang of browserLangs) {
+      if (!lang) continue
+      const lower = lang.toLowerCase()
+      // Portuguese variants (pt-BR, pt-PT, pt, etc.)
+      if (lower.startsWith('pt')) return 'pt'
+      // Spanish variants (es-ES, es-419, es-MX, es-AR, es-CO, etc.)
+      if (lower.startsWith('es')) return 'es'
+      // English variants (en-US, en-GB, en-AU, etc.)
+      if (lower.startsWith('en')) return 'en'
+    }
+
+    // 3. Default fallback: PT-BR
+    return 'pt'
+  }
+
+  useEffect(() => {
+    const detected = detectLanguage()
+    setLocaleState(detected)
   }, [])
 
   const setLocale = (l: Language) => {
