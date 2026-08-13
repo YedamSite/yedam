@@ -1965,8 +1965,8 @@ async function publicCatalogSync(): Promise<boolean> {
     let changed = false;
     for (const table of catalogTables) {
       const rows = json.data[table as string];
-      if (!rows || !Array.isArray(rows) || rows.length === 0) continue;
-      if (mergeTableLocalFirst(table as string, rows)) changed = true;
+      if (!rows || !Array.isArray(rows)) continue;
+      if (mergeTableData(table as string, rows)) changed = true;
     }
 
     if (changed) {
