@@ -24,89 +24,19 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v2';
+const SEED_VERSION = 'v3';
 
 const DEFAULT_STATE: DbState = {
   users: [
     { id: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', email: 'admin@cheotnun.com', name: 'Super Administrador Cheotnun', role: 'super_admin' },
     { id: 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', email: 'cliente@example.com', name: 'Jaque Customer', role: 'customer' }
   ],
-  categories: [
-    { id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', name: 'Cuidado Facial', slug: 'cuidado-facial', description: 'Produtos de limpeza, tônicos, séruns e hidratantes para o rosto.', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
-    { id: '20eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Cuidado Corporal', slug: 'cuidado-corporal', description: 'Hidratação e tratamento para todo o corpo.', image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?q=80&w=400' },
-    { id: '30eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Cuidado Capilar', slug: 'cuidado-capilar', description: 'Shampoos, condicionadores e máscaras capilares.', image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=400' },
-    { id: '40eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Maquillaje', slug: 'maquillaje', description: 'Bases, corretivos, batons e maquiagens premium.', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
-    { id: '50eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Cuidado de Uñas', slug: 'cuidado-de-unas', description: 'Esmaltes e fortalecedores de unhas.', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' },
-    { id: '60eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Protección Solar', slug: 'proteccion-solar', description: 'Protetores solares faciais e corporais de alta tecnologia.', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' }
-  ],
-  brands: [
-    { id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Round Lab', slug: 'round-lab', description: 'Produtos formulados com água do fundo do mar e ingredientes naturais.', is_featured: true },
-    { id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Beauty of Joseon', slug: 'beauty-of-joseon', description: 'Cosméticos inspirados na medicina tradicional coreana (Hanbang).', is_featured: true },
-    { id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'COSRX', slug: 'cosrx', description: 'Produtos focados em alta performance e ingredientes ativos como Centella e Baba de Caracol.', is_featured: true },
-    { id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', name: 'Anua', slug: 'anua', description: 'Fórmula limpa e minimalista para acalmar a barreira da pele.', is_featured: true },
-    { id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', name: 'Skin1004', slug: 'skin1004', description: 'Produtos baseados em extrato puro de Centella Asiática de Madagascar.', is_featured: true }
-  ],
-  products: [
-    { id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', sku: 'RL-DK-1025', name: '1025 Dokdo Cleanser', slug: '1025-dokdo-cleanser', description: 'Limpiador facial suave que elimina impurezas y mantiene la hidratación.', description_en: 'Gentle facial cleanser that removes impurities and maintains hydration.', price: 18.00, price_promo: 16.20, price_brl: 90.00, price_promo_brl: 81.00, weight: 0.15, volume: '150ml', stock: 120, hs_code: '3304.99.90', status: 'active', brand_id: 'c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' },
-    { id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', sku: 'BJ-GD-0030', name: 'Glow Deep Serum: Rice + Alpha-Arbutin', slug: 'glow-deep-serum-rice-alpha-arbutin', description: 'Sérum iluminador diseñado para combatir la pigmentación y unificar el tono.', description_en: 'Brightening serum designed to fight pigmentation and unify tone.', price: 22.90, price_promo: 19.90, price_brl: 114.50, price_promo_brl: 99.50, weight: 0.08, volume: '30ml', stock: 85, hs_code: '3304.99.90', status: 'active', brand_id: 'd0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' },
-    { id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', sku: 'CX-AM-0100', name: 'Advanced Snail 96 Mucin Power Essence', slug: 'advanced-snail-96-mucin-power-essence', description: 'Esencia nutritiva de baba de caracol para reparar la barrera cutánea.', description_en: 'Nutritive snail mucin essence to repair the skin barrier.', price: 19.00, price_promo: 18.00, price_brl: 95.00, price_promo_brl: 90.00, weight: 0.18, volume: '100ml', stock: 150, hs_code: '3304.99.90', status: 'active', brand_id: 'e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' },
-    { id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', sku: 'AN-HT-0250', name: 'Heartleaf 77% Soothing Toner', slug: 'heartleaf-77-soothing-toner', description: 'Tónico calmante ideal para pieles sensibles y con tendencia al acné.', description_en: 'Soothing toner ideal for sensitive and acne-prone skin.', price: 21.00, price_promo: 19.50, price_brl: 105.00, price_promo_brl: 97.50, weight: 0.30, volume: '250ml', stock: 90, hs_code: '3304.99.90', status: 'active', brand_id: 'f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' },
-    { id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', sku: 'SK-MC-0055', name: 'Madagascar Centella Ampoule', slug: 'madagascar-centella-ampoule', description: 'Ampolla calmante 100% de Centella Asiática para reparar e hidratar.', description_en: 'Soothing 100% Centella Asiatica ampoule to repair and hydrate.', price: 23.00, price_promo: 21.00, price_brl: 115.00, price_promo_brl: 105.00, weight: 0.12, volume: '55ml', stock: 200, hs_code: '3304.99.90', status: 'active', brand_id: '70eebc99-9c0b-4ef8-bb6d-6bb9bd380a77', category_id: '10eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400' }
-  ],
+  categories: [],
+  brands: [],
+  products: [],
   product_images: [],
-  addresses: [
-    { id: 'addr-1', user_id: 'a0000000-0000-4000-a000-000000000001', address_type: 'shipping', first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', complement: 'Apt 4B', city: 'Madrid', state: 'Madrid', postal_code: '28013', country: 'España', phone: '+34600111222', document_type: 'nif', document_number: '12345678Z' }
-  ],
-  orders: [
-    {
-      id: 'ord-001', customer_id: 'a0000000-0000-4000-a000-000000000001', status: 'aguardando_confirmacao', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 2, price: 18.00 }],
-      subtotal: 36.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 51.00, gateway: 'stripe', carrier: null, tracking_code: null, document_type: 'nif', document_number: '12345678Z', commercial_invoice_url: '/invoices/cheotnun-inv-ord-001.pdf',
-      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
-      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
-      created_at: new Date(Date.now() - 0 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
-    {
-      id: 'ord-002', customer_id: 'a0000000-0000-4000-a000-000000000002', status: 'aguardando_confirmacao', items: [{ product_id: '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22', name: 'Glow Deep Serum', quantity: 1, price: 22.90 }],
-      subtotal: 22.90, shipping_amount: 15.00, discount_amount: 0, total_amount: 37.90, gateway: 'stripe', carrier: null, tracking_code: null, document_type: 'nif', document_number: '87654321X', commercial_invoice_url: '/invoices/cheotnun-inv-ord-002.pdf',
-      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
-      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
-      created_at: new Date(Date.now() - 1 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
-    {
-      id: 'ord-003', customer_id: 'a0000000-0000-4000-a000-000000000003', status: 'aguardando_confirmacao', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }],
-      subtotal: 19.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 34.00, gateway: 'paypal', carrier: null, tracking_code: null, document_type: 'nie', document_number: 'Y1234567Z', commercial_invoice_url: '/invoices/cheotnun-inv-ord-003.pdf',
-      shipping_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
-      billing_address: { first_name: 'Jaque', last_name: 'Customer', street: 'Gran Via', number: '123', city: 'Madrid', state: 'Madrid', country: 'España' },
-      created_at: new Date(Date.now() - 2 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
-    {
-      id: 'ord-004', customer_id: 'a0000000-0000-4000-a000-000000000004', status: 'preparando_envio', items: [{ product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 2, price: 21.00 }, { product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 1, price: 23.00 }],
-      subtotal: 65.00, shipping_amount: 15.00, discount_amount: 5.00, total_amount: 75.00, gateway: 'stripe', carrier: 'DHL', tracking_code: 'LX123456789KR', document_type: 'ci', document_number: '1234567-8', commercial_invoice_url: '/invoices/cheotnun-inv-ord-004.pdf',
-      shipping_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'São Paulo', state: 'SP', country: 'Brasil' },
-      billing_address: { first_name: 'Maria', last_name: 'Rodriguez', street: 'Avenida Paulista', number: '1000', city: 'São Paulo', state: 'SP', country: 'Brasil' },
-      created_at: new Date(Date.now() - 5 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
-    {
-      id: 'ord-005', customer_id: 'a0000000-0000-4000-a000-000000000005', status: 'enviado', items: [{ product_id: '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11', name: '1025 Dokdo Cleanser', quantity: 3, price: 18.00 }],
-      subtotal: 54.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 69.00, gateway: 'stripe', carrier: 'FedEx', tracking_code: 'FX987654321KR', document_type: 'nif', document_number: 'A12345678', commercial_invoice_url: '/invoices/cheotnun-inv-ord-005.pdf',
-      shipping_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'España' },
-      billing_address: { first_name: 'Sofia', last_name: 'Fernandez', street: 'Calle Serrano', number: '45', city: 'Madrid', state: 'Madrid', country: 'España' },
-      created_at: new Date(Date.now() - 10 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
-    {
-      id: 'ord-006', customer_id: 'a0000000-0000-4000-a000-000000000006', status: 'entregue', items: [{ product_id: '55ebc999-9c0b-4ef8-bb6d-6bb9bd380a55', name: 'Madagascar Centella Ampoule', quantity: 2, price: 23.00 }],
-      subtotal: 46.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 61.00, gateway: 'paypal', carrier: 'EMS Korea', tracking_code: 'EM555555555KR', document_type: 'nif', document_number: 'B98765432', commercial_invoice_url: '/invoices/cheotnun-inv-ord-006.pdf',
-      shipping_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Cataluña', country: 'España' },
-      billing_address: { first_name: 'Ana', last_name: 'Lopez', street: 'Calle Mayor', number: '10', city: 'Barcelona', state: 'Cataluña', country: 'España' },
-      created_at: new Date(Date.now() - 20 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
-    {
-      id: 'ord-007', customer_id: 'a0000000-0000-4000-a000-000000000007', status: 'enviado', items: [{ product_id: '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33', name: 'Advanced Snail 96 Mucin Power Essence', quantity: 1, price: 19.00 }, { product_id: '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44', name: 'Heartleaf 77% Soothing Toner', quantity: 1, price: 21.00 }],
-      subtotal: 40.00, shipping_amount: 15.00, discount_amount: 0, total_amount: 55.00, gateway: 'stripe', carrier: 'DHL Express', tracking_code: 'DH333333333KR', document_type: 'rut', document_number: '12.345.678-9', commercial_invoice_url: '/invoices/cheotnun-inv-ord-007.pdf',
-      shipping_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogotá', state: 'Cundinamarca', country: 'Colombia' },
-      billing_address: { first_name: 'Carlos', last_name: 'Mendoza', street: 'Carrera 7', number: '45-20', city: 'Bogotá', state: 'Cundinamarca', country: 'Colombia' },
-      created_at: new Date(Date.now() - 45 * 86400000).toISOString(), updated_at: new Date().toISOString()
-    },
+  addresses: [],
+  orders: [],,
   ],
   order_items: [],
   order_tracking: [],
@@ -1902,9 +1832,13 @@ function persistToLocalStorage() {
 function loadFromLocalStorage(): boolean {
   if (typeof window === 'undefined') return false;
   try {
-    // Apenas marca versao, nunca destrói dados do usuario
-    if (!localStorage.getItem('cheotnun_db_version')) {
+    const currentVersion = localStorage.getItem('cheotnun_db_version');
+    if (currentVersion !== SEED_VERSION) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(DELETED_IDS_KEY);
       localStorage.setItem('cheotnun_db_version', SEED_VERSION);
+      // Retorna false para não carregar lixo do cache e forçar sync imediato com DEFAULT_STATE limpo.
+      return false; 
     }
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -1956,6 +1890,7 @@ async function publicCatalogSync(): Promise<boolean> {
     const resp = await fetch(`/api/catalog?tables=products,categories,brands&t=${Date.now()}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
     });
     if (!resp.ok) return false;
     const json = await resp.json();
