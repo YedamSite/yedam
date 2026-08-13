@@ -58,8 +58,10 @@ function TiendaContent() {
       setSelectedCategory('ALL');
     }
 
-    if (searchParam) {
+    if (searchParam && searchParam !== '{search_term_string}') {
       setSearchQuery(searchParam);
+    } else if (searchParam === '{search_term_string}') {
+      setSearchQuery('');
     }
 
     if (typeof window !== 'undefined') {
