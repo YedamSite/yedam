@@ -2027,22 +2027,41 @@ async function tryLoadFromSupabase() {
   }
 }
 
-function trySaveToSupabase(table: string, records: any[]) {
+async function trySaveToSupabase(table: string, records: any[]) {
   if (!supabaseReady) return;
-  fetch('/api/supabase-reload', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'upsert', table, records }),
-  }).catch(() => {});
+  try {
+    const res = await fetch('/api/supabase-reload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'upsert', table, records }),
+    });
+    const data = await res.json();
+    if (!data.success) {
+      console.error('Supabase sync error:', data.error);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: data.error } }));
+      }
+    }
+  } catch (err) {
+    console.error('Supabase fetch failed:', err);
+  }
 }
 
-function tryDeleteFromSupabase(table: string, id: string) {
+async function tryDeleteFromSupabase(table: string, id: string) {
   if (!supabaseReady) return;
-  fetch('/api/supabase-reload', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'delete', table, id }),
-  }).catch(() => {});
+  try {
+    const res = await fetch('/api/supabase-reload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', table, id }),
+    });
+    const data = await res.json();
+    if (!data.success) {
+      console.error('Supabase delete error:', data.error);
+    }
+  } catch (err) {
+    console.error('Supabase fetch failed:', err);
+  }
 }
 
 async function loadSettingsFromSupabase() {
@@ -2069,13 +2088,21 @@ async function loadSettingsFromSupabase() {
   } catch {}
 }
 
-function trySaveSettingsToSupabase(key: string, value: any) {
+async function trySaveSettingsToSupabase(key: string, value: any) {
   if (!supabaseReady) return;
-  fetch('/api/supabase-reload', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'saveSetting', key, value }),
-  }).catch(() => {});
+  try {
+    const res = await fetch('/api/supabase-reload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'saveSetting', key, value }),
+    });
+    const data = await res.json();
+    if (!data.success) {
+      console.error('Supabase save setting error:', data.error);
+    }
+  } catch (err) {
+    console.error('Supabase fetch failed:', err);
+  }
 }
 
 function setMemoryAndPersist(table: string, data: any) {
@@ -2135,37 +2162,37 @@ export const db = {
     return memoryDb[table];
   },
 
-  save: <K extends keyof DbState>(table: K, records: DbState[K]): void => {
+  save: async <K extends keyof DbState>(table: K, records: DbState[K]): Promise<void> => {
     memoryDb[table] = records;
     persistToLocalStorage();
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
     }
     if (table === 'site_content') {
-      trySaveSettingsToSupabase('site_content', records);
+      await trySaveSettingsToSupabase('site_content', records);
     } else if (table === 'system_settings') {
       const settings = records as any;
-      if (settings.visual_theme) trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
-      if (settings.company_details) trySaveSettingsToSupabase('company_details', settings.company_details);
-      if (settings.seo) trySaveSettingsToSupabase('seo', settings.seo);
-      if (settings.invoice_templates) trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
+      if (settings.visual_theme) await trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
+      if (settings.company_details) await trySaveSettingsToSupabase('company_details', settings.company_details);
+      if (settings.seo) await trySaveSettingsToSupabase('seo', settings.seo);
+      if (settings.invoice_templates) await trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
     } else {
-      trySaveToSupabase(table as string, records as any[]);
+      await trySaveToSupabase(table as string, records as any[]);
     }
   },
 
-  update: <K extends keyof DbState>(table: K, updater: (data: DbState[K]) => DbState[K]): DbState[K] => {
+  update: async <K extends keyof DbState>(table: K, updater: (data: DbState[K]) => DbState[K]): Promise<DbState[K]> => {
     const updated = updater(memoryDb[table]);
     memoryDb[table] = updated;
     persistToLocalStorage();
     if (table === 'system_settings') {
       const settings = updated as any;
-      if (settings.visual_theme) trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
-      if (settings.company_details) trySaveSettingsToSupabase('company_details', settings.company_details);
-      if (settings.seo) trySaveSettingsToSupabase('seo', settings.seo);
-      if (settings.invoice_templates) trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
+      if (settings.visual_theme) await trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
+      if (settings.company_details) await trySaveSettingsToSupabase('company_details', settings.company_details);
+      if (settings.seo) await trySaveSettingsToSupabase('seo', settings.seo);
+      if (settings.invoice_templates) await trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
     } else {
-      trySaveToSupabase(table as string, updated as any[]);
+      await trySaveToSupabase(table as string, updated as any[]);
     }
     return updated;
   },
@@ -2178,7 +2205,7 @@ export const db = {
   },
 
   markDeleted: (id: string) => saveDeletedId(id),
-  deleteRecord: <K extends keyof DbState>(table: K, id: string): void => {
+  deleteRecord: async <K extends keyof DbState>(table: K, id: string): Promise<void> => {
     saveDeletedId(id);
     const current = memoryDb[table];
     if (Array.isArray(current)) {
@@ -2187,7 +2214,7 @@ export const db = {
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
       }
-      tryDeleteFromSupabase(table as string, id);
+      await tryDeleteFromSupabase(table as string, id);
     }
   },
   getDefault,

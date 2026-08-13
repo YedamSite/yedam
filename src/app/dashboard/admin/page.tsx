@@ -234,6 +234,7 @@ export default function AdminDashboard() {
     
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('cheotnun_db_change', handleDbChange as EventListener);
+    window.addEventListener('cheotnun_sync_error', handleSyncError as EventListener);
     
     // Polling: recarregar pedidos do Supabase a cada 3 segundos
     const poll = setInterval(async () => {
@@ -244,6 +245,7 @@ export default function AdminDashboard() {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('cheotnun_db_change', handleDbChange as EventListener);
+      window.removeEventListener('cheotnun_sync_error', handleSyncError as EventListener);
       clearInterval(poll);
     };
   }, []);
@@ -396,7 +398,7 @@ export default function AdminDashboard() {
   };
 
   // Create/Update Product
-  const handleCreateProduct = (e: React.FormEvent) => {
+  const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prodName || (!prodPrice && !prodPriceBrl)) return;
 
@@ -449,7 +451,7 @@ export default function AdminDashboard() {
           translations: productTranslations,
           updated_at: new Date().toISOString(),
         };
-        db.save('products', allProds);
+        await db.save('products', allProds);
         cancelEditProduct();
         loadData();
         return;
@@ -483,14 +485,14 @@ export default function AdminDashboard() {
     };
 
     allProds.push(newProd);
-    db.save('products', allProds);
+    await db.save('products', allProds);
     cancelEditProduct();
     loadData();
   };
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = async (id: string) => {
     if (!confirm('¿Eliminar este producto permanentemente?')) return;
-    db.deleteRecord('products', id);
+    await db.deleteRecord('products', id);
     loadData();
   };
 
@@ -519,6 +521,11 @@ export default function AdminDashboard() {
   };
 
   // Create Coupon
+  const handleSyncError = (e: Event) => {
+    const customEvent = e as CustomEvent;
+    alert(`Error de sincronización con Supabase: ${customEvent.detail?.error}`);
+  };
+
   const handleCreateCoupon = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCouponCode || !newCouponDiscount) return;
