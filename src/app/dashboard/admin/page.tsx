@@ -398,7 +398,7 @@ export default function AdminDashboard() {
   };
 
   // Create/Update Product
-  const handleAddProduct = async (e: React.FormEvent) => {
+  const handleCreateProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!prodName || (!prodPrice && !prodPriceBrl)) return;
 
