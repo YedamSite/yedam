@@ -11,6 +11,8 @@ const PUBLIC_TABLE_MAP: Record<string, string> = {
   brands: 'cheotnun_brands',
 };
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   if (!supabaseUrl || !serviceRoleKey) {
     return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
@@ -43,8 +45,10 @@ export async function GET(req: Request) {
       { success: true, data: result },
       {
         headers: {
-          // Cache for 30 seconds on CDN, 60 seconds stale-while-revalidate
-          'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
+          // Disable caching so mobile devices instantly see new products
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         },
       }
     );

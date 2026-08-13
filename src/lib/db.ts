@@ -1953,7 +1953,7 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
 // Used by public-facing pages (home, tienda) to fetch fresh product/category/brand data
 async function publicCatalogSync(): Promise<boolean> {
   try {
-    const resp = await fetch('/api/catalog?tables=products,categories,brands', {
+    const resp = await fetch(`/api/catalog?tables=products,categories,brands&t=${Date.now()}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
