@@ -158,15 +158,21 @@ export default function Header() {
   const siteContent = db.get('site_content');
   const translatedContent = db.getTranslatedRecord(siteContent, locale) || {};
   const headerContent = translatedContent.header || {};
-  const navItems: any[] = headerContent.navLinks || [
-    { label: t('Inicio'), href: '/' },
-    { label: t('Tienda'), href: '/tienda' },
-    { label: t('Marcas'), href: '/marcas' },
-    { label: t('Rutinas'), href: '/rutinas' },
-    { label: t('Experiencias'), href: '/experiencias' },
-    { label: t('Blog'), href: '/blog' },
-    { label: t('Contacto'), href: '/contacto' }
+
+  // Nav items: use DB navLinks if available, but always apply t() to labels at render time
+  // This ensures PT-BR shows "Loja" instead of "Tienda" even when DB has hardcoded ES labels
+  const defaultNavItems = [
+    { label: 'Inicio', href: '/' },
+    { label: 'Tienda', href: '/tienda' },
+    { label: 'Marcas', href: '/marcas' },
+    { label: 'Rutinas', href: '/rutinas' },
+    { label: 'Experiencias', href: '/experiencias' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Contacto', href: '/contacto' },
   ];
+  const rawNavItems: any[] = headerContent.navLinks || defaultNavItems;
+  // Always run labels through t() so translations apply regardless of DB content
+  const navItems = rawNavItems.map((item: any) => ({ ...item, label: t(item.label) }));
   return (
     <div className="w-full flex flex-col sticky top-0 z-50">
       {/* Top Announcement Bar */}
@@ -432,13 +438,34 @@ export default function Header() {
             )}
           </div>
 
-          {/* Mobile menu trigger */}
-          <button
-            className="md:hidden text-foreground/80 hover:text-accent"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          {/* Mobile: Cart + Favorites + Hamburger */}
+          <div className="md:hidden flex items-center gap-3">
+            {/* Favorites */}
+            <Link href="/dashboard/cliente?tab=favorites" className="relative p-1">
+              <Heart strokeWidth={1.8} className="h-5 w-5 text-accent" />
+              {favCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
+                  {favCount}
+                </span>
+              )}
+            </Link>
+            {/* Cart */}
+            <Link href="/tienda/carrinho" className="relative p-1">
+              <ShoppingBag strokeWidth={1.8} className="h-5 w-5 text-accent" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+            {/* Hamburger */}
+            <button
+              className="text-foreground/80 hover:text-accent"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
