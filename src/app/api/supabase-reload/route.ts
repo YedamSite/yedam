@@ -91,6 +91,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true });
     }
 
+    if (action === 'deleteImage') {
+      const { path } = body;
+      if (!path) return NextResponse.json({ error: 'Provide path' }, { status: 400 });
+      const supabase = createClient(supabaseUrl, serviceRoleKey);
+      const { error } = await supabase.storage.from('cheotnun-images').remove([path]);
+      if (error) return NextResponse.json({ success: false, error: error.message });
+      return NextResponse.json({ success: true });
+    }
+
     if (action === 'getSettings') {
       const { keys } = body;
       if (!Array.isArray(keys)) return NextResponse.json({ error: 'Provide keys array' }, { status: 400 });

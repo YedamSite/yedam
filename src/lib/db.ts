@@ -2209,6 +2209,31 @@ export const db = {
     saveDeletedId(id);
     const current = memoryDb[table];
     if (Array.isArray(current)) {
+      const recordToDelete = current.find((r: any) => r.id === id);
+      
+      // Auto-delete associated images to keep storage clean
+      if (recordToDelete) {
+        const urlsToDelete: string[] = [];
+        if (recordToDelete.image) urlsToDelete.push(recordToDelete.image);
+        if (recordToDelete.logo_url) urlsToDelete.push(recordToDelete.logo_url);
+        if (recordToDelete.bgImage) urlsToDelete.push(recordToDelete.bgImage);
+        
+        urlsToDelete.forEach(url => {
+          if (url && typeof url === 'string' && !url.startsWith('data:') && url.includes('cheotnun-images')) {
+             try {
+                const path = url.split('cheotnun-images/')[1];
+                if (path && supabaseReady) {
+                  fetch('/api/supabase-reload', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'deleteImage', path }),
+                  }).catch(() => {});
+                }
+             } catch(e) {}
+          }
+        });
+      }
+
       (memoryDb as any)[table] = current.filter((r: any) => r.id !== id);
       persistToLocalStorage();
       if (typeof window !== 'undefined') {
