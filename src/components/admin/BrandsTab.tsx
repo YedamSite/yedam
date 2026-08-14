@@ -41,7 +41,7 @@ export default function BrandsTab() {
     setActiveLang('es');
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName) return;
     const all = db.get('brands');
@@ -73,7 +73,7 @@ export default function BrandsTab() {
     } else {
       all.push(brandData);
     }
-    db.save('brands', all);
+    await db.save('brands', all);
     resetForm();
     load();
   };
@@ -98,9 +98,9 @@ export default function BrandsTab() {
     setActiveLang('es');
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm(t('¿Eliminar esta marca permanentemente?'))) return;
-    db.deleteRecord('brands', id);
+    await db.deleteRecord('brands', id);
     load();
   };
 

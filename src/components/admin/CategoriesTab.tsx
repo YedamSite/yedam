@@ -47,7 +47,7 @@ export default function CategoriesTab() {
       .replace(/^-+|-+$/g, '');
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName) return;
     const all = db.get('categories') || [];
@@ -80,7 +80,7 @@ export default function CategoriesTab() {
     } else {
       all.push(categoryData);
     }
-    db.save('categories', all);
+    await db.save('categories', all);
     resetForm();
     load();
   };
@@ -104,9 +104,9 @@ export default function CategoriesTab() {
     setActiveLang('es');
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!confirm(t('¿Eliminar esta categoría permanentemente?'))) return;
-    db.deleteRecord('categories', id);
+    await db.deleteRecord('categories', id);
     load();
   };
 
