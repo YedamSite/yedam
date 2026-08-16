@@ -231,7 +231,7 @@ export default function Header() {
         <div className="absolute inset-0 -z-10 bg-background/95 backdrop-blur" />
         <div className="mx-auto flex w-full max-w-[1536px] items-center justify-between relative z-10 px-2 md:px-4 lg:px-6">
           {/* Logo - Left */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0 min-w-max">
+          <button onClick={() => router.push('/')} className="flex items-center gap-3 group shrink-0 min-w-max">
             <Image
               src={headerContent.logoUrl || '/images/cheotnun-logo.webp'}
               alt="Cheotnun"
@@ -255,20 +255,20 @@ export default function Header() {
                 BEAUTY
               </span>
             </div>
-          </Link>
+          </button>
 
           {/* Desktop Nav Centered - Responsive Spacing & Scaling */}
           <nav className="hidden lg:flex items-center justify-center flex-1 px-2 xl:px-8">
             <div className="flex items-center justify-center gap-3 lg:gap-4 xl:gap-8 w-full">
               {navItems.map((item: any) => (
-                <Link
+                <button
                   key={item.href + '-' + item.label}
-                  href={item.href}
+                  onClick={() => router.push(item.href)}
                   className={`text-[10px] lg:text-[11px] xl:text-xs uppercase tracking-[0.1em] xl:tracking-[0.15em] font-semibold transition-all hover:text-accent hover:-translate-y-0.5 duration-300 whitespace-nowrap ${pathname === item.href ? 'text-accent border-b border-accent/40 pb-0.5' : 'text-foreground/80'
                     }`}
                 >
                   {item.label}
-                </Link>
+                </button>
               ))}
             </div>
           </nav>
@@ -316,17 +316,17 @@ export default function Header() {
                             <span className="text-[8px] text-accent font-bold uppercase tracking-widest">{t('Categorías')}</span>
                             <div className="flex flex-col gap-1">
                               {matchedCategories.map((cat: any) => (
-                                <Link
+                                <button
                                   key={cat.id}
-                                  href={`/tienda?category=${cat.slug}`}
                                   onClick={() => {
                                     setIsSearchExpanded(false);
                                     setHeaderSearchQuery('');
+                                    router.push(`/tienda?category=${cat.slug}`);
                                   }}
-                                  className="text-[10px] text-white hover:text-accent font-semibold transition-colors py-0.5 uppercase tracking-wide"
+                                  className="text-[10px] text-white hover:text-accent font-semibold transition-colors py-0.5 uppercase tracking-wide text-left"
                                 >
                                   📁 {cat.name}
-                                </Link>
+                                </button>
                               ))}
                             </div>
                           </div>
@@ -338,14 +338,14 @@ export default function Header() {
                               {searchResults.map((prod: any) => {
                                 const imgUrl = prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=100';
                                 return (
-                                  <Link
+                                  <button
                                     key={prod.id}
-                                    href={`/tienda/produto/${prod.slug}`}
                                     onClick={() => {
                                       setIsSearchExpanded(false);
                                       setHeaderSearchQuery('');
+                                      router.push(`/tienda/produto/${prod.slug}`);
                                     }}
-                                    className="flex items-center gap-2.5 group/item"
+                                    className="flex items-center gap-2.5 group/item text-left"
                                   >
                                     <div className="relative h-8 w-8 rounded overflow-hidden shrink-0 bg-secondary/50">
                                       <Image src={imgUrl} alt={prod.name} fill unoptimized className="object-cover" />
@@ -354,7 +354,7 @@ export default function Header() {
                                       <span className="text-[10px] text-white group-hover/item:text-accent font-bold truncate transition-colors leading-tight uppercase">{prod.name}</span>
                                       <span className="text-[9px] text-accent/80 font-heading">US$ {prod.price.toFixed(2)}</span>
                                     </div>
-                                  </Link>
+                                  </button>
                                 );
                               })}
                             </div>
@@ -371,24 +371,24 @@ export default function Header() {
               </div>
 
               {/* Favorites */}
-              <Link href="/dashboard/cliente?tab=favorites" className="relative p-1 hover:bg-white/5 rounded-full transition-colors">
+              <button onClick={() => router.push('/dashboard/cliente?tab=favorites')} className="relative p-1 hover:bg-white/5 rounded-full transition-colors">
                 <Heart strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 transition-all" />
                 {favCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center shadow-sm">
                     {favCount}
                   </span>
                 )}
-              </Link>
+              </button>
 
               {/* Cart */}
-              <Link href="/tienda/carrinho" className="relative p-1 hover:bg-white/5 rounded-full transition-colors">
+              <button onClick={() => router.push('/tienda/carrinho')} className="relative p-1 hover:bg-white/5 rounded-full transition-colors">
                 <ShoppingBag strokeWidth={1.8} className="h-4.5 w-4.5 text-accent hover:scale-110 transition-all" />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center shadow-sm">
                     {cartCount}
                   </span>
                 )}
-              </Link>
+              </button>
             </div>
 
             {/* Vertical Separator */}
@@ -403,13 +403,13 @@ export default function Header() {
                 </button>
                 <div className="absolute right-0 top-full pt-1.5 w-52 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 z-50">
                   <div className="rounded-md border border-white/10 bg-secondary p-1 shadow-2xl">
-                    <Link
-                      href={currentUser.role === 'super_admin' || currentUser.role === 'admin' ? '/dashboard/admin' : '/dashboard/cliente'}
+                    <button
+                      onClick={() => router.push(currentUser.role === 'super_admin' || currentUser.role === 'admin' ? '/dashboard/admin' : '/dashboard/cliente')}
                       className="w-full text-left px-2.5 py-2 text-xs rounded hover:bg-white/5 hover:text-accent transition-colors flex items-center gap-2 text-foreground/80"
                     >
                       <LayoutDashboard className="h-4 w-4 text-accent" />
                       <span>{t('Mi Panel')}</span>
-                    </Link>
+                    </button>
                     <button
                       onClick={handleLogout}
                       className="w-full text-left px-2.5 py-2 text-xs rounded hover:bg-red-500/5 hover:text-red-400 transition-colors flex items-center gap-2 text-red-500 border-t border-white/5 mt-1"
@@ -441,23 +441,23 @@ export default function Header() {
           {/* Mobile: Cart + Favorites + Hamburger */}
           <div className="md:hidden flex items-center gap-3">
             {/* Favorites */}
-            <Link href="/dashboard/cliente?tab=favorites" className="relative p-1">
+            <button onClick={() => router.push('/dashboard/cliente?tab=favorites')} className="relative p-1">
               <Heart strokeWidth={1.8} className="h-5 w-5 text-accent" />
               {favCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
                   {favCount}
                 </span>
               )}
-            </Link>
+            </button>
             {/* Cart */}
-            <Link href="/tienda/carrinho" className="relative p-1">
+            <button onClick={() => router.push('/tienda/carrinho')} className="relative p-1">
               <ShoppingBag strokeWidth={1.8} className="h-5 w-5 text-accent" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-accent text-background text-[8px] font-bold h-3.5 w-3.5 rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
-            </Link>
+            </button>
             {/* Hamburger */}
             <button
               className="text-foreground/80 hover:text-accent"
@@ -497,30 +497,30 @@ export default function Header() {
               {headerSearchQuery.trim() && (searchResults.length > 0 || matchedCategories.length > 0) && (
                 <div className="absolute left-0 right-0 top-full mt-1.5 rounded-xl border border-white/10 bg-[#07101E] p-3 shadow-2xl z-50 flex flex-col gap-2">
                   {matchedCategories.map((cat: any) => (
-                    <Link
+                    <button
                       key={cat.id}
-                      href={`/tienda?category=${cat.slug}`}
                       onClick={() => {
                         setMobileMenuOpen(false);
                         setHeaderSearchQuery('');
+                        router.push(`/tienda?category=${cat.slug}`);
                       }}
-                      className="text-[10px] text-white hover:text-accent font-semibold py-0.5 uppercase tracking-wide px-2"
+                      className="text-[10px] text-white hover:text-accent font-semibold py-0.5 uppercase tracking-wide px-2 text-left"
                     >
                       📁 {cat.name}
-                    </Link>
+                    </button>
                   ))}
                   {searchResults.map((prod: any) => (
-                    <Link
+                    <button
                       key={prod.id}
-                      href={`/tienda/produto/${prod.slug}`}
                       onClick={() => {
                         setMobileMenuOpen(false);
                         setHeaderSearchQuery('');
+                        router.push(`/tienda/produto/${prod.slug}`);
                       }}
-                      className="text-[10px] text-white hover:text-accent font-bold py-0.5 truncate uppercase px-2 border-t border-white/5 pt-1.5"
+                      className="text-[10px] text-white hover:text-accent font-bold py-0.5 truncate uppercase px-2 border-t border-white/5 pt-1.5 text-left"
                     >
                       ✨ {prod.name}
-                    </Link>
+                    </button>
                   ))}
                 </div>
               )}
@@ -528,15 +528,14 @@ export default function Header() {
 
             <div className="flex flex-col gap-4">
               {navItems.map((item) => (
-                <Link
+                <button
                   key={item.href + '-' + item.label}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => { setMobileMenuOpen(false); router.push(item.href); }}
                   className={`text-xs uppercase tracking-wider font-bold hover:text-accent ${pathname === item.href ? 'text-accent' : 'text-foreground'
                     }`}
                 >
                   {item.label}
-                </Link>
+                </button>
               ))}
             </div>
 
@@ -569,14 +568,16 @@ export default function Header() {
                 <div className="text-[9px] font-bold text-accent uppercase tracking-widest">
                   {t('Sesión')}: {currentUser.name} ({currentUser.role})
                 </div>
-                <Link
-                  href={currentUser.role === 'super_admin' || currentUser.role === 'admin' ? '/dashboard/admin' : '/dashboard/cliente'}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-2 text-xs text-foreground/80 py-1"
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    router.push(currentUser.role === 'super_admin' || currentUser.role === 'admin' ? '/dashboard/admin' : '/dashboard/cliente');
+                  }}
+                  className="flex items-center gap-2 text-xs text-foreground/80 py-1 text-left"
                 >
                   <LayoutDashboard className="h-4 w-4 text-accent" />
                   {t('Mi Panel')}
-                </Link>
+                </button>
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 text-xs text-red-500 py-1 text-left"
