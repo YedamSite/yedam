@@ -183,37 +183,49 @@ export const authService = {
       });
       if (error) throw error;
 
+      // Ensure profile is created in our DB in all scenarios
+      const profileDataPayload = {
+        id: data.user.id,
+        email: cleanEmail,
+        name,
+        phone: cleanPhone || null,
+        country: profileData?.country || null,
+        document_type: profileData?.documentType || null,
+        document_number: cleanDoc || null,
+        postal_code: profileData?.postalCode || null,
+        street: profileData?.street || null,
+        number: profileData?.number || null,
+        complement: profileData?.complement || null,
+        neighborhood: profileData?.neighborhood || null,
+        city: profileData?.city || null,
+        state: profileData?.state || null,
+      };
+
       // Verificar se o usuário precisa confirmar e-mail
       if (data.user && !data.session) {
         // Usuário criado mas precisa confirmar e-mail - NÃO criar sessão
         console.log('Usuário criado, aguardando confirmação de e-mail:', data.user.email);
+        
+        // Insert profile data unauthenticated (INSERT only)
+        await fetch('/api/auth/register-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isNewRegistration: true, profileData: profileDataPayload }),
+        });
+
         return { user: data.user, requiresEmailConfirmation: true };
       }
 
       if (data.user && data.session) {
-        // Usuário já confirmado (caso raro em produção)
-        const insertResp = await fetch('/api/supabase-reload', {
+        // Usuário já logado
+        const insertResp = await fetch('/api/auth/register-profile', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${data.session.access_token}`
+          },
           body: JSON.stringify({
-            action: 'upsert',
-            table: 'users',
-            records: [{
-              id: data.user.id,
-              email: cleanEmail,
-              name,
-              phone: cleanPhone || null,
-              country: profileData?.country || null,
-              document_type: profileData?.documentType || null,
-              document_number: cleanDoc || null,
-              postal_code: profileData?.postalCode || null,
-              street: profileData?.street || null,
-              number: profileData?.number || null,
-              complement: profileData?.complement || null,
-              neighborhood: profileData?.neighborhood || null,
-              city: profileData?.city || null,
-              state: profileData?.state || null,
-            }]
+            profileData: profileDataPayload
           }),
         });
         const insertResult = await insertResp.json();
