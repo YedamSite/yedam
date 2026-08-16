@@ -182,6 +182,10 @@ export const authService = {
         }
       });
       if (error) throw error;
+      
+      if (!data.user) {
+        throw new Error('User creation failed: no user returned');
+      }
 
       // Ensure profile is created in our DB in all scenarios
       const profileDataPayload = {
