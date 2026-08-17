@@ -309,7 +309,12 @@ export default function CheckoutWizard() {
     setCouponError('');
   };
 
-  const shipping = locale === 'pt' ? 75.00 : 15.00;
+  // Compute dynamic shipping
+  const systemSettings = db.get('system_settings') || {};
+  const shippingZones = systemSettings.shipping_zones || [];
+  const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
+  const shipping = selectedZone?.methods?.[0]?.price !== undefined ? Number(selectedZone.methods[0].price) : (locale === 'pt' ? 75.00 : 15.00);
+
   const total = Math.max(0, subtotal + shipping - discount);
 
   // Check for Stripe success/cancel redirect on mount
