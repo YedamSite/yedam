@@ -8,8 +8,8 @@ type Language = 'es' | 'pt' | 'en'
 const translations: Record<Language, Record<string, string>> = {
   es: {
     // Header
-    'Belleza que nace de la tradición. Cosm├®tica que transforma.': 'Belleza que nace de la tradición. Cosm├®tica que transforma.',
-    'Envíos para toda Am├®rica Latina': 'Envíos para toda Am├®rica Latina',
+    'Belleza que nace de la tradición. Cosmética que transforma.': 'Belleza que nace de la tradición. Cosmética que transforma.',
+    'Envíos para toda América Latina': 'Envíos para toda América Latina',
     'Atención': 'Atención',
     'Inicio': 'Inicio',
     'Tienda': 'Tienda',
@@ -25,8 +25,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Productos': 'Productos',
     'Sesión': 'Sesión',
     'Español': 'Español',
-    'Portugu├®s': 'Portugu├®s',
-    'Ingl├®s': 'Ingl├®s',
+    'Portugués': 'Portugués',
+    'Inglés': 'Inglés',
     'Política de Cookies': 'Política de Cookies',
     // Footer
     'Todos los derechos reservados': 'Todos los derechos reservados',
@@ -36,13 +36,13 @@ const translations: Record<Language, Record<string, string>> = {
     'Tu belleza.': 'Tu belleza.',
     'Tu ritual.': 'Tu ritual.',
     'Tu momento.': 'Tu momento.',
-    'CHEOTNUN ÔÇö Tu tienda online de cosm├®tica coreana K-Beauty': 'CHEOTNUN ÔÇö Tu tienda online de cosm├®tica coreana K-Beauty',
-    'Cheotnun es tu tienda online de cosm├®tica coreana K-Beauty. Compra productos aut├®nticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda Am├®rica Latina.': 'Cheotnun es tu tienda online de cosm├®tica coreana K-Beauty. Compra productos aut├®nticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda Am├®rica Latina.',
+    'CHEOTNUN ÔÇö Tu tienda online de cosmética coreana K-Beauty': 'CHEOTNUN ÔÇö Tu tienda online de cosmética coreana K-Beauty',
+    'Cheotnun es tu tienda online de cosmética coreana K-Beauty. Compra productos auténticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda América Latina.': 'Cheotnun es tu tienda online de cosmética coreana K-Beauty. Compra productos auténticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda América Latina.',
     'COMPRAR AHORA': 'COMPRAR AHORA',
     'DESCUBRIR RUTINAS': 'DESCUBRIR RUTINAS',
     'Colección Curada': 'Colección Curada',
     'Descubre lo mejor del K-Beauty': 'Descubre lo mejor del K-Beauty',
-    'Productos aut├®nticos para realzar tu belleza natural.': 'Productos aut├®nticos para realzar tu belleza natural.',
+    'Productos auténticos para realzar tu belleza natural.': 'Productos auténticos para realzar tu belleza natural.',
     'VER TODAS LAS CATEGORÍAS': 'VER TODAS LAS CATEGORÍAS',
     'Favoritos de la Comunidad': 'Favoritos de la Comunidad',
     'Más vendidos': 'Más vendidos',
@@ -67,7 +67,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Suscríbete y recibe un 10% de descuento': 'Suscríbete y recibe un 10% de descuento',
     'Tu correo electrónico': 'Tu correo electrónico',
     'SUSCRIBIRSE': 'SUSCRIBIRSE',
-    'Ô£ô ┬íTe has suscrito con ├®xito! Bienvenido al Cheotnun Club.': 'Ô£ô ┬íTe has suscrito con ├®xito! Bienvenido al Cheotnun Club.',
+    'Ô£ô ┬íTe has suscrito con éxito! Bienvenido al Cheotnun Club.': 'Ô£ô ┬íTe has suscrito con éxito! Bienvenido al Cheotnun Club.',
     // Tienda
     'Tienda Cheotnun': 'Tienda Cheotnun',
     'Todos los Productos': 'Todos los Productos',
@@ -123,7 +123,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Programas de Inmersión Seleccionados': 'Programas de Inmersión Seleccionados',
     'Reservar Plaza': 'Reservar Plaza',
     'Inversión': 'Inversión',
-    '┬┐Por qu├® elegirnos?': '┬┐Por qu├® elegirnos?',
+    '┬┐Por qué elegirnos?': '┬┐Por qué elegirnos?',
     'Beneficios de la Inmersión Cheotnun': 'Beneficios de la Inmersión Cheotnun',
     'Certificación Premium': 'Certificación Premium',
     'Inmersión Cultural': 'Inmersión Cultural',
@@ -148,14 +148,14 @@ const translations: Record<Language, Record<string, string>> = {
     'Configuración': 'Configuración',
     'Bienvenido/a': 'Bienvenido/a',
     'Email': 'Email',
-    'Tel├®fono': 'Tel├®fono',
+    'Teléfono': 'Teléfono',
     'Actualizar Datos': 'Actualizar Datos',
     'Guardar': 'Guardar',
     'Cancelar': 'Cancelar',
     'Nombre': 'Nombre',
     'Apellido': 'Apellido',
     'Fecha de Nacimiento': 'Fecha de Nacimiento',
-    'G├®nero': 'G├®nero',
+    'Género': 'Género',
     'Femenino': 'Femenino',
     'Masculino': 'Masculino',
     'Otro': 'Otro',
@@ -171,7 +171,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Al menos 6 caracteres': 'Al menos 6 caracteres',
     'Confirmar contraseña': 'Confirmar contraseña',
     'He leído y acepto los': 'He leído y acepto los',
-    'T├®rminos y Condiciones': 'T├®rminos y Condiciones',
+    'Términos y Condiciones': 'Términos y Condiciones',
     'Política de Privacidad': 'Política de Privacidad',
     // Erros e Sucesso
     'Error': 'Error',
@@ -183,11 +183,11 @@ const translations: Record<Language, Record<string, string>> = {
     'Producto eliminado de favoritos': 'Producto eliminado de favoritos',
     // Tienda textos
     'agregado al carrito': 'agregado al carrito',
-    'Catálogo de Cosm├®ticos': 'Catálogo de Cosm├®ticos',
+    'Catálogo de Cosméticos': 'Catálogo de Cosméticos',
     'Todas las categorías': 'Todas las categorías',
     'Todas las marcas': 'Todas las marcas',
     'Buscar Producto': 'Buscar Producto',
-    'Ej: S├®rum, Limpiador...': 'Ej: S├®rum, Limpiador...',
+    'Ej: Sérum, Limpiador...': 'Ej: Sérum, Limpiador...',
     'Marcas': 'Marcas',
     'Filtrar por': 'Filtrar por',
     'Buscar Produto': 'Buscar Producto',
@@ -233,9 +233,9 @@ const translations: Record<Language, Record<string, string>> = {
     // Header completo
     'Belleza que nace': 'Belleza que nace',
     'tradición': 'tradición',
-    'Cosm├®tica que transforma': 'Cosm├®tica que transforma',
+    'Cosmética que transforma': 'Cosmética que transforma',
     'Envíos para toda': 'Envíos para toda',
-    'Am├®rica Latina': 'Am├®rica Latina',
+    'América Latina': 'América Latina',
     'Buscar': 'Buscar',
     'Panel': 'Panel',
     'Salir': 'Salir',
@@ -274,8 +274,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Tu belleza': 'Tu belleza',
     'Tu ritual': 'Tu ritual',
     'Tu momento': 'Tu momento',
-    'Cosm├®ticos coreanos': 'Cosm├®ticos coreanos',
-    'aut├®nticos': 'aut├®nticos',
+    'Cosméticos coreanos': 'Cosméticos coreanos',
+    'auténticos': 'auténticos',
     'seleccionados': 'seleccionados',
     'cada etapa': 'cada etapa',
     'cuidado facial': 'cuidado facial',
@@ -286,7 +286,7 @@ const translations: Record<Language, Record<string, string>> = {
     'AHORA': 'AHORA',
     'DESCUBRIR': 'DESCUBRIR',
     'RUTINAS': 'RUTINAS',
-    // Seç├Áes Home
+    // Seções Home
     'Colección': 'Colección',
     'Curada': 'Curada',
     'Descubre': 'Descubre',
@@ -340,14 +340,14 @@ const translations: Record<Language, Record<string, string>> = {
     'Cruelty': 'Cruelty',
     'Free': 'Free',
     'CHEOTNUN CLUB': 'CHEOTNUN CLUB',
-    'S├®': 'S├®',
+    'Sé': 'Sé',
     'primera': 'primera',
     'descubrir': 'descubrir',
     'nuevos': 'nuevos',
     'ofertas': 'ofertas',
     'correo': 'correo',
     'electrónico': 'electrónico',
-    '├®xito': '├®xito',
+    'éxito': 'éxito',
     'Bienvenido': 'Bienvenido',
     'Club': 'Club',
     // Data transparency (Google OAuth)
@@ -368,12 +368,12 @@ const translations: Record<Language, Record<string, string>> = {
     'Error al actualizar la contraseña.': 'Error al actualizar la contraseña.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Aguardando Confirmación de la Tienda',
-    'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de at├® 48 horas úteis (at├® 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Su pedido fue recibido y el pago fue confirmado. Estamos dentro del plazo operativo de hasta 48 horas hábiles (72 horas en feriados coreanos) para preparar y enviar su producto. Recibirá una notificación cuando el pedido est├® siendo preparado para envío.',
+    'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Su pedido fue recibido y el pago fue confirmado. Estamos dentro del plazo operativo de hasta 48 horas hábiles (72 horas en feriados coreanos) para preparar y enviar su producto. Recibirá una notificación cuando el pedido esté siendo preparado para envío.',
   },
   pt: {
     // Header
-    'Belleza que nace de la tradición. Cosm├®tica que transforma.': 'Beleza que nasce da tradição. Cosm├®tica que transforma.',
-    'Envíos para toda Am├®rica Latina': 'Envios para toda Am├®rica Latina',
+    'Belleza que nace de la tradición. Cosmética que transforma.': 'Beleza que nasce da tradição. Cosmética que transforma.',
+    'Envíos para toda América Latina': 'Envios para toda América Latina',
     'Atención': 'Atendimento',
     'Inicio': 'Início',
     'Tienda': 'Loja',
@@ -389,8 +389,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Productos': 'Produtos',
     'Sesión': 'Sessão',
     'Español': 'Espanhol',
-    'Portugu├®s': 'Português',
-    'Ingl├®s': 'Inglês',
+    'Portugués': 'Português',
+    'Inglés': 'Inglês',
     // Footer
     'Todos los derechos reservados': 'Todos os direitos reservados',
     'Orgulhosamente desenvolvido por': 'Orgulhosamente desenvolvido por',
@@ -399,20 +399,20 @@ const translations: Record<Language, Record<string, string>> = {
     'Tu belleza.': 'Sua beleza.',
     'Tu ritual.': 'Seu ritual.',
     'Tu momento.': 'Seu momento.',
-    'CHEOTNUN ÔÇö Tu tienda online de cosm├®tica coreana K-Beauty': 'CHEOTNUN ÔÇö Sua loja online de cosm├®tica coreana K-Beauty',
-    'Cheotnun es tu tienda online de cosm├®tica coreana K-Beauty. Compra productos aut├®nticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda Am├®rica Latina.': 'Cheotnun ├® sua loja online de cosm├®tica coreana K-Beauty. Compre produtos autênticos, descubra rotinas personalizadas para seu tipo de pele e receba entregas em toda a Am├®rica Latina.',
+    'CHEOTNUN ÔÇö Tu tienda online de cosmética coreana K-Beauty': 'CHEOTNUN ÔÇö Sua loja online de cosmética coreana K-Beauty',
+    'Cheotnun es tu tienda online de cosmética coreana K-Beauty. Compra productos auténticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda América Latina.': 'Cheotnun é sua loja online de cosmética coreana K-Beauty. Compre produtos autênticos, descubra rotinas personalizadas para seu tipo de pele e receba entregas em toda a América Latina.',
     'COMPRAR AHORA': 'COMPRAR AGORA',
     'DESCUBRIR RUTINAS': 'DESCOBRIR ROTINAS',
     'Colección Curada': 'Coleção Curada',
     'Descubre lo mejor del K-Beauty': 'Descubra o melhor do K-Beauty',
-    'Productos aut├®nticos para realzar tu belleza natural.': 'Produtos autênticos para realçar sua beleza natural.',
+    'Productos auténticos para realzar tu belleza natural.': 'Produtos autênticos para realçar sua beleza natural.',
     'VER TODAS LAS CATEGORÍAS': 'VER TODAS AS CATEGORIAS',
     'Favoritos de la Comunidad': 'Favoritos da Comunidade',
     'Más vendidos': 'Mais vendidos',
     'Los favoritos de nuestra comunidad internacional. Fórmulas probadas que entregan resultados visibles.': 'Os favoritos da nossa comunidade internacional. Fórmulas testadas que entregam resultados visíveis.',
     'VER TODOS': 'VER TODOS',
     'Experiencias Cheotnun': 'Experiências Cheotnun',
-    'Vive la belleza coreana más allá de los productos': 'Viva a beleza coreana al├®m dos produtos',
+    'Vive la belleza coreana más allá de los productos': 'Viva a beleza coreana além dos produtos',
     'SABER MÁS': 'SAIBA MAIS',
     'Tratamientos Específicos': 'Tratamentos Específicos',
     'Rutinas para cada necesidad': 'Rotinas para cada necessidade',
@@ -430,7 +430,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Suscríbete y recibe un 10% de descuento': 'Inscreva-se e receba 10% de desconto',
     'Tu correo electrónico': 'Seu e-mail',
     'SUSCRIBIRSE': 'INSCREVER-SE',
-    'Ô£ô ┬íTe has suscrito con ├®xito! Bienvenido al Cheotnun Club.': 'Ô£ô Inscrição realizada com sucesso! Bem-vindo ao Cheotnun Club.',
+    'Ô£ô ┬íTe has suscrito con éxito! Bienvenido al Cheotnun Club.': 'Ô£ô Inscrição realizada com sucesso! Bem-vindo ao Cheotnun Club.',
     // Tienda
     'Tienda Cheotnun': 'Loja Cheotnun',
     'Buscar Produto': 'Buscar Produto',
@@ -493,12 +493,12 @@ const translations: Record<Language, Record<string, string>> = {
     'Descubre el verdadero arte del skincare coreano': 'Descubra a verdadeira arte do skincare coreano',
     'EXPLORAR EL CATÁLOGO': 'EXPLORAR O CATÁLOGO',
     'Inmersión y Bienestar': 'Imersão e Bem-estar',
-    'Más allá del Producto:': 'Al├®m do Produto:',
+    'Más allá del Producto:': 'Além do Produto:',
     'Una Filosofía de Cuidado': 'Uma Filosofia de Cuidado',
     'Programas de Inmersión Seleccionados': 'Programas de Imersão Selecionados',
     'Reservar Plaza': 'Reservar Vaga',
     'Inversión': 'Investimento',
-    '┬┐Por qu├® elegirnos?': 'Por que nos escolher?',
+    '┬┐Por qué elegirnos?': 'Por que nos escolher?',
     'Beneficios de la Inmersión Cheotnun': 'Benefícios da Imersão Cheotnun',
     'Certificación Premium': 'Certificação Premium',
     'Inmersión Cultural': 'Imersão Cultural',
@@ -520,17 +520,17 @@ const translations: Record<Language, Record<string, string>> = {
     'Mis Datos': 'Meus Dados',
     'Direcciones': 'Endereços',
     'Club Cheotnun': 'Clube Cheotnun',
-    'Configuración': 'Configuraç├Áes',
+    'Configuración': 'Configurações',
     'Bienvenido/a': 'Bem-vindo/a',
     'Email': 'E-mail',
-    'Tel├®fono': 'Telefone',
+    'Teléfono': 'Telefone',
     'Actualizar Datos': 'Atualizar Dados',
     'Guardar': 'Salvar',
     'Cancelar': 'Cancelar',
     'Nombre': 'Nome',
     'Apellido': 'Sobrenome',
     'Fecha de Nacimiento': 'Data de Nascimento',
-    'G├®nero': 'Gênero',
+    'Género': 'Gênero',
     'Femenino': 'Feminino',
     'Masculino': 'Masculino',
     'Otro': 'Outro',
@@ -546,7 +546,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Al menos 6 caracteres': 'Pelo menos 6 caracteres',
     'Confirmar contraseña': 'Confirmar senha',
     'He leído y acepto los': 'Li e aceito os',
-    'T├®rminos y Condiciones': 'Termos e Condiç├Áes',
+    'Términos y Condiciones': 'Termos e Condições',
     'Política de Privacidad': 'Política de Privacidade',
     'Política de Cookies': 'Política de Cookies',
     // Erros e Sucesso
@@ -558,7 +558,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Producto agregado a favoritos': 'Produto adicionado aos favoritos',
     'Producto eliminado de favoritos': 'Produto removido dos favoritos',
     // Data transparency (Google OAuth)
-    'Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.': 'Ao se registrar na Cheotnun, seus dados (nome, e-mail) são usados para processar seus pedidos, personalizar sua experiência de compra e enviar informaç├Áes relevantes sobre suas compras. Seus dados estão seguros e nunca são compartilhados sem seu consentimento.',
+    'Al registrarte en Cheotnun, tus datos (nombre, correo electrónico) se utilizan para procesar tus pedidos, personalizar tu experiencia de compra y enviarte información relevante sobre tus compras. Tus datos están seguros y nunca se comparten sin tu consentimiento.': 'Ao se registrar na Cheotnun, seus dados (nome, e-mail) são usados para processar seus pedidos, personalizar sua experiência de compra e enviar informações relevantes sobre suas compras. Seus dados estão seguros e nunca são compartilhados sem seu consentimento.',
     // Complete profile (Google OAuth)
     'Completa tu registro': 'Complete seu cadastro',
     'Solo falta completar tus datos para finalizar tu cuenta.': 'Só falta completar seus dados para finalizar sua conta.',
@@ -575,12 +575,12 @@ const translations: Record<Language, Record<string, string>> = {
     'Error al actualizar la contraseña.': 'Erro ao atualizar a senha.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Aguardando Confirmação da Loja',
-    'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de at├® 48 horas úteis (at├® 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Seu pedido foi recebido e o pagamento foi confirmado. Estamos dentro do prazo operacional de at├® 48 horas úteis (72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.',
+    'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Seu pedido foi recebido e o pagamento foi confirmado. Estamos dentro do prazo operacional de até 48 horas úteis (72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.',
   },
   en: {
     // Header
-    'Belleza que nace de la tradición. Cosm├®tica que transforma.': 'Beauty born from tradition. Cosmetics that transform.',
-    'Envíos para toda Am├®rica Latina': 'Shipping throughout Latin America',
+    'Belleza que nace de la tradición. Cosmética que transforma.': 'Beauty born from tradition. Cosmetics that transform.',
+    'Envíos para toda América Latina': 'Shipping throughout Latin America',
     'Atención': 'Support',
     'Inicio': 'Home',
     'Tienda': 'Shop',
@@ -596,8 +596,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Productos': 'Products',
     'Sesión': 'Session',
     'Español': 'Spanish',
-    'Portugu├®s': 'Portuguese',
-    'Ingl├®s': 'English',
+    'Portugués': 'Portuguese',
+    'Inglés': 'English',
     // Footer
     'Todos los derechos reservados': 'All rights reserved',
     'Orgulhosamente desenvolvido por': 'Proudly developed by',
@@ -606,13 +606,13 @@ const translations: Record<Language, Record<string, string>> = {
     'Tu belleza.': 'Your beauty.',
     'Tu ritual.': 'Your ritual.',
     'Tu momento.': 'Your moment.',
-    'CHEOTNUN ÔÇö Tu tienda online de cosm├®tica coreana K-Beauty': 'CHEOTNUN ÔÇö Your online K-Beauty store',
-    'Cheotnun es tu tienda online de cosm├®tica coreana K-Beauty. Compra productos aut├®nticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda Am├®rica Latina.': 'Cheotnun is your online K-Beauty store. Buy authentic Korean cosmetics, discover personalized skincare routines, and get delivery throughout Latin America.',
+    'CHEOTNUN ÔÇö Tu tienda online de cosmética coreana K-Beauty': 'CHEOTNUN ÔÇö Your online K-Beauty store',
+    'Cheotnun es tu tienda online de cosmética coreana K-Beauty. Compra productos auténticos, descubre rutinas personalizadas para tu tipo de piel y recibe envíos a toda América Latina.': 'Cheotnun is your online K-Beauty store. Buy authentic Korean cosmetics, discover personalized skincare routines, and get delivery throughout Latin America.',
     'COMPRAR AHORA': 'SHOP NOW',
     'DESCUBRIR RUTINAS': 'DISCOVER ROUTINES',
     'Colección Curada': 'Curated Collection',
     'Descubre lo mejor del K-Beauty': 'Discover the best of K-Beauty',
-    'Productos aut├®nticos para realzar tu belleza natural.': 'Authentic products to enhance your natural beauty.',
+    'Productos auténticos para realzar tu belleza natural.': 'Authentic products to enhance your natural beauty.',
     'VER TODAS LAS CATEGORÍAS': 'VIEW ALL CATEGORIES',
     'Favoritos de la Comunidad': 'Community Favorites',
     'Más vendidos': 'Best Sellers',
@@ -637,7 +637,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Suscríbete y recibe un 10% de descuento': 'Subscribe and get 10% off',
     'Tu correo electrónico': 'Your email',
     'SUSCRIBIRSE': 'SUBSCRIBE',
-    'Ô£ô ┬íTe has suscrito con ├®xito! Bienvenido al Cheotnun Club.': 'Ô£ô Successfully subscribed! Welcome to the Cheotnun Club.',
+    'Ô£ô ┬íTe has suscrito con éxito! Bienvenido al Cheotnun Club.': 'Ô£ô Successfully subscribed! Welcome to the Cheotnun Club.',
     // Tienda
     'Tienda Cheotnun': 'Cheotnun Shop',
     'Buscar Produto': 'Search Product',
@@ -705,7 +705,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Programas de Inmersión Seleccionados': 'Selected Immersion Programs',
     'Reservar Plaza': 'Reserve Spot',
     'Inversión': 'Investment',
-    '┬┐Por qu├® elegirnos?': 'Why choose us?',
+    '┬┐Por qué elegirnos?': 'Why choose us?',
     'Beneficios de la Inmersión Cheotnun': 'Benefits of Cheotnun Immersion',
     'Certificación Premium': 'Premium Certification',
     'Inmersión Cultural': 'Cultural Immersion',
@@ -730,14 +730,14 @@ const translations: Record<Language, Record<string, string>> = {
     'Configuración': 'Settings',
     'Bienvenido/a': 'Welcome',
     'Email': 'Email',
-    'Tel├®fono': 'Phone',
+    'Teléfono': 'Phone',
     'Actualizar Datos': 'Update Data',
     'Guardar': 'Save',
     'Cancelar': 'Cancel',
     'Nombre': 'Name',
     'Apellido': 'Surname',
     'Fecha de Nacimiento': 'Date of Birth',
-    'G├®nero': 'Gender',
+    'Género': 'Gender',
     'Femenino': 'Female',
     'Masculino': 'Male',
     'Otro': 'Other',
@@ -753,7 +753,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Al menos 6 caracteres': 'At least 6 characters',
     'Confirmar contraseña': 'Confirm password',
     'He leído y acepto los': 'I have read and accept the',
-    'T├®rminos y Condiciones': 'Terms and Conditions',
+    'Términos y Condiciones': 'Terms and Conditions',
     'Política de Privacidad': 'Privacy Policy',
     'Política de Cookies': 'Cookie Policy',
     // Erros e Sucesso
@@ -782,7 +782,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Error al actualizar la contraseña.': 'Error updating password.',
     // Corrigir.txt - Order status texts
     'Aguardando Confirmação da Loja': 'Awaiting Store Confirmation',
-    'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de at├® 48 horas úteis (at├® 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Your order has been received and payment confirmed. We are within the operational period of up to 48 business hours (72 hours on Korean holidays) to pick, prepare and ship your product. You will receive a notification as soon as your order is being prepared for shipping.',
+    'Seu pedido foi recebido e o pagamento foi confirmado. Agora estamos dentro do prazo operacional de até 48 horas úteis (até 72 horas em feriados coreanos) para separar, preparar e enviar seu produto. Você receberá uma notificação assim que o pedido estiver sendo preparado para envio.': 'Your order has been received and payment confirmed. We are within the operational period of up to 48 business hours (72 hours on Korean holidays) to pick, prepare and ship your product. You will receive a notification as soon as your order is being prepared for shipping.',
   },
 }
 
@@ -797,13 +797,30 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | null>(null)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Language>('es')
+  const [locale, setLocaleState] = useState<Language>('pt')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const stored = localStorage.getItem('cheotnun_locale') as Language | null
     if (stored === 'es' || stored === 'pt' || stored === 'en') {
       setLocaleState(stored)
+    } else {
+      // Auto-detect browser language
+      const browserLang = navigator.language.toLowerCase();
+      let detectedLocale: Language = 'pt'; // Default fallback
+      
+      if (browserLang.startsWith('es')) {
+        detectedLocale = 'es';
+      } else if (browserLang.startsWith('en')) {
+        detectedLocale = 'en';
+      } else if (browserLang.startsWith('pt')) {
+        detectedLocale = 'pt';
+      }
+      
+      setLocaleState(detectedLocale);
+      // Opcional: já salva a detecção no cache do usuário
+      localStorage.setItem('cheotnun_locale', detectedLocale);
+      document.cookie = `cheotnun_locale=${detectedLocale};path=/;max-age=31536000;SameSite=Lax`;
     }
   }, [])
 
@@ -815,11 +832,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   const t = (key: string): string => {
-    // Primeiro tenta nas traduç├Áes principais
+    // Primeiro tenta nas traduções principais
     if (translations[locale]?.[key]) {
       return translations[locale][key]
     }
-    // Depois tenta nas traduç├Áes adicionais
+    // Depois tenta nas traduções adicionais
     if ((additionalTranslations as any)[locale]?.[key]) {
       return (additionalTranslations as any)[locale][key]
     }
