@@ -88,12 +88,14 @@ if (typeof window !== 'undefined' && supabase) {
         }
 
         const name = dbUser?.name || session.user.user_metadata?.name || email.split('@')[0];
+        const adminEmails = ['admin@cheotnun.com', 'mauemglobal@gmail.com'];
+        const role = adminEmails.includes(email) ? 'super_admin' : 'customer';
 
         saveSession({
           id: session.user.id,
           email,
           name,
-          role: 'customer',
+          role: role,
           phone: dbUser?.phone || null,
           country: dbUser?.country || null,
           document_type: dbUser?.document_type || null,
