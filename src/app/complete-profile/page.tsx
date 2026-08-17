@@ -101,14 +101,22 @@ export default function CompleteProfilePage() {
     setSuccess('');
 
     try {
+      let accessToken = null;
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        accessToken = session?.access_token;
+      } catch (e) {}
+
       // Save to DB via API
-      const resp = await fetch('/api/supabase-reload', {
+      const resp = await fetch('/api/auth/register-profile', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+        },
         body: JSON.stringify({
-          action: 'upsert',
-          table: 'users',
-          records: [{
+          isNewRegistration: true,
+          profileData: {
             id: user.id,
             email: user.email,
             name: user.name,
@@ -123,7 +131,7 @@ export default function CompleteProfilePage() {
             neighborhood: neighborhood || null,
             city: city || null,
             state: state || null,
-          }]
+          }
         }),
       });
       const result = await resp.json();
