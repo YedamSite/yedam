@@ -258,6 +258,25 @@ export async function deleteOrderFromSupabase(orderId: string) {
   }
 }
 
+export async function fetchCustomerOrdersAction(customerId: string) {
+  if (!supabaseUrl || !supabaseServiceKey) return { success: false, data: { orders: [], subscriptions: [] } };
+  try {
+    const client = createClient(supabaseUrl, supabaseServiceKey);
+    const { data: orders } = await client.from('cheotnun_orders').select('*').eq('customer_id', customerId);
+    const { data: subscriptions } = await client.from('cheotnun_subscriptions').select('*').eq('customer_id', customerId);
+    
+    return { 
+      success: true, 
+      data: {
+        orders: orders || [],
+        subscriptions: subscriptions || []
+      }
+    };
+  } catch (error: any) {
+    return { success: false, error: error.message, data: { orders: [], subscriptions: [] } };
+  }
+}
+
 export async function cancelOrderAction(orderId: string) {
   try {
     const orders = db.get('orders');

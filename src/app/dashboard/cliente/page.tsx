@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
 import { toggleFavoriteAction } from '@/actions/shopActions';
+import { fetchCustomerOrdersAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -102,11 +103,23 @@ export default function ClienteDashboard() {
     const userId = user.id;
     const userEmail = user.email;
 
-    // Try to load orders and subscriptions from Supabase first, then merge with localStorage
+    // Load orders directly from server action
     try {
-      await db.reloadFromSupabase(['orders', 'subscriptions']);
+      const res = await fetchCustomerOrdersAction(userId);
+      if (res.success && res.data) {
+        // Merge orders into local DB to ensure persistence
+        const existingOrders = db.get('orders') || [];
+        const incomingIds = new Set(res.data.orders.map((o: any) => o.id));
+        const mergedOrders = [...existingOrders.filter((o: any) => !incomingIds.has(o.id)), ...res.data.orders];
+        db.save('orders', mergedOrders);
+        
+        const existingSubs = db.get('subscriptions') || [];
+        const incomingSubIds = new Set(res.data.subscriptions.map((s: any) => s.id));
+        const mergedSubs = [...existingSubs.filter((s: any) => !incomingSubIds.has(s.id)), ...res.data.subscriptions];
+        db.save('subscriptions', mergedSubs);
+      }
     } catch (e) {
-      console.error('Failed to reload from Supabase:', e);
+      console.error('Failed to reload customer data:', e);
     }
 
     // Load orders (filtering out uncompleted Stripe checkouts)
@@ -168,10 +181,22 @@ export default function ClienteDashboard() {
 
     // Real-time polling: sync from Supabase and re-read orders every 5 seconds
     const interval = setInterval(async () => {
-      await db.reloadFromSupabase(['orders', 'subscriptions']);
       const userId = user.id;
+      const res = await fetchCustomerOrdersAction(userId);
+      if (res.success && res.data) {
+        const existingOrders = db.get('orders') || [];
+        const incomingIds = new Set(res.data.orders.map((o: any) => o.id));
+        const mergedOrders = [...existingOrders.filter((o: any) => !incomingIds.has(o.id)), ...res.data.orders];
+        db.save('orders', mergedOrders);
+        
+        const existingSubs = db.get('subscriptions') || [];
+        const incomingSubIds = new Set(res.data.subscriptions.map((s: any) => s.id));
+        const mergedSubs = [...existingSubs.filter((s: any) => !incomingSubIds.has(s.id)), ...res.data.subscriptions];
+        db.save('subscriptions', mergedSubs);
+      }
+      
       const allOrders = db.get('orders') || [];
-      const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
+      const userOrders = allOrders.filter((o: any) => o.customer_id === userId && o.status !== 'pendente_pagamento');
       setOrders(userOrders);
       const allSubs = db.get('subscriptions') || [];
       const hasAnyRecord = allSubs.some((s: any) => s.user_id === userId);
