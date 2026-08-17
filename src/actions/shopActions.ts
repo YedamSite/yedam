@@ -35,6 +35,8 @@ export async function submitOrderAction(data: {
   documentType: 'nif' | 'nie' | 'rut' | 'ci';
   documentNumber: string;
   gateway: string;
+  shippingAmount: number;
+  discountAmount: number;
 }) {
   try {
     const orders = db.get('orders');
@@ -53,8 +55,9 @@ export async function submitOrderAction(data: {
       }
     });
 
-    const shipping = 15.00;
-    const total = subtotal + shipping;
+    const shipping = data.shippingAmount || 0;
+    const discount = data.discountAmount || 0;
+    const total = Math.max(0, subtotal + shipping - discount);
 
     const orderId = crypto.randomUUID();
 
@@ -78,7 +81,7 @@ export async function submitOrderAction(data: {
       items: data.items,
       subtotal,
       shipping_amount: shipping,
-      discount_amount: 0.00,
+      discount_amount: discount,
       total_amount: total,
       gateway: data.gateway,
       shipping_address: data.shippingAddress,

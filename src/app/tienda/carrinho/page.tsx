@@ -379,7 +379,9 @@ export default function CheckoutWizard() {
       billingAddress: address,
       documentType: docType as any,
       documentNumber: docNumber,
-      gateway: 'stripe'
+      gateway: 'stripe',
+      shippingAmount: shipping,
+      discountAmount: discount
     });
 
     if (!res.success || !res.order) {
