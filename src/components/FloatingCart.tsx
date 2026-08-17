@@ -30,7 +30,7 @@ export default function FloatingCart() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 md:hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+    <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-50 md:hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
       {/* Mini Cart Preview */}
       <div className="group relative">
         {/* Mini dropdown on hover/tap */}

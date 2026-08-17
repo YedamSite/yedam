@@ -1975,7 +1975,10 @@ function mergeTableData(table: string, incoming: any[]) {
     if (!localRecord) {
       kept.push(record);
       changed = true;
-    } else if (new Date((record as any).updated_at || 0) > new Date((localRecord as any).updated_at || 0)) {
+    } else if (
+      new Date((record as any).updated_at || 0) > new Date((localRecord as any).updated_at || 0) ||
+      JSON.stringify(record) !== JSON.stringify(localRecord)
+    ) {
       Object.assign(localRecord, record);
       changed = true;
     }

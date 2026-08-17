@@ -94,10 +94,10 @@ export default function Home() {
       {/* Hero Section — Full viewport */}
       <section className="relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden border-b border-white/5">
         {/* Responsive background images */}
-        <div className="absolute inset-0 bg-cover bg-[position:65%_center] bg-no-repeat md:hidden"
+        <div className="absolute inset-0 bg-cover bg-[position:65%_25%] bg-no-repeat md:hidden"
           style={{ backgroundImage: c?.hero?.bgImageMobile ? `url('${c.hero.bgImageMobile}')` : "url('/images/cheotnun-k-beauty-banner-mobile-skincare-coreano.webp')" }}
         />
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden md:block"
+        <div className="absolute inset-0 bg-cover bg-[center_30%] bg-no-repeat hidden md:block"
           style={{ backgroundImage: c?.hero?.bgImage ? `url('${c.hero.bgImage}')` : "url('/images/cheotnun-k-beauty-banner-principal-skincare-coreano.webp')" }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-transparent z-0" />
@@ -164,9 +164,9 @@ export default function Home() {
           <p className="text-xs text-muted-foreground mt-2 font-light">{t(c?.categories?.subtitle || 'Productos auténticos para realzar tu belleza natural.')}</p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {categories.map((cat: any) => (
-            <Link key={cat.id} href={`/tienda?category=${cat.slug}`} className="relative h-64 rounded-3xl overflow-hidden border border-white/10 group shadow-xl">
+            <Link key={cat.id} href={`/tienda?category=${cat.slug}`} className="relative h-72 md:h-80 rounded-3xl overflow-hidden border border-white/10 group shadow-xl">
               <Image src={cat.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'} alt={cat.name} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
               <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-sm py-4 px-2 text-center border-t border-white/5">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-white group-hover:text-accent transition-colors leading-snug">
