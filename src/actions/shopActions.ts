@@ -163,22 +163,6 @@ export async function submitOrderAction(data: {
   }
 }
 
-export async function confirmOrderPaymentAction(orderId: string) {
-  try {
-    const orders = db.get('orders');
-    const orderIdx = orders.findIndex((o: any) => o.id === orderId);
-    if (orderIdx !== -1 && orders[orderIdx].status === 'pendente_pagamento') {
-      orders[orderIdx].status = 'aguardando_confirmacao';
-      orders[orderIdx].updated_at = new Date().toISOString();
-      db.save('orders', orders);
-      await syncOrderWithSupabase('orders', orders);
-      return { success: true };
-    }
-    return { success: false, error: 'Order not found or already confirmed' };
-  } catch (error: any) {
-    return { success: false, error: error.message };
-  }
-}
 
 export async function toggleFavoriteAction(userId: string, productId: string) {
   try {
