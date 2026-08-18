@@ -408,10 +408,10 @@ const DEFAULT_STATE: DbState = {
             { icon: 'Handshake', title: 'Colaboraciones y prensa', desc: 'Propuestas de colaboración, eventos y prensa.' }
           ],
           quickItems: [
-            '¿Cuánto tiempo tarda en llegar mi pedido?',
-            '¿Qué métodos de pago aceptan?',
-            '¿Realizan envíos a mi país?',
-            '¿Puedo cambiar o devolver un producto?'
+            { q: '¿Cuánto tiempo tarda en llegar mi pedido?', a: 'Los envíos estándar toman entre 3 a 7 días hábiles, y los express entre 1 a 3 días hábiles.' },
+            { q: '¿Qué métodos de pago aceptan?', a: 'Aceptamos tarjetas de crédito, débito, Pix y transferencias bancarias a través de Stripe y PayPal.' },
+            { q: '¿Realizan envíos a mi país?', a: 'Sí, realizamos envíos a todo el mundo. Los costos y tiempos de entrega varían según la ubicación.' },
+            { q: '¿Puedo cambiar o devolver un producto?', a: 'Tienes 30 días para devolver un producto sin usar y en su empaque original. Contáctanos para iniciar el proceso.' }
           ]
         },
         community: {
@@ -987,10 +987,10 @@ const DEFAULT_STATE: DbState = {
               { icon: 'Handshake', title: 'Colaborações e imprensa', desc: 'Propostas de colaboração, eventos e imprensa.' }
             ],
             quickItems: [
-              'Quanto tempo leva para meu pedido chegar?',
-              'Quais métodos de pagamento vocês aceitam?',
-              'Vocês fazem envios para todo o Brasil?',
-              'Posso trocar ou devolver um produto?'
+              { q: 'Quanto tempo leva para meu pedido chegar?', a: 'Os envios padrão levam de 3 a 7 dias úteis, e os expressos de 1 a 3 dias úteis.' },
+              { q: 'Quais métodos de pagamento vocês aceitam?', a: 'Aceitamos cartões de crédito, débito, Pix e transferências bancárias através do Stripe e PayPal.' },
+              { q: 'Vocês fazem envios para todo o Brasil?', a: 'Sim, realizamos envios para todo o mundo. Os custos e tempos de entrega variam de acordo com a localização.' },
+              { q: 'Posso trocar ou devolver um produto?', a: 'Você tem 30 dias para devolver um produto sem uso e em sua embalagem original. Entre em contato conosco para iniciar o processo.' }
             ]
           },
           community: {

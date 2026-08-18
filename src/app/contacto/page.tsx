@@ -76,6 +76,7 @@ export default function ContactoPage() {
   const [content, setContent] = useState<any>(null);
   const [formData, setFormData] = React.useState({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [expandedFaq, setExpandedFaq] = React.useState<number | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -302,15 +303,25 @@ export default function ContactoPage() {
                </Link>
              </div>
 
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-                {quickItems.map((q: string, idx: number) => (
-                   <div key={idx} className="bg-white/5 border border-white/10 rounded-lg px-6 py-4 flex items-center justify-between cursor-pointer group hover:bg-white/10 transition-colors">
-                      <span className="text-[11px] text-white/90 group-hover:text-white font-medium">{t(q)}</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-[#C9C9C9]/50 group-hover:text-[#C9C9C9] transition-colors" />
-                   </div>
-                ))}
-             </div>
-          </section>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                 {quickItems.map((item: any, idx: number) => {
+                    const isExpanded = expandedFaq === idx;
+                    return (
+                      <div key={idx} className="bg-white/5 border border-white/10 rounded-lg flex flex-col cursor-pointer group hover:bg-white/10 transition-colors" onClick={() => setExpandedFaq(isExpanded ? null : idx)}>
+                         <div className="px-6 py-4 flex items-center justify-between">
+                           <span className="text-[11px] text-white/90 group-hover:text-white font-medium">{t(item.q || item)}</span>
+                           <ChevronRight className={`w-3.5 h-3.5 text-[#C9C9C9]/50 group-hover:text-[#C9C9C9] transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                         </div>
+                         {isExpanded && item.a && (
+                           <div className="px-6 pb-4 pt-1 border-t border-white/5 text-[10px] text-white/70 leading-relaxed">
+                             {t(item.a)}
+                           </div>
+                         )}
+                      </div>
+                    );
+                 })}
+              </div>
+           </section>
         )}
 
         {/* UNETE A NUESTRA COMUNIDAD (INSTAGRAM) */}
