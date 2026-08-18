@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { useLanguage } from '@/context/translations';
+import { useLanguage } from '@/context/LanguageContext';
 import { ChevronRight } from 'lucide-react';
 import { db } from '@/lib/db';
 
