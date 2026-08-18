@@ -846,9 +846,9 @@ const DEFAULT_STATE: DbState = {
               { label: 'Contato', href: '/contacto' }
             ]},
           col3: { title: 'ATENDIMENTO', links: [
-              { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
-              { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
-              { label: 'Calle Gran Vía 12, Madrid, Espanha', href: '#', icon: 'MapPin' }
+              { label: 'hola@cheotnun.com', href: 'mailto:hola@cheotnun.com', icon: 'Mail' },
+              { label: '+82 01024836078', href: 'tel:+8201024836078', icon: 'Phone' },
+              { label: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', href: '#', icon: 'MapPin' }
             ]}
         },
         marcas: {

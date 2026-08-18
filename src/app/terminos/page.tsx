@@ -50,8 +50,8 @@ export default function TerminosPage() {
     },
     {
       icon: 'CheckCircle',
-      title: '6. Ley Aplicable y Jurisdicción',
-      content: 'Estos términos se rigen por la ley española. Cualquier disputa será resuelta en los juzgados y tribunales de Madrid, España, salvo que la ley aplicable disponga otra cosa.'
+      title: '11. Ley Aplicable',
+      content: 'Estos términos se rigen por las leyes de Corea del Sur. Cualquier disputa será resuelta en los juzgados y tribunales de Incheon, Corea del Sur, salvo que la ley aplicable disponga otra cosa.'
     }
   ];
 
@@ -78,13 +78,11 @@ export default function TerminosPage() {
             <p className="text-sm text-foreground/70 leading-relaxed mb-4">
               {t(c?.intro?.p1 || 'Bienvenido a')} <strong className="text-white">{t(c?.intro?.brand || 'Cheotnun K-Beauty')}</strong>. {t(c?.intro?.p2 || 'Estos términos establecen las condiciones bajo las cuales proporcionamos nuestros servicios de comercio electrónico de productos de belleza coreana.')}
             </p>
-            <p className="text-sm text-foreground/70 leading-relaxed">
-              <strong className="text-white">{t('Empresa:')}</strong> {t(c?.company?.name || 'Cheotnun K-Beauty S.L.')}<br/>
-              <strong className="text-white">{t('NIF:')}</strong> {t(c?.company?.nif || 'B-12345678')}<br/>
-              <strong className="text-white">{t('Domicilio:')}</strong> {t(c?.company?.address || 'Calle Gran Vía 12, Madrid, España')}<br/>
-              <strong className="text-white">{t('Email:')}</strong> {t(c?.company?.email || 'hola@cheotnun.com')}<br/>
-              <strong className="text-white">{t('Teléfono:')}</strong> {t(c?.company?.phone || '+34 600 111 222')}
-            </p>
+            <div className="text-foreground/70 text-sm leading-relaxed mb-8 flex flex-col gap-2">
+              <strong>{t('Razón Social:')}</strong> {t(c?.company?.name || 'Maeum Global')}<br/>
+              <strong>{t('Domicilio:')}</strong> {t(c?.company?.address || '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon')}<br/>
+              <strong>{t('Email:')}</strong> <a href={`mailto:${c?.company?.email || 'hola@cheotnun.com'}`} className="text-accent hover:underline">{t(c?.company?.email || 'hola@cheotnun.com')}</a>
+            </div>
           </div>
 
           {/* Sections */}

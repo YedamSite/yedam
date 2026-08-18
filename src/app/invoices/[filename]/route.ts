@@ -103,14 +103,14 @@ export async function GET(
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
   const company = db.get('system_settings')?.company_details || {
-    name: 'Cheotnun K-Beauty S.L.',
-    address: 'Calle Gran Vía 12, Madrid, España',
-    phone: '+34 912 345 678',
+    name: 'Maeum Global',
+    address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon',
+    phone: '+82 01024836078',
     email: 'hola@cheotnun.com'
   };
-  doc.text('Cheotnun K-Beauty S.L.', 15, 47);
-  doc.text(company.address || 'Calle Gran Vía 12, Madrid, España', 15, 51);
-  doc.text(`Phone: ${company.phone || '+34 912 345 678'}`, 15, 55);
+  doc.text(company.name || 'Maeum Global', 15, 47);
+  doc.text(company.address || '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', 15, 51);
+  doc.text(`Phone: ${company.phone || '+82 01024836078'}`, 15, 55);
   doc.text(`Email: ${company.email || 'hola@cheotnun.com'}`, 15, 59);
 
   // Importer info
@@ -154,7 +154,8 @@ export async function GET(
 
   items.forEach((item: any) => {
     const prod = allProds.find((p: any) => p.id === item.product_id || p.name === item.name);
-    const descEn = prod?.description_en || item.name || 'K-Beauty Cosmetic';
+    // Prefer original item name in order to be explicit and clear
+    const descEn = item.name || prod?.name || 'K-Beauty Cosmetic';
     const hsCode = prod?.hs_code || '3304.99.90';
     const weight = prod?.weight ? `${(prod.weight * item.quantity).toFixed(2)} kg` : '0.15 kg';
 
@@ -177,7 +178,9 @@ export async function GET(
   doc.text(`$${order.subtotal.toFixed(2)}`, 180, y);
 
   y += 5;
-  doc.text('Shipping & Handling:', 145, y);
+  const shipMethod = order.shipping_method || order.carrier || 'Standard Shipping';
+  const shippingLabel = `Shipping (${shipMethod}):`;
+  doc.text(shippingLabel.length > 25 ? shippingLabel.substring(0, 22) + '...:' : shippingLabel, 120, y);
   doc.text(`$${order.shipping_amount.toFixed(2)}`, 180, y);
 
   if (order.discount_amount > 0) {

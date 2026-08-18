@@ -1830,7 +1830,7 @@ if (!authorized) {
                           <div className="border border-white/10 bg-white p-3 rounded-xl text-black font-mono text-[8px] flex flex-col gap-2 leading-normal">
                             <div className="text-center font-bold text-[10px] border-b border-black pb-1 uppercase">COMMERCIAL INVOICE</div>
                             <div className="grid grid-cols-2 gap-2">
-                              <div><span className="font-bold">EXPORTER:</span> CHEOTNUN BEAUTY S.L.<br />Madrid, España</div>
+                              <div><span className="font-bold">EXPORTER:</span> MAEUM GLOBAL<br />Incheon, Corea del Sur</div>
                               <div><span className="font-bold">IMPORTER:</span> {selectedOrderForInvoice.shipping_address?.first_name} {selectedOrderForInvoice.shipping_address?.last_name}<br />{selectedOrderForInvoice.shipping_address?.country}</div>
                             </div>
                             <div className="border-t border-b border-black py-1">

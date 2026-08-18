@@ -26,7 +26,7 @@ export default function PrivacidadPage() {
     {
       icon: 'Shield',
       title: '1. Responsable del Tratamiento',
-      content: 'Cheotnun K-Beauty S.L., con domicilio en Calle Gran Vía 12, Madrid, España, NIF B-12345678, email: hola@cheotnun.com, es la responsable del tratamiento de tus datos personales.'
+      content: 'Maeum Global, con domicilio en 9 Inju-daero 224beon-gil, Michuhol-gu, Incheon, Corea del Sur, email: hola@cheotnun.com, es la responsable del tratamiento de tus datos personales.'
     },
     {
       icon: 'Database',
@@ -141,7 +141,7 @@ export default function PrivacidadPage() {
                 ✉️ {t(c?.contact?.email || 'dpo@cheotnun.com')}
               </a>
               <span className="text-foreground/20">|</span>
-              <span className="text-foreground/70">{t(c?.contact?.address || 'Calle Gran Vía 12, Madrid, España')}</span>
+              <span className="text-foreground/70">{t(c?.contact?.address || '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon')}</span>
             </div>
           </div>
 
