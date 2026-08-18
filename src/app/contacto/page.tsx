@@ -74,6 +74,30 @@ const iconMap: Record<string, any> = { MessageCircle, Mail, Instagram, Clock, Ma
 export default function ContactoPage() {
   const { t, locale } = useLanguage();
   const [content, setContent] = useState<any>(null);
+  const [formData, setFormData] = React.useState({ name: '', email: '', subject: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        alert(t(c?.form?.successAlert || '¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.'));
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        alert(t('Error al enviar el mensaje. Inténtalo de nuevo.'));
+      }
+    } catch (err) {
+      alert(t('Error al enviar el mensaje. Inténtalo de nuevo.'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const loadContent = () => {
     const siteContent = db.get('site_content');
@@ -204,32 +228,32 @@ export default function ContactoPage() {
                     <h3 className="text-2xl font-heading">{t(c?.form?.title || 'Envíanos un mensaje')}</h3>
                  </div>
                  
-                 <form className="flex flex-col gap-5">
+                 <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                        <div className="flex flex-col">
                           <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t(c?.form?.nameLabel || 'Nombre completo')}</label>
-                          <input type="text" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm" />
+                          <input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} type="text" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm" />
                        </div>
                        <div className="flex flex-col">
                           <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t(c?.form?.emailLabel || 'E-mail')}</label>
-                          <input type="email" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm" />
+                          <input required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} type="email" className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm" />
                        </div>
                     </div>
                     <div className="flex flex-col">
                        <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t(c?.form?.subjectLabel || 'Asunto')}</label>
-                       <select className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm text-[#1c2838]/70 appearance-none">
+                       <select value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})} className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm text-[#1c2838]/70 appearance-none">
                          {(c?.form?.subjectOptions || ['Selecciona un asunto', 'Dudas sobre productos', 'Estado de mi pedido', 'Devoluciones', 'Otros']).map((opt: string, idx: number) => (
-                           <option key={idx}>{t(opt)}</option>
+                           <option key={idx} value={opt}>{t(opt)}</option>
                          ))}
                        </select>
                     </div>
                     <div className="flex flex-col flex-1 min-h-[100px]">
                        <label className="text-[9px] font-bold uppercase tracking-widest mb-1">{t(c?.form?.messageLabel || 'Tu mensaje')}</label>
-                       <textarea required className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm h-full resize-none"></textarea>
+                       <textarea required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="bg-transparent border-b border-[#1c2838]/20 py-2 focus:outline-none focus:border-[#C9C9C9] text-sm h-full resize-none"></textarea>
                     </div>
                     
-                    <button type="submit" onClick={(e) => { e.preventDefault(); alert(t(c?.form?.successAlert || '¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.')); }} className="bg-[#C9C9C9] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[10px] tracking-widest py-4 rounded-md uppercase transition-colors flex justify-center items-center gap-2 mt-4">
-                      {t(c?.form?.submitText || 'ENVIAR MENSAJE')} <Send className="w-3.5 h-3.5" />
+                    <button type="submit" disabled={isSubmitting} className="bg-[#C9C9C9] hover:bg-[#1c2838] hover:text-[#FDF9F4] text-[#1c2838] font-bold text-[10px] tracking-widest py-4 rounded-md uppercase transition-colors flex justify-center items-center gap-2 mt-4 disabled:opacity-50">
+                      {isSubmitting ? '...' : t(c?.form?.submitText || 'ENVIAR MENSAJE')} <Send className="w-3.5 h-3.5" />
                     </button>
                     
                     <div className="flex items-center justify-center gap-1.5 mt-2">
