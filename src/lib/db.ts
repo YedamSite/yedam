@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v5';
+const SEED_VERSION = 'v7';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -1335,7 +1335,7 @@ const DEFAULT_STATE: DbState = {
           col3: { title: 'CUSTOMER SERVICE', links: [
               { label: 'WhatsApp: +82 01024836078', href: 'https://wa.me/8201024836078', icon: 'MessageCircle' },
               { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
-              { label: 'Calle Gran Vía 12, Madrid, Spain', href: '#', icon: 'MapPin' }
+              { label: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', href: '#', icon: 'MapPin' }
             ]}
         },
         marcas: {
