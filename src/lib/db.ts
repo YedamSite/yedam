@@ -1445,11 +1445,11 @@ const DEFAULT_STATE: DbState = {
           hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Contact Us', subtitle: 'We are here to help you with questions, suggestions or any need.', buttonText: 'QUICK PERSONALIZED RESPONSE', badges: [{ icon: 'Clock', text: 'English support' }, { icon: 'Clock', text: 'Response in under 24h' }, { icon: 'CheckCircle2', text: 'Your satisfaction is our priority' }] },
           contactMethods: {
             title: 'Contact Methods',
-            whatsapp: { label: 'WhatsApp', value: '+1 (555) 123-4567', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: 'https://wa.me/821024836078' },
-            email: { label: 'Email', value: 'hello@cheotnun.com', time: 'Response in under 24h', desc: 'Send us an email and we will reply shortly.', btn: 'SEND EMAIL', link: 'mailto:hello@cheotnun.com' },
+            whatsapp: { label: 'WhatsApp', value: '+82 01024836078', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: 'https://wa.me/821024836078' },
+            email: { label: 'Email', value: 'sac@cheotnun.com', time: 'Response in under 24h', desc: 'Send us an email and we will reply shortly.', btn: 'SEND EMAIL', link: 'mailto:sac@cheotnun.com' },
             instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
             hours: { label: 'Business Hours', value: 'Except holidays', time: '', desc: 'Monday to Friday 9am to 6pm (EST)', btn: 'VIEW HOURS', link: '#' },
-            address: { label: 'Address', value: 'Miami, FL, USA', time: '', desc: 'Administrative office', btn: 'VIEW ON MAP', link: '#' }
+            address: { label: 'Address', value: 'Incheon, South Korea', time: '', desc: 'Administrative office', btn: 'VIEW ON MAP', link: 'https://maps.google.com/?q=9+Inju-daero+224beon-gil,+Michuhol-gu,+Incheon' }
           },
           form: {
             title: 'Send us a message',
