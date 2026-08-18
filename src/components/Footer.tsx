@@ -127,44 +127,44 @@ export default function Footer() {
         ))}
       </div>
 
-      <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-8 pb-4 flex flex-col gap-6 text-[10px] text-muted-foreground">
+      <div className="mx-auto max-w-7xl border-t border-white/5 mt-12 pt-8 pb-8 flex flex-col lg:flex-row justify-between items-center gap-6 text-[10px] text-muted-foreground">
         
-        {/* Top row: Copyright and Credits */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+        {/* Left: Copyright and Legal Links */}
+        <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
           <p>
             &copy; {new Date().getFullYear()} {t('Cheotnun K-Beauty')}. {t('Todos los derechos reservados')}.
           </p>
-
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <p>
-              {t('Orgulhosamente desenvolvido por')}{' '}
-              <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">
-                VOLTRIS
-              </a>
-            </p>
-            <span className="hidden md:inline text-white/20">|</span>
-            <p>
-              {t('En colaboración con')}{' '}
-              <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
-                Maeum Global Agency
-              </a>
-            </p>
+          <span className="hidden md:inline text-white/20">|</span>
+          <div className="flex flex-wrap justify-center items-center gap-3 uppercase tracking-wider">
+            <Link href="/terminos" className="hover:text-accent transition-colors">
+              {t('Términos y Condiciones')}
+            </Link>
+            <span className="text-white/20">|</span>
+            <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
+              {t('Política de Privacidad')}
+            </Link>
+            <span className="text-white/20">|</span>
+            <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
+              {t('Política de Cookies')}
+            </Link>
           </div>
         </div>
 
-        {/* Bottom row: Legal Links */}
-        <div className="flex flex-wrap justify-center items-center gap-3 text-[10px] uppercase tracking-wider">
-          <Link href="/terminos" className="hover:text-accent transition-colors">
-            {t('Términos y Condiciones')}
-          </Link>
-          <span className="text-white/20">|</span>
-          <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
-            {t('Política de Privacidad')}
-          </Link>
-          <span className="text-white/20">|</span>
-          <Link href="/politica-de-privacidad" className="hover:text-accent transition-colors">
-            {t('Política de Cookies')}
-          </Link>
+        {/* Right: Credits */}
+        <div className="flex flex-wrap items-center justify-center gap-4 uppercase tracking-wider">
+          <p>
+            {t('Orgulhosamente desenvolvido por')}{' '}
+            <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">
+              VOLTRIS
+            </a>
+          </p>
+          <span className="hidden md:inline text-white/20">|</span>
+          <p>
+            {t('En colaboración con')}{' '}
+            <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
+              Maeum Global Agency
+            </a>
+          </p>
         </div>
 
       </div>
