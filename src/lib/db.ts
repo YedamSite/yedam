@@ -379,11 +379,11 @@ const DEFAULT_STATE: DbState = {
         },
         contactMethods: {
           title: 'Formas de contacto',
-          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma más rápida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form' },
+          whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +82 01024836078', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma más rápida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: 'https://wa.me/821024836078' },
           email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Envíanos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:sac@cheotnun.com' },
-          instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Envíanos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
+          instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envíanos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
           hours: { label: 'Horario de atención', value: 'Excepto feriados', time: '', desc: 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#' },
-          address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: '#' }
+          address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: 'https://maps.google.com/?q=9+Inju-daero+224beon-gil,+Michuhol-gu,+Incheon' }
         },
         form: {
           title: 'Envíanos un mensaje',
@@ -958,11 +958,11 @@ const DEFAULT_STATE: DbState = {
           hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Fale Conosco', subtitle: 'Estamos aqui para ajudar você com dúvidas, sugestões ou qualquer necessidade.', buttonText: 'RESPOSTA RÁPIDA E PERSONALIZADA', badges: [{ icon: 'Clock', text: 'Atendimento em português' }, { icon: 'Clock', text: 'Resposta em menos de 24h' }, { icon: 'CheckCircle2', text: 'Sua satisfação é nossa prioridade' }] },
           contactMethods: {
             title: 'Formas de contato',
-            whatsapp: { label: 'WhatsApp', value: '+55 (11) 99999-9999', time: 'Seg a Sex, 9h às 18h (GMT-3)', desc: 'A forma mais rápida de falar com nossa equipe.', btn: 'FALAR AGORA', link: '#contacto-form' },
-            email: { label: 'E-mail', value: 'ola@cheotnun.com', time: 'Resposta em menos de 24h', desc: 'Envie um e-mail e responderemos em breve.', btn: 'ENVIAR E-MAIL', link: 'mailto:ola@cheotnun.com' },
-            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
+            whatsapp: { label: 'WhatsApp', value: '+82 01024836078', time: 'Seg a Sex, 9h às 18h (GMT-3)', desc: 'A forma mais rápida de falar com nossa equipe.', btn: 'FALAR AGORA', link: 'https://wa.me/821024836078' },
+            email: { label: 'E-mail', value: 'sac@cheotnun.com', time: 'Resposta em menos de 24h', desc: 'Envie um e-mail e responderemos em breve.', btn: 'ENVIAR E-MAIL', link: 'mailto:sac@cheotnun.com' },
+            instagram: { label: 'Instagram', value: '@cheotnun.kbeauty', time: '', desc: 'Envie uma mensagem direta no Instagram.', btn: 'IR PARA O INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
             hours: { label: 'Horário de atendimento', value: 'Exceto feriados', time: '', desc: 'Segunda a sexta 9h às 18h (GMT-3)', btn: 'VER HORÁRIOS', link: '#' },
-            address: { label: 'Endereço', value: 'São Paulo, SP, Brasil', time: '', desc: 'Escritório administrativo', btn: 'VER NO MAPA', link: '#' }
+            address: { label: 'Endereço', value: 'Incheon, Coreia do Sul', time: '', desc: 'Escritório administrativo', btn: 'VER NO MAPA', link: 'https://maps.google.com/?q=9+Inju-daero+224beon-gil,+Michuhol-gu,+Incheon' }
           },
           form: {
             title: 'Envie uma mensagem',
@@ -1445,9 +1445,9 @@ const DEFAULT_STATE: DbState = {
           hero: { image: '/images/cheotnun-k-beauty-contato-atendimento.webp', title: 'Contact Us', subtitle: 'We are here to help you with questions, suggestions or any need.', buttonText: 'QUICK PERSONALIZED RESPONSE', badges: [{ icon: 'Clock', text: 'English support' }, { icon: 'Clock', text: 'Response in under 24h' }, { icon: 'CheckCircle2', text: 'Your satisfaction is our priority' }] },
           contactMethods: {
             title: 'Contact Methods',
-            whatsapp: { label: 'WhatsApp', value: '+1 (555) 123-4567', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: '#contacto-form' },
+            whatsapp: { label: 'WhatsApp', value: '+1 (555) 123-4567', time: 'Mon to Fri, 9am to 6pm (EST)', desc: 'The fastest way to talk to our team.', btn: 'CHAT NOW', link: 'https://wa.me/821024836078' },
             email: { label: 'Email', value: 'hello@cheotnun.com', time: 'Response in under 24h', desc: 'Send us an email and we will reply shortly.', btn: 'SEND EMAIL', link: 'mailto:hello@cheotnun.com' },
-            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
+            instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Send us a direct message on Instagram.', btn: 'GO TO INSTAGRAM', link: 'https://instagram.com/cheotnun.kbeauty' },
             hours: { label: 'Business Hours', value: 'Except holidays', time: '', desc: 'Monday to Friday 9am to 6pm (EST)', btn: 'VIEW HOURS', link: '#' },
             address: { label: 'Address', value: 'Miami, FL, USA', time: '', desc: 'Administrative office', btn: 'VIEW ON MAP', link: '#' }
           },
