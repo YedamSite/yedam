@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v4';
+const SEED_VERSION = 'v5';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -244,9 +244,9 @@ const DEFAULT_STATE: DbState = {
       col3: {
         title: 'Atención al Cliente',
         links: [
-          { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
+          { label: 'WhatsApp: +82 01024836078', href: 'https://wa.me/8201024836078', icon: 'MessageCircle' },
           { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
-          { label: 'Calle Gran Vía 12, Madrid, España', href: '#', icon: 'MapPin' }
+          { label: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', href: '#', icon: 'MapPin' }
         ]
       }
     },
@@ -463,7 +463,7 @@ const DEFAULT_STATE: DbState = {
           contactTitle: '¿Necesitas Ayuda?',
           contactText: 'Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier duda sobre cambios o devoluciones.',
           contactEmail: 'sac@cheotnun.com',
-          contactWhatsapp: '+34 600 111 222'
+          contactWhatsapp: '+82 01024836078'
         }
       },
       envios: {
@@ -663,9 +663,9 @@ const DEFAULT_STATE: DbState = {
       company: {
         name: 'Cheotnun K-Beauty',
         nif: 'B-12345678',
-        address: 'Calle Gran Vía 12, Madrid, España',
+        address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon',
         email: 'sac@cheotnun.com',
-        phone: '+34 600 111 222'
+        phone: '+82 01024836078'
       },
       additional: {
         ageTitle: 'Edad Mínima',
@@ -714,7 +714,7 @@ const DEFAULT_STATE: DbState = {
         title: '¿Dudas sobre Privacidad?',
         desc: 'Nuestro Delegado de Protección de Datos está disponible para resolver cualquier consulta.',
         email: 'dpo@cheotnun.com',
-        address: 'Calle Gran Vía 12, Madrid, España'
+        address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon'
       },
       sections: [
         { icon: 'FileText', title: 'Información que Recopilamos', content: 'Recopilamos información que nos proporcionas directamente (nombre, email, dirección) e información de navegación (cookies, páginas visitadas).' },
@@ -1185,7 +1185,7 @@ const DEFAULT_STATE: DbState = {
         terminos: {
           hero: { badge: 'Marco Legal', title: 'Termos e Condições', subtitle: 'Conheça as regras que regem o uso da nossa plataforma e a relação com nossos clientes.' },
           intro: { p1: 'Bem-vindo à Cheotnun K-Beauty. Ao acessar e utilizar este site, você aceita cumprir os seguintes termos e condições. Se não concordar com algum destes termos, recomendamos não utilizar nossos serviços.', brand: 'Cheotnun K-Beauty', p2: 'Estes termos estabelecem os direitos e obrigações entre Cheotnun K-Beauty e os usuários de nossa loja online especializada em cosméticos coreanos.' },
-          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: 'São Paulo, SP, Brasil', email: 'ola@cheotnun.com', phone: '+55 (11) 99999-9999' },
+          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', email: 'sac@cheotnun.com', phone: '+82 01024836078' },
           additional: { ageTitle: 'Idade Mínima', ageDesc: 'Você deve ser maior de 18 anos ou ter autorização legal para realizar compras em nossa loja. Ao se registrar, confirma que cumpre este requisito.', accountTitle: 'Contas de Usuário', accountDesc: 'Você é responsável por manter a confidencialidade de suas credenciais de acesso. Notifique-nos imediatamente sobre qualquer uso não autorizado de sua conta.' },
           contact: { title: 'Consultas Legais', desc: 'Para qualquer dúvida sobre estes termos, entre em contato com nossa equipe jurídica.', email: 'legal@cheotnun.com', phone: '+55 (11) 91234-5678' },
           sections: [
@@ -1202,7 +1202,7 @@ const DEFAULT_STATE: DbState = {
           intro: { p1: 'Na Cheotnun K-Beauty levamos sua privacidade muito a sério. Esta política descreve como coletamos, utilizamos e protegemos seus dados pessoais ao utilizar nossa loja online.', brand: 'Cheotnun K-Beauty', p2: 'Ao usar nosso site, você aceita as práticas descritas nesta política. Recomendamos a leitura atenta.', p3: 'Nosso compromisso é garantir a confidencialidade e segurança dos seus dados pessoais de acordo com a legislação aplicável.' },
           security: { title: 'Segurança de Dados', p1: 'Implementamos medidas de segurança técnicas e organizacionais para proteger seus dados pessoais contra acessos não autorizados, perda ou destruição.', p2: 'Embora usemos as melhores práticas, nenhuma transmissão pela Internet é 100% segura. Fazemos todo o possível para proteger suas informações.' },
           cookies: { title: 'Uso de Cookies', p1: 'Utilizamos cookies próprios e de terceiros para melhorar sua experiência de navegação, analisar o tráfego e personalizar conteúdo.', p2: 'Você pode configurar seu navegador para recusar cookies, embora isso possa afetar a funcionalidade de algumas partes do site.' },
-          contact: { title: 'Dúvidas sobre Privacidade?', desc: 'Nosso Encarregado de Proteção de Dados está disponível para responder qualquer dúvida.', email: 'dpo@cheotnun.com', address: 'São Paulo, SP, Brasil' },
+          contact: { title: 'Dúvidas sobre Privacidade?', desc: 'Nosso Encarregado de Proteção de Dados está disponível para responder qualquer dúvida.', email: 'dpo@cheotnun.com', address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon' },
           sections: [
             { icon: 'FileText', title: 'Informações que Coletamos', content: 'Coletamos informações que você nos fornece diretamente (nome, e-mail, endereço) e informações de navegação (cookies, páginas visitadas).' },
             { icon: 'ShieldCheck', title: 'Uso das suas Informações', content: 'Utilizamos seus dados para processar pedidos, melhorar nossos serviços, enviar comunicações comerciais (com seu consentimento) e cumprir obrigações legais.' },
@@ -1333,7 +1333,7 @@ const DEFAULT_STATE: DbState = {
               { label: 'Contact', href: '/contacto' }
             ]},
           col3: { title: 'CUSTOMER SERVICE', links: [
-              { label: 'WhatsApp: +34 600 111 222', href: 'https://wa.me/34600111222', icon: 'MessageCircle' },
+              { label: 'WhatsApp: +82 01024836078', href: 'https://wa.me/8201024836078', icon: 'MessageCircle' },
               { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
               { label: 'Calle Gran Vía 12, Madrid, Spain', href: '#', icon: 'MapPin' }
             ]}
@@ -1672,7 +1672,7 @@ const DEFAULT_STATE: DbState = {
         terminos: {
           hero: { badge: 'Legal Framework', title: 'Terms & Conditions', subtitle: 'Learn the rules governing the use of our platform and the relationship with our customers.' },
           intro: { p1: 'Welcome to Cheotnun K-Beauty. By accessing and using this website, you agree to comply with the following terms and conditions. If you do not agree with any of these terms, we recommend that you do not use our services.', brand: 'Cheotnun K-Beauty', p2: 'These terms establish the rights and obligations between Cheotnun K-Beauty and the users of our online store specializing in Korean cosmetics.' },
-          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: 'Miami, FL, USA', email: 'hello@cheotnun.com', phone: '+1 (555) 123-4567' },
+          company: { name: 'Cheotnun K-Beauty', nif: 'B-12345678', address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', email: 'sac@cheotnun.com', phone: '+82 01024836078' },
           additional: { ageTitle: 'Minimum Age', ageDesc: 'You must be at least 18 years old or have legal authorization to make purchases in our store. By registering, you confirm that you meet this requirement.', accountTitle: 'User Accounts', accountDesc: 'You are responsible for maintaining the confidentiality of your login credentials. Notify us immediately of any unauthorized use of your account.' },
           contact: { title: 'Legal Inquiries', desc: 'For any questions about these terms, please contact our legal team.', email: 'legal@cheotnun.com', phone: '+1 (555) 234-5678' },
           sections: [
@@ -1689,7 +1689,7 @@ const DEFAULT_STATE: DbState = {
           intro: { p1: 'At Cheotnun K-Beauty we take your privacy very seriously. This policy describes how we collect, use and protect your personal data when using our online store.', brand: 'Cheotnun K-Beauty', p2: 'By using our website, you agree to the practices described in this policy. We recommend reading it carefully.', p3: 'Our commitment is to guarantee the confidentiality and security of your personal data in accordance with applicable regulations.' },
           security: { title: 'Data Security', p1: 'We implement technical and organizational security measures to protect your personal data against unauthorized access, loss or destruction.', p2: 'Although we use best practices, no Internet transmission is 100% secure. We do our best to protect your information.' },
           cookies: { title: 'Cookie Usage', p1: 'We use first and third-party cookies to improve your browsing experience, analyze traffic and personalize content.', p2: 'You can configure your browser to reject cookies, although this may affect the functionality of some parts of the site.' },
-          contact: { title: 'Privacy Questions?', desc: 'Our Data Protection Officer is available to answer any questions.', email: 'dpo@cheotnun.com', address: 'Miami, FL, USA' },
+          contact: { title: 'Privacy Questions?', desc: 'Our Data Protection Officer is available to answer any questions.', email: 'dpo@cheotnun.com', address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon' },
           sections: [
             { icon: 'FileText', title: 'Information We Collect', content: 'We collect information you provide directly (name, email, address) and browsing information (cookies, pages visited).' },
             { icon: 'ShieldCheck', title: 'Use of Your Information', content: 'We use your data to process orders, improve our services, send commercial communications (with your consent) and fulfill legal obligations.' },
@@ -1728,9 +1728,9 @@ const DEFAULT_STATE: DbState = {
     company_details: {
       name: 'Cheotnun K-Beauty S.L.',
       phone: '+34 912 345 678',
-      whatsapp: '+34600000000',
+      whatsapp: '+8201024836078',
       email: 'sac@cheotnun.com',
-      address: 'Calle Gran Vía 12, Madrid, España',
+      address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon',
       social: {
         instagram: 'https://www.instagram.com/lacheotnun/',
         youtube: 'https://www.youtube.com/@enquantoaconteceoficial/featured',
