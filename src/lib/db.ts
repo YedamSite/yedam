@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v3';
+const SEED_VERSION = 'v4';
 
 const DEFAULT_STATE: DbState = {
   users: [
