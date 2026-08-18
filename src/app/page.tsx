@@ -94,7 +94,7 @@ export default function Home() {
       {/* Hero Section — Full viewport */}
       <section className="relative min-h-[calc(100vh-80px)] flex items-center overflow-hidden border-b border-white/5">
         {/* Responsive background images */}
-        <div className="absolute inset-0 bg-cover bg-[position:65%_25%] bg-no-repeat md:hidden"
+        <div className="absolute inset-0 bg-cover bg-[position:65%_40%] bg-no-repeat md:hidden"
           style={{ backgroundImage: c?.hero?.bgImageMobile ? `url('${c.hero.bgImageMobile}')` : "url('/images/cheotnun-k-beauty-banner-mobile-skincare-coreano.webp')" }}
         />
         <div className="absolute inset-0 bg-cover bg-[center_30%] bg-no-repeat hidden md:block"
