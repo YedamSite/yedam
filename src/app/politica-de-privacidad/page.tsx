@@ -26,7 +26,7 @@ export default function PrivacidadPage() {
     {
       icon: 'Shield',
       title: '1. Responsable del Tratamiento',
-      content: 'Maeum Global, con domicilio en 9 Inju-daero 224beon-gil, Michuhol-gu, Incheon, Corea del Sur, email: hola@cheotnun.com, es la responsable del tratamiento de tus datos personales.'
+      content: 'Maeum Global, con domicilio en 9 Inju-daero 224beon-gil, Michuhol-gu, Incheon, Corea del Sur, email: sac@cheotnun.com, es la responsable del tratamiento de tus datos personales.'
     },
     {
       icon: 'Database',

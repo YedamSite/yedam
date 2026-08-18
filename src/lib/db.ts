@@ -380,7 +380,7 @@ const DEFAULT_STATE: DbState = {
         contactMethods: {
           title: 'Formas de contacto',
           whatsapp: { label: 'Chat en vivo', value: 'WhatsApp: +34 600 111 222', time: 'Lunes a Viernes, 9:00 - 18:00', desc: 'La forma más rápida de hablar con nuestro equipo.', btn: 'ESCRIBIR AHORA', link: '#contacto-form' },
-          email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Envíanos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:hola@cheotnun.com' },
+          email: { label: 'Envíanos un correo', value: 'sac@cheotnun.com', time: 'Respuesta en menos de 24h', desc: 'Envíanos un e-mail y te responderemos pronto.', btn: 'ENVIAR E-MAIL', link: 'mailto:sac@cheotnun.com' },
           instagram: { label: 'Instagram', value: '@lacheotnun', time: '', desc: 'Envíanos un mensaje directo en Instagram.', btn: 'IR AL INSTAGRAM', link: 'https://www.instagram.com/lacheotnun/' },
           hours: { label: 'Horario de atención', value: 'Excepto feriados', time: '', desc: 'Lunes a viernes 9:00 a 18:00 (GMT-3)', btn: 'VER HORARIOS', link: '#' },
           address: { label: 'Sede Principal', value: 'Seúl, Corea del Sur', time: '', desc: 'Oficina administrativa', btn: 'VER EN EL MAPA', link: '#' }
@@ -462,7 +462,7 @@ const DEFAULT_STATE: DbState = {
           ],
           contactTitle: '¿Necesitas Ayuda?',
           contactText: 'Nuestro equipo de atención al cliente está disponible para ayudarte con cualquier duda sobre cambios o devoluciones.',
-          contactEmail: 'hola@cheotnun.com',
+          contactEmail: 'sac@cheotnun.com',
           contactWhatsapp: '+34 600 111 222'
         }
       },
@@ -664,7 +664,7 @@ const DEFAULT_STATE: DbState = {
         name: 'Cheotnun K-Beauty',
         nif: 'B-12345678',
         address: 'Calle Gran Vía 12, Madrid, España',
-        email: 'hola@cheotnun.com',
+        email: 'sac@cheotnun.com',
         phone: '+34 600 111 222'
       },
       additional: {
@@ -846,7 +846,7 @@ const DEFAULT_STATE: DbState = {
               { label: 'Contato', href: '/contacto' }
             ]},
           col3: { title: 'ATENDIMENTO', links: [
-              { label: 'hola@cheotnun.com', href: 'mailto:hola@cheotnun.com', icon: 'Mail' },
+              { label: 'sac@cheotnun.com', href: 'mailto:sac@cheotnun.com', icon: 'Mail' },
               { label: '+82 01024836078', href: 'tel:+8201024836078', icon: 'Phone' },
               { label: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', href: '#', icon: 'MapPin' }
             ]}

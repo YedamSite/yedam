@@ -106,12 +106,12 @@ export async function GET(
     name: 'Maeum Global',
     address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon',
     phone: '+82 01024836078',
-    email: 'hola@cheotnun.com'
+    email: 'sac@cheotnun.com'
   };
   doc.text(company.name || 'Maeum Global', 15, 47);
   doc.text(company.address || '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', 15, 51);
   doc.text(`Phone: ${company.phone || '+82 01024836078'}`, 15, 55);
-  doc.text(`Email: ${company.email || 'hola@cheotnun.com'}`, 15, 59);
+  doc.text(`Email: ${company.email || 'sac@cheotnun.com'}`, 15, 59);
 
   // Importer info
   doc.setFont('Helvetica', 'bold');

@@ -81,7 +81,7 @@ export default function TerminosPage() {
             <div className="text-foreground/70 text-sm leading-relaxed mb-8 flex flex-col gap-2">
               <strong>{t('Razón Social:')}</strong> {t(c?.company?.name || 'Maeum Global')}<br/>
               <strong>{t('Domicilio:')}</strong> {t(c?.company?.address || '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon')}<br/>
-              <strong>{t('Email:')}</strong> <a href={`mailto:${c?.company?.email || 'hola@cheotnun.com'}`} className="text-accent hover:underline">{t(c?.company?.email || 'hola@cheotnun.com')}</a>
+              <strong>{t('Email:')}</strong> <a href={`mailto:${c?.company?.email || 'sac@cheotnun.com'}`} className="text-accent hover:underline">{t(c?.company?.email || 'sac@cheotnun.com')}</a>
             </div>
           </div>
 
