@@ -2040,22 +2040,27 @@ async function tryLoadFromSupabase() {
 
 async function trySaveToSupabase(table: string, records: any[]) {
   try {
-    const res = await fetch('/api/supabase-reload', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'upsert', table, records }),
-    });
-    if (!res.ok) {
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: `HTTP error ${res.status}` } }));
+    const chunkSize = 20;
+    for (let i = 0; i < records.length; i += chunkSize) {
+      const chunk = records.slice(i, i + chunkSize);
+      const res = await fetch('/api/supabase-reload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'upsert', table, records: chunk }),
+      });
+      if (!res.ok) {
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: `HTTP error ${res.status}` } }));
+        }
+        return;
       }
-      return;
-    }
-    const data = await res.json();
-    if (!data.success) {
-      console.error('Supabase sync error:', data.error);
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: data.error } }));
+      const data = await res.json();
+      if (!data.success) {
+        console.error('Supabase sync error:', data.error);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: data.error } }));
+        }
+        return;
       }
     }
   } catch (err: any) {
