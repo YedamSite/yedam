@@ -81,7 +81,7 @@ export default function ExperienciasPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-experiencias-viagens.webp"}
-              alt="Experiencias Cheotnun"
+              alt={t('Experiencias Cheotnun')}
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -90,7 +90,7 @@ export default function ExperienciasPage() {
             />
             <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-experiencias-viagens.webp"}
-              alt="Experiencias Cheotnun Mobile"
+              alt={t('Experiencias Cheotnun')}
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"

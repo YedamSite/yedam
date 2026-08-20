@@ -140,7 +140,7 @@ export default function ContactoPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-contato-atendimento.webp"}
-              alt="Contacto"
+              alt={t('Contacto')}
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -149,7 +149,7 @@ export default function ContactoPage() {
             />
             <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-contato-atendimento.webp"}
-              alt="Contacto Mobile"
+              alt={t('Contacto')}
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"

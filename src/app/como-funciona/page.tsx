@@ -107,7 +107,7 @@ export default function ComoFuncionaPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-como-funciona-guia.webp"}
-              alt="Productos"
+              alt={t('Productos')}
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -116,7 +116,7 @@ export default function ComoFuncionaPage() {
             />
             <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-como-funciona-guia.webp"}
-              alt="Productos Mobile"
+              alt={t('Productos')}
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
@@ -265,7 +265,7 @@ export default function ComoFuncionaPage() {
               <div className="relative w-full md:w-1/3 h-[300px] rounded-2xl overflow-hidden shrink-0">
                  <SafeImage
                    src={c?.promises?.image || 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=600'}
-                   alt="Produtos originais"
+                   alt={t('Produtos originais')}
                    fill
                    className="object-cover"
                  />

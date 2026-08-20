@@ -59,7 +59,7 @@ export default function MarcasPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
-              alt="K-Beauty Products"
+              alt={t('K-Beauty Products')}
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -68,7 +68,7 @@ export default function MarcasPage() {
             />
             <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-marcas-coreanas-oficiais.webp"}
-              alt="K-Beauty Products Mobile"
+              alt={t('K-Beauty Products')}
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
@@ -191,7 +191,7 @@ export default function MarcasPage() {
               <div className="w-full max-w-[280px] h-[350px] relative rounded-xl overflow-hidden shadow-lg z-10">
                 <SafeImage
                   src={c?.whyChooseUs?.image || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop"}
-                  alt="K-Beauty Experience"
+                  alt={t('K-Beauty Experience')}
                   fill
                   className="object-cover"
                 />

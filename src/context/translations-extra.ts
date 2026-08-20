@@ -110,6 +110,9 @@ export const extraTranslations = {
     'mais itens': 'más artículos',
     'Orgulhosamente desenvolvido por': 'Orgullosamente desarrollado por',
     'Português (Brasil)': 'Portugués (Brasil)',
+    // === Alt texts (Português → Español) ===
+    'K-Beauty Products': 'Productos de K-Beauty',
+    'Newsletter Model': 'Modelo de la newsletter',
     // === Como Funciona (Português → Español) ===
     'Produtos originais': 'Productos originales',
   },
@@ -661,6 +664,9 @@ export const extraTranslations = {
     '✓ Acceso prioritario a lanzamientos y novedades': '✓ Acesso prioritário a lançamentos e novidades',
     '✓ Box mensual con lo último en cosmética coreana': '✓ Box mensal com o que há de mais novo em cosmética coreana',
     '✓ Envíos 100% gratuitos en todos tus pedidos': '✓ Envios 100% gratuitos em todos os seus pedidos',
+    // === Alt texts (Español → Português) ===
+    'K-Beauty Products': 'Produtos de K-Beauty',
+    'Newsletter Model': 'Modelo da newsletter',
   },
 
   en: {
@@ -1321,5 +1327,8 @@ export const extraTranslations = {
     '✓ Acceso prioritario a lanzamientos y novedades': '✓ Priority access to launches and news',
     '✓ Box mensual con lo último en cosmética coreana': '✓ Monthly box with the latest in Korean cosmetics',
     '✓ Envíos 100% gratuitos en todos tus pedidos': '✓ 100% free shipping on all your orders',
+    // === Alt texts (Español → English) ===
+    'K-Beauty Products': 'K-Beauty Products',
+    'Newsletter Model': 'Newsletter model',
   },
 }

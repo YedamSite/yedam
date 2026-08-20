@@ -107,7 +107,7 @@ export default function EnviosYPagosPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-politica-envios.webp"}
-              alt="Envíos"
+              alt={t('Envíos')}
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -116,7 +116,7 @@ export default function EnviosYPagosPage() {
             />
             <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-politica-envios.webp"}
-              alt="Envíos Mobile"
+              alt={t('Envíos')}
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"

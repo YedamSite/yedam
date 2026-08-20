@@ -88,7 +88,7 @@ export default function RutinasPage() {
           <div className="absolute inset-0 z-0 overflow-hidden">
             <SafeImage
               src={c?.hero?.image || "/images/cheotnun-k-beauty-rutinas-skincare.webp"}
-              alt="Rutinas Skincare"
+              alt={t('Rutinas Skincare')}
               fill
               sizes="100vw"
               className="object-cover object-center hidden md:block"
@@ -97,7 +97,7 @@ export default function RutinasPage() {
             />
             <SafeImage
               src={c?.hero?.imageMobile || "/images/mobile/cheotnun-k-beauty-rutinas-skincare.webp"}
-              alt="Rutinas Skincare Mobile"
+              alt={t('Rutinas Skincare')}
               fill
               sizes="100vw"
               className="object-cover object-center md:hidden"
@@ -435,7 +435,7 @@ export default function RutinasPage() {
               <div className="absolute bottom-0 right-[5%] w-[40%] h-[90%] z-20 hidden md:block">
                  <SafeImage
                    src={c?.newsletter?.image || "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=400&auto=format&fit=crop"}
-                   alt="Newsletter Model"
+                   alt={t('Newsletter Model')}
                    fill
                    className="object-contain object-bottom"
                  />
