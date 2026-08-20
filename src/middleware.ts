@@ -30,7 +30,12 @@ export function middleware(request: NextRequest) {
         const loginUrl = new URL('/dashboard/admin/login', request.url);
         return NextResponse.redirect(loginUrl);
       } else {
-        // Dashboard do cliente - redirecionar para home ou login
+        // Dashboard do cliente - permitir acesso anônimo apenas à aba de favoritos
+        const tab = request.nextUrl.searchParams.get('tab');
+        if (tab === 'favorites') {
+          return NextResponse.next();
+        }
+        // Redirecionar para home
         const homeUrl = new URL('/', request.url);
         return NextResponse.redirect(homeUrl);
       }

@@ -322,8 +322,11 @@ export default function CheckoutWizard() {
   const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
   const availableMethods = selectedZone?.methods || [];
   const selectedMethod = availableMethods[selectedMethodIdx] || availableMethods[0];
-  const baseShipping = selectedMethod?.price !== undefined ? Number(selectedMethod.price) : 15.00;
-  const shipping = baseShipping * rate;
+  const shipping = selectedMethod 
+    ? (locale === 'pt' && selectedMethod.price_brl !== undefined 
+        ? Number(selectedMethod.price_brl) 
+        : Number(selectedMethod.price) * rate)
+    : 15.00 * rate;
 
   const total = Math.max(0, subtotal + shipping - discount);
 
@@ -690,7 +693,11 @@ export default function CheckoutWizard() {
                               <span className="text-[10px] text-muted-foreground">{method.days} {t('días')}</span>
                             </div>
                           </div>
-                          <span className="text-xs font-bold text-accent">{currency} {(Number(method.price) * rate).toFixed(2)}</span>
+                          <span className="text-xs font-bold text-accent">
+                            {locale === 'pt' && method.price_brl !== undefined
+                              ? `R$ ${Number(method.price_brl).toFixed(2)}`
+                              : `${currency} ${(Number(method.price) * rate).toFixed(2)}`}
+                          </span>
                         </label>
                       ))}
                     </div>

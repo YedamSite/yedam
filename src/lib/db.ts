@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v9';
+const SEED_VERSION = 'v10';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -1749,12 +1749,12 @@ const DEFAULT_STATE: DbState = {
     },
     
     shipping_zones: [
-      { country: 'Brasil', methods: [{ name: 'K-Packet', days: '15-25', price: 100.00 }, { name: 'EMS', days: '7-10', price: 170.00 }] },
-      { country: 'México', methods: [{ name: 'K-Packet', days: '15-20', price: 15.00 }] },
-      { country: 'Chile', methods: [{ name: 'K-Packet', days: '12-20', price: 18.00 }] },
-      { country: 'Colombia', methods: [{ name: 'K-Packet', days: '15-25', price: 18.00 }] },
-      { country: 'Argentina', methods: [{ name: 'K-Packet', days: '20-30', price: 20.00 }] },
-      { country: 'España', methods: [{ name: 'Correos', days: '5-10', price: 10.00 }] }
+      { country: 'Brasil', methods: [{ name: 'K-Packet', days: '15-25', price: 20.00, price_brl: 100.00 }, { name: 'EMS', days: '7-10', price: 34.00, price_brl: 170.00 }] },
+      { country: 'México', methods: [{ name: 'K-Packet', days: '15-20', price: 15.00, price_brl: 75.00 }] },
+      { country: 'Chile', methods: [{ name: 'K-Packet', days: '12-20', price: 18.00, price_brl: 90.00 }] },
+      { country: 'Colombia', methods: [{ name: 'K-Packet', days: '15-25', price: 18.00, price_brl: 90.00 }] },
+      { country: 'Argentina', methods: [{ name: 'K-Packet', days: '20-30', price: 20.00, price_brl: 100.00 }] },
+      { country: 'España', methods: [{ name: 'Correos', days: '5-10', price: 10.00, price_brl: 50.00 }] }
     ],
     payments: {
       stripePublicKey: 'pk_live_51M3c...'

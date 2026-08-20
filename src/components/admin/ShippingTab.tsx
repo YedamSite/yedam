@@ -33,7 +33,7 @@ export default function ShippingTab() {
   };
 
   const addZone = () => {
-    setZones([...zones, { country: '', methods: [{ name: 'Standard', days: '10-15', price: 15 }] }]);
+    setZones([...zones, { country: '', methods: [{ name: 'Standard', days: '10-15', price: 15, price_brl: 75 }] }]);
   };
 
   const removeZone = (idx: number) => {
@@ -56,7 +56,7 @@ export default function ShippingTab() {
 
   const addMethod = (zoneIdx: number) => {
     const newZones = [...zones];
-    newZones[zoneIdx].methods.push({ name: 'Expresso', days: '3-5', price: 30 });
+    newZones[zoneIdx].methods.push({ name: 'Expresso', days: '3-5', price: 30, price_brl: 150 });
     setZones(newZones);
   };
 
@@ -123,6 +123,18 @@ export default function ShippingTab() {
                       value={method.price} 
                       onChange={(e) => updateMethod(zIdx, mIdx, 'price', parseFloat(e.target.value))}
                       className="bg-black/30 border-white/10 text-xs h-8 w-20 text-right"
+                      placeholder="US$"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center gap-2 shrink-0 ml-2">
+                    <span className="text-xs text-muted-foreground">R$</span>
+                    <Input 
+                      type="number"
+                      value={method.price_brl !== undefined ? method.price_brl : (method.price * 5)} 
+                      onChange={(e) => updateMethod(zIdx, mIdx, 'price_brl', parseFloat(e.target.value))}
+                      className="bg-black/30 border-white/10 text-xs h-8 w-20 text-right text-emerald-400"
+                      placeholder="R$"
                     />
                   </div>
                   

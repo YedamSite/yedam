@@ -172,14 +172,19 @@ function ClienteDashboardContent() {
 
   useEffect(() => {
     const user = authService.getCurrentUser();
-    
+    // Read tab from window.location to avoid the empty-searchParams race on first render
+    const tabParam = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('tab')
+      : searchParams.get('tab');
+
     // Allow anonymous users to view favorites tab only
-    if (!user && searchParams.get('tab') !== 'favorites') {
+    if (!user && tabParam !== 'favorites') {
       window.location.href = '/';
       return;
     }
-    
-    if (!user && searchParams.get('tab') === 'favorites') {
+
+    if (!user) {
+      setActiveTab('favorites');
       loadData();
       return;
     }
@@ -228,7 +233,6 @@ function ClienteDashboardContent() {
     }, 5000);
 
     // Handle URL params
-    const tabParam = searchParams.get('tab');
     if (tabParam) {
       setActiveTab(tabParam);
     }
