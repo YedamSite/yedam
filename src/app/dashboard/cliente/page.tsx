@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -15,9 +15,11 @@ import { toggleFavoriteAction } from '@/actions/shopActions';
 import { fetchCustomerOrdersAction } from '@/actions/shopActions';
 import { authService } from '@/lib/supabaseAuth';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSearchParams } from 'next/navigation';
 
-export default function ClienteDashboard() {
+function ClienteDashboardContent() {
   const { t, locale } = useLanguage();
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('pedidos');
   const [currentUser, setCurrentUser] = useState<any>(null);
   
@@ -216,12 +218,13 @@ export default function ClienteDashboard() {
     }, 5000);
 
     // Handle URL params
+    const tabParam = searchParams.get('tab');
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+    
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
-      const tab = urlParams.get('tab');
-      if (tab === 'favorites') {
-        setActiveTab('favorites');
-      }
       // Subscription success after Stripe Checkout
       if (urlParams.get('subscription') === 'success') {
         setActiveTab('suscripciones');
@@ -247,7 +250,7 @@ export default function ClienteDashboard() {
     }
 
     return () => clearInterval(interval);
-  }, []);
+  }, [searchParams]);
 
   const handleRemoveFavorite = async (productId: string) => {
     const userId = currentUser ? currentUser.id : 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22';
@@ -705,5 +708,13 @@ export default function ClienteDashboard() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function ClienteDashboard() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ClienteDashboardContent />
+    </Suspense>
   );
 }

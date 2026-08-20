@@ -309,11 +309,20 @@ export default function CheckoutWizard() {
     setCouponError('');
   };
 
+  const [selectedMethodIdx, setSelectedMethodIdx] = useState(0);
+
+  useEffect(() => {
+    // Reset method when country changes
+    setSelectedMethodIdx(0);
+  }, [country]);
+
   // Compute dynamic shipping
   const systemSettings = db.get('system_settings') || {};
   const shippingZones = systemSettings.shipping_zones || [];
   const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
-  const baseShipping = selectedZone?.methods?.[0]?.price !== undefined ? Number(selectedZone.methods[0].price) : 15.00;
+  const availableMethods = selectedZone?.methods || [];
+  const selectedMethod = availableMethods[selectedMethodIdx] || availableMethods[0];
+  const baseShipping = selectedMethod?.price !== undefined ? Number(selectedMethod.price) : 15.00;
   const shipping = baseShipping * rate;
 
   const total = Math.max(0, subtotal + shipping - discount);
@@ -661,6 +670,32 @@ export default function CheckoutWizard() {
                   </div>
                   {phoneError && <span className="text-[10px] text-red-400 font-semibold">{phoneError}</span>}
                 </div>
+
+                {availableMethods && availableMethods.length > 0 && (
+                  <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-white/5">
+                    <label className="text-[10px] font-semibold uppercase text-accent">{t('Método de Envío')}</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {availableMethods.map((method: any, idx: number) => (
+                        <label key={idx} className={`flex items-center justify-between p-3 rounded-xl cursor-pointer border transition-all ${selectedMethodIdx === idx ? 'bg-accent/10 border-accent/50 shadow-[0_0_15px_rgba(255,255,255,0.05)]' : 'bg-black/20 border-white/5 hover:border-white/20'}`}>
+                          <div className="flex items-center gap-3">
+                            <input 
+                              type="radio" 
+                              name="shippingMethod" 
+                              checked={selectedMethodIdx === idx} 
+                              onChange={() => setSelectedMethodIdx(idx)} 
+                              className="accent-accent h-4 w-4" 
+                            />
+                            <div className="flex flex-col">
+                              <span className="text-sm font-bold text-white">{method.name}</span>
+                              <span className="text-[10px] text-muted-foreground">{method.days} {t('días')}</span>
+                            </div>
+                          </div>
+                          <span className="text-xs font-bold text-accent">{currency} {(Number(method.price) * rate).toFixed(2)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

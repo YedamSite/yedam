@@ -35,6 +35,11 @@ export default function ProductoDetallePage({ params }: { params: Promise<{ slug
 
   useEffect(() => {
     loadData();
+    window.addEventListener('cheotnun_db_change', loadData);
+    
+    return () => {
+      window.removeEventListener('cheotnun_db_change', loadData);
+    };
   }, [slug, locale]);
 
   const handleToggleFavorite = async () => {

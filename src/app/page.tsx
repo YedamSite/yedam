@@ -164,12 +164,16 @@ export default function Home() {
           <p className="text-xs text-muted-foreground mt-2 font-light">{t(c?.categories?.subtitle || 'Productos auténticos para realzar tu belleza natural.')}</p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 md:gap-6 max-w-5xl mx-auto">
           {categories.map((cat: any) => (
-            <Link key={cat.id} href={`/tienda?category=${cat.slug}`} className="relative h-72 md:h-80 rounded-3xl overflow-hidden border border-white/10 group shadow-xl">
+            <Link 
+              key={cat.id} 
+              href={`/tienda?category=${cat.slug}`} 
+              className="relative h-48 sm:h-72 md:h-80 w-[calc(33.333%-0.5rem)] sm:w-[calc(33.333%-1rem)] lg:max-w-[280px] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 group shadow-xl"
+            >
               <Image src={cat.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400'} alt={cat.name} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-sm py-4 px-2 text-center border-t border-white/5">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-white group-hover:text-accent transition-colors leading-snug">
+              <div className="absolute inset-x-0 bottom-0 bg-black/60 backdrop-blur-sm py-2 sm:py-4 px-1 sm:px-2 text-center border-t border-white/5 flex items-center justify-center h-1/3 max-h-[60px]">
+                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-white group-hover:text-accent transition-colors leading-tight line-clamp-2">
                   {cat.name}
                 </span>
               </div>
