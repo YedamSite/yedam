@@ -345,7 +345,7 @@ export default function Home() {
           <div className="flex flex-col items-start gap-4">
             <h2 className="font-heading text-3xl font-light text-white uppercase leading-tight">{t(c?.instagram?.title || 'Únete a nuestra comunidad')}</h2>
             <p className="text-xs text-gray-400 font-light leading-relaxed">{t(c?.instagram?.subtitle || 'Tips, rutinas, lanzamientos y mucho más en Instagram.')}</p>
-            <a href={c?.instagram?.buttonLink || 'https://www.instagram.com/lacheotnun/'} target="_blank" rel="noreferrer">
+            <a href={c?.instagram?.buttonLink || 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA=='} target="_blank" rel="noreferrer">
               <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white font-bold text-[10px] px-8 py-5 rounded-full uppercase tracking-wider transition-all hover:-translate-y-0.5 duration-300">
                 {t(c?.instagram?.buttonText || 'SEGUIR EN INSTAGRAM')}
               </Button>

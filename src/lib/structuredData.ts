@@ -35,10 +35,10 @@ export function generateOrganizationSchema() {
       "areaServed": ["ES", "BR", "MX", "CL", "CO", "AR", "US"]
     },
     "sameAs": [
-      "https://www.instagram.com/lacheotnun/",
-      "https://www.youtube.com/@enquantoaconteceoficial/featured",
+      "https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==",
+      "https://youtube.com/@enquantoaconteceoficial?si=NI6G-hH2TMoK69-H",
       "https://www.facebook.com/cheotnun.kbeauty",
-      "https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98Av3TtdgVI"
+      "https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98z1msmaull"
     ],
     "areaServed": [
       "https://www.cheotnun.com/es",
