@@ -427,7 +427,7 @@ export default function TiendaPage() {
       <div className="flex min-h-screen bg-background items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 rounded-full border-2 border-accent border-t-transparent animate-spin" />
-          <span className="text-xs text-muted-foreground uppercase tracking-widest">{t('K-Beauty Shop')}</span>
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">K-Beauty Shop</span>
         </div>
       </div>
     }>
