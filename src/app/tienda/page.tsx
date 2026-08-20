@@ -259,7 +259,7 @@ function TiendaContent() {
         ) : (
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-white/10 pb-6 mb-8 gap-4">
             <div>
-              <span className="text-xs text-accent uppercase font-bold tracking-widest">K-Beauty Shop</span>
+              <span className="text-xs text-accent uppercase font-bold tracking-widest">{t('K-Beauty Shop')}</span>
               <h1 className="font-heading text-3xl sm:text-4xl font-light text-white mt-1">{t('Catálogo de Cosméticos')}</h1>
             </div>
             {addedProduct && (
@@ -427,7 +427,7 @@ export default function TiendaPage() {
       <div className="flex min-h-screen bg-background items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 rounded-full border-2 border-accent border-t-transparent animate-spin" />
-          <span className="text-xs text-muted-foreground uppercase tracking-widest">K-Beauty Shop</span>
+          <span className="text-xs text-muted-foreground uppercase tracking-widest">{t('K-Beauty Shop')}</span>
         </div>
       </div>
     }>

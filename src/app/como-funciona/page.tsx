@@ -205,7 +205,7 @@ export default function ComoFuncionaPage() {
                     </div>
                     <div className="border border-[#1c2838]/10 rounded-xl p-4 bg-white flex flex-col items-center justify-center text-center">
                        <Building2 className="w-6 h-6 text-[#1c2838] mb-2 stroke-[1.2]" />
-                       <span className="text-[9px] text-[#1c2838]/80 leading-tight">Transferencia<br/>Bancaria</span>
+                       <span className="text-[9px] text-[#1c2838]/80 leading-tight">{t('Transferencia')}<br/>{t('Bancaria')}</span>
                     </div>
                  </div>
               </div>

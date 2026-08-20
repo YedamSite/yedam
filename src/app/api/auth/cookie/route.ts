@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       const response = NextResponse.json({ success: true });
       response.cookies.set('cheotnun_admin_session', 'true', {
         ...cookieOptions,
-        maxAge: 7200, // 2 hours
+        maxAge: 604800, // 7 days
       });
       return response;
     } 

@@ -1832,14 +1832,14 @@ function loadFromLocalStorage(): boolean {
   if (typeof window === 'undefined') return false;
   try {
     const currentVersion = localStorage.getItem('cheotnun_db_version');
+    let saved = localStorage.getItem(STORAGE_KEY);
+    
     if (currentVersion !== SEED_VERSION) {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(DELETED_IDS_KEY);
       localStorage.setItem('cheotnun_db_version', SEED_VERSION);
-      // Retorna false para não carregar lixo do cache e forçar sync imediato com DEFAULT_STATE limpo.
-      return false; 
+      // Don't remove STORAGE_KEY! The data from localStorage will be merged with DEFAULT_STATE below, 
+      // preventing the loss of user's unsynced products when the codebase is updated.
     }
-    const saved = localStorage.getItem(STORAGE_KEY);
+
     if (saved) {
       let stringified = saved;
       if (stringified.toLowerCase().includes('yedam')) {
@@ -2031,7 +2031,6 @@ async function tryLoadFromSupabase() {
 }
 
 async function trySaveToSupabase(table: string, records: any[]) {
-  if (!supabaseReady) return;
   try {
     const res = await fetch('/api/supabase-reload', {
       method: 'POST',

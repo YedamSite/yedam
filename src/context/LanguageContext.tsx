@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { additionalTranslations } from './translations'
+import { extraTranslations } from './translations-extra'
 
 type Language = 'es' | 'pt' | 'en'
 
@@ -839,6 +840,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     // Depois tenta nas traduções adicionais
     if ((additionalTranslations as any)[locale]?.[key]) {
       return (additionalTranslations as any)[locale][key]
+    }
+    // Depois tenta nas traduções complementares das páginas públicas
+    if ((extraTranslations as any)[locale]?.[key]) {
+      return (extraTranslations as any)[locale][key]
     }
     // Retorna a chave original se não encontrar
     return key
