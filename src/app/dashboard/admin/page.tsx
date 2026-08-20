@@ -458,12 +458,19 @@ export default function AdminDashboard() {
       }
     }
 
+    let finalSlug = computedSlug || ('prod-' + Date.now());
+    let slugSuffix = 1;
+    while (allProds.some((p: any) => p.slug === finalSlug)) {
+      finalSlug = `${computedSlug}-${slugSuffix}`;
+      slugSuffix++;
+    }
+
     const now = new Date().toISOString();
     const newProd = {
       id: crypto.randomUUID(),
       sku: prodSku || 'YD-' + Math.floor(Math.random() * 10000),
       name: prodName,
-      slug: computedSlug || ('prod-' + Date.now()),
+      slug: finalSlug,
       description: prodDesc || 'Nuevo cosmético coreano importado.',
       description_en: prodTranslations.en.description || prodDescEn || 'New imported Korean cosmetic product.',
       price: basePriceUsd,
