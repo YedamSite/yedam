@@ -1847,6 +1847,14 @@ function loadFromLocalStorage(): boolean {
         localStorage.setItem(STORAGE_KEY, stringified);
       }
       const parsed = JSON.parse(stringified);
+      
+      // Force social links update
+      if (parsed.system_settings && parsed.system_settings.social_links) {
+        parsed.system_settings.social_links.tiktok = 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98z1msmaull';
+        parsed.system_settings.social_links.youtube = 'https://youtube.com/@enquantoaconteceoficial?si=NI6G-hH2TMoK69-H';
+        parsed.system_settings.social_links.instagram = 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==';
+      }
+
       memoryDb = {
         ...DEFAULT_STATE,
         ...parsed,
@@ -2037,6 +2045,12 @@ async function trySaveToSupabase(table: string, records: any[]) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'upsert', table, records }),
     });
+    if (!res.ok) {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: `HTTP error ${res.status}` } }));
+      }
+      return;
+    }
     const data = await res.json();
     if (!data.success) {
       console.error('Supabase sync error:', data.error);
@@ -2044,8 +2058,11 @@ async function trySaveToSupabase(table: string, records: any[]) {
         window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: data.error } }));
       }
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error('Supabase fetch failed:', err);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: err.message || 'Falha de rede ao salvar' } }));
+    }
   }
 }
 
