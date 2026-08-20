@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v8';
+const SEED_VERSION = 'v9';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -1749,7 +1749,7 @@ const DEFAULT_STATE: DbState = {
     },
     
     shipping_zones: [
-      { country: 'Brasil', methods: [{ name: 'K-Packet', days: '15-25', price: 15.00 }, { name: 'EMS', days: '7-10', price: 35.00 }] },
+      { country: 'Brasil', methods: [{ name: 'K-Packet', days: '15-25', price: 100.00 }, { name: 'EMS', days: '7-10', price: 170.00 }] },
       { country: 'México', methods: [{ name: 'K-Packet', days: '15-20', price: 15.00 }] },
       { country: 'Chile', methods: [{ name: 'K-Packet', days: '12-20', price: 18.00 }] },
       { country: 'Colombia', methods: [{ name: 'K-Packet', days: '15-25', price: 18.00 }] },
@@ -2072,7 +2072,7 @@ async function loadSettingsFromSupabase() {
     const resp = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content'] }),
+      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content', 'shipping_zones'] }),
     });
     if (!resp.ok) return;
     const json = await resp.json();
@@ -2080,6 +2080,7 @@ async function loadSettingsFromSupabase() {
     if (json.data?.visual_theme) { memoryDb.system_settings.visual_theme = json.data.visual_theme; changedSettings = true; }
     if (json.data?.company_details) { memoryDb.system_settings.company_details = json.data.company_details; changedSettings = true; }
     if (json.data?.seo) { memoryDb.system_settings.seo = json.data.seo; changedSettings = true; }
+    if (json.data?.shipping_zones) { memoryDb.system_settings.shipping_zones = json.data.shipping_zones; changedSettings = true; }
     if (json.data?.site_content) { memoryDb.site_content = deepMerge(DEFAULT_STATE.site_content, json.data.site_content); changedSettings = true; }
     
     if (changedSettings) {
@@ -2178,6 +2179,7 @@ export const db = {
       if (settings.visual_theme) await trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
       if (settings.company_details) await trySaveSettingsToSupabase('company_details', settings.company_details);
       if (settings.seo) await trySaveSettingsToSupabase('seo', settings.seo);
+      if (settings.shipping_zones) await trySaveSettingsToSupabase('shipping_zones', settings.shipping_zones);
       if (settings.invoice_templates) await trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
     } else {
       await trySaveToSupabase(table as string, records as any[]);
@@ -2193,6 +2195,7 @@ export const db = {
       if (settings.visual_theme) await trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
       if (settings.company_details) await trySaveSettingsToSupabase('company_details', settings.company_details);
       if (settings.seo) await trySaveSettingsToSupabase('seo', settings.seo);
+      if (settings.shipping_zones) await trySaveSettingsToSupabase('shipping_zones', settings.shipping_zones);
       if (settings.invoice_templates) await trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
     } else {
       await trySaveToSupabase(table as string, updated as any[]);
