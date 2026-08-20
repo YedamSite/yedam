@@ -507,11 +507,7 @@ function ClienteDashboardContent() {
                 {favorites.length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                     {favorites.map((prod) => {
-                      const imgUrl = prod.id === '11ebc999-9c0b-4ef8-bb6d-6bb9bd380a11' ? 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400' :
-                                     prod.id === '22ebc999-9c0b-4ef8-bb6d-6bb9bd380a22' ? 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400' :
-                                     prod.id === '33ebc999-9c0b-4ef8-bb6d-6bb9bd380a33' ? 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400' :
-                                     prod.id === '44ebc999-9c0b-4ef8-bb6d-6bb9bd380a44' ? 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400' :
-                                     'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400';
+                      const imgUrl = prod.image || 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400';
 
                       return (
                         <div key={prod.id} className="bg-secondary/40 border border-white/5 rounded-2xl p-4 flex flex-col justify-between group">
