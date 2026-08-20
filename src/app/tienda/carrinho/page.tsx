@@ -313,7 +313,8 @@ export default function CheckoutWizard() {
   const systemSettings = db.get('system_settings') || {};
   const shippingZones = systemSettings.shipping_zones || [];
   const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
-  const shipping = selectedZone?.methods?.[0]?.price !== undefined ? Number(selectedZone.methods[0].price) : (locale === 'pt' ? 75.00 : 15.00);
+  const baseShipping = selectedZone?.methods?.[0]?.price !== undefined ? Number(selectedZone.methods[0].price) : 15.00;
+  const shipping = baseShipping * rate;
 
   const total = Math.max(0, subtotal + shipping - discount);
 
@@ -381,7 +382,8 @@ export default function CheckoutWizard() {
       documentNumber: docNumber,
       gateway: 'stripe',
       shippingAmount: shipping,
-      discountAmount: discount
+      discountAmount: discount,
+      locale
     });
 
     if (!res.success || !res.order) {

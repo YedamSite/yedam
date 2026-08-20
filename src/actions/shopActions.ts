@@ -37,6 +37,7 @@ export async function submitOrderAction(data: {
   gateway: string;
   shippingAmount: number;
   discountAmount: number;
+  locale?: string;
 }) {
   try {
     const orders = db.get('orders');
@@ -46,12 +47,14 @@ export async function submitOrderAction(data: {
 
     let subtotal = 0;
     // Calculate subtotal securely using prices from the database
-    data.items.forEach(item => {
+    data.items.forEach((item: any) => {
       const product = products.find((p: any) => p.id === item.product_id);
       if (product) {
+        // Calculate the actual price based on the currency/locale
+        const realPrice = data.locale === 'pt' ? (product.price_brl || product.price * 5) : product.price;
         // Also update the item price in the array so it reflects the real price in the order record
-        item.price = product.price;
-        subtotal += (product.price * item.quantity);
+        item.price = realPrice;
+        subtotal += (realPrice * item.quantity);
       }
     });
 
