@@ -183,12 +183,6 @@ function ClienteDashboardContent() {
       return;
     }
 
-    if (!user) {
-      setActiveTab('favorites');
-      loadData();
-      return;
-    }
-
     if (user) {
       setCurrentUser(user);
       setProfileForm({ name: user.name, email: user.email });
