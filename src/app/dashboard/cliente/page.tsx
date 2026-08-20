@@ -99,8 +99,18 @@ function ClienteDashboardContent() {
   };
 
   const loadData = useCallback(async () => {
+    // Load favorites products from localStorage
+    let userFavIds: string[] = [];
+    if (typeof window !== 'undefined') {
+      const savedFavs = localStorage.getItem('cheotnun_favorites');
+      userFavIds = savedFavs ? JSON.parse(savedFavs) : [];
+    }
+    const products = db.get('products') || [];
+    const userFavProducts = products.filter((p: any) => userFavIds.includes(p.id));
+    setFavorites(userFavProducts);
+
     const user = authService.getCurrentUser();
-    if (!user) return; // Prevent loading data if not authenticated
+    if (!user) return; // Prevent loading protected data if not authenticated
 
     const userId = user.id;
     const userEmail = user.email;
@@ -134,16 +144,6 @@ function ClienteDashboardContent() {
     const userAddrs = allAddresses.filter((a: any) => a.user_id === userId);
     setAddresses(userAddrs);
 
-    // Load favorites products from localStorage
-    let userFavIds: string[] = [];
-    if (typeof window !== 'undefined') {
-      const savedFavs = localStorage.getItem('cheotnun_favorites');
-      userFavIds = savedFavs ? JSON.parse(savedFavs) : [];
-    }
-    const products = db.get('products') || [];
-    const userFavProducts = products.filter((p: any) => userFavIds.includes(p.id));
-    setFavorites(userFavProducts);
-
 
     // Load email logs
     const allLogs = db.get('communication_logs') || [];
@@ -172,17 +172,27 @@ function ClienteDashboardContent() {
 
   useEffect(() => {
     const user = authService.getCurrentUser();
-    if (!user) {
+    
+    // Allow anonymous users to view favorites tab only
+    if (!user && searchParams.get('tab') !== 'favorites') {
       window.location.href = '/';
       return;
     }
+    
+    if (!user && searchParams.get('tab') === 'favorites') {
+      loadData();
+      return;
+    }
 
-    setCurrentUser(user);
-    setProfileForm({ name: user.name, email: user.email });
+    if (user) {
+      setCurrentUser(user);
+      setProfileForm({ name: user.name, email: user.email });
+    }
     loadData();
 
     // Real-time polling: sync from Supabase and re-read orders every 5 seconds
     const interval = setInterval(async () => {
+      if (!user) return;
       const userId = user.id;
       const res = await fetchCustomerOrdersAction(userId);
       if (res.success && res.data) {
@@ -295,7 +305,7 @@ function ClienteDashboardContent() {
               { id: 'addresses', label: t('Direcciones'), icon: MapPin },
               { id: 'emails', label: t('Comms'), icon: Clock },
               { id: 'perfil', label: t('Perfil'), icon: User }
-            ].map((tab) => {
+            ].filter(tab => currentUser || tab.id === 'favorites').map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
@@ -326,7 +336,7 @@ function ClienteDashboardContent() {
               { id: 'addresses', label: t('Direcciones'), icon: MapPin },
               { id: 'emails', label: t('Comunicaciones'), icon: Clock },
               { id: 'perfil', label: t('Mi Perfil'), icon: User }
-            ].map((tab) => {
+            ].filter(tab => currentUser || tab.id === 'favorites').map((tab) => {
               const Icon = tab.icon;
               return (
                 <button
