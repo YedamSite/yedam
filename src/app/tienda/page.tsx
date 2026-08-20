@@ -145,7 +145,7 @@ function TiendaContent() {
   }, [categories, selectedCategory]);
 
   // Sidebar filter panel — shared between desktop and mobile drawer
-  const FilterPanel = () => (
+  const renderFilterPanel = () => (
     <div className="flex flex-col gap-6 text-xs">
       {/* Search */}
       <div className="flex flex-col gap-1.5">
@@ -305,7 +305,7 @@ function TiendaContent() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <FilterPanel />
+              {renderFilterPanel()}
             </div>
           </>
         )}
@@ -315,7 +315,7 @@ function TiendaContent() {
 
           {/* Desktop Sidebar - hidden on mobile */}
           <aside className="hidden lg:flex flex-col gap-6 border border-white/10 rounded-3xl p-6 bg-card shadow-xl h-fit">
-            <FilterPanel />
+            {renderFilterPanel()}
           </aside>
 
           {/* Products Grid — always full width on mobile, 3 cols on desktop */}
