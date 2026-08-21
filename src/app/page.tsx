@@ -126,11 +126,13 @@ export default function Home() {
                   {t(c?.hero?.btnBuyText || 'COMPRAR AHORA')}
                 </Button>
               </Link>
+              {/* BOTÃO ROTINAS — temporariamente desativado, reativar quando estiver pronto
               <Link href={c?.hero?.btnRoutineLink || '/rutinas'}>
                 <Button variant="outline" className="w-full sm:w-auto text-white border-white/20 hover:bg-white/5 hover:border-accent/40 font-bold text-xs tracking-[0.1em] py-4 md:py-5 px-7 md:px-9 rounded-full backdrop-blur transition-all hover:-translate-y-0.5 duration-300">
                   {t(c?.hero?.btnRoutineText || 'DESCUBRIR RUTINAS')}
                 </Button>
               </Link>
+              */}
             </div>
           </div>
         </div>
