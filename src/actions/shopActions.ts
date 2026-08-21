@@ -2,6 +2,7 @@
 
 import { db } from '@/lib/db';
 import { createClient } from '@supabase/supabase-js';
+import { sendEmail, buildOrderConfirmationHtml, buildAdminNewOrderHtml } from '@/lib/emailSender';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
@@ -159,6 +160,46 @@ export async function submitOrderAction(data: {
     });
     db.save('communication_logs', logs);
     await syncOrderWithSupabase('communication_logs', db.get('communication_logs'));
+
+    // === REAL EMAIL SENDING ===
+    const currency = data.locale === 'pt' ? 'R$' : 'US$';
+
+    // 1. Send confirmation email to customer
+    const customerHtml = buildOrderConfirmationHtml({
+      orderId,
+      customerName: recipientName,
+      items: data.items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
+      subtotal,
+      shippingAmount: shipping,
+      discountAmount: discount,
+      totalAmount: total,
+      shippingAddress: { country: data.shippingAddress?.country, city: data.shippingAddress?.city },
+      currency,
+    });
+    await sendEmail({
+      to: recipientEmail,
+      subject: `✨ Pedido #${orderId.substring(0, 8).toUpperCase()} recibido — Cheotnun K-Beauty`,
+      html: customerHtml,
+    });
+
+    // 2. Send new order notification to admin
+    const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'sac@cheotnun.com';
+    const adminHtml = buildAdminNewOrderHtml({
+      orderId,
+      customerName: recipientName,
+      customerEmail: recipientEmail,
+      items: data.items.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
+      subtotal,
+      shippingAmount: shipping,
+      totalAmount: total,
+      shippingAddress: data.shippingAddress,
+      currency,
+    });
+    await sendEmail({
+      to: adminEmail,
+      subject: `🛒 Novo Pedido #${orderId.substring(0, 8).toUpperCase()} — ${recipientName}`,
+      html: adminHtml,
+    });
 
     return { success: true, order: newOrder };
   } catch (error: any) {
@@ -321,6 +362,65 @@ export async function confirmOrderPaymentAction(orderId: string) {
       orders[oIdx].updated_at = new Date().toISOString();
       db.save('orders', orders);
       await syncOrderWithSupabase('orders', orders);
+
+      // Send payment approved email to customer and admin
+      try {
+        const order = orders[oIdx];
+        const users = db.get('users') || [];
+        const user = users.find((u: any) => u.id === order.customer_id);
+        const recipientEmail = user?.email || order.shipping_address?.email || '';
+        const recipientName = user?.name || order.shipping_address?.first_name || 'Cliente';
+        const orderShort = orderId.substring(0, 8).toUpperCase();
+
+        if (recipientEmail) {
+          const paymentApprovedHtml = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:40px 20px;">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+<tr><td style="background:#08152F;padding:32px 40px;text-align:center;">
+  <h1 style="color:#C9C9C9;font-size:22px;margin:0;letter-spacing:2px;">✅ PAGO CONFIRMADO</h1>
+  <p style="color:#fff;font-size:13px;margin:8px 0 0;opacity:0.8;">Cheotnun K-Beauty</p>
+</td></tr>
+<tr><td style="padding:32px 40px;">
+  <p style="color:#333;font-size:15px;margin:0 0 16px;">Hola <strong>${recipientName}</strong>,</p>
+  <p style="color:#555;font-size:13px;line-height:1.6;">Tu pago ha sido confirmado con éxito. Tu pedido <strong>#${orderShort}</strong> está ahora en proceso de preparación. Recibirás otro e-mail cuando sea enviado con el código de seguimiento.</p>
+  <div style="background:#f9f9f9;border-left:4px solid #22c55e;padding:12px 20px;margin:20px 0;border-radius:8px;">
+    <p style="margin:0;font-size:13px;color:#333;"><strong>Status:</strong> Aguardando Confirmação da Loja (48h úteis)</p>
+  </div>
+  <p style="color:#555;font-size:12px;line-height:1.6;">Qualquer dúvida, entre em contato pelo e-mail <a href="mailto:sac@cheotnun.com" style="color:#08152F;">sac@cheotnun.com</a>.</p>
+</td></tr>
+<tr><td style="background:#f9f9f9;padding:20px 40px;text-align:center;border-top:1px solid #eee;">
+  <p style="color:#999;font-size:11px;margin:0;">CHEOTNUN K-BEAUTY — Maeum global agency Ltda</p>
+</td></tr>
+</table></td></tr></table>
+</body></html>`;
+
+          await sendEmail({
+            to: recipientEmail,
+            subject: `✅ Pago confirmado — Pedido #${orderShort} — Cheotnun K-Beauty`,
+            html: paymentApprovedHtml,
+          });
+        }
+
+        // Notify admin
+        const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || 'sac@cheotnun.com';
+        await sendEmail({
+          to: adminEmail,
+          subject: `💳 Pagamento Confirmado — Pedido #${orderShort} — ${recipientName}`,
+          html: `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:Arial,sans-serif;padding:32px;background:#f4f4f4;">
+<div style="max-width:500px;margin:0 auto;background:#fff;border-radius:12px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+<h2 style="color:#08152F;margin:0 0 16px;">💳 Pagamento Confirmado pelo Stripe</h2>
+<p style="color:#555;font-size:13px;">Pedido: <strong>#${orderShort}</strong></p>
+<p style="color:#555;font-size:13px;">Cliente: <strong>${recipientName}</strong> (${recipientEmail})</p>
+<p style="color:#555;font-size:13px;">Status atualizado para: <strong>Aguardando Confirmação da Loja</strong></p>
+<a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.cheotnun.com'}/dashboard/admin" style="display:inline-block;margin-top:16px;background:#08152F;color:#C9C9C9;text-decoration:none;padding:12px 28px;border-radius:40px;font-size:13px;font-weight:bold;">Acessar Painel</a>
+</div></body></html>`,
+        });
+      } catch (emailErr) {
+        console.error('[confirmOrderPaymentAction] email send failed:', emailErr);
+      }
     }
     return { success: true };
   } catch (error: any) {

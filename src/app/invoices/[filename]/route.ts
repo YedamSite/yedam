@@ -103,12 +103,12 @@ export async function GET(
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
   const company = db.get('system_settings')?.company_details || {
-    name: 'Maeum Global',
+    name: 'Maeum global agency Ltda',
     address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon',
     phone: '+82 01024836078',
     email: 'sac@cheotnun.com'
   };
-  doc.text(company.name || 'Maeum Global', 15, 47);
+  doc.text(company.name || 'Maeum global agency Ltda', 15, 47);
   doc.text(company.address || '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon', 15, 51);
   doc.text(`Phone: ${company.phone || '+82 01024836078'}`, 15, 55);
   doc.text(`Email: ${company.email || 'sac@cheotnun.com'}`, 15, 59);

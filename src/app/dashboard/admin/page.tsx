@@ -849,14 +849,26 @@ if (!authorized) {
                 
                 const now = new Date();
                 const today = now.toISOString().split('T')[0];
+                const yesterday = new Date(now.getTime() - 86400000).toISOString().split('T')[0];
                 const weekAgo = new Date(now.getTime() - 7 * 86400000).toISOString().split('T')[0];
+                const twoWeeksAgo = new Date(now.getTime() - 14 * 86400000).toISOString().split('T')[0];
                 const monthAgo = new Date(now.getTime() - 30 * 86400000).toISOString().split('T')[0];
+                const twoMonthsAgo = new Date(now.getTime() - 60 * 86400000).toISOString().split('T')[0];
                 const yearAgo = new Date(now.getTime() - 365 * 86400000).toISOString().split('T')[0];
+                const twoYearsAgo = new Date(now.getTime() - 730 * 86400000).toISOString().split('T')[0];
                 
                 const revenueToday = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] === today).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenueYesterday = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] === yesterday).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                
                 const revenueWeek = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= weekAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenuePrevWeek = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= twoWeeksAgo && o.created_at.split('T')[0] < weekAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                
                 const revenueMonth = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= monthAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenuePrevMonth = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= twoMonthsAgo && o.created_at.split('T')[0] < monthAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                
                 const revenueYear = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= yearAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                const revenuePrevYear = allOrders.filter((o: any) => o.created_at && o.created_at.split('T')[0] >= twoYearsAgo && o.created_at.split('T')[0] < yearAgo).reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
+                
                 const revenueTotal = allOrders.reduce((sum: number, o: any) => sum + (o.total_amount || 0), 0);
                 
                 const totalStock = allProducts.reduce((sum: number, p: any) => sum + (p.stock || 0), 0);
@@ -870,9 +882,30 @@ if (!authorized) {
                 
                 const avgTicket = allOrders.length > 0 ? revenueTotal / allOrders.length : 0;
                 
-                const growthDaily = revenueToday > 0 ? 12.5 : revenueWeek > 0 ? 5.2 : 0;
-                const growthMonthly = revenueMonth > 0 ? 8.7 : 2.1;
+                const calculateGrowth = (current: number, previous: number) => {
+                  if (previous === 0) return current > 0 ? 100 : 0;
+                  return ((current - previous) / previous) * 100;
+                };
+
+                const growthDaily = calculateGrowth(revenueToday, revenueYesterday);
+                const growthWeekly = calculateGrowth(revenueWeek, revenuePrevWeek);
+                const growthMonthly = calculateGrowth(revenueMonth, revenuePrevMonth);
+                const growthYearly = calculateGrowth(revenueYear, revenuePrevYear);
                 
+                const renderGrowthIndicator = (growth: number, label: string) => {
+                  const isPositive = growth > 0;
+                  const isNegative = growth < 0;
+                  const color = isPositive ? 'text-green-400' : isNegative ? 'text-red-400' : 'text-gray-400';
+                  const Icon = isPositive ? ArrowUp : isNegative ? ArrowDown : Activity;
+                  return (
+                    <div className="flex items-center gap-1 mt-2">
+                      <Icon className={`h-3 w-3 ${color}`} />
+                      <span className={`text-[9px] font-bold ${color}`}>{Math.abs(growth).toFixed(1)}%</span>
+                      <span className="text-[8px] text-muted-foreground">{t(label)}</span>
+                    </div>
+                  );
+                };
+
                 return (
                   <>
                     {/* Header */}
@@ -896,11 +929,7 @@ if (!authorized) {
                           <DollarSign className="h-4 w-4 text-green-400" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueToday.toFixed(2)}</h3>
-                        <div className="flex items-center gap-1 mt-2">
-                          <ArrowUp className="h-3 w-3 text-green-400" />
-                          <span className="text-[9px] text-green-400 font-bold">{growthDaily}%</span>
-                          <span className="text-[8px] text-muted-foreground">{t('vs. ontem')}</span>
-                        </div>
+                        {renderGrowthIndicator(growthDaily, 'vs. ontem')}
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
@@ -909,11 +938,7 @@ if (!authorized) {
                           <Clock className="h-4 w-4 text-blue-400" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueWeek.toFixed(2)}</h3>
-                        <div className="flex items-center gap-1 mt-2">
-                          <ArrowUp className="h-3 w-3 text-green-400" />
-                          <span className="text-[9px] text-green-400 font-bold">5.2%</span>
-                          <span className="text-[8px] text-muted-foreground">{t('vs. semana anterior')}</span>
-                        </div>
+                        {renderGrowthIndicator(growthWeekly, 'vs. semana anterior')}
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
@@ -922,11 +947,7 @@ if (!authorized) {
                           <Calendar className="h-4 w-4 text-purple-400" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-white">US$ {revenueMonth.toFixed(2)}</h3>
-                        <div className="flex items-center gap-1 mt-2">
-                          <ArrowUp className="h-3 w-3 text-green-400" />
-                          <span className="text-[9px] text-green-400 font-bold">{growthMonthly}%</span>
-                          <span className="text-[8px] text-muted-foreground">{t('vs. mês anterior')}</span>
-                        </div>
+                        {renderGrowthIndicator(growthMonthly, 'vs. mês anterior')}
                       </div>
 
                       <div className="bg-card border border-white/5 rounded-2xl p-5 shadow-lg">
@@ -935,11 +956,7 @@ if (!authorized) {
                           <TrendingUp className="h-4 w-4 text-accent" />
                         </div>
                         <h3 className="font-heading text-2xl font-bold text-accent">US$ {revenueYear.toFixed(2)}</h3>
-                        <div className="flex items-center gap-1 mt-2">
-                          <ArrowUp className="h-3 w-3 text-green-400" />
-                          <span className="text-[9px] text-green-400 font-bold">15.3%</span>
-                          <span className="text-[8px] text-muted-foreground">{t('vs. ano anterior')}</span>
-                        </div>
+                        {renderGrowthIndicator(growthYearly, 'vs. ano anterior')}
                       </div>
                     </div>
 

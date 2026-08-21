@@ -1,2 +1,42 @@
+1. Notificação não está chegando
 
-https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98Av3TtdgVI
+- [ ] Verificar o sistema de notificações.
+- [ ] A notificação que deveria ser gerada após a ação/compra não está chegando corretamente no email sac@cheotnun.com da hostinger e no email do cliente que efetuou a compra.
+- [ ] Conferir todo o fluxo para garantir que as notificações sejam disparadas automaticamente.
+
+2. Valor do frete muda sozinho
+
+- [ ] O valor do frete está variando sem nenhuma alteração no pedido.
+- [ ] No teste realizado, o mesmo produto e as mesmas informações apresentaram valores diferentes apenas após atualizar a página/limpar o cache.
+- [ ] Exemplo identificado: inicialmente o frete apareceu como R$ 110,00 e depois, para exatamente a mesma compra, passou para R$ 100,00.
+- [ ] Verificar de onde o sistema está puxando o cálculo do frete.
+- [ ] O valor precisa ficar vinculado corretamente às regras configuradas no site, sem mudar simplesmente ao atualizar a página.
+- [ ] Garantir que cliente e administração visualizem sempre o mesmo valor de frete.
+
+3. Pedido/compra desaparecendo do sistema
+
+- [ ] Após a cliente realizar a compra, o pedido está aparecendo e depois sumindo do site/painel administrativo.
+- [ ] O pedido precisa aparecer imediatamente no painel após a compra e permanecer registrado.
+- [ ] Verificar se existe problema de atualização, sincronização, banco de dados ou status do pedido.
+
+4. Não é possível aprovar a compra
+
+- [ ] Como o pedido está desaparecendo do painel, não conseguimos realizar a aprovação da compra.
+- [ ] Verificar o fluxo completo:
+  cliente finaliza compra → pedido é registrado → aparece no painel → administração consegue visualizar e aprovar.
+
+5. E não chegou também o e-mail para cliente, segundo - nome da invoice continua errado terceiro número do telefone continua errado
+o nome correto deve ser: Maeum global agency Ltda - telefone +82 01024836078
+
+Fazer novo teste completo após as correções
+
+- [ ] Depois de corrigir esses problemas, testar novamente o processo como cliente real.
+- [ ] Conferir:
+  - cálculo e estabilidade do frete;
+  - atualização da página;
+  - comportamento após limpar cache;
+  - geração da compra;
+  - permanência do pedido no painel;
+  - possibilidade de aprovação;
+  - recebimento das notificações.
+- [ ] O objetivo é garantir que esses bugs não aconteçam novamente quando o site estiver sendo utilizado pelos clientes.

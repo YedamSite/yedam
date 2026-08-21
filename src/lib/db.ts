@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v10';
+const SEED_VERSION = 'v11';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -1726,8 +1726,8 @@ const DEFAULT_STATE: DbState = {
       favicon_url: '/favicon.ico'
     },
     company_details: {
-      name: 'Cheotnun K-Beauty S.L.',
-      phone: '+34 912 345 678',
+      name: 'Maeum global agency Ltda',
+      phone: '+82 01024836078',
       whatsapp: '+8201024836078',
       email: 'sac@cheotnun.com',
       address: '9 Inju-daero 224beon-gil, Michuhol-gu, Incheon',
@@ -1969,8 +1969,23 @@ function mergeTableData(table: string, incoming: any[]) {
   const deletedIds = loadDeletedIds();
   let changed = false;
 
-  // Remove local records that no longer exist on server (deleted by admin)
-  const kept = local.filter((r: any) => incomingIds.has(r.id) || deletedIds.has(r.id));
+  // Grace period: keep newly created local records not yet confirmed in Supabase
+  // (prevents race condition where admin polling clears orders just created)
+  const GRACE_PERIOD_MS = 10 * 60 * 1000; // 10 minutes
+  const now = Date.now();
+
+  // Remove local records that no longer exist on server (deleted by admin),
+  // but preserve records in the grace period (just created, not yet in Supabase)
+  const kept = local.filter((r: any) => {
+    if (incomingIds.has(r.id)) return true;
+    if (deletedIds.has(r.id)) return true;
+    // Preserve recently created records (grace period for Supabase propagation)
+    if (r.created_at) {
+      const age = now - new Date(r.created_at).getTime();
+      if (age < GRACE_PERIOD_MS) return true;
+    }
+    return false;
+  });
   if (kept.length !== local.length) changed = true;
 
   // Build a map of kept records for fast lookup
@@ -2007,7 +2022,14 @@ async function tryLoadFromSupabase() {
         if (table === 'orders' || MERGE_TABLES.has(table)) {
           const deletedIds = loadDeletedIds();
           const local = (memoryDb as any)[table] || [];
-          const kept = local.filter((r: any) => deletedIds.has(r.id));
+          const gracePeriodMs = 10 * 60 * 1000;
+          const nowTs = Date.now();
+          // Preserve orders created within the grace period (may not be in Supabase yet)
+          const kept = local.filter((r: any) => {
+            if (deletedIds.has(r.id)) return true;
+            if (r.created_at && (nowTs - new Date(r.created_at).getTime()) < gracePeriodMs) return true;
+            return false;
+          });
           if (kept.length !== local.length) {
             (memoryDb as any)[table] = kept;
             changed = true;
@@ -2158,7 +2180,13 @@ export const db = {
           if (table === 'orders' || MERGE_TABLES.has(table)) {
             const deletedIds = loadDeletedIds();
             const local = (memoryDb as any)[table] || [];
-            const kept = local.filter((r: any) => deletedIds.has(r.id));
+            const gracePeriodMs = 10 * 60 * 1000;
+            const nowTs = Date.now();
+            const kept = local.filter((r: any) => {
+              if (deletedIds.has(r.id)) return true;
+              if (r.created_at && (nowTs - new Date(r.created_at).getTime()) < gracePeriodMs) return true;
+              return false;
+            });
             if (kept.length !== local.length) {
               (memoryDb as any)[table] = kept;
               changed = true;

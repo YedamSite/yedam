@@ -316,17 +316,34 @@ export default function CheckoutWizard() {
     setSelectedMethodIdx(0);
   }, [country]);
 
-  // Compute dynamic shipping
+  // Compute dynamic shipping — frozen into state to avoid changing on hydration/refresh
+  const [frozenShipping, setFrozenShipping] = useState<number | null>(null);
+
+  useEffect(() => {
+    const systemSettings = db.get('system_settings') || {};
+    const shippingZones = systemSettings.shipping_zones || [];
+    const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
+    const availableMethods = selectedZone?.methods || [];
+    const selectedMethod = availableMethods[selectedMethodIdx] || availableMethods[0];
+    const computed = selectedMethod
+      ? (locale === 'pt' && selectedMethod.price_brl !== undefined
+          ? Number(selectedMethod.price_brl)
+          : Number(selectedMethod.price) * rate)
+      : 15.00 * rate;
+    setFrozenShipping(computed);
+  }, [country, selectedMethodIdx, locale, rate]);
+
   const systemSettings = db.get('system_settings') || {};
   const shippingZones = systemSettings.shipping_zones || [];
   const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
   const availableMethods = selectedZone?.methods || [];
   const selectedMethod = availableMethods[selectedMethodIdx] || availableMethods[0];
-  const shipping = selectedMethod 
-    ? (locale === 'pt' && selectedMethod.price_brl !== undefined 
-        ? Number(selectedMethod.price_brl) 
+  // Use frozen value (from first stable load) if available; fallback to computed for the initial render only
+  const shipping = frozenShipping !== null ? frozenShipping : (selectedMethod
+    ? (locale === 'pt' && selectedMethod.price_brl !== undefined
+        ? Number(selectedMethod.price_brl)
         : Number(selectedMethod.price) * rate)
-    : 15.00 * rate;
+    : 15.00 * rate);
 
   const total = Math.max(0, subtotal + shipping - discount);
 
