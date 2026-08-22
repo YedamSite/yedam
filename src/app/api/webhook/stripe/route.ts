@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
           await supabase
             .from('cheotnun_orders')
             .update({
-              status: 'pagamento_aprovado',
+              status: 'aguardando_confirmacao',
               stripe_session_id: session.id,
               updated_at: new Date().toISOString(),
             })
@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
           await supabase.from('cheotnun_order_tracking').insert({
             id: crypto.randomUUID(),
             order_id: orderId,
-            status: 'pagamento_aprovado',
-            notes: 'Pagamento via Stripe confirmado com sucesso.',
+            status: 'aguardando_confirmacao',
+            notes: 'Pagamento via Stripe confirmado com sucesso. Pedido aguardando confirmação da loja.',
             updated_at: new Date().toISOString()
           });
 

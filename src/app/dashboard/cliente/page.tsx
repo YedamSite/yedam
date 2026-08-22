@@ -377,6 +377,7 @@ function ClienteDashboardContent() {
                             'bg-accent/10 text-accent border-accent/20'
                           }`}>
                             {({
+                              'pagamento_aprovado': t('Pagamento Confirmado'),
                               'aguardando_confirmacao': t('Aguardando Confirmação'),
                               'preparando_envio': t('Preparando Envío'),
                               'enviado': t('Enviado'),

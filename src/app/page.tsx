@@ -158,7 +158,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Categorias Circular Row */}
+      {/* Categorias Circular Row — only render if enabled and has categories */}
+      {c?.categories?.enabled !== false && categories.length > 0 && (
       <section className="py-24 lg:py-28 max-w-7xl mx-auto w-full px-4 md:px-8">
         <div className="text-center max-w-md mx-auto mb-16">
           <span className="text-[10px] text-accent uppercase font-bold tracking-[0.2em] block mb-2">{t(c?.categories?.preTitle || 'Colección Curada')}</span>
@@ -190,6 +191,7 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      )}
 
       {/* Best Sellers Section */}
       <section className="py-24 lg:py-28 border-y border-white/5 bg-[#050b1c] w-full">
@@ -253,7 +255,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Experiencias Cheotnun Section */}
+      {/* Experiencias Cheotnun Section — only render if has cards and enabled */}
+      {c?.experiencias?.enabled !== false && (c?.experiencias?.cards || []).length > 0 && (
       <section className="py-24 lg:py-28 px-4 md:px-8 max-w-7xl mx-auto w-full">
         <div className="text-center max-w-md mx-auto mb-16">
           <span className="text-[9px] font-bold text-accent tracking-widest uppercase">{t(c?.experiencias?.preTitle || 'Experiencias Cheotnun')}</span>
@@ -289,8 +292,10 @@ export default function Home() {
           })}
         </div>
       </section>
+      )}
 
-      {/* Rutinas por Necesidad */}
+      {/* Rutinas por Necesidad — only render if enabled and has items */}
+      {c?.routines?.enabled !== false && (c?.routines?.items || []).length > 0 && (
       <section className="py-24 lg:py-28 border-t border-white/5 bg-[#040815] w-full">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex justify-between items-end mb-16">
@@ -325,6 +330,7 @@ export default function Home() {
             </Link>
           </div>
 
+          {(c?.routines?.badges || []).length > 0 && (
           <div className="w-full bg-[#0b1329] border border-white/10 rounded-2xl md:rounded-3xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-5 gap-6 text-xs text-muted-foreground shadow-2xl mt-16">
             {(c?.routines?.badges || []).map((badge: any, idx: number) => {
               const Icon = ICON_MAP[badge.icon] || ShieldCheck;
@@ -338,8 +344,10 @@ export default function Home() {
               );
             })}
           </div>
+          )}
         </div>
       </section>
+      )}
 
       {/* Instagram Feed */}
       <section className="py-24 lg:py-28 max-w-7xl mx-auto px-4 md:px-8 w-full">

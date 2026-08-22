@@ -1104,6 +1104,7 @@ if (!authorized) {
                                   </td>
                                   <td className="py-3 px-3">
                                     <span className={`text-[8px] font-bold px-2 py-1 rounded-full uppercase ${
+                                      order.status === 'pagamento_aprovado' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
                                       order.status === 'aguardando_confirmacao' ? 'bg-accent/10 text-accent border border-accent/20' :
                                       order.status === 'preparando_envio' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
                                       order.status === 'enviado' ? 'bg-green-500/10 text-green-400 border border-green-500/20' :
@@ -1112,6 +1113,7 @@ if (!authorized) {
                                       'bg-gray-500/10 text-gray-400 border border-gray-500/20'
                                     }`}>
                                       {({
+                                        'pagamento_aprovado': t('Pago Confirmado'),
                                         'aguardando_confirmacao': t('Aguardando Confirmação'),
                                         'preparando_envio': t('Preparando Envío'),
                                         'enviado': t('Enviado'),
