@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseAuth';
+import { sendEmail } from '@/lib/emailSender';
 
 /**
  * API para envio de e-mails transacionais
@@ -48,11 +49,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Integrar com serviço de e-mail real (SendGrid, Resend, etc.)
-    // Por enquanto, apenas logamos no banco de dados
-    // Quando configurar o serviço de e-mail, adicione o envio aqui
-
-    console.log('Email logged for:', to, 'Subject:', subject);
+    try {
+      await sendEmail({
+        to,
+        subject,
+        html,
+      });
+      console.log('Email sent and logged for:', to, 'Subject:', subject);
+    } catch (emailErr: any) {
+      console.error('Error actually sending email:', emailErr);
+      return NextResponse.json(
+        { success: false, error: 'Failed to dispatch email: ' + emailErr.message },
+        { status: 500 }
+      );
+    }
     
     return NextResponse.json({
       success: true,

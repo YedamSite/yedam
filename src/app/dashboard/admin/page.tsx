@@ -1592,7 +1592,7 @@ if (!authorized) {
                 <div className="grid grid-cols-1 xl:grid-cols-5 gap-8">
                   {/* Order list */}
                   <div className="xl:col-span-3 flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-2">
-                    {orders.filter(o => o.status !== 'pendente_pagamento').map((order) => {
+                    {orders.map((order) => {
                       const isSelected = selectedOrderForInvoice?.id === order.id;
                       return (
                         <div
@@ -1698,7 +1698,7 @@ if (!authorized) {
                             <label className="text-[8px] uppercase font-bold text-muted-foreground">{t('Alterar Status')}</label>
                             <select
                               value={selectedOrderForInvoice.status}
-                              onChange={(e) => {
+                              onChange={async (e) => {
                                 const newStatus = e.target.value;
                                 const allOrders = db.get('orders');
                                 const idx = allOrders.findIndex((o: any) => o.id === selectedOrderForInvoice.id);
@@ -1720,23 +1720,44 @@ if (!authorized) {
                                   db.save('order_tracking', tracking);
 
                                   const logs = db.get('communication_logs') || [];
-                                  logs.push({
-                                    id: crypto.randomUUID(),
-                                    order_id: selectedOrderForInvoice.id,
-                                    type: 'email',
-                                    status: 'sent',
-                                    recipient: 'cliente@example.com',
-                                    subject: `Estado del Pedido - Cheotnun K-Beauty`,
-                                    content: `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${({
+                                  const customerEmail = selectedOrderForInvoice.email || selectedOrderForInvoice.shipping_address?.email || 'cliente@cheotnun.com';
+                                  const subjectText = `Estado del Pedido - Cheotnun K-Beauty`;
+                                  const contentText = `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ahora tiene el estado: ${({
+                                      'pendente_pagamento': 'Pendiente de Pago',
                                       'aguardando_confirmacao': 'Aguardando Confirmación de la Tienda',
                                       'preparando_envio': 'Preparando para Envío',
                                       'enviado': 'Enviado',
                                       'entregue': 'Entregado',
                                       'cancelado': 'Cancelado'
-                                    } as Record<string, string>)[newStatus] || newStatus.toUpperCase()}`,
+                                    } as Record<string, string>)[newStatus] || newStatus.toUpperCase()}`;
+
+                                  logs.push({
+                                    id: crypto.randomUUID(),
+                                    order_id: selectedOrderForInvoice.id,
+                                    type: 'email',
+                                    status: 'sent',
+                                    recipient: customerEmail,
+                                    subject: subjectText,
+                                    content: contentText,
                                     created_at: new Date().toISOString()
                                   });
                                   db.save('communication_logs', logs);
+
+                                  try {
+                                    await fetch('/api/email/send', {
+                                      method: 'POST',
+                                      headers: { 'Content-Type': 'application/json' },
+                                      body: JSON.stringify({
+                                        to: customerEmail,
+                                        subject: subjectText,
+                                        html: `<p>${contentText}</p>`,
+                                        type: 'order_status_update',
+                                        metadata: { orderId: selectedOrderForInvoice.id }
+                                      })
+                                    });
+                                  } catch (err) {
+                                    console.error('Failed to send status update email:', err);
+                                  }
 
                                   setSelectedOrderForInvoice({ ...selectedOrderForInvoice, status: newStatus });
                                   loadData();
@@ -1744,6 +1765,7 @@ if (!authorized) {
                               }}
                               className="flex h-9 w-full rounded-lg border border-white/10 bg-background px-3 py-1 text-xs text-white"
                             >
+                              <option value="pendente_pagamento">{t('💳 Pendente Pagamento')}</option>
                               <option value="aguardando_confirmacao">{t('🕐 Aguardando Confirmação (48-72h)')}</option>
                               <option value="preparando_envio">{t('📦 Preparando para Envío')}</option>
                               <option value="enviado">{t('🚚 Enviado (Shipped)')}</option>

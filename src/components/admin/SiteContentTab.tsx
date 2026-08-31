@@ -841,6 +841,31 @@ export default function SiteContentTab() {
                 label={t('Logo do Site')}
               />
             </div>
+
+            <div className="border-t border-white/5 pt-4">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h4 className="text-[10px] font-bold text-accent uppercase tracking-wider">{t('Links de Navegação')}</h4>
+                  <p className="text-[9px] text-muted-foreground mt-1">
+                    {t('Se a lista estiver vazia, o site usará os links padrões. Adicione links para personalizar.')}
+                  </p>
+                </div>
+                <Button onClick={() => addArrayItem('header', 'navLinks', { label: 'Novo Link', href: '#' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+                  <Plus className="h-3 w-3" /> {t('ADICIONAR LINK')}
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {((content.header as any)?.navLinks || []).map((_: any, idx: number) => (
+                  <div key={idx} className="flex gap-2 items-center">
+                    <div className="flex-1 grid grid-cols-2 gap-2">
+                      {renderArrayInput(t('Label (Texto)'), 'header', 'navLinks', idx, 'label')}
+                      {renderArrayInput(t('URL / Link'), 'header', 'navLinks', idx, 'href')}
+                    </div>
+                    <button onClick={() => removeArrayItem('header', 'navLinks', idx)} className="text-red-500 mt-5"><Trash2 className="h-3.5 w-3.5" /></button>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 

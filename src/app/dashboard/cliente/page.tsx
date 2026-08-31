@@ -134,9 +134,9 @@ function ClienteDashboardContent() {
       console.error('Failed to reload customer data:', e);
     }
 
-    // Load orders (filtering out uncompleted Stripe checkouts)
+    // Load orders
     const allOrders = db.get('orders') || [];
-    const userOrders = allOrders.filter((o: any) => o.customer_id === userId && o.status !== 'pendente_pagamento');
+    const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
     setOrders(userOrders);
 
     // Load addresses
@@ -207,7 +207,7 @@ function ClienteDashboardContent() {
       }
       
       const allOrders = db.get('orders') || [];
-      const userOrders = allOrders.filter((o: any) => o.customer_id === userId && o.status !== 'pendente_pagamento');
+      const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
       setOrders(userOrders);
       const allSubs = db.get('subscriptions') || [];
       const hasAnyRecord = allSubs.some((s: any) => s.user_id === userId);
@@ -374,9 +374,11 @@ function ClienteDashboardContent() {
                             order.status === 'enviado' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
                             order.status === 'preparando_envio' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
                             order.status === 'cancelado' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                            order.status === 'pendente_pagamento' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
                             'bg-accent/10 text-accent border-accent/20'
                           }`}>
                             {({
+                              'pendente_pagamento': t('Pendente Pagamento'),
                               'pagamento_aprovado': t('Pagamento Confirmado'),
                               'aguardando_confirmacao': t('Aguardando Confirmação'),
                               'preparando_envio': t('Preparando Envío'),
@@ -433,6 +435,7 @@ function ClienteDashboardContent() {
                         {(() => {
                           const getStatusStep = (status: string) => {
                             switch (status) {
+                              case 'pendente_pagamento': return 0;
                               case 'aguardando_confirmacao': return 1;
                               case 'preparando_envio': return 2;
                               case 'enviado': return 3;
