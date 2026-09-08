@@ -117,7 +117,7 @@ function ClienteDashboardContent() {
 
     // Load orders directly from server action
     try {
-      const res = await fetchCustomerOrdersAction(userId);
+      const res = await fetchCustomerOrdersAction(userId, userEmail);
       if (res.success && res.data) {
         // Merge orders into local DB to ensure persistence
         const existingOrders = db.get('orders') || [];
@@ -136,7 +136,10 @@ function ClienteDashboardContent() {
 
     // Load orders
     const allOrders = db.get('orders') || [];
-    const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
+    const userOrders = allOrders.filter((o: any) => 
+      o.customer_id === userId || 
+      (userEmail && o.shipping_address?.email?.toLowerCase() === userEmail.toLowerCase())
+    );
     setOrders(userOrders);
 
     // Load addresses
@@ -193,7 +196,8 @@ function ClienteDashboardContent() {
     const interval = setInterval(async () => {
       if (!user) return;
       const userId = user.id;
-      const res = await fetchCustomerOrdersAction(userId);
+      const userEmail = user.email;
+      const res = await fetchCustomerOrdersAction(userId, userEmail);
       if (res.success && res.data) {
         const existingOrders = db.get('orders') || [];
         const incomingIds = new Set(res.data.orders.map((o: any) => o.id));
@@ -207,7 +211,10 @@ function ClienteDashboardContent() {
       }
       
       const allOrders = db.get('orders') || [];
-      const userOrders = allOrders.filter((o: any) => o.customer_id === userId);
+      const userOrders = allOrders.filter((o: any) => 
+        o.customer_id === userId || 
+        (userEmail && o.shipping_address?.email?.toLowerCase() === userEmail.toLowerCase())
+      );
       setOrders(userOrders);
       const allSubs = db.get('subscriptions') || [];
       const hasAnyRecord = allSubs.some((s: any) => s.user_id === userId);

@@ -165,12 +165,13 @@ export default function Header() {
     { label: 'Inicio', href: '/' },
     { label: 'Tienda', href: '/tienda' },
     { label: 'Marcas', href: '/marcas' },
-    { label: 'Rutinas', href: '/rutinas' },
-    { label: 'Experiencias', href: '/experiencias' },
     { label: 'Blog', href: '/blog' },
     { label: 'Contacto', href: '/contacto' },
   ];
-  const rawNavItems: any[] = headerContent.navLinks || defaultNavItems;
+  const rawNavItems: any[] = (headerContent.navLinks && headerContent.navLinks.length > 0
+    ? headerContent.navLinks
+    : defaultNavItems
+  ).filter((item: any) => item.href !== '/rutinas' && item.href !== '/experiencias');
   // Always run labels through t() so translations apply regardless of DB content
   const navItems = rawNavItems.map((item: any) => ({ ...item, label: t(item.label) }));
   return (

@@ -286,11 +286,17 @@ export async function deleteOrderFromSupabase(orderId: string) {
   }
 }
 
-export async function fetchCustomerOrdersAction(customerId: string) {
+export async function fetchCustomerOrdersAction(customerId: string, customerEmail?: string) {
   if (!supabaseUrl || !supabaseServiceKey) return { success: false, data: { orders: [], subscriptions: [] } };
   try {
     const client = createClient(supabaseUrl, supabaseServiceKey);
-    const { data: orders } = await client.from('cheotnun_orders').select('*').eq('customer_id', customerId);
+    let query = client.from('cheotnun_orders').select('*');
+    if (customerEmail) {
+      query = query.or(`customer_id.eq.${customerId},shipping_address->>email.eq.${customerEmail}`);
+    } else {
+      query = query.eq('customer_id', customerId);
+    }
+    const { data: orders } = await query.order('created_at', { ascending: false });
     const { data: subscriptions } = await client.from('cheotnun_subscriptions').select('*').eq('customer_id', customerId);
     
     return { 

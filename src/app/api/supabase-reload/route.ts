@@ -18,6 +18,8 @@ const TABLE_MAP: Record<string, string> = {
   users: 'cheotnun_users',
   newsletter_subscribers: 'cheotnun_newsletter_subscribers',
   subscriptions: 'cheotnun_subscriptions',
+  // Tabelas locais com suporte a Supabase
+  coupons: 'cheotnun_coupons',
 };
 
 export async function POST(req: Request) {
@@ -46,8 +48,16 @@ export async function POST(req: Request) {
       for (const table of tables) {
         const tableName = TABLE_MAP[table];
         if (!tableName) continue;
-        const { data, error } = await supabase.from(tableName).select('*');
-        if (!error && data) result[table] = data;
+        let query = supabase.from(tableName).select('*');
+        if (tableName === 'cheotnun_orders') {
+          query = query.order('created_at', { ascending: false });
+        }
+        const { data, error } = await query;
+        if (!error && data) {
+          result[table] = data;
+        } else if (error) {
+          console.warn(`Supabase get(${tableName}):`, error.message);
+        }
       }
       return NextResponse.json({ success: true, data: result });
     }
@@ -55,23 +65,36 @@ export async function POST(req: Request) {
     if (action === 'upsert') {
       const { table, records } = body;
       const tableName = TABLE_MAP[table];
-      if (!tableName || !Array.isArray(records)) {
-        return NextResponse.json({ error: 'Invalid params' }, { status: 400 });
+      // Se a tabela não está mapeada no Supabase, retorna sucesso silencioso
+      // (o dado já foi salvo no localStorage pelo db.save antes desta chamada)
+      if (!tableName) {
+        return NextResponse.json({ success: true, synced: 0, local_only: true });
+      }
+      if (!Array.isArray(records)) {
+        return NextResponse.json({ error: 'Invalid records' }, { status: 400 });
       }
       const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       const valid = records.filter((r: any) => r.id && UUID_RE.test(r.id));
       if (valid.length === 0) {
         return NextResponse.json({ success: true, synced: 0 });
       }
-      // Sanitize foreign keys: empty strings → null (UUID columns reject empty strings)
+      // Sanitize foreign keys: empty strings or non-UUIDs → null (UUID columns reject empty strings/invalid formats)
       for (const r of valid) {
-        for (const key of ['brand_id', 'category_id', 'user_id', 'order_id', 'product_id']) {
-          if (r[key] === '') r[key] = null;
+        for (const key of ['brand_id', 'category_id', 'user_id', 'order_id', 'product_id', 'customer_id']) {
+          if (r[key] === '' || (r[key] && typeof r[key] === 'string' && !UUID_RE.test(r[key]))) {
+            r[key] = null;
+          }
         }
       }
       const supabase = createClient(supabaseUrl, serviceRoleKey);
       const { error } = await supabase.from(tableName).upsert(valid, { onConflict: 'id', ignoreDuplicates: false });
       if (error) {
+        // Se a tabela não existe no Supabase (ex: tabela local que não foi migrada),
+        // não bloqueia a operação — o dado já está seguro no localStorage
+        if (error.code === '42P01' || error.message?.includes('does not exist') || error.message?.includes('relation')) {
+          console.warn(`Supabase table ${tableName} does not exist, keeping local-only.`);
+          return NextResponse.json({ success: true, synced: 0, local_only: true, warning: error.message });
+        }
         return NextResponse.json({ success: false, error: error.message, synced: 0 });
       }
       return NextResponse.json({ success: true, synced: valid.length });
@@ -80,12 +103,19 @@ export async function POST(req: Request) {
     if (action === 'delete') {
       const { table, id } = body;
       const tableName = TABLE_MAP[table];
-      if (!tableName || !id) {
-        return NextResponse.json({ error: 'Invalid params' }, { status: 400 });
+      // Tabela não mapeada — delete local já foi feito, retorna sucesso silencioso
+      if (!tableName) {
+        return NextResponse.json({ success: true, local_only: true });
+      }
+      if (!id) {
+        return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
       }
       const supabase = createClient(supabaseUrl, serviceRoleKey);
       const { error } = await supabase.from(tableName).delete().eq('id', id);
       if (error) {
+        if (error.code === '42P01' || error.message?.includes('does not exist') || error.message?.includes('relation')) {
+          return NextResponse.json({ success: true, local_only: true });
+        }
         return NextResponse.json({ success: false, error: error.message });
       }
       return NextResponse.json({ success: true });

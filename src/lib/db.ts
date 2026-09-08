@@ -24,7 +24,7 @@ interface DbState {
 
 const STORAGE_KEY = 'cheotnun_db_state';
 const DELETED_IDS_KEY = 'cheotnun_deleted_ids';
-const SEED_VERSION = 'v11';
+const SEED_VERSION = 'v12';
 
 const DEFAULT_STATE: DbState = {
   users: [
@@ -128,6 +128,7 @@ const DEFAULT_STATE: DbState = {
         buttonText: 'VER TODOS'
       },
       experiencias: {
+        enabled: false,
         preTitle: 'Experiencias Cheotnun',
         title: 'Vive la belleza coreana más allá de los productos',
         cards: [
@@ -158,6 +159,7 @@ const DEFAULT_STATE: DbState = {
         ]
       },
       routines: {
+        enabled: false,
         preTitle: 'Tratamientos Específicos',
         title: 'Rutinas para cada necesidad',
         subtitle: 'Encuentra la rutina ideal para tu tipo de piel y estilo de vida.',
@@ -207,8 +209,6 @@ const DEFAULT_STATE: DbState = {
         { label: 'Inicio', href: '/' },
         { label: 'Tienda', href: '/tienda' },
         { label: 'Marcas', href: '/marcas' },
-        { label: 'Rutinas', href: '/rutinas' },
-        { label: 'Experiencias', href: '/experiencias' },
         { label: 'Blog', href: '/blog' },
         { label: 'Contacto', href: '/contacto' }
       ]
@@ -227,7 +227,6 @@ const DEFAULT_STATE: DbState = {
           { label: 'Cuidado Facial', href: '/tienda?category=cuidado-facial' },
           { label: 'Protección Solar', href: '/tienda?category=proteccion-solar' },
           { label: 'Cómo funciona', href: '/como-funciona' },
-          { label: 'Rutinas Recomendadas', href: '/rutinas' },
           { label: 'Blog', href: '/blog' }
         ]
       },
@@ -764,6 +763,7 @@ const DEFAULT_STATE: DbState = {
             buttonText: 'VER MAIS'
           },
           experiencias: {
+            enabled: false,
             preTitle: 'EXPERIÊNCIAS',
             title: 'Viva o K-Beauty',
             cards: [
@@ -773,6 +773,7 @@ const DEFAULT_STATE: DbState = {
             ]
           },
           routines: {
+            enabled: false,
             preTitle: 'ROTINAS',
             title: 'Sua Rotina Perfeita',
             subtitle: 'Passos simples para uma pele radiante com produtos coreanos.',
@@ -811,7 +812,7 @@ const DEFAULT_STATE: DbState = {
           }
         },
         header: {
-          topBar: 'Frete grátis para compras acima de R\$ 297 para todo o Brasil',
+          topBar: 'Frete grátis para compras acima de R$ 297 para todo o Brasil',
           logoText: 'CHEOTNUN',
           logoSubtext: 'Corean Beauty',
           ctaText: 'COMECE AQUI',
@@ -820,8 +821,6 @@ const DEFAULT_STATE: DbState = {
             { label: 'Início', href: '/' },
             { label: 'Loja', href: '/tienda' },
             { label: 'Marcas', href: '/marcas' },
-            { label: 'Rotinas', href: '/rutinas' },
-            { label: 'Experiências', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
             { label: 'Contato', href: '/contacto' }
           ]
@@ -1251,6 +1250,7 @@ const DEFAULT_STATE: DbState = {
             buttonText: 'SEE MORE'
           },
           experiencias: {
+            enabled: false,
             preTitle: 'EXPERIENCES',
             title: 'Live K-Beauty',
             cards: [
@@ -1260,6 +1260,7 @@ const DEFAULT_STATE: DbState = {
             ]
           },
           routines: {
+            enabled: false,
             preTitle: 'ROUTINES',
             title: 'Your Perfect Routine',
             subtitle: 'Simple steps for radiant skin with Korean products.',
@@ -1298,7 +1299,7 @@ const DEFAULT_STATE: DbState = {
           }
         },
         header: {
-          topBar: 'Free shipping on orders over \$150 for all Latin America',
+          topBar: 'Free shipping on orders over $150 for all Latin America',
           logoText: 'CHEOTNUN',
           logoSubtext: 'Corean Beauty',
           ctaText: 'START HERE',
@@ -1307,8 +1308,6 @@ const DEFAULT_STATE: DbState = {
             { label: 'Home', href: '/' },
             { label: 'Shop', href: '/tienda' },
             { label: 'Brands', href: '/marcas' },
-            { label: 'Routines', href: '/rutinas' },
-            { label: 'Experiences', href: '/experiencias' },
             { label: 'Blog', href: '/blog' },
             { label: 'Contact', href: '/contacto' }
           ]
@@ -1836,8 +1835,42 @@ function loadFromLocalStorage(): boolean {
     
     if (currentVersion !== SEED_VERSION) {
       localStorage.setItem('cheotnun_db_version', SEED_VERSION);
-      // Don't remove STORAGE_KEY! The data from localStorage will be merged with DEFAULT_STATE below, 
-      // preventing the loss of user's unsynced products when the codebase is updated.
+      // Auto-migrate: disable retired sections and remove dead nav links from existing client storage
+      if (saved) {
+        try {
+          const parsedSaved = JSON.parse(saved);
+          if (parsedSaved.site_content?.home) {
+            if (parsedSaved.site_content.home.experiencias) parsedSaved.site_content.home.experiencias.enabled = false;
+            if (parsedSaved.site_content.home.routines) parsedSaved.site_content.home.routines.enabled = false;
+          }
+          if (parsedSaved.site_content?.header?.navLinks) {
+            parsedSaved.site_content.header.navLinks = parsedSaved.site_content.header.navLinks.filter(
+              (l: any) => l.href !== '/rutinas' && l.href !== '/experiencias'
+            );
+          }
+          if (parsedSaved.site_content?.footer?.col1?.links) {
+            parsedSaved.site_content.footer.col1.links = parsedSaved.site_content.footer.col1.links.filter(
+              (l: any) => l.href !== '/rutinas' && l.href !== '/experiencias'
+            );
+          }
+          for (const lang of ['pt', 'en']) {
+            const trans = parsedSaved.site_content?.translations?.[lang];
+            if (trans?.home) {
+              if (trans.home.experiencias) trans.home.experiencias.enabled = false;
+              if (trans.home.routines) trans.home.routines.enabled = false;
+            }
+            if (trans?.header?.navLinks) {
+              trans.header.navLinks = trans.header.navLinks.filter(
+                (l: any) => l.href !== '/rutinas' && l.href !== '/experiencias'
+              );
+            }
+          }
+          saved = JSON.stringify(parsedSaved);
+          localStorage.setItem(STORAGE_KEY, saved);
+        } catch (e) {
+          console.warn('Failed to migrate site_content in localStorage:', e);
+        }
+      }
     }
 
     if (saved) {

@@ -57,6 +57,12 @@ export default function Footer() {
   
   // Ensure Contacto is present in the help column just in case it's missing from DB
   const renderColumns = [JSON.parse(JSON.stringify(col1)), JSON.parse(JSON.stringify(col2)), JSON.parse(JSON.stringify(col3))].filter(c => c.title);
+  // Filter out decommissioned links like /rutinas and /experiencias
+  renderColumns.forEach((c: any) => {
+    if (c.links && Array.isArray(c.links)) {
+      c.links = c.links.filter((l: any) => l.href !== '/rutinas' && l.href !== '/experiencias');
+    }
+  });
   const helpColumn = renderColumns.find((c: any) => c.title === 'Ayuda & Políticas' || c.title === 'Ayuda' || c.title === 'HELP');
   if (helpColumn && !helpColumn.links.some((l: any) => l.href === '/contacto')) {
     helpColumn.links.splice(2, 0, { label: 'Contacto', href: '/contacto' });

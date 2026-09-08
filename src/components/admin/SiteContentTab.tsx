@@ -659,7 +659,20 @@ export default function SiteContentTab() {
         {activeSection === 'experiencias' && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Experiencias Cheotnun')}</h3>
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider">{t('Experiencias Cheotnun')}</h3>
+                <label className="flex items-center gap-2 mt-2 cursor-pointer text-xs">
+                  <input
+                    type="checkbox"
+                    checked={content.home?.experiencias?.enabled !== false}
+                    onChange={e => handleChange('experiencias', 'enabled', e.target.checked)}
+                    className="accent-accent h-4 w-4 rounded"
+                  />
+                  <span className={content.home?.experiencias?.enabled !== false ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold'}>
+                    {content.home?.experiencias?.enabled !== false ? t('✓ Seção Ativada no Site') : t('✗ Seção Desativada no Site')}
+                  </span>
+                </label>
+              </div>
               <Button onClick={() => addArrayItem('experiencias', 'cards', { badge: 'NOVA', badgeColor: 'accent', title: 'Nova Experiência', text: 'Descrição', buttonText: 'SABER MÁS', image: '' })} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
                 <Plus className="h-3 w-3" /> {t('ADICIONAR CARD')}
               </Button>
@@ -707,7 +720,20 @@ export default function SiteContentTab() {
         {/* ROUTINES */}
         {activeSection === 'routines' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção Rutinas')}</h3>
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">{t('Seção Rutinas')}</h3>
+              <label className="flex items-center gap-2 cursor-pointer text-xs">
+                <input
+                  type="checkbox"
+                  checked={content.home?.routines?.enabled !== false}
+                  onChange={e => handleChange('routines', 'enabled', e.target.checked)}
+                  className="accent-accent h-4 w-4 rounded"
+                />
+                <span className={content.home?.routines?.enabled !== false ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold'}>
+                  {content.home?.routines?.enabled !== false ? t('✓ Seção Ativada no Site') : t('✗ Seção Desativada no Site')}
+                </span>
+              </label>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               {renderInput(t('Pré-título'), 'routines', 'preTitle')}
               {renderInput(t('Título'), 'routines', 'title')}

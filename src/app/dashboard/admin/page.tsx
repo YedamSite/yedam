@@ -58,6 +58,9 @@ export default function AdminDashboard() {
   const [orders, setOrders] = useState<any[]>([]);
   const [emailLogs, setEmailLogs] = useState<any[]>([]);
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
+  const [orderStatusSaved, setOrderStatusSaved] = useState(false);
+  const [isSyncingOrders, setIsSyncingOrders] = useState(false);
 
   // CRUD Product States
   const [prodName, setProdName] = useState('');
@@ -226,6 +229,7 @@ export default function AdminDashboard() {
         await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
         loadData();
       }
+      setIsLoadingOrders(false);
     })();
     
     // Listener para atualizar quando o db mudar em outras abas/páginas
@@ -530,10 +534,10 @@ export default function AdminDashboard() {
   // Create Coupon
   const handleSyncError = (e: Event) => {
     const customEvent = e as CustomEvent;
-    alert(`Error de sincronización con Supabase: ${customEvent.detail?.error}`);
+    console.warn(`Aviso de sincronização com Supabase: ${customEvent.detail?.error}`);
   };
 
-  const handleCreateCoupon = (e: React.FormEvent) => {
+  const handleCreateCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCouponCode || !newCouponDiscount) return;
     const allCoupons = db.get('coupons') || [];
@@ -542,28 +546,29 @@ export default function AdminDashboard() {
       code: newCouponCode.trim().toUpperCase(),
       discount: Number(newCouponDiscount),
       type: newCouponType,
-      status: 'active'
+      status: 'active',
+      created_at: new Date().toISOString()
     };
     allCoupons.push(newC);
-    db.save('coupons', allCoupons);
-    setCoupons(allCoupons);
+    await db.save('coupons', allCoupons);
+    setCoupons([...allCoupons]);
     setNewCouponCode('');
     setNewCouponDiscount(0);
   };
 
-  const handleDeleteCoupon = (id: string) => {
+  const handleDeleteCoupon = async (id: string) => {
     if (!confirm('¿Eliminar este cupón permanentemente?')) return;
-    db.deleteRecord('coupons', id);
+    await db.deleteRecord('coupons', id);
     setCoupons(db.get('coupons') || []);
   };
 
-  const handleToggleCouponStatus = (id: string, currentStatus: string) => {
+  const handleToggleCouponStatus = async (id: string, currentStatus: string) => {
     const all = db.get('coupons') || [];
     const idx = all.findIndex((c: any) => c.id === id);
     if (idx !== -1) {
       all[idx].status = currentStatus === 'active' ? 'inactive' : 'active';
-      db.save('coupons', all);
-      setCoupons(all);
+      await db.save('coupons', all);
+      setCoupons([...all]);
     }
   };
 
@@ -1569,12 +1574,22 @@ if (!authorized) {
                 <div className="flex flex-wrap items-center gap-2 text-[10px] text-muted-foreground">
                   <button
                     onClick={async () => {
+                      setIsSyncingOrders(true);
                       await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
                       loadData();
+                      setIsSyncingOrders(false);
                     }}
-                    className="text-[9px] font-bold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 rounded-lg px-3 h-7 transition-all"
+                    disabled={isSyncingOrders}
+                    className="text-[9px] font-bold bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 rounded-lg px-3 h-7 transition-all flex items-center gap-1 disabled:opacity-50"
                   >
-                    {t('🔄 Sync')}
+                    {isSyncingOrders ? (
+                      <>
+                        <span className="w-2.5 h-2.5 border border-accent border-t-transparent rounded-full animate-spin inline-block" />
+                        {t('Sincronizando...')}
+                      </>
+                    ) : (
+                      t('🔄 Sync')
+                    )}
                   </button>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-accent inline-block" /> {t('Aguardando')}</span>
                   <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" /> {t('Preparando')}</span>
@@ -1584,7 +1599,12 @@ if (!authorized) {
                 </div>
               </div>
 
-              {orders.length === 0 ? (
+              {isLoadingOrders ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-3 border border-dashed border-white/10 rounded-2xl">
+                  <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs text-muted-foreground">{t('Carregando pedidos do Supabase...')}</span>
+                </div>
+              ) : orders.length === 0 ? (
                 <div className="text-center text-xs text-muted-foreground py-12 border border-dashed border-white/10 rounded-2xl">
                   {t('Nenhum pedido registrado no sistema.')}
                 </div>
@@ -1688,7 +1708,14 @@ if (!authorized) {
 
                         {/* Status Management */}
                         <div className="border border-white/5 rounded-2xl p-5 bg-secondary/20 flex flex-col gap-4">
-                          <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider border-b border-white/5 pb-2">{t('Status & Envío')}</h4>
+                          <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                            <h4 className="text-[9px] font-bold text-accent uppercase tracking-wider">{t('Status & Envío')}</h4>
+                            {orderStatusSaved && (
+                              <span className="text-[9px] text-emerald-400 font-bold bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full animate-pulse">
+                                ✓ {t('Status salvo com sucesso!')}
+                              </span>
+                            )}
+                          </div>
                           
                           <div className="bg-accent/10 border border-accent/20 rounded-xl px-4 py-3 text-[10px] text-accent leading-relaxed">
                             {t('⏱ Prazo operacional: 48h úteis (até 72h em feriados coreanos). O cliente foi informado.')}
@@ -1705,7 +1732,7 @@ if (!authorized) {
                                 if (idx !== -1) {
                                   allOrders[idx].status = newStatus;
                                   allOrders[idx].updated_at = new Date().toISOString();
-                                  db.save('orders', allOrders);
+                                  await db.save('orders', allOrders);
                                   
                                   const tracking = db.get('order_tracking') || [];
                                   tracking.push({
@@ -1717,7 +1744,7 @@ if (!authorized) {
                                     notes: `Estado actualizado por el administrador a ${newStatus.toUpperCase()}`,
                                     updated_at: new Date().toISOString()
                                   });
-                                  db.save('order_tracking', tracking);
+                                  await db.save('order_tracking', tracking);
 
                                   const logs = db.get('communication_logs') || [];
                                   const customerEmail = selectedOrderForInvoice.email || selectedOrderForInvoice.shipping_address?.email || 'cliente@cheotnun.com';
@@ -1741,7 +1768,7 @@ if (!authorized) {
                                     content: contentText,
                                     created_at: new Date().toISOString()
                                   });
-                                  db.save('communication_logs', logs);
+                                  await db.save('communication_logs', logs);
 
                                   try {
                                     await fetch('/api/email/send', {
@@ -1761,6 +1788,8 @@ if (!authorized) {
 
                                   setSelectedOrderForInvoice({ ...selectedOrderForInvoice, status: newStatus });
                                   loadData();
+                                  setOrderStatusSaved(true);
+                                  setTimeout(() => setOrderStatusSaved(false), 3000);
                                 }
                               }}
                               className="flex h-9 w-full rounded-lg border border-white/10 bg-background px-3 py-1 text-xs text-white"
@@ -1796,14 +1825,14 @@ if (!authorized) {
                           </div>
 
                           <Button
-                            onClick={() => {
+                            onClick={async () => {
                               const allOrders = db.get('orders');
                               const idx = allOrders.findIndex((o: any) => o.id === selectedOrderForInvoice.id);
                               if (idx !== -1) {
                                 allOrders[idx].carrier = selectedOrderForInvoice.carrier;
                                 allOrders[idx].tracking_code = selectedOrderForInvoice.tracking_code;
                                 allOrders[idx].updated_at = new Date().toISOString();
-                                db.save('orders', allOrders);
+                                await db.save('orders', allOrders);
 
                                 const tracking = db.get('order_tracking') || [];
                                 tracking.push({
@@ -1815,7 +1844,7 @@ if (!authorized) {
                                   notes: `Detalles de rastreo guardados: ${selectedOrderForInvoice.carrier} - ${selectedOrderForInvoice.tracking_code}`,
                                   updated_at: new Date().toISOString()
                                 });
-                                db.save('order_tracking', tracking);
+                                await db.save('order_tracking', tracking);
 
                                 const logs = db.get('communication_logs') || [];
                                 logs.push({
@@ -1828,9 +1857,11 @@ if (!authorized) {
                                   content: `Hola, tu pedido #${selectedOrderForInvoice.id.substring(0, 8)} ha sido enviado vía ${selectedOrderForInvoice.carrier}. Número de seguimiento: ${selectedOrderForInvoice.tracking_code}`,
                                   created_at: new Date().toISOString()
                                 });
-                                db.save('communication_logs', logs);
+                                await db.save('communication_logs', logs);
 
                                 loadData();
+                                setOrderStatusSaved(true);
+                                setTimeout(() => setOrderStatusSaved(false), 3000);
                                 alert('✓ Detalles de envío actualizados y correo de seguimiento enviado al cliente.');
                               }
                             }}
