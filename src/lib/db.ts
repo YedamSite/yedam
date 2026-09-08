@@ -2187,7 +2187,7 @@ async function loadSettingsFromSupabase() {
     const resp = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content', 'shipping_zones'] }),
+      body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content', 'shipping_zones', 'coupons'] }),
     });
     if (!resp.ok) return;
     const json = await resp.json();
@@ -2209,6 +2209,13 @@ async function loadSettingsFromSupabase() {
         // re-enabled would never show for visitors/other devices.
         memoryDb.site_content = supabaseMerged;
       }
+      changedSettings = true;
+    }
+    if (json.data?.coupons && Array.isArray(json.data.coupons)) {
+      // Coupons are global — Supabase (backed by cheotnun_system_settings) is the source of truth.
+      // This guarantees the admin-created coupon survives an admin panel F5 even if localStorage
+      // persistence failed (quota / private window).
+      memoryDb.coupons = json.data.coupons;
       changedSettings = true;
     }
     
@@ -2319,6 +2326,11 @@ export const db = {
     if (table === 'site_content') {
       hasLocalSiteContentOverride = true;
       await trySaveSettingsToSupabase('site_content', records);
+    } else if (table === 'coupons') {
+      // Coupons are saved via cheotnun_system_settings (key "coupons") — the same table that
+      // reliably backs site_content/theme. The dedicated cheotnun_coupons table may not exist,
+      // which caused admin-created coupons to never reach Supabase (and disappear after F5).
+      await trySaveSettingsToSupabase('coupons', records as any[]);
     } else if (table === 'system_settings') {
       const settings = records as any;
       if (settings.visual_theme) await trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
@@ -2342,6 +2354,8 @@ export const db = {
       if (settings.seo) await trySaveSettingsToSupabase('seo', settings.seo);
       if (settings.shipping_zones) await trySaveSettingsToSupabase('shipping_zones', settings.shipping_zones);
       if (settings.invoice_templates) await trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
+    } else if (table === 'coupons') {
+      await trySaveSettingsToSupabase('coupons', updated as any[]);
     } else {
       await trySaveToSupabase(table as string, updated as any[]);
     }
@@ -2391,7 +2405,13 @@ export const db = {
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
       }
-      await tryDeleteFromSupabase(table as string, id);
+      if (table === 'coupons') {
+        // Coupons live in cheotnun_system_settings (key "coupons"), so deletions must be saved
+        // there too instead of tryDeleteFromSupabase (which targets a possibly-missing table).
+        await trySaveSettingsToSupabase('coupons', (memoryDb as any).coupons);
+      } else {
+        await tryDeleteFromSupabase(table as string, id);
+      }
     }
   },
   getDefault,

@@ -34,6 +34,19 @@ export async function GET(req: Request) {
 
     for (const table of requestedTables) {
       const tableName = PUBLIC_TABLE_MAP[table];
+      if (table === 'coupons') {
+        // Coupons live in cheotnun_system_settings (key "coupons") — the same table used for
+        // site_content/theme, so it is guaranteed to exist. Read publicly for shoppers.
+        const { data: setting, error: err } = await supabase
+          .from('cheotnun_system_settings')
+          .select('value')
+          .eq('key', 'coupons')
+          .single();
+        if (!err && setting?.value && Array.isArray(setting.value)) {
+          result.coupons = setting.value;
+        }
+        continue;
+      }
       if (!tableName) continue; // Skip tables not in public whitelist
 
       const { data, error } = await supabase.from(tableName).select('*');

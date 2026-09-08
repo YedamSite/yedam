@@ -82,17 +82,20 @@ export async function submitOrderAction(data: {
       const code = data.couponCode.trim().toUpperCase();
       let found: any = null;
 
-      // Coupons are stored in Supabase (source of truth); the local memory DB on the server
-      // only holds seed data, so query the DB first.
+      // Coupons are stored in Supabase under cheotnun_system_settings (key "coupons") — the same
+      // table that backs site_content. The local memory DB on the server only holds seed data, so
+      // query Supabase directly (source of truth).
       if (supabaseUrl && supabaseServiceKey) {
         try {
           const client = createClient(supabaseUrl, supabaseServiceKey);
-          const { data: rows } = await client
-            .from('cheotnun_coupons')
-            .select('*')
-            .eq('status', 'active');
-          if (rows) {
-            found = rows.find((r: any) => (r.code || '').toUpperCase() === code) || null;
+          const { data: setting } = await client
+            .from('cheotnun_system_settings')
+            .select('value')
+            .eq('key', 'coupons')
+            .single();
+          const rows = setting?.value;
+          if (Array.isArray(rows)) {
+            found = rows.find((r: any) => (r.code || '').toUpperCase() === code && r.status === 'active') || null;
           }
         } catch (e: any) {
           console.error('Coupon lookup from Supabase failed:', e?.message);
