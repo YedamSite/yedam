@@ -475,15 +475,18 @@ export default function SiteContentTab() {
 
   if (!content) return <div className="text-xs text-muted-foreground">{t('Carregando...')}</div>;
 
-  const sections = [
-    { id: 'hero', label: t('Hero / Banner Principal') },
-    { id: 'highlights', label: t('Barra de Destaques') },
-    { id: 'categories', label: t('Seção Categorias') },
-    { id: 'bestSellers', label: t('Seção Mais Vendidos') },
-    { id: 'experiencias', label: t('Experiencias Cheotnun') },
-    { id: 'routines', label: t('Seção Rutinas') },
-    { id: 'instagram', label: t('Seção Instagram') },
+  const homeSections = [
+    { id: 'hero', label: t('Hero / Banner') },
+    { id: 'highlights', label: t('Destaques') },
+    { id: 'categories', label: t('Categorias'), toggleKey: 'categories' },
+    { id: 'bestSellers', label: t('Mais Vendidos') },
+    { id: 'experiencias', label: t('Experiencias (Home)'), toggleKey: 'experiencias' },
+    { id: 'routines', label: t('Rotinas (Home)'), toggleKey: 'routines' },
+    { id: 'instagram', label: t('Instagram') },
     { id: 'newsletter', label: t('Newsletter') },
+  ];
+
+  const pageSections = [
     { id: 'header', label: t('Header / Topo') },
     { id: 'footer', label: t('Footer / Rodapé') },
     { id: 'marcas', label: t('Página: Marcas') },
@@ -493,9 +496,9 @@ export default function SiteContentTab() {
     { id: 'envios', label: t('Página: Envíos') },
     { id: 'rutinasPage', label: t('Página: Rutinas') },
     { id: 'experienciasPage', label: t('Página: Experiencias') },
+    { id: 'blog', label: t('Página: Blog') },
     { id: 'terminos', label: t('Página: Términos') },
     { id: 'privacidad', label: t('Página: Privacidad') },
-    { id: 'blog', label: t('Página: Blog') },
   ];
 
   // Base lengths for loop consistency in translation tab
@@ -556,19 +559,63 @@ export default function SiteContentTab() {
         ))}
       </div>
 
-      {/* Section selector */}
-      <div className="flex gap-4 border-b border-white/10 mb-8 overflow-x-auto pb-2">
-        {sections.map(sec => (
-          <button
-            key={sec.id}
-            onClick={() => setActiveSection(sec.id)}
-            className={`text-[10px] font-bold uppercase tracking-wider whitespace-nowrap px-3 py-2 border-b-2 transition-all ${
-              activeSection === sec.id ? 'border-accent text-accent' : 'border-transparent text-muted-foreground hover:text-white'
-            }`}
-          >
-            {sec.label}
-          </button>
-        ))}
+      {/* Section selector grouped */}
+      <div className="space-y-4 mb-8 bg-black/40 p-4 rounded-2xl border border-white/5">
+        <div>
+          <div className="text-[10px] uppercase font-bold text-accent tracking-wider mb-2 flex items-center gap-1.5">
+            <span>🏠 {t('Seções da Página Inicial (Home)')}</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {homeSections.map(sec => {
+              const isEnabled = sec.toggleKey ? content.home?.[sec.toggleKey]?.enabled !== false : null;
+              return (
+                <button
+                  key={sec.id}
+                  type="button"
+                  onClick={() => setActiveSection(sec.id)}
+                  className={`text-[11px] font-bold uppercase tracking-wider whitespace-nowrap px-3.5 py-2 rounded-xl transition-all flex items-center gap-1.5 ${
+                    activeSection === sec.id 
+                      ? 'bg-accent text-background shadow-md' 
+                      : 'bg-white/5 text-muted-foreground hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <span>{sec.label}</span>
+                  {isEnabled !== null && (
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-mono font-black ${
+                      isEnabled 
+                        ? (activeSection === sec.id ? 'bg-background/25 text-background' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30')
+                        : (activeSection === sec.id ? 'bg-red-950/50 text-red-200' : 'bg-red-500/20 text-red-400 border border-red-500/30')
+                    }`}>
+                      {isEnabled ? t('ON') : t('OFF')}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="pt-3 border-t border-white/5">
+          <div className="text-[10px] uppercase font-bold text-white/50 tracking-wider mb-2 flex items-center gap-1.5">
+            <span>📄 {t('Páginas Específicas & Menus')}</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {pageSections.map(sec => (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => setActiveSection(sec.id)}
+                className={`text-[11px] font-bold uppercase tracking-wider whitespace-nowrap px-3.5 py-2 rounded-xl transition-all ${
+                  activeSection === sec.id 
+                    ? 'bg-accent text-background shadow-md' 
+                    : 'bg-white/5 text-muted-foreground hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {sec.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="space-y-6 text-xs text-muted-foreground max-w-4xl">
@@ -1565,7 +1612,40 @@ export default function SiteContentTab() {
         {/* RUTINAS PAGE */}
         {activeSection === 'rutinasPage' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Rutinas</h3>
+            {/* Box de Controle da Seção na Home */}
+            <div className="bg-accent/10 border border-accent/30 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-accent font-bold text-xs uppercase tracking-wider">{t('Controle de Exibição')}</span>
+                  <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-white font-medium">{t('Página Inicial (Home)')}</span>
+                </div>
+                <p className="text-xs text-white/80 mt-1">
+                  {t('Deseja exibir ou ocultar a seção de')} <strong>{t('Rotinas')}</strong> {t('na Página Inicial do site?')}
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 cursor-pointer bg-black/40 px-3.5 py-2.5 rounded-xl border border-white/10 hover:border-accent transition-all">
+                  <input
+                    type="checkbox"
+                    checked={content.home?.routines?.enabled !== false}
+                    onChange={e => handleChange('routines', 'enabled', e.target.checked)}
+                    className="accent-accent h-4 w-4 rounded cursor-pointer"
+                  />
+                  <span className={content.home?.routines?.enabled !== false ? 'text-emerald-400 font-bold text-xs' : 'text-red-400 font-bold text-xs'}>
+                    {content.home?.routines?.enabled !== false ? t('✓ Seção Ativada na Home') : t('✗ Seção Desativada na Home')}
+                  </span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setActiveSection('routines')}
+                  className="text-[10px] bg-white/10 hover:bg-white/20 text-white font-bold px-3 py-2.5 rounded-xl whitespace-nowrap transition-all"
+                >
+                  {t('Editar Textos da Home →')}
+                </button>
+              </div>
+            </div>
+
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Página: Rutinas (/rutinas)')}</h3>
             <div className="grid grid-cols-2 gap-4">
               {renderInput('Título do Hero', 'rutinasPage', 'hero.title')}
               {renderInput('Subtítulo do Hero', 'rutinasPage', 'hero.subtitle')}
@@ -1825,7 +1905,40 @@ export default function SiteContentTab() {
         {/* EXPERIENCIAS PAGE */}
         {activeSection === 'experienciasPage' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">Página: Experiencias</h3>
+            {/* Box de Controle da Seção na Home */}
+            <div className="bg-accent/10 border border-accent/30 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-accent font-bold text-xs uppercase tracking-wider">{t('Controle de Exibição')}</span>
+                  <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-white font-medium">{t('Página Inicial (Home)')}</span>
+                </div>
+                <p className="text-xs text-white/80 mt-1">
+                  {t('Deseja exibir ou ocultar a seção de')} <strong>{t('Experiências')}</strong> {t('na Página Inicial do site?')}
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 cursor-pointer bg-black/40 px-3.5 py-2.5 rounded-xl border border-white/10 hover:border-accent transition-all">
+                  <input
+                    type="checkbox"
+                    checked={content.home?.experiencias?.enabled !== false}
+                    onChange={e => handleChange('experiencias', 'enabled', e.target.checked)}
+                    className="accent-accent h-4 w-4 rounded cursor-pointer"
+                  />
+                  <span className={content.home?.experiencias?.enabled !== false ? 'text-emerald-400 font-bold text-xs' : 'text-red-400 font-bold text-xs'}>
+                    {content.home?.experiencias?.enabled !== false ? t('✓ Seção Ativada na Home') : t('✗ Seção Desativada na Home')}
+                  </span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setActiveSection('experiencias')}
+                  className="text-[10px] bg-white/10 hover:bg-white/20 text-white font-bold px-3 py-2.5 rounded-xl whitespace-nowrap transition-all"
+                >
+                  {t('Editar Textos da Home →')}
+                </button>
+              </div>
+            </div>
+
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Página: Experiencias (/experiencias)')}</h3>
             <div className="grid grid-cols-2 gap-4">
               {renderInput('Título do Hero', 'experienciasPage', 'hero.title')}
               {renderInput('Subtítulo do Hero', 'experienciasPage', 'hero.subtitle')}
