@@ -169,13 +169,6 @@ export default function Footer() {
         {/* Right: Credits */}
         <div className="flex flex-wrap items-center justify-center gap-4 uppercase tracking-wider">
           <p>
-            {t('Orgulhosamente desenvolvido por')}{' '}
-            <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.voltris.com.br" target="_blank" rel="noreferrer">
-              VOLTRIS
-            </a>
-          </p>
-          <span className="hidden md:inline text-white/20">|</span>
-          <p>
             {t('En colaboración con')}{' '}
             <a className="font-semibold text-foreground hover:text-accent transition-colors duration-200" href="https://www.maeumglobal.com.br" target="_blank" rel="noreferrer">
               Maeum Global Agency

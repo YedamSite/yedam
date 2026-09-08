@@ -2,7 +2,7 @@
 
 import { db } from '@/lib/db';
 import { createClient } from '@supabase/supabase-js';
-import { sendEmail, buildOrderConfirmationHtml, buildAdminNewOrderHtml } from '@/lib/emailSender';
+import { sendEmail, buildOrderConfirmationHtml, buildAdminNewOrderHtml, getOrderReceivedSubject, getPaymentConfirmedSubject, buildPaymentConfirmedHtml } from '@/lib/emailSender';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
@@ -269,10 +269,11 @@ export async function submitOrderAction(data: {
       totalAmount: total,
       shippingAddress: { country: data.shippingAddress?.country, city: data.shippingAddress?.city },
       currency,
+      locale: data.locale,
     });
     await sendEmail({
       to: recipientEmail,
-      subject: `✨ Pedido #${orderId.substring(0, 8).toUpperCase()} recibido — Cheotnun K-Beauty`,
+      subject: getOrderReceivedSubject(orderId.substring(0, 8).toUpperCase(), data.locale),
       html: customerHtml,
     });
 
@@ -453,7 +454,7 @@ export async function cancelOrderAction(orderId: string) {
   }
 }
 
-export async function confirmOrderPaymentAction(orderId: string) {
+export async function confirmOrderPaymentAction(orderId: string, locale?: string) {
   try {
     const orders = db.get('orders');
     const oIdx = orders.findIndex((o: any) => o.id === orderId);
@@ -473,33 +474,15 @@ export async function confirmOrderPaymentAction(orderId: string) {
         const orderShort = orderId.substring(0, 8).toUpperCase();
 
         if (recipientEmail) {
-          const paymentApprovedHtml = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0">
-<tr><td align="center" style="padding:40px 20px;">
-<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
-<tr><td style="background:#08152F;padding:32px 40px;text-align:center;">
-  <h1 style="color:#C9C9C9;font-size:22px;margin:0;letter-spacing:2px;">✅ PAGO CONFIRMADO</h1>
-  <p style="color:#fff;font-size:13px;margin:8px 0 0;opacity:0.8;">Cheotnun K-Beauty</p>
-</td></tr>
-<tr><td style="padding:32px 40px;">
-  <p style="color:#333;font-size:15px;margin:0 0 16px;">Hola <strong>${recipientName}</strong>,</p>
-  <p style="color:#555;font-size:13px;line-height:1.6;">Tu pago ha sido confirmado con éxito. Tu pedido <strong>#${orderShort}</strong> está ahora en proceso de preparación. Recibirás otro e-mail cuando sea enviado con el código de seguimiento.</p>
-  <div style="background:#f9f9f9;border-left:4px solid #22c55e;padding:12px 20px;margin:20px 0;border-radius:8px;">
-    <p style="margin:0;font-size:13px;color:#333;"><strong>Status:</strong> Aguardando Confirmação da Loja (48h úteis)</p>
-  </div>
-  <p style="color:#555;font-size:12px;line-height:1.6;">Qualquer dúvida, entre em contato pelo e-mail <a href="mailto:sac@cheotnun.com" style="color:#08152F;">sac@cheotnun.com</a>.</p>
-</td></tr>
-<tr><td style="background:#f9f9f9;padding:20px 40px;text-align:center;border-top:1px solid #eee;">
-  <p style="color:#999;font-size:11px;margin:0;">CHEOTNUN K-BEAUTY — Maeum global agency Ltda</p>
-</td></tr>
-</table></td></tr></table>
-</body></html>`;
+          const paymentApprovedHtml = buildPaymentConfirmedHtml({
+            customerName: recipientName,
+            orderShort,
+            locale,
+          });
 
           await sendEmail({
             to: recipientEmail,
-            subject: `✅ Pago confirmado — Pedido #${orderShort} — Cheotnun K-Beauty`,
+            subject: getPaymentConfirmedSubject(orderShort, locale),
             html: paymentApprovedHtml,
           });
         }

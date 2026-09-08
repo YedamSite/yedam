@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
     // === SUBSCRIPTION FLOW (Club Cheotnun) ===
     if (body.mode === 'subscription') {
       const { planName, customerEmail, customerName, customerId } = body;
+      const locale = body.locale || 'es';
       
       const VALID_PLANS: Record<string, number> = {
         'Lover': 15.00,
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
           type: 'club_subscription',
           plan_name: planName,
           customer_id: customerId || '',
+          locale,
         },
       });
 
@@ -100,6 +102,7 @@ export async function POST(req: NextRequest) {
         type: 'product_purchase',
         order_id: orderId,
         customer_name: customerName || '',
+        locale,
       },
     });
 

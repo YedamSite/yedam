@@ -386,7 +386,7 @@ export default function CheckoutWizard() {
           localStorage.removeItem('cheotnun_cart');
           setCartItems([]);
           import('@/actions/shopActions').then(mod => {
-            mod.confirmOrderPaymentAction(orderId);
+            mod.confirmOrderPaymentAction(orderId, locale);
           });
         }
         window.history.replaceState({}, '', '/tienda/carrinho');

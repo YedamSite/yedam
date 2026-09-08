@@ -125,6 +125,23 @@ export interface OrderItem {
   price: number;
 }
 
+type EmailLocale = 'pt' | 'es' | 'en';
+
+function normalizeEmailLocale(locale?: string): EmailLocale {
+  if (locale === 'pt' || locale === 'es' || locale === 'en') return locale;
+  return 'es';
+}
+
+export function getOrderReceivedSubject(orderShort: string, locale?: string) {
+  const l = normalizeEmailLocale(locale);
+  const map = {
+    pt: `✨ Pedido #${orderShort} recebido — Cheotnun K-Beauty`,
+    es: `✨ Pedido #${orderShort} recibido — Cheotnun K-Beauty`,
+    en: `✨ Order #${orderShort} received — Cheotnun K-Beauty`,
+  };
+  return map[l];
+}
+
 export function buildOrderConfirmationHtml(opts: {
   orderId: string;
   customerName: string;
@@ -135,10 +152,60 @@ export function buildOrderConfirmationHtml(opts: {
   totalAmount: number;
   shippingAddress?: { country?: string; city?: string };
   currency?: string;
+  locale?: string;
 }) {
-  const { orderId, customerName, items, subtotal, shippingAmount, discountAmount, totalAmount, currency = 'US$' } = opts;
+  const { orderId, customerName, items, subtotal, shippingAmount, discountAmount, totalAmount, currency = 'US$', locale } = opts;
+  const l = normalizeEmailLocale(locale);
   const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.cheotnun.com'}/dashboard/cliente`;
   const orderShort = orderId.substring(0, 8).toUpperCase();
+
+  const copy = {
+    pt: {
+      tagline: 'Confirmação de Pedido',
+      intro: `Olá <strong>${customerName}</strong>,`,
+      thanks: 'Obrigado pela sua compra! Seu pedido foi recebido e o pagamento confirmado. Aqui está o resumo:',
+      orderNumber: 'Número do Pedido:',
+      product: 'Produto',
+      quantity: 'Qtd.',
+      total: 'Total',
+      subtotal: 'Subtotal',
+      shipping: 'Frete',
+      discount: 'Desconto',
+      totalLabel: 'TOTAL',
+      validation: '<strong>⏱ Prazo de Validação (48-72h):</strong> Como operamos com envios diretos da Coreia do Sul, seu pedido está em fase de validação de disponibilidade e documentação. Você receberá uma atualização quando o pedido for confirmado pela nossa equipe.',
+      cta: 'Ver meus pedidos',
+    },
+    es: {
+      tagline: 'Confirmación de Pedido',
+      intro: `Hola <strong>${customerName}</strong>,`,
+      thanks: '¡Gracias por tu compra! Tu pedido ha sido recibido y el pago confirmado. Aquí está el resumen:',
+      orderNumber: 'Número de Pedido:',
+      product: 'Producto',
+      quantity: 'Cant.',
+      total: 'Total',
+      subtotal: 'Subtotal',
+      shipping: 'Envío',
+      discount: 'Descuento',
+      totalLabel: 'TOTAL',
+      validation: '<strong>⏱ Plazo de Validación (48-72h):</strong> Como operamos con envíos directos desde Corea del Sur, tu pedido está en fase de validación de disponibilidad y documentación. Recibirás una actualización cuando el pedido sea confirmado por nuestro equipo.',
+      cta: 'Ver mis pedidos',
+    },
+    en: {
+      tagline: 'Order Confirmation',
+      intro: `Hello <strong>${customerName}</strong>,`,
+      thanks: 'Thank you for your purchase! Your order has been received and payment confirmed. Here is a summary:',
+      orderNumber: 'Order Number:',
+      product: 'Product',
+      quantity: 'Qty',
+      total: 'Total',
+      subtotal: 'Subtotal',
+      shipping: 'Shipping',
+      discount: 'Discount',
+      totalLabel: 'TOTAL',
+      validation: '<strong>⏱ Validation Window (48-72h):</strong> Since we ship directly from South Korea, your order is being validated for availability and documentation. You will receive an update once your order is confirmed by our team.',
+      cta: 'View my orders',
+    },
+  }[l];
 
   const itemsHtml = items.map(item => `
     <tr>
@@ -156,36 +223,36 @@ export function buildOrderConfirmationHtml(opts: {
       <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
         <tr><td style="background:#08152F;padding:32px 40px;text-align:center;">
           <h1 style="color:#C9C9C9;font-size:22px;margin:0;letter-spacing:2px;text-transform:uppercase;">✨ CHEOTNUN K-BEAUTY</h1>
-          <p style="color:#fff;font-size:13px;margin:8px 0 0;opacity:0.8;">Confirmación de Pedido</p>
+          <p style="color:#fff;font-size:13px;margin:8px 0 0;opacity:0.8;">${copy.tagline}</p>
         </td></tr>
         <tr><td style="padding:32px 40px;">
-          <p style="color:#333;font-size:15px;margin:0 0 16px;">Hola <strong>${customerName}</strong>,</p>
-          <p style="color:#555;font-size:13px;line-height:1.6;">¡Gracias por tu compra! Tu pedido ha sido recibido y el pago confirmado. Aquí está el resumen:</p>
+          <p style="color:#333;font-size:15px;margin:0 0 16px;">${copy.intro}</p>
+          <p style="color:#555;font-size:13px;line-height:1.6;">${copy.thanks}</p>
           <div style="background:#f9f9f9;border-left:4px solid #C9C9C9;padding:12px 20px;margin:20px 0;border-radius:8px;">
-            <p style="margin:0;font-size:13px;color:#333;"><strong>Número de Pedido:</strong> #${orderShort}</p>
+            <p style="margin:0;font-size:13px;color:#333;"><strong>${copy.orderNumber}</strong> #${orderShort}</p>
           </div>
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
             <thead>
               <tr>
-                <th style="text-align:left;font-size:11px;color:#999;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #eee;">Producto</th>
-                <th style="text-align:center;font-size:11px;color:#999;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #eee;">Cant.</th>
-                <th style="text-align:right;font-size:11px;color:#999;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #eee;">Total</th>
+                <th style="text-align:left;font-size:11px;color:#999;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #eee;">${copy.product}</th>
+                <th style="text-align:center;font-size:11px;color:#999;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #eee;">${copy.quantity}</th>
+                <th style="text-align:right;font-size:11px;color:#999;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #eee;">${copy.total}</th>
               </tr>
             </thead>
             <tbody>${itemsHtml}</tbody>
           </table>
           <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;">
-            <tr><td style="font-size:13px;color:#555;padding:4px 0;">Subtotal</td><td style="font-size:13px;color:#333;text-align:right;padding:4px 0;">${currency} ${subtotal.toFixed(2)}</td></tr>
-            <tr><td style="font-size:13px;color:#555;padding:4px 0;">Envío</td><td style="font-size:13px;color:#333;text-align:right;padding:4px 0;">${currency} ${shippingAmount.toFixed(2)}</td></tr>
-            ${discountAmount > 0 ? `<tr><td style="font-size:13px;color:#16a34a;padding:4px 0;">Descuento</td><td style="font-size:13px;color:#16a34a;text-align:right;padding:4px 0;">- ${currency} ${discountAmount.toFixed(2)}</td></tr>` : ''}
-            <tr><td style="font-size:15px;font-weight:bold;color:#08152F;padding:12px 0 4px;border-top:2px solid #eee;">TOTAL</td><td style="font-size:15px;font-weight:bold;color:#08152F;text-align:right;padding:12px 0 4px;border-top:2px solid #eee;">${currency} ${totalAmount.toFixed(2)}</td></tr>
+            <tr><td style="font-size:13px;color:#555;padding:4px 0;">${copy.subtotal}</td><td style="font-size:13px;color:#333;text-align:right;padding:4px 0;">${currency} ${subtotal.toFixed(2)}</td></tr>
+            <tr><td style="font-size:13px;color:#555;padding:4px 0;">${copy.shipping}</td><td style="font-size:13px;color:#333;text-align:right;padding:4px 0;">${currency} ${shippingAmount.toFixed(2)}</td></tr>
+            ${discountAmount > 0 ? `<tr><td style="font-size:13px;color:#16a34a;padding:4px 0;">${copy.discount}</td><td style="font-size:13px;color:#16a34a;text-align:right;padding:4px 0;">- ${currency} ${discountAmount.toFixed(2)}</td></tr>` : ''}
+            <tr><td style="font-size:15px;font-weight:bold;color:#08152F;padding:12px 0 4px;border-top:2px solid #eee;">${copy.totalLabel}</td><td style="font-size:15px;font-weight:bold;color:#08152F;text-align:right;padding:12px 0 4px;border-top:2px solid #eee;">${currency} ${totalAmount.toFixed(2)}</td></tr>
           </table>
           <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:16px 20px;margin:24px 0;">
-            <p style="margin:0;font-size:12px;color:#664d03;line-height:1.6;"><strong>⏱ Plazo de Validación (48-72h):</strong> Como operamos con envíos directos desde Corea del Sur, tu pedido está en fase de validación de disponibilidad y documentación. Recibirás una actualización cuando el pedido sea confirmado por nuestro equipo.</p>
+            <p style="margin:0;font-size:12px;color:#664d03;line-height:1.6;">${copy.validation}</p>
           </div>
           <table cellpadding="0" cellspacing="0" style="margin-top:24px;">
             <tr><td align="center">
-              <a href="${adminUrl}" style="display:inline-block;background:#08152F;color:#C9C9C9;text-decoration:none;font-size:13px;font-weight:bold;padding:14px 32px;border-radius:40px;letter-spacing:1px;text-transform:uppercase;">Ver mis pedidos</a>
+              <a href="${adminUrl}" style="display:inline-block;background:#08152F;color:#C9C9C9;text-decoration:none;font-size:13px;font-weight:bold;padding:14px 32px;border-radius:40px;letter-spacing:1px;text-transform:uppercase;">${copy.cta}</a>
             </td></tr>
           </table>
         </td></tr>
@@ -198,6 +265,73 @@ export function buildOrderConfirmationHtml(opts: {
   </table>
 </body>
 </html>`;
+}
+
+export function getPaymentConfirmedSubject(orderShort: string, locale?: string) {
+  const l = normalizeEmailLocale(locale);
+  const map = {
+    pt: `✅ Pagamento confirmado — Pedido #${orderShort} — Cheotnun K-Beauty`,
+    es: `✅ Pago confirmado — Pedido #${orderShort} — Cheotnun K-Beauty`,
+    en: `✅ Payment confirmed — Order #${orderShort} — Cheotnun K-Beauty`,
+  };
+  return map[l];
+}
+
+export function buildPaymentConfirmedHtml(opts: {
+  customerName: string;
+  orderShort: string;
+  locale?: string;
+}) {
+  const { customerName, orderShort, locale } = opts;
+  const l = normalizeEmailLocale(locale);
+
+  const copy = {
+    pt: {
+      header: 'PAGAMENTO CONFIRMADO',
+      intro: `Olá <strong>${customerName}</strong>,`,
+      body: `Seu pagamento foi confirmado com sucesso. Seu pedido <strong>#${orderShort}</strong> está agora em fase de preparação. Você receberá outro e-mail com o código de rastreio assim que for enviado.`,
+      status: '<strong>Status:</strong> Aguardando confirmação da loja (até 48h úteis)',
+      contact: 'Qualquer dúvida, entre em contato pelo e-mail',
+    },
+    es: {
+      header: 'PAGO CONFIRMADO',
+      intro: `Hola <strong>${customerName}</strong>,`,
+      body: `Tu pago ha sido confirmado con éxito. Tu pedido <strong>#${orderShort}</strong> está ahora en proceso de preparación. Recibirás otro e-mail cuando sea enviado con el código de seguimiento.`,
+      status: '<strong>Estado:</strong> Pendiente de confirmación de la tienda (hasta 48h laborables)',
+      contact: '¿Dudas? Escríbenos al e-mail',
+    },
+    en: {
+      header: 'PAYMENT CONFIRMED',
+      intro: `Hello <strong>${customerName}</strong>,`,
+      body: `Your payment has been confirmed successfully. Your order <strong>#${orderShort}</strong> is now being prepared. You will receive another email with the tracking code as soon as it ships.`,
+      status: '<strong>Status:</strong> Awaiting store confirmation (up to 48 business hours)',
+      contact: 'Any questions? Contact us at',
+    },
+  }[l];
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center" style="padding:40px 20px;">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+<tr><td style="background:#08152F;padding:32px 40px;text-align:center;">
+  <h1 style="color:#C9C9C9;font-size:22px;margin:0;letter-spacing:2px;">✅ ${copy.header}</h1>
+  <p style="color:#fff;font-size:13px;margin:8px 0 0;opacity:0.8;">Cheotnun K-Beauty</p>
+</td></tr>
+<tr><td style="padding:32px 40px;">
+  <p style="color:#333;font-size:15px;margin:0 0 16px;">${copy.intro}</p>
+  <p style="color:#555;font-size:13px;line-height:1.6;">${copy.body}</p>
+  <div style="background:#f9f9f9;border-left:4px solid #22c55e;padding:12px 20px;margin:20px 0;border-radius:8px;">
+    <p style="margin:0;font-size:13px;color:#333;">${copy.status}</p>
+  </div>
+  <p style="color:#555;font-size:12px;line-height:1.6;">${copy.contact} <a href="mailto:sac@cheotnun.com" style="color:#08152F;">sac@cheotnun.com</a>.</p>
+</td></tr>
+<tr><td style="background:#f9f9f9;padding:20px 40px;text-align:center;border-top:1px solid #eee;">
+  <p style="color:#999;font-size:11px;margin:0;">CHEOTNUN K-BEAUTY — Maeum global agency Ltda</p>
+</td></tr>
+</table></td></tr></table>
+</body></html>`;
 }
 
 export function buildAdminNewOrderHtml(opts: {

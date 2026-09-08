@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { createClient } from '@supabase/supabase-js';
-import { sendEmail } from '@/lib/emailSender';
+import { sendEmail, getPaymentConfirmedSubject, buildPaymentConfirmedHtml } from '@/lib/emailSender';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseServiceKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').split(/[\r\n]+/)[0];
@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const type = session.metadata?.type;
+    const locale = session.metadata?.locale || 'es';
 
     // Product purchase - update order with Stripe session ID
     if (type === 'product_purchase') {
@@ -57,8 +58,8 @@ export async function POST(req: NextRequest) {
             type: 'email',
             status: 'sent',
             recipient: session.customer_email || 'cliente@example.com',
-            subject: 'Pago Confirmado - Cheotnun K-Beauty',
-            content: `Hola, el pago de tu pedido #${orderId.substring(0, 8)} ha sido confirmado. En breve comenzaremos a preparar tu paquete.`,
+            subject: getPaymentConfirmedSubject(orderId.substring(0, 8).toUpperCase(), locale),
+            content: `[${locale}] Payment confirmed for order #${orderId.substring(0, 8)}. Awaiting store confirmation.`,
             created_at: new Date().toISOString()
           });
 
@@ -71,26 +72,8 @@ export async function POST(req: NextRequest) {
           if (customerEmail) {
             await sendEmail({
               to: customerEmail,
-              subject: `✅ Pago confirmado — Pedido #${orderShort} — Cheotnun K-Beauty`,
-              html: `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:40px 20px;">
-<table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:16px;overflow:hidden;">
-<tr><td style="background:#08152F;padding:32px 40px;text-align:center;">
-  <h1 style="color:#C9C9C9;font-size:22px;margin:0;letter-spacing:2px;">✅ PAGO CONFIRMADO</h1>
-  <p style="color:#fff;font-size:13px;margin:8px 0 0;">Cheotnun K-Beauty</p>
-</td></tr>
-<tr><td style="padding:32px 40px;">
-  <p style="color:#333;font-size:15px;">Hola <strong>${customerName}</strong>,</p>
-  <p style="color:#555;font-size:13px;line-height:1.6;">Tu pago para el pedido <strong>#${orderShort}</strong> fue procesado con éxito por Stripe. Tu pedido está en preparación y recibirás el código de seguimiento en breve.</p>
-  <div style="background:#f9f9f9;border-left:4px solid #22c55e;padding:12px 20px;margin:20px 0;border-radius:8px;">
-    <p style="margin:0;font-size:13px;color:#333;"><strong>Pedido #${orderShort}</strong> — Aguardando preparação</p>
-  </div>
-  <p style="color:#555;font-size:12px;">Dúvidas? Escreva para <a href="mailto:sac@cheotnun.com">sac@cheotnun.com</a></p>
-</td></tr>
-<tr><td style="background:#f9f9f9;padding:16px 40px;text-align:center;border-top:1px solid #eee;">
-  <p style="color:#999;font-size:11px;margin:0;">CHEOTNUN K-BEAUTY — Maeum global agency Ltda | +82 01024836078</p>
-</td></tr>
-</table></td></tr></table></body></html>`,
+              subject: getPaymentConfirmedSubject(orderShort, locale),
+              html: buildPaymentConfirmedHtml({ customerName, orderShort, locale }),
             }).catch(e => console.error('[webhook] customer email failed:', e));
           }
 
