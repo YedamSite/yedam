@@ -45,7 +45,8 @@ export default function SiteContentTab() {
       const parts = field.split('.');
       
       let root = updated;
-      if (activeLang !== 'es') {
+      const isSectionEnabled = field === 'enabled';
+      if (!isSectionEnabled && activeLang !== 'es') {
         if (!updated.translations) updated.translations = {};
         if (!updated.translations[activeLang]) updated.translations[activeLang] = {};
         root = updated.translations[activeLang];

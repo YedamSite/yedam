@@ -64,6 +64,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [favCount, setFavCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
+  const [, forceHeaderUpdate] = useState(0);
   
   // Search state & filtering
   const [headerSearchQuery, setHeaderSearchQuery] = useState('');
@@ -130,6 +131,24 @@ export default function Header() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isModalOpen, setIsModalOpen]);
+
+  // Re-render when the in-memory DB changes (e.g. admin panel saved site_content in another tab)
+  useEffect(() => {
+    const handleDbChange = () => {
+      db.reloadFromLocalStorage();
+      forceHeaderUpdate(v => v + 1);
+    };
+    const handleStorage = () => {
+      db.reloadFromLocalStorage();
+      forceHeaderUpdate(v => v + 1);
+    };
+    window.addEventListener('cheotnun_db_change', handleDbChange);
+    window.addEventListener('storage', handleStorage);
+    return () => {
+      window.removeEventListener('cheotnun_db_change', handleDbChange);
+      window.removeEventListener('storage', handleStorage);
+    };
+  }, []);
 
   const handleLogout = async () => {
     await authService.signOut();
