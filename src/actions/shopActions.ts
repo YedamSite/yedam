@@ -38,13 +38,25 @@ export async function submitOrderAction(data: {
   gateway: string;
   shippingAmount: number;
   discountAmount: number;
+  couponCode?: string;
   locale?: string;
 }) {
   try {
     const orders = db.get('orders');
-    const products = db.get('products');
     const orderTracking = db.get('order_tracking');
     const logs = db.get('communication_logs');
+
+    // Products on the server come from Supabase (source of truth); the local DB may only hold seed data.
+    let products = db.get('products') || [];
+    if (supabaseUrl && supabaseServiceKey) {
+      try {
+        const client = createClient(supabaseUrl, supabaseServiceKey);
+        const { data } = await client.from('cheotnun_products').select('*');
+        if (data && data.length) products = data;
+      } catch (e: any) {
+        console.error('Products lookup from Supabase failed:', e?.message);
+      }
+    }
 
     let subtotal = 0;
     // Calculate subtotal securely using prices from the database
@@ -60,7 +72,49 @@ export async function submitOrderAction(data: {
     });
 
     const shipping = data.shippingAmount || 0;
-    const discount = data.discountAmount || 0;
+
+    // === Server-side coupon validation ===
+    // Recalculates the discount from the coupons table (same logic as the cart):
+    // USD fixed coupons are converted with the BRL rate; percentage applies to the DB subtotal.
+    const rate = data.locale === 'pt' ? 5 : 1;
+    let discount = 0;
+    if (data.couponCode) {
+      const code = data.couponCode.trim().toUpperCase();
+      let found: any = null;
+
+      // Coupons are stored in Supabase (source of truth); the local memory DB on the server
+      // only holds seed data, so query the DB first.
+      if (supabaseUrl && supabaseServiceKey) {
+        try {
+          const client = createClient(supabaseUrl, supabaseServiceKey);
+          const { data: rows } = await client
+            .from('cheotnun_coupons')
+            .select('*')
+            .eq('status', 'active');
+          if (rows) {
+            found = rows.find((r: any) => (r.code || '').toUpperCase() === code) || null;
+          }
+        } catch (e: any) {
+          console.error('Coupon lookup from Supabase failed:', e?.message);
+        }
+      }
+
+      if (!found) {
+        const allCoupons = db.get('coupons') || [];
+        found = allCoupons.find(
+          (c: any) => (c.code || '').toUpperCase() === code && c.status === 'active'
+        ) || null;
+      }
+
+      if (found) {
+        if (found.type === 'percentage') {
+          discount = subtotal * (Number(found.discount) / 100);
+        } else {
+          discount = Number(found.discount) * rate;
+        }
+        if (discount > subtotal) discount = subtotal;
+      }
+    }
     const total = Math.max(0, subtotal + shipping - discount);
 
     const orderId = crypto.randomUUID();

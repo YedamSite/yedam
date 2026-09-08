@@ -9,6 +9,7 @@ const PUBLIC_TABLE_MAP: Record<string, string> = {
   products: 'cheotnun_products',
   categories: 'cheotnun_categories',
   brands: 'cheotnun_brands',
+  coupons: 'cheotnun_coupons',
 };
 
 export const dynamic = 'force-dynamic';

@@ -273,6 +273,7 @@ export default function CheckoutWizard() {
   // Dynamic Coupon System
   const [couponError, setCouponError] = useState('');
   const [appliedCouponCode, setAppliedCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<any>(null);
 
   const getPrice = (item: any) => locale === 'pt' ? (item.price_brl || item.price * 5) : item.price;
   const currency = locale === 'pt' ? 'R$' : 'US$';
@@ -280,18 +281,27 @@ export default function CheckoutWizard() {
 
   const subtotal = cartItems.reduce((acc, curr) => acc + (getPrice(curr) * curr.quantity), 0);
 
-  const handleApplyCoupon = () => {
+  const handleApplyCoupon = async () => {
     setCouponError('');
     const codeClean = couponCode.trim().toUpperCase();
     if (!codeClean) return;
 
-    const allCoupons = (db.get('coupons') as any[]) || [];
-    const found = allCoupons.find((c: any) => (c.code || '').toUpperCase() === codeClean && c.status === 'active');
+    let allCoupons = (db.get('coupons') as any[]) || [];
+    let found = allCoupons.find((c: any) => (c.code || '').toUpperCase() === codeClean && c.status === 'active');
+
+    if (!found) {
+      // Fallback: coupons are synced from Supabase (admin-created ones reach every browser),
+      // but in a fresh session they may not have arrived yet — fetch them now.
+      await db.syncPublicCatalog();
+      allCoupons = (db.get('coupons') as any[]) || [];
+      found = allCoupons.find((c: any) => (c.code || '').toUpperCase() === codeClean && c.status === 'active');
+    }
 
     if (!found) {
       setDiscount(0);
       setCouponApplied(false);
       setAppliedCouponCode('');
+      setAppliedCoupon(null);
       setCouponError(t('Cupón inválido o no existente'));
       return;
     }
@@ -302,10 +312,13 @@ export default function CheckoutWizard() {
     } else {
       calculatedDiscount = Number(found.discount) * rate;
     }
+    // Never discount more than the subtotal
+    if (calculatedDiscount > subtotal) calculatedDiscount = subtotal;
 
     setDiscount(calculatedDiscount);
     setCouponApplied(true);
     setAppliedCouponCode(found.code);
+    setAppliedCoupon(found);
     setCouponError('');
   };
 
@@ -412,6 +425,7 @@ export default function CheckoutWizard() {
       gateway: 'stripe',
       shippingAmount: shipping,
       discountAmount: discount,
+      couponCode: appliedCoupon?.code || '',
       locale
     });
 

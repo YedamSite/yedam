@@ -1929,7 +1929,7 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
 // Used by public-facing pages (home, tienda) to fetch fresh product/category/brand data
 async function publicCatalogSync(): Promise<boolean> {
   try {
-    const resp = await fetch(`/api/catalog?tables=products,categories,brands&t=${Date.now()}`, {
+    const resp = await fetch(`/api/catalog?tables=products,categories,brands,coupons&t=${Date.now()}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
@@ -1938,12 +1938,16 @@ async function publicCatalogSync(): Promise<boolean> {
     const json = await resp.json();
     if (!json.success || !json.data) return false;
 
-    const catalogTables: Array<keyof DbState> = ['products', 'categories', 'brands'];
+    const catalogTables: Array<keyof DbState> = ['products', 'categories', 'brands', 'coupons'];
     let changed = false;
     for (const table of catalogTables) {
       const rows = json.data[table as string];
       if (!rows || !Array.isArray(rows)) continue;
-      if (mergeTableData(table as string, rows)) changed = true;
+      if (table === 'coupons') {
+        if (mergeCouponsFromServer(rows)) changed = true;
+      } else if (mergeTableData(table as string, rows)) {
+        changed = true;
+      }
     }
 
     if (changed) {
@@ -1954,6 +1958,39 @@ async function publicCatalogSync(): Promise<boolean> {
     }
     return changed;
   } catch { return false; }
+}
+
+// Coupons are synced from the server (Supabase) so coupons created in the admin
+// panel are instantly available to every shopper — dollar, reais or percentage.
+function mergeCouponsFromServer(incoming: any[]): boolean {
+  const local = (memoryDb as any).coupons || [];
+  const deletedIds = loadDeletedIds();
+  const incomingMap = new Map(incoming.map((r: any) => [r.id, r]));
+  const localMap = new Map(local.map((r: any) => [r.id, r]));
+  const GRACE_PERIOD_MS = 10 * 60 * 1000;
+  const now = Date.now();
+  let changed = false;
+
+  // Remove local coupons missing on server, unless just created (grace period) or deleted locally
+  const kept = local.filter((r: any) => {
+    if (incomingMap.has(r.id)) return true;
+    if (deletedIds.has(r.id)) return false;
+    if (r.created_at && now - new Date(r.created_at).getTime() < GRACE_PERIOD_MS) return true;
+    return false;
+  });
+  if (kept.length !== local.length) changed = true;
+
+  const result = new Map(kept.map((r: any) => [r.id, r]));
+  for (const record of incoming) {
+    if (deletedIds.has(record.id)) continue;
+    // Server record wins: keeps coupons enabled/disabled and values in sync everywhere
+    result.set(record.id, { ...(localMap.get(record.id) || {}), ...record });
+  }
+
+  const next = [...result.values()];
+  const changedValue = JSON.stringify(next) !== JSON.stringify(local);
+  (memoryDb as any).coupons = next;
+  return changed || changedValue;
 }
 
 let supabaseReady = false;
@@ -2216,6 +2253,10 @@ export const db = {
   },
 
   isSupabaseReady: () => supabaseReady,
+
+  /** Re-fetch public catalog (products/categories/brands/coupons). Used as fallback so
+   *  newly-created coupons reach the cart even when this browser has no local data. */
+  syncPublicCatalog: async (): Promise<boolean> => publicCatalogSync(),
 
   /** Reload in-memory DB from localStorage. Used by components that receive cross-tab storage events. */
   reloadFromLocalStorage: () => {
