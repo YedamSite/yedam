@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingBag, ArrowRight, ShieldCheck, Check, Trash2, FileText, CreditCard, Loader2, Globe, Search, ChevronDown } from 'lucide-react';
@@ -118,10 +118,12 @@ export default function CheckoutWizard() {
   const countryKey = COUNTRY_KEY_MAP[country] || country;
   const dialCode = DIAL_CODES[countryKey] || '+55';
 
-  // Coupon state
-  const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
+  // Coupon code lives in a ref (NOT state): typing the code must NOT re-render the whole
+  // checkout wizard on every keystroke — that re-render is what makes mobile browsers auto-scroll
+  // the page to keep the focused input visible, fighting the user's scroll position.
+  const couponCodeRef = useRef('');
 
   // Auth state
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -281,9 +283,9 @@ export default function CheckoutWizard() {
 
   const subtotal = cartItems.reduce((acc, curr) => acc + (getPrice(curr) * curr.quantity), 0);
 
-  const handleApplyCoupon = async () => {
+  const handleApplyCoupon = async (rawCode?: string) => {
     setCouponError('');
-    const codeClean = couponCode.trim().toUpperCase();
+    const codeClean = (rawCode ?? couponCodeRef.current).trim().toUpperCase();
     if (!codeClean) return;
 
     let allCoupons = (db.get('coupons') as any[]) || [];
@@ -528,15 +530,20 @@ export default function CheckoutWizard() {
                     </div>
                   ))}
 
-                  {/* Coupon entry */}
+                  {/* Coupon entry — uncontrolled input (no per-keystroke re-render of the page);
+                      mobile browsers auto-scroll the focused input into view on every re-render,
+                      which fights the user's scroll position. */}
                   <div className="flex gap-2 mt-4 pt-4 border-t border-white/5">
                     <Input
-                      value={couponCode}
-                      onChange={e => setCouponCode(e.target.value)}
+                      defaultValue=""
+                      onChange={e => { couponCodeRef.current = e.target.value; }}
+                      autoComplete="off"
+                      autoCorrect="off"
+                      spellCheck={false}
                       placeholder={t('Código del Cupón')}
                       className="bg-black/30 border-white/10 text-white rounded-xl text-xs flex-1 uppercase"
                     />
-                    <Button onClick={handleApplyCoupon} className="bg-accent hover:bg-accentHover text-background font-bold rounded-xl text-xs px-5">
+                    <Button onClick={() => handleApplyCoupon()} className="bg-accent hover:bg-accentHover text-background font-bold rounded-xl text-xs px-5">
                       {t('APLICAR')}
                     </Button>
                   </div>
