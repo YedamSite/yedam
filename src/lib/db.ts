@@ -1840,14 +1840,12 @@ function loadFromLocalStorage(): boolean {
     
     if (currentVersion !== SEED_VERSION) {
       localStorage.setItem('cheotnun_db_version', SEED_VERSION);
-      // Auto-migrate: disable retired sections and remove dead nav links from existing client storage
+      // Auto-migrate: only remove dead nav links. NEVER force-enable/disable sections here —
+      // that would make the admin's visibility toggles (rutinas/experiencias) silently reset
+      // on every load from an older client version.
       if (saved) {
         try {
           const parsedSaved = JSON.parse(saved);
-          if (parsedSaved.site_content?.home) {
-            if (parsedSaved.site_content.home.experiencias) parsedSaved.site_content.home.experiencias.enabled = false;
-            if (parsedSaved.site_content.home.routines) parsedSaved.site_content.home.routines.enabled = false;
-          }
           if (parsedSaved.site_content?.header?.navLinks) {
             parsedSaved.site_content.header.navLinks = parsedSaved.site_content.header.navLinks.filter(
               (l: any) => l.href !== '/rutinas' && l.href !== '/experiencias'
@@ -1860,10 +1858,6 @@ function loadFromLocalStorage(): boolean {
           }
           for (const lang of ['pt', 'en']) {
             const trans = parsedSaved.site_content?.translations?.[lang];
-            if (trans?.home) {
-              if (trans.home.experiencias) trans.home.experiencias.enabled = false;
-              if (trans.home.routines) trans.home.routines.enabled = false;
-            }
             if (trans?.header?.navLinks) {
               trans.header.navLinks = trans.header.navLinks.filter(
                 (l: any) => l.href !== '/rutinas' && l.href !== '/experiencias'
