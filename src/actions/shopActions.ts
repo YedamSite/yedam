@@ -37,6 +37,7 @@ export async function submitOrderAction(data: {
   documentNumber: string;
   gateway: string;
   shippingAmount: number;
+  shippingMethodName?: string;
   discountAmount: number;
   couponCode?: string;
   locale?: string;
@@ -71,12 +72,47 @@ export async function submitOrderAction(data: {
       }
     });
 
-    const shipping = data.shippingAmount || 0;
-
+    // === Server-side shipping calculation ===
+    // Never trusts the amount sent by the client: the shipping price is recomputed from the
+    // shipping_zones saved in Supabase (cheotnun_system_settings) + the method the shopper picked.
+    const rate = data.locale === 'pt' ? 5 : 1;
+    let shipping = Number(data.shippingAmount) || 0;
+    let shippingMethodName = data.shippingMethodName || '';
+    if (supabaseUrl && supabaseServiceKey) {
+      try {
+        const client = createClient(supabaseUrl, supabaseServiceKey);
+        const { data: setting } = await client
+          .from('cheotnun_system_settings')
+          .select('value')
+          .eq('key', 'shipping_zones')
+          .single();
+        const zones = Array.isArray(setting?.value) ? setting!.value : [];
+        if (zones.length) {
+          const country = String(data.shippingAddress?.country || '').toLowerCase();
+          const zone = zones.find((z: any) => String(z.country || '').toLowerCase() === country) || zones[0];
+          const methods = Array.isArray(zone?.methods) ? zone.methods : [];
+          const method = methods.find((m: any) => (m.name || '') === shippingMethodName) || methods[0];
+          if (method) {
+            shippingMethodName = method.name || '';
+            if (method.free === true || Number(method.price) === 0) {
+              shipping = 0;
+            } else if (data.locale === 'pt' && method.price_brl !== undefined) {
+              shipping = Number(method.price_brl) || 0;
+            } else {
+              shipping = Number(method.price) * rate || 0;
+            }
+          } else {
+            shipping = 0;
+            shippingMethodName = '';
+          }
+        }
+      } catch (e: any) {
+        console.error('Shipping zones lookup from Supabase failed:', e?.message);
+      }
+    }
     // === Server-side coupon validation ===
     // Recalculates the discount from the coupons table (same logic as the cart):
     // USD fixed coupons are converted with the BRL rate; percentage applies to the DB subtotal.
-    const rate = data.locale === 'pt' ? 5 : 1;
     let discount = 0;
     if (data.couponCode) {
       const code = data.couponCode.trim().toUpperCase();
@@ -142,6 +178,7 @@ export async function submitOrderAction(data: {
       items: data.items,
       subtotal,
       shipping_amount: shipping,
+      shipping_method: shippingMethodName,
       discount_amount: discount,
       total_amount: total,
       gateway: data.gateway,

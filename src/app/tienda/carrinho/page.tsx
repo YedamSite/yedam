@@ -332,16 +332,27 @@ export default function CheckoutWizard() {
   // Compute dynamic shipping — frozen into state to avoid changing on hydration/refresh
   const [frozenShipping, setFrozenShipping] = useState<number | null>(null);
 
+  // Resolves the shipping cost for a method, honoring free shipping (price/free flag = 0)
+  // and the BRL override in pt locale.
+  const resolveMethodPrice = (method: any): number => {
+    if (!method) return NaN;
+    if (method.free === true) return 0;
+    const price = Number(method.price);
+    if (price === 0 || Number.isNaN(price)) return 0;
+    if (locale === 'pt' && method.price_brl !== undefined) {
+      return Number(method.price_brl);
+    }
+    return price * rate;
+  };
+
   useEffect(() => {
     const systemSettings = db.get('system_settings') || {};
     const shippingZones = systemSettings.shipping_zones || [];
     const selectedZone = shippingZones.find((z: any) => z.country.toLowerCase() === country.toLowerCase()) || shippingZones[0];
     const availableMethods = selectedZone?.methods || [];
     const selectedMethod = availableMethods[selectedMethodIdx] || availableMethods[0];
-    const computed = selectedMethod
-      ? (locale === 'pt' && selectedMethod.price_brl !== undefined
-          ? Number(selectedMethod.price_brl)
-          : Number(selectedMethod.price) * rate)
+    const computed = selectedZone
+      ? resolveMethodPrice(selectedMethod)
       : 15.00 * rate;
     setFrozenShipping(computed);
   }, [country, selectedMethodIdx, locale, rate]);
@@ -352,11 +363,11 @@ export default function CheckoutWizard() {
   const availableMethods = selectedZone?.methods || [];
   const selectedMethod = availableMethods[selectedMethodIdx] || availableMethods[0];
   // Use frozen value (from first stable load) if available; fallback to computed for the initial render only
-  const shipping = frozenShipping !== null ? frozenShipping : (selectedMethod
-    ? (locale === 'pt' && selectedMethod.price_brl !== undefined
-        ? Number(selectedMethod.price_brl)
-        : Number(selectedMethod.price) * rate)
-    : 15.00 * rate);
+  const computedShipping = selectedZone
+    ? resolveMethodPrice(selectedMethod)
+    : 15.00 * rate;
+  const shipping = frozenShipping !== null ? frozenShipping : computedShipping;
+  const isFreeShipping = Number.isFinite(shipping) && shipping <= 0;
 
   const total = Math.max(0, subtotal + shipping - discount);
 
@@ -424,6 +435,7 @@ export default function CheckoutWizard() {
       documentNumber: docNumber,
       gateway: 'stripe',
       shippingAmount: shipping,
+      shippingMethodName: selectedMethod?.name || '',
       discountAmount: discount,
       couponCode: appliedCoupon?.code || '',
       locale
@@ -725,9 +737,11 @@ export default function CheckoutWizard() {
                             </div>
                           </div>
                           <span className="text-xs font-bold text-accent">
-                            {locale === 'pt' && method.price_brl !== undefined
-                              ? `R$ ${Number(method.price_brl).toFixed(2)}`
-                              : `${currency} ${(Number(method.price) * rate).toFixed(2)}`}
+                            {method.free === true || Number(method.price) === 0
+                              ? t('GRÁTIS')
+                              : (locale === 'pt' && method.price_brl !== undefined
+                                  ? `R$ ${Number(method.price_brl).toFixed(2)}`
+                                  : `${currency} ${(Number(method.price) * rate).toFixed(2)}`)}
                           </span>
                         </label>
                       ))}
@@ -829,7 +843,9 @@ export default function CheckoutWizard() {
                   </div>
                   <div className="flex justify-between">
                     <span>{t('Envío')}</span>
-                    <span>{currency} {shipping.toFixed(2)}</span>
+                    <span className={isFreeShipping ? 'text-emerald-400 font-bold' : ''}>
+                      {isFreeShipping ? t('GRÁTIS') : `${currency} ${shipping.toFixed(2)}`}
+                    </span>
                   </div>
                   {discount > 0 && (
                     <div className="flex justify-between text-green-500">

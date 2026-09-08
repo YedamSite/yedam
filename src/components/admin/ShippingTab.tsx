@@ -33,7 +33,7 @@ export default function ShippingTab() {
   };
 
   const addZone = () => {
-    setZones([...zones, { country: '', methods: [{ name: 'Standard', days: '10-15', price: 15, price_brl: 75 }] }]);
+    setZones([...zones, { country: '', methods: [{ name: 'Standard', days: '10-15', price: 15, price_brl: 75, free: false }] }]);
   };
 
   const removeZone = (idx: number) => {
@@ -56,7 +56,7 @@ export default function ShippingTab() {
 
   const addMethod = (zoneIdx: number) => {
     const newZones = [...zones];
-    newZones[zoneIdx].methods.push({ name: 'Expresso', days: '3-5', price: 30, price_brl: 150 });
+    newZones[zoneIdx].methods.push({ name: 'Expresso', days: '3-5', price: 30, price_brl: 150, free: false });
     setZones(newZones);
   };
 
@@ -84,12 +84,19 @@ export default function ShippingTab() {
             <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3 border-b border-white/5 pb-3">
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <Globe className="h-5 w-5 text-accent shrink-0" />
-                <Input 
-                  value={zone.country} 
-                  onChange={(e) => updateZoneCountry(zIdx, e.target.value)}
-                  placeholder="Nome do País (ex: Brasil)"
-                  className="bg-black/30 border-white/10 text-white font-bold h-9 w-full sm:w-64"
-                />
+                <div className="flex flex-col w-full sm:w-72">
+                  <Input 
+                    value={zone.country} 
+                    onChange={(e) => updateZoneCountry(zIdx, e.target.value)}
+                    placeholder="Nome do País (ex: Brasil)"
+                    className="bg-black/30 border-white/10 text-white font-bold h-9 w-full"
+                  />
+                  <span className="text-[10px] text-muted-foreground mt-1">
+                    {zone.country
+                      ? t('Usado para o país digitado acima')
+                      : t('País Padrão — aplicado a qualquer outro país não listado')}
+                  </span>
+                </div>
               </div>
               <Button onClick={() => removeZone(zIdx)} variant="ghost" className="text-red-400 hover:text-red-300 hover:bg-red-500/10 h-8 text-xs shrink-0 self-end sm:self-auto">
                 <Trash2 className="h-4 w-4 mr-2" /> {t('Remover País')}
@@ -116,13 +123,31 @@ export default function ShippingTab() {
                     <span className="text-xs text-muted-foreground">{t('dias')}</span>
                   </div>
                   
-                  <div className="flex items-center gap-2 shrink-0 ml-auto sm:ml-4">
+                  <label className={`flex items-center gap-2 shrink-0 cursor-pointer px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors ${method.free ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400' : 'bg-black/20 border-white/10 text-muted-foreground hover:border-white/25'}`}>
+                    <input
+                      type="checkbox"
+                      checked={method.free === true}
+                      onChange={(e) => {
+                        updateMethod(zIdx, mIdx, 'free', e.target.checked);
+                        if (e.target.checked) {
+                          updateMethod(zIdx, mIdx, 'price', 0);
+                          updateMethod(zIdx, mIdx, 'price_brl', 0);
+                        }
+                      }}
+                      className="h-3.5 w-3.5 accent-emerald-500"
+                    />
+                    {t('GRÁTIS')}
+                  </label>
+                  
+                  <div className="flex items-center gap-2 shrink-0 ml-auto sm:ml-2">
                     <span className="text-xs text-muted-foreground">US$</span>
                     <Input 
                       type="number"
-                      value={method.price} 
+                      min={0}
+                      value={method.free ? 0 : method.price} 
                       onChange={(e) => updateMethod(zIdx, mIdx, 'price', parseFloat(e.target.value))}
-                      className="bg-black/30 border-white/10 text-xs h-8 w-20 text-right"
+                      disabled={method.free}
+                      className={`bg-black/30 border-white/10 text-xs h-8 w-20 text-right ${method.free ? 'opacity-40' : ''}`}
                       placeholder="US$"
                     />
                   </div>
@@ -131,9 +156,11 @@ export default function ShippingTab() {
                     <span className="text-xs text-muted-foreground">R$</span>
                     <Input 
                       type="number"
-                      value={method.price_brl !== undefined ? method.price_brl : (method.price * 5)} 
+                      min={0}
+                      value={method.free ? 0 : (method.price_brl !== undefined ? method.price_brl : (method.price * 5))} 
                       onChange={(e) => updateMethod(zIdx, mIdx, 'price_brl', parseFloat(e.target.value))}
-                      className="bg-black/30 border-white/10 text-xs h-8 w-20 text-right text-emerald-400"
+                      disabled={method.free}
+                      className={`bg-black/30 border-white/10 text-xs h-8 w-20 text-right text-emerald-400 ${method.free ? 'opacity-40' : ''}`}
                       placeholder="R$"
                     />
                   </div>

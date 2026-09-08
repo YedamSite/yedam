@@ -35,11 +35,8 @@ export async function GET(req: Request) {
     // Run all table fetches in parallel (the previous sequential loop made every page load wait
     // for all Supabase round-trips, adding noticeable latency before fresh content appeared).
     const fetchers = requestedTables.map(async (table) => {
-      if (table === 'coupons' || table === 'site_content') {
-        // Coupons and site_content live in cheotnun_system_settings (key = table) — the same
-        // table used for theme/shipping, so it is guaranteed to exist. site_content carries the
-        // section visibility toggles (rutinas/experiencias) and must reach every shopper browser,
-        // otherwise a fresh visit would show the default disabled state.
+      // System settings stored in cheotnun_system_settings: coupons, site_content, shipping_zones
+      if (table === 'coupons' || table === 'site_content' || table === 'shipping_zones') {
         const { data: setting, error: err } = await supabase
           .from('cheotnun_system_settings')
           .select('value')

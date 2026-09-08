@@ -1929,7 +1929,7 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
 // Used by public-facing pages (home, tienda) to fetch fresh product/category/brand data
 async function publicCatalogSync(): Promise<boolean> {
   try {
-    const resp = await fetch(`/api/catalog?tables=products,categories,brands,coupons,site_content&t=${Date.now()}`, {
+    const resp = await fetch(`/api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones&t=${Date.now()}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
@@ -1954,6 +1954,17 @@ async function publicCatalogSync(): Promise<boolean> {
     // rutinas/experiencias enabled or disabled in the header.
     if (json.data.site_content) {
       changed = mergeSiteContentFromServer(json.data.site_content) || changed;
+    }
+    // shipping_zones must reach every shopper browser — the cart computes shipping from these.
+    // Without a public sync, visitors would only see the hardcoded fallback (US$15), never the
+    // admin's configured zones/methods/free-shipping.
+    if (Array.isArray(json.data.shipping_zones)) {
+      const currentZones = memoryDb.system_settings.shipping_zones;
+      const nextZones = json.data.shipping_zones;
+      if (JSON.stringify(currentZones) !== JSON.stringify(nextZones)) {
+        memoryDb.system_settings.shipping_zones = nextZones;
+        changed = true;
+      }
     }
 
     if (changed) {
