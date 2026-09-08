@@ -172,6 +172,16 @@ export default function Header() {
     ? headerContent.navLinks
     : defaultNavItems
   ).filter((item: any) => item.href !== '/rutinas' && item.href !== '/experiencias');
+  
+  if (translatedContent.rutinasPage?.enabled !== false) {
+    // Add Rutinas before Contacto (which is typically the last item)
+    rawNavItems.splice(rawNavItems.length - 1, 0, { label: 'Rutinas', href: '/rutinas' });
+  }
+  if (translatedContent.experienciasPage?.enabled !== false) {
+    // Add Experiencias before Contacto
+    rawNavItems.splice(rawNavItems.length - 1, 0, { label: 'Experiencias', href: '/experiencias' });
+  }
+
   // Always run labels through t() so translations apply regardless of DB content
   const navItems = rawNavItems.map((item: any) => ({ ...item, label: t(item.label) }));
   return (
