@@ -30,20 +30,22 @@ export async function GET(req: Request) {
 
   try {
     const supabase = createClient(supabaseUrl, serviceRoleKey);
-    const result: Record<string, any[]> = {};
+    const result: Record<string, any> = {};
 
     for (const table of requestedTables) {
       const tableName = PUBLIC_TABLE_MAP[table];
-      if (table === 'coupons') {
-        // Coupons live in cheotnun_system_settings (key "coupons") — the same table used for
-        // site_content/theme, so it is guaranteed to exist. Read publicly for shoppers.
+      if (table === 'coupons' || table === 'site_content') {
+        // Coupons and site_content live in cheotnun_system_settings (key = table) — the same
+        // table used for theme/shipping, so it is guaranteed to exist. site_content carries the
+        // section visibility toggles (rutinas/experiencias) and must reach every shopper browser,
+        // otherwise a fresh visit would show the default disabled state.
         const { data: setting, error: err } = await supabase
           .from('cheotnun_system_settings')
           .select('value')
-          .eq('key', 'coupons')
+          .eq('key', table)
           .single();
-        if (!err && setting?.value && Array.isArray(setting.value)) {
-          result.coupons = setting.value;
+        if (!err && setting?.value) {
+          result[table] = typeof setting.value === 'string' ? JSON.parse(setting.value) : setting.value;
         }
         continue;
       }

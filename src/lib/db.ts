@@ -1929,7 +1929,7 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
 // Used by public-facing pages (home, tienda) to fetch fresh product/category/brand data
 async function publicCatalogSync(): Promise<boolean> {
   try {
-    const resp = await fetch(`/api/catalog?tables=products,categories,brands,coupons&t=${Date.now()}`, {
+    const resp = await fetch(`/api/catalog?tables=products,categories,brands,coupons,site_content&t=${Date.now()}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
@@ -1948,6 +1948,12 @@ async function publicCatalogSync(): Promise<boolean> {
       } else if (mergeTableData(table as string, rows)) {
         changed = true;
       }
+    }
+    // site_content (section visibility toggles, translations, header/footer) is synced publicly so
+    // that fresh visitors WITHOUT localStorage see the same state the admin saved — including
+    // rutinas/experiencias enabled or disabled in the header.
+    if (json.data.site_content) {
+      changed = mergeSiteContentFromServer(json.data.site_content) || changed;
     }
 
     if (changed) {
@@ -1991,6 +1997,40 @@ function mergeCouponsFromServer(incoming: any[]): boolean {
   const changedValue = JSON.stringify(next) !== JSON.stringify(local);
   (memoryDb as any).coupons = next;
   return changed || changedValue;
+}
+
+// Merges site_content coming from Supabase (public catalog or admin settings) with the current
+// in-memory state. The NEWEST writer wins (admin saves stamp updated_at) — this protects against
+// the case where localStorage persistence failed and a stale local copy would otherwise override
+// the admin's freshly saved toggles.
+function mergeSiteContentFromServer(supabaseContent: any): boolean {
+  try {
+    const supabaseMerged = deepMerge(DEFAULT_STATE.site_content, supabaseContent || {});
+    const local = memoryDb.site_content;
+    const localTime = local?.updated_at || '';
+    const supabaseTime = supabaseMerged?.updated_at || '';
+    let next: any;
+
+    if (supabaseTime > localTime) {
+      next = supabaseMerged;
+    } else if (localTime > supabaseTime) {
+      next = deepMerge(supabaseMerged, local);
+    } else if (!hasLocalSiteContentOverride) {
+      // No local override and no timestamps to break the tie — Supabase is the source of truth,
+      // so a fresh visitor sees exactly what the admin saved (not the vanilla defaults with
+      // rutinas/experiencias disabled).
+      next = supabaseMerged;
+    } else {
+      // Tie with a local override present: keep local (the admin's own saved state).
+      next = deepMerge(supabaseMerged, local);
+    }
+
+    const changed = JSON.stringify(next) !== JSON.stringify(local);
+    memoryDb.site_content = next;
+    return changed;
+  } catch {
+    return false;
+  }
 }
 
 let supabaseReady = false;
@@ -2197,18 +2237,7 @@ async function loadSettingsFromSupabase() {
     if (json.data?.seo) { memoryDb.system_settings.seo = json.data.seo; changedSettings = true; }
     if (json.data?.shipping_zones) { memoryDb.system_settings.shipping_zones = json.data.shipping_zones; changedSettings = true; }
     if (json.data?.site_content) {
-      const supabaseMerged = deepMerge(DEFAULT_STATE.site_content, json.data.site_content);
-      if (hasLocalSiteContentOverride) {
-        // Merge Supabase site_content ON TOP OF the current memoryDb (which already has the admin's
-        // enabled/disabled flags from localStorage). This prevents Supabase from overwriting
-        // section visibility toggles that were changed by the admin.
-        memoryDb.site_content = deepMerge(supabaseMerged, memoryDb.site_content);
-      } else {
-        // Fresh/first visit (no local overrides): Supabase is the source of truth.
-        // Without this, the vanilla DEFAULT (enabled:false) would win and sections the admin
-        // re-enabled would never show for visitors/other devices.
-        memoryDb.site_content = supabaseMerged;
-      }
+      mergeSiteContentFromServer(json.data.site_content);
       changedSettings = true;
     }
     if (json.data?.coupons && Array.isArray(json.data.coupons)) {
@@ -2325,6 +2354,10 @@ export const db = {
     }
     if (table === 'site_content') {
       hasLocalSiteContentOverride = true;
+      // Stamp when this content was saved so merges can pick the NEWEST writer. This prevents a
+      // stale localStorage (e.g. quota failure) from silently overriding the admin's latest save
+      // on the next load.
+      (records as any).updated_at = new Date().toISOString();
       await trySaveSettingsToSupabase('site_content', records);
     } else if (table === 'coupons') {
       // Coupons are saved via cheotnun_system_settings (key "coupons") — the same table that
