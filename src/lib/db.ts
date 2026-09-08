@@ -2157,7 +2157,14 @@ async function loadSettingsFromSupabase() {
     if (json.data?.company_details) { memoryDb.system_settings.company_details = json.data.company_details; changedSettings = true; }
     if (json.data?.seo) { memoryDb.system_settings.seo = json.data.seo; changedSettings = true; }
     if (json.data?.shipping_zones) { memoryDb.system_settings.shipping_zones = json.data.shipping_zones; changedSettings = true; }
-    if (json.data?.site_content) { memoryDb.site_content = deepMerge(DEFAULT_STATE.site_content, json.data.site_content); changedSettings = true; }
+    if (json.data?.site_content) {
+      // Merge Supabase site_content ON TOP OF the current memoryDb (which already has the admin's
+      // enabled/disabled flags from localStorage). This prevents Supabase from overwriting
+      // section visibility toggles that were changed by the admin.
+      const supabaseMerged = deepMerge(DEFAULT_STATE.site_content, json.data.site_content);
+      memoryDb.site_content = deepMerge(supabaseMerged, memoryDb.site_content);
+      changedSettings = true;
+    }
     
     if (changedSettings) {
       persistToLocalStorage();
@@ -2200,6 +2207,11 @@ export const db = {
   },
 
   isSupabaseReady: () => supabaseReady,
+
+  /** Reload in-memory DB from localStorage. Used by components that receive cross-tab storage events. */
+  reloadFromLocalStorage: () => {
+    loadFromLocalStorage();
+  },
 
   reloadFromSupabase: async (tables?: string[]): Promise<void> => {
     try {

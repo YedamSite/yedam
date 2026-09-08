@@ -50,14 +50,21 @@ export default function Home() {
     }
   };
 
+  const handleStorageChange = () => {
+    // Another tab (e.g. admin panel) updated localStorage — reload the in-memory DB
+    // before reading, otherwise db.get() returns stale in-memory data
+    db.reloadFromLocalStorage();
+    loadData();
+  };
+
   useEffect(() => {
     setMounted(true);
     loadData();
     window.addEventListener('cheotnun_db_change', loadData);
-    window.addEventListener('storage', loadData);
+    window.addEventListener('storage', handleStorageChange);
     return () => {
       window.removeEventListener('cheotnun_db_change', loadData);
-      window.removeEventListener('storage', loadData);
+      window.removeEventListener('storage', handleStorageChange);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
