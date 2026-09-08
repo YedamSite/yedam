@@ -631,7 +631,20 @@ export default function SiteContentTab() {
         {/* CATEGORIES SECTION TEXT */}
         {activeSection === 'categories' && (
           <div className="space-y-5">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção de Categorias')}</h3>
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">{t('Seção de Categorias')}</h3>
+              <label className="flex items-center gap-2 cursor-pointer text-xs">
+                <input
+                  type="checkbox"
+                  checked={content.home?.categories?.enabled !== false}
+                  onChange={e => handleChange('categories', 'enabled', e.target.checked)}
+                  className="accent-accent h-4 w-4 rounded"
+                />
+                <span className={content.home?.categories?.enabled !== false ? 'text-emerald-400 font-bold' : 'text-red-400 font-bold'}>
+                  {content.home?.categories?.enabled !== false ? t('✓ Seção Ativada no Site') : t('✗ Seção Desativada no Site')}
+                </span>
+              </label>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               {renderInput(t('Pré-título'), 'categories', 'preTitle')}
               {renderInput(t('Título'), 'categories', 'title')}
