@@ -57,10 +57,20 @@ export default function Footer() {
   
   // Ensure Contacto is present in the help column just in case it's missing from DB
   const renderColumns = [JSON.parse(JSON.stringify(col1)), JSON.parse(JSON.stringify(col2)), JSON.parse(JSON.stringify(col3))].filter(c => c.title);
-  // Filter out decommissioned links like /rutinas and /experiencias
+  // Filter out decommissioned links like /rutinas and /experiencias unless they are enabled
   renderColumns.forEach((c: any) => {
     if (c.links && Array.isArray(c.links)) {
       c.links = c.links.filter((l: any) => l.href !== '/rutinas' && l.href !== '/experiencias');
+      
+      // Re-add conditionally if enabled
+      if (c.title === 'Tienda' || c.title === 'Shop') {
+        if (translatedContent.home?.routines?.enabled !== false) {
+          c.links.push({ label: 'Rutinas', href: '/rutinas' });
+        }
+        if (translatedContent.home?.experiencias?.enabled !== false) {
+          c.links.push({ label: 'Experiencias', href: '/experiencias' });
+        }
+      }
     }
   });
   const helpColumn = renderColumns.find((c: any) => c.title === 'Ayuda & Políticas' || c.title === 'Ayuda' || c.title === 'HELP');

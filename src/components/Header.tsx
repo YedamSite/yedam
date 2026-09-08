@@ -173,11 +173,11 @@ export default function Header() {
     : defaultNavItems
   ).filter((item: any) => item.href !== '/rutinas' && item.href !== '/experiencias');
   
-  if (translatedContent.rutinasPage?.enabled !== false) {
+  if (translatedContent.home?.routines?.enabled !== false) {
     // Add Rutinas before Contacto (which is typically the last item)
     rawNavItems.splice(rawNavItems.length - 1, 0, { label: 'Rutinas', href: '/rutinas' });
   }
-  if (translatedContent.experienciasPage?.enabled !== false) {
+  if (translatedContent.home?.experiencias?.enabled !== false) {
     // Add Experiencias before Contacto
     rawNavItems.splice(rawNavItems.length - 1, 0, { label: 'Experiencias', href: '/experiencias' });
   }
