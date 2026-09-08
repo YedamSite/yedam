@@ -32,8 +32,9 @@ export async function GET(req: Request) {
     const supabase = createClient(supabaseUrl, serviceRoleKey);
     const result: Record<string, any> = {};
 
-    for (const table of requestedTables) {
-      const tableName = PUBLIC_TABLE_MAP[table];
+    // Run all table fetches in parallel (the previous sequential loop made every page load wait
+    // for all Supabase round-trips, adding noticeable latency before fresh content appeared).
+    const fetchers = requestedTables.map(async (table) => {
       if (table === 'coupons' || table === 'site_content') {
         // Coupons and site_content live in cheotnun_system_settings (key = table) — the same
         // table used for theme/shipping, so it is guaranteed to exist. site_content carries the
@@ -44,17 +45,17 @@ export async function GET(req: Request) {
           .select('value')
           .eq('key', table)
           .single();
-        if (!err && setting?.value) {
-          result[table] = typeof setting.value === 'string' ? JSON.parse(setting.value) : setting.value;
-        }
-        continue;
+        return { table, value: (!err && setting?.value) ? (typeof setting.value === 'string' ? JSON.parse(setting.value) : setting.value) : undefined };
       }
-      if (!tableName) continue; // Skip tables not in public whitelist
-
+      const tableName = PUBLIC_TABLE_MAP[table];
+      if (!tableName) return { table, value: undefined }; // Skip tables not in public whitelist
       const { data, error } = await supabase.from(tableName).select('*');
-      if (!error && data) {
-        result[table] = data;
-      }
+      return { table, value: (!error && data) ? data : undefined };
+    });
+
+    const settled = await Promise.all(fetchers);
+    for (const { table, value } of settled) {
+      if (value !== undefined) result[table] = value;
     }
 
     return NextResponse.json(

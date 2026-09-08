@@ -2034,6 +2034,8 @@ function mergeSiteContentFromServer(supabaseContent: any): boolean {
 }
 
 let supabaseReady = false;
+let liveSyncTimer: ReturnType<typeof setInterval> | null = null;
+let liveSyncStarted = false;
 
 // IDs deletados localmente que nao devem ser ressuscitados pelo Supabase
 function loadDeletedIds(): Set<string> {
@@ -2293,6 +2295,28 @@ export const db = {
   /** Re-fetch public catalog (products/categories/brands/coupons). Used as fallback so
    *  newly-created coupons reach the cart even when this browser has no local data. */
   syncPublicCatalog: async (): Promise<boolean> => publicCatalogSync(),
+
+  /** Starts a lightweight live sync: re-fetches the public catalog whenever the tab gains focus
+   *  and every 20s while visible. This makes admin panel changes (section toggles, coupons,
+   *  content) appear on the site without the visitor needing CTRL+F5. */
+  startLiveSync: (): void => {
+    if (typeof window === 'undefined' || liveSyncStarted) return;
+    liveSyncStarted = true;
+    const syncIfVisible = () => {
+      if (document.visibilityState === 'visible') {
+        publicCatalogSync();
+      }
+    };
+    window.addEventListener('focus', syncIfVisible);
+    document.addEventListener('visibilitychange', syncIfVisible);
+    liveSyncTimer = setInterval(syncIfVisible, 20000);
+  },
+
+  stopLiveSync: (): void => {
+    if (liveSyncTimer) clearInterval(liveSyncTimer);
+    liveSyncTimer = null;
+    liveSyncStarted = false;
+  },
 
   /** Reload in-memory DB from localStorage. Used by components that receive cross-tab storage events. */
   reloadFromLocalStorage: () => {

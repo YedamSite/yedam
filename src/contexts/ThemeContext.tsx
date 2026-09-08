@@ -71,6 +71,8 @@ export function ThemeProvider({ children, initialTheme }: { children: React.Reac
     (async () => {
       // Init DB: loads localStorage, syncs catalog from public API, then syncs admin tables
       await db.init();
+      // Keep the site in sync with admin-panel changes without requiring CTRL+F5
+      db.startLiveSync();
       // After init, dispatch event so all pages re-read fresh data
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { source: 'db_init' } }));
