@@ -1799,6 +1799,11 @@ const DEFAULT_STATE: DbState = {
 
 let memoryDb: DbState = { ...DEFAULT_STATE, site_content: JSON.parse(JSON.stringify(DEFAULT_STATE.site_content)), system_settings: JSON.parse(JSON.stringify(DEFAULT_STATE.system_settings)) };
 
+// True when THIS browser has real (non-default) site_content/visibility flags saved locally.
+// Used so Supabase wins as source of truth for fresh visitors, while the admin's own
+// recently-saved toggles still win locally (avoids Supabase rolling back a just-saved change).
+let hasLocalSiteContentOverride = false;
+
 function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -1881,6 +1886,9 @@ function loadFromLocalStorage(): boolean {
       }
       const parsed = JSON.parse(stringified);
       
+      // A saved DB exists in this browser — treat local site_content as a real override
+      hasLocalSiteContentOverride = true;
+
       // Force social links update
       if (parsed.system_settings && parsed.system_settings.social_links) {
         parsed.system_settings.social_links.tiktok = 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98z1msmaull';
@@ -2158,11 +2166,18 @@ async function loadSettingsFromSupabase() {
     if (json.data?.seo) { memoryDb.system_settings.seo = json.data.seo; changedSettings = true; }
     if (json.data?.shipping_zones) { memoryDb.system_settings.shipping_zones = json.data.shipping_zones; changedSettings = true; }
     if (json.data?.site_content) {
-      // Merge Supabase site_content ON TOP OF the current memoryDb (which already has the admin's
-      // enabled/disabled flags from localStorage). This prevents Supabase from overwriting
-      // section visibility toggles that were changed by the admin.
       const supabaseMerged = deepMerge(DEFAULT_STATE.site_content, json.data.site_content);
-      memoryDb.site_content = deepMerge(supabaseMerged, memoryDb.site_content);
+      if (hasLocalSiteContentOverride) {
+        // Merge Supabase site_content ON TOP OF the current memoryDb (which already has the admin's
+        // enabled/disabled flags from localStorage). This prevents Supabase from overwriting
+        // section visibility toggles that were changed by the admin.
+        memoryDb.site_content = deepMerge(supabaseMerged, memoryDb.site_content);
+      } else {
+        // Fresh/first visit (no local overrides): Supabase is the source of truth.
+        // Without this, the vanilla DEFAULT (enabled:false) would win and sections the admin
+        // re-enabled would never show for visitors/other devices.
+        memoryDb.site_content = supabaseMerged;
+      }
       changedSettings = true;
     }
     
@@ -2176,7 +2191,7 @@ async function loadSettingsFromSupabase() {
 }
 
 async function trySaveSettingsToSupabase(key: string, value: any) {
-  if (!supabaseReady) return;
+  // No early return on !supabaseReady: settings must reach Supabase even right after page load.
   try {
     const res = await fetch('/api/supabase-reload', {
       method: 'POST',
@@ -2267,6 +2282,7 @@ export const db = {
       window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
     }
     if (table === 'site_content') {
+      hasLocalSiteContentOverride = true;
       await trySaveSettingsToSupabase('site_content', records);
     } else if (table === 'system_settings') {
       const settings = records as any;
@@ -2302,6 +2318,7 @@ export const db = {
       localStorage.removeItem(STORAGE_KEY);
     }
     memoryDb = { ...DEFAULT_STATE, site_content: deepClone(DEFAULT_STATE.site_content), system_settings: deepClone(DEFAULT_STATE.system_settings) };
+    hasLocalSiteContentOverride = false;
   },
 
   markDeleted: (id: string) => saveDeletedId(id),
