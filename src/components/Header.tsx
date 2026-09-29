@@ -135,7 +135,10 @@ export default function Header() {
   // Re-render when the in-memory DB changes (e.g. admin panel saved site_content in another tab)
   useEffect(() => {
     const handleDbChange = () => {
-      db.reloadFromLocalStorage();
+      // cheotnun_db_change already means the in-memory DB is current — it is dispatched
+      // right after a catalog sync writes into memory. Reloading from localStorage here
+      // would discard the freshly fetched products and blank out the shop, so only the
+      // cross-tab storage event (where another tab wrote) triggers a reload.
       forceHeaderUpdate(v => v + 1);
     };
     const handleStorage = () => {

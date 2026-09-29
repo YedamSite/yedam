@@ -23,6 +23,9 @@ function TiendaContent() {
   const [products, setProducts] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  // True until the first catalog sync lands, so the empty state is not shown while
+  // the products are still being downloaded.
+  const [loading, setLoading] = useState(true);
 
   // Filters
   const [selectedBrand, setSelectedBrand] = useState('ALL');
@@ -37,6 +40,7 @@ function TiendaContent() {
   const loadData = () => {
     const rawProds = db.get('products') || [];
     setProducts(rawProds.map((p: any) => db.getTranslatedRecord(p, locale)));
+    if (rawProds.length > 0) setLoading(false);
 
     const rawBrands = db.get('brands') || [];
     setBrands(rawBrands.map((b: any) => db.getTranslatedRecord(b, locale)));
@@ -76,9 +80,12 @@ function TiendaContent() {
     const handleDbChange = () => loadData();
     window.addEventListener('cheotnun_db_change', handleDbChange);
     window.addEventListener('storage', handleDbChange);
+    // Safety net: never leave the page spinning if the catalog sync never resolves.
+    const failSafe = setTimeout(() => setLoading(false), 20000);
     return () => {
       window.removeEventListener('cheotnun_db_change', handleDbChange);
       window.removeEventListener('storage', handleDbChange);
+      clearTimeout(failSafe);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale, categoryParam, searchParam]);
@@ -399,6 +406,13 @@ function TiendaContent() {
                     </div>
                   );
                 })}
+              </div>
+            ) : loading ? (
+              // The catalog is fetched from the API on first paint. Without this the page
+              // claims "no products match the filters" while it is still downloading them.
+              <div className="border border-dashed border-white/10 rounded-3xl p-10 sm:p-12 flex flex-col items-center gap-4">
+                <div className="h-8 w-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+                <p className="text-xs text-muted-foreground">{t('Cargando productos...')}</p>
               </div>
             ) : (
               <div className="border border-dashed border-white/10 rounded-3xl p-10 sm:p-12 text-center flex flex-col items-center gap-3">

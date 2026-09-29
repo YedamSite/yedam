@@ -2404,9 +2404,28 @@ export const db = {
     liveSyncStarted = false;
   },
 
-  /** Reload in-memory DB from localStorage. Used by components that receive cross-tab storage events. */
+  /**
+   * Refresh the locally-persisted tables from localStorage.
+   *
+   * The catalog (products/categories/brands) is server-authoritative and is never
+   * written to localStorage, so rebuilding the whole state from storage would throw
+   * away the copy that publicCatalogSync() just fetched and blank out the shop.
+   * Those tables are therefore carried over from memory, and only restored if the
+   * reload left them empty.
+   */
   reloadFromLocalStorage: () => {
+    const preserved: Record<string, any[]> = {};
+    for (const table of SERVER_AUTHORITATIVE_TABLES) {
+      preserved[table] = (memoryDb as any)[table];
+    }
     loadFromLocalStorage();
+    for (const table of SERVER_AUTHORITATIVE_TABLES) {
+      const afterReload = (memoryDb as any)[table];
+      const beforeReload = preserved[table];
+      if ((!afterReload || afterReload.length === 0) && beforeReload && beforeReload.length > 0) {
+        (memoryDb as any)[table] = beforeReload;
+      }
+    }
   },
 
   reloadFromSupabase: async (tables?: string[]): Promise<void> => {
