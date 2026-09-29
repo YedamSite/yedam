@@ -2338,7 +2338,9 @@ async function loadSettingsFromSupabase() {
   } catch {}
 }
 
-async function trySaveSettingsToSupabase(key: string, value: any): Promise<boolean> {
+type SettingsSaveResult = { ok: boolean; updated_at?: string };
+
+async function trySaveSettingsToSupabase(key: string, value: any): Promise<SettingsSaveResult> {
   // No early return on !supabaseReady: settings must reach Supabase even right after page load.
   try {
     const res = await fetch('/api/supabase-reload', {
@@ -2348,17 +2350,17 @@ async function trySaveSettingsToSupabase(key: string, value: any): Promise<boole
     });
     if (!res.ok) {
       console.error('Supabase save setting HTTP error:', res.status);
-      return false;
+      return { ok: false };
     }
     const data = await res.json();
     if (!data.success) {
       console.error('Supabase save setting error:', data.error);
-      return false;
+      return { ok: false };
     }
-    return true;
+    return { ok: true, updated_at: data.updated_at };
   } catch (err) {
     console.error('Supabase fetch failed:', err);
-    return false;
+    return { ok: false };
   }
 }
 
@@ -2481,9 +2483,9 @@ export const db = {
    * (e.g. the admin panel) can surface real failures instead of a fake "saved" toast.
    */
   save: async <K extends keyof DbState>(table: K, records: DbState[K]): Promise<boolean> => {
-    // Stamp BEFORE persisting so the snapshot in localStorage carries the same
-    // updated_at that goes to the server. Otherwise the next reload saw an empty
-    // local timestamp and lost the newest-writer merge.
+    // Provisional stamp so the in-memory/localStorage copy is never older than the
+    // server's. It gets replaced by the server's authoritative timestamp below, which
+    // is what every other machine compares against.
     if (table === 'site_content') {
       hasLocalSiteContentOverride = true;
       (records as any).updated_at = new Date().toISOString();
@@ -2496,12 +2498,20 @@ export const db = {
     }
 
     if (table === 'site_content') {
-      return trySaveSettingsToSupabase('site_content', records);
+      const res = await trySaveSettingsToSupabase('site_content', records);
+      if (res.ok && res.updated_at) {
+        // Store the server's clock locally. Otherwise a machine whose clock runs ahead
+        // keeps a "newer" local copy forever, wins every merge and never picks up the
+        // admin's real changes.
+        (memoryDb.site_content as any).updated_at = res.updated_at;
+        persistToLocalStorage();
+      }
+      return res.ok;
     } else if (table === 'coupons') {
       // Coupons are saved via cheotnun_system_settings (key "coupons") — the same table that
       // reliably backs site_content/theme. The dedicated cheotnun_coupons table may not exist,
       // which caused admin-created coupons to never reach Supabase (and disappear after F5).
-      return trySaveSettingsToSupabase('coupons', records as any[]);
+      return (await trySaveSettingsToSupabase('coupons', records as any[])).ok;
     } else if (table === 'system_settings') {
       const settings = records as any;
       const results = await Promise.all([
@@ -2511,7 +2521,7 @@ export const db = {
         settings.shipping_zones && trySaveSettingsToSupabase('shipping_zones', settings.shipping_zones),
         settings.invoice_templates && trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates),
       ]);
-      return results.every((r) => r !== false);
+      return results.every((r) => !r || r.ok);
     } else {
       return trySaveToSupabase(table as string, records as any[]);
     }

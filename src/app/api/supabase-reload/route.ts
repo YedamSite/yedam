@@ -143,12 +143,25 @@ export async function POST(req: Request) {
     }
 
     if (action === 'saveSetting') {
-      const { key, value } = body;
+      const { key } = body;
+      let { value } = body;
       if (!key) return NextResponse.json({ error: 'Provide key' }, { status: 400 });
+
+      // site_content is reconciled across browsers by comparing `updated_at`. When each
+      // client stamped that with its own clock, a machine with a skewed clock won every
+      // merge forever and pinned the whole site to stale content (the admin's own changes
+      // would not reach visitors at all). The server is the only trustworthy clock, so it
+      // owns the timestamp and hands it back for the caller to store locally.
+      let stampedAt: string | undefined;
+      if (key === 'site_content' && value && typeof value === 'object' && !Array.isArray(value)) {
+        stampedAt = new Date().toISOString();
+        value = { ...value, updated_at: stampedAt };
+      }
+
       const supabase = createClient(supabaseUrl, serviceRoleKey);
       const { error } = await supabase.from('cheotnun_system_settings').upsert({ key, value }, { onConflict: 'key' });
       if (error) return NextResponse.json({ success: false, error: error.message });
-      return NextResponse.json({ success: true });
+      return NextResponse.json({ success: true, ...(stampedAt ? { updated_at: stampedAt } : {}) });
     }
 
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
