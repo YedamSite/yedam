@@ -619,6 +619,12 @@ export default function SiteContentTab() {
             {syncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
             {t('RECARREGAR DO SERVIDOR')}
           </Button>
+          {dirty && saveState !== 'saving' && (
+            <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              {t('Alterações não salvas — clique em SALVAR')}
+            </span>
+          )}
           <Button
             onClick={handleSave}
             disabled={saveState === 'saving' || !dirty}
@@ -2395,6 +2401,12 @@ export default function SiteContentTab() {
             <span>{saveError}</span>
           </div>
         )}
+        {dirty && saveState !== 'saving' && (
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2.5 self-start">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            {t('Alterações não salvas — clique no botão abaixo para gravar no site')}
+          </div>
+        )}
         <Button
           onClick={handleSave}
           disabled={saveState === 'saving' || !dirty}
@@ -2406,7 +2418,7 @@ export default function SiteContentTab() {
           {saveState === 'saved' ? '✓ SALVO!' : saveState === 'saving' ? t('SALVANDO...') : 'SALVAR TODAS AS ALTERAÇÕES'}
         </Button>
         {!dirty && saveState !== 'saved' && (
-          <p className="text-[10px] text-muted-foreground">{t('Nenhuma alteração pendente.')}</p>
+          <p className="text-[10px] text-muted-foreground">{t('Nada pendente: o que está aqui é o que está no site.')}</p>
         )}
       </div>
     </div>
