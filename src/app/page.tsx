@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import Link from 'next/link';
 import {
   Star, ShieldCheck, Truck, ShieldAlert, Heart, Compass, Check, ArrowRight,
@@ -357,28 +358,34 @@ export default function Home() {
       )}
 
       {/* Instagram Feed */}
+      {c?.instagram?.enabled !== false && (
       <section className="py-24 lg:py-28 max-w-7xl mx-auto px-4 md:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center mb-10">
           <div className="flex flex-col items-start gap-4">
-            <h2 className="font-heading text-3xl font-light text-white uppercase leading-tight">{t(c?.instagram?.title || 'Únete a nuestra comunidad')}</h2>
-            <p className="text-xs text-gray-400 font-light leading-relaxed">{t(c?.instagram?.subtitle || 'Tips, rutinas, lanzamientos y mucho más en Instagram.')}</p>
+            <h2 className="font-heading text-3xl font-light text-white uppercase leading-tight">
+              {c?.instagram?.title || t('Únete a nuestra comunidad')}
+            </h2>
+            <p className="text-xs text-gray-400 font-light leading-relaxed">
+              {c?.instagram?.subtitle || t('Tips, rutinas, lanzamientos y mucho más en Instagram.')}
+            </p>
             <a href={c?.instagram?.buttonLink || 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA=='} target="_blank" rel="noreferrer">
               <Button variant="outline" className="border-white/10 hover:bg-white/5 text-white font-bold text-[10px] px-8 py-5 rounded-full uppercase tracking-wider transition-all hover:-translate-y-0.5 duration-300">
-                {t(c?.instagram?.buttonText || 'SEGUIR EN INSTAGRAM')}
+                {c?.instagram?.buttonText || t('SEGUIR EN INSTAGRAM')}
               </Button>
             </a>
           </div>
 
-          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-5 gap-4">
-            {(c?.instagram?.images || []).map((url: string, idx: number) => (
+          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {(c?.instagram?.images || []).filter(Boolean).map((url: string, idx: number) => (
               <div key={idx} className="relative aspect-square rounded-3xl overflow-hidden border border-white/10 group shadow-lg">
-                <Image src={url} alt={`Instagram ${idx}`} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                <SafeImage src={url} alt={`Instagram ${idx + 1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw" />
                 <div className="absolute inset-0 bg-black/10" />
               </div>
             ))}
           </div>
         </div>
       </section>
+      )}
 
       {/* Newsletter */}
       <section className="py-24 bg-background w-full">

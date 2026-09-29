@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Loader2, AlertTriangle } from 'lucide-react';
 import { uploadImage, deleteImage } from '@/lib/supabaseStorage';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -29,10 +29,12 @@ export default function ImageUpload({
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [urlInput, setUrlInput] = useState(currentUrl || '');
+  const [degraded, setDegraded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setUrlInput(currentUrl || '');
+    setDegraded(!!currentUrl && currentUrl.startsWith('data:'));
     if (!currentUrl) {
       setPreview(null);
     }
@@ -70,6 +72,11 @@ export default function ImageUpload({
       if (isStoredImage(previousUrl) && previousUrl !== url) {
         await deleteImage(previousUrl);
       }
+      // A data: URL means the Supabase Storage upload was rejected (missing RLS policy on
+      // storage.objects). The image will still display, but it is embedded as base64 in the
+      // record itself, which bloats the database, breaks localStorage quota and prevents the
+      // image from being cached. Surface it instead of failing silently.
+      setDegraded(url.startsWith('data:'));
       onUrlChange(url);
       setUrlInput(url);
       setPreview(null);
@@ -80,6 +87,7 @@ export default function ImageUpload({
 
   const handleUrlChange = (value: string) => {
     setUrlInput(value);
+    setDegraded(value.startsWith('data:'));
     onUrlChange(value);
     setPreview(null);
   };
@@ -98,6 +106,13 @@ export default function ImageUpload({
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
       <label className="text-[10px] font-bold uppercase text-accent">{displayLabel}</label>
+
+      {degraded && (
+        <div className="flex items-start gap-1.5 text-[9px] leading-snug text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded-lg p-2">
+          <AlertTriangle className="h-3 w-3 shrink-0 mt-px" />
+          <span>{t('O upload para o Supabase Storage foi bloqueado (falta a permissão de RLS). A imagem foi embutida em base64: ela aparece, mas pesa muito e pode ser perdida. Use "colar uma URL externa" como alternativa.')}</span>
+        </div>
+      )}
 
       {/* Current image preview */}
       {displayUrl && (

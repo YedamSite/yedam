@@ -1,28 +1,67 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Save, Plus, Trash2, ShieldCheck, Truck, ShieldAlert, Heart, GripVertical } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Save, Plus, Trash2, ShieldCheck, Truck, ShieldAlert, Heart, GripVertical, AlertTriangle, CheckCircle2, RefreshCw, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '@/lib/db';
 import ImageUpload from '@/components/ImageUpload';
 import { useLanguage } from '@/context/LanguageContext';
 
+type SaveState = 'idle' | 'saving' | 'saved' | 'error';
+
 export default function SiteContentTab() {
   const [content, setContent] = useState<any>(null);
   const [activeSection, setActiveSection] = useState('hero');
   const [activeLang, setActiveLang] = useState<'es' | 'pt' | 'en'>('es');
-  const [saved, setSaved] = useState(false);
+  const [saveState, setSaveState] = useState<SaveState>('idle');
+  const [saveError, setSaveError] = useState<string>('');
+  const [dirty, setDirty] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const { t } = useLanguage();
 
-  useEffect(() => {
-    const c = db.get('site_content');
+  // Mirrors `dirty` for use inside the auto re-sync listeners. Kept in a ref so the
+  // effect can stay mounted while the admin types — depending on `dirty` would tear
+  // the listeners down and re-run the initial snapshot, wiping the in-progress edit.
+  const dirtyRef = useRef(false);
+
+  const setDirtyState = (value: boolean) => {
+    dirtyRef.current = value;
+    setDirty(value);
+  };
+
+  // Build an editable snapshot from the current DB state, filling any gaps with the
+  // shipped defaults. Must be re-run whenever the DB finishes its async Supabase
+  // sync, otherwise the panel would save a pre-sync snapshot back over the server
+  // and silently discard whatever had already been configured.
+  const buildSnapshot = useCallback((): any => {
     const defaults = db.getDefault('site_content');
-    // Deep merge: fill empty/null/undefined fields with defaults
     const merged = JSON.parse(JSON.stringify(defaults));
-    deepMerge(merged, JSON.parse(JSON.stringify(c || {})));
-    setContent(merged);
+    deepMerge(merged, JSON.parse(JSON.stringify(db.get('site_content') || {})));
+    return merged;
   }, []);
+
+  useEffect(() => {
+    setContent(buildSnapshot());
+
+    // Re-snapshot when the DB hydrates or another tab/sync updates it, but never
+    // while the admin has unsaved edits in front of them.
+    const onDbChange = () => {
+      if (dirtyRef.current) return;
+      setContent(buildSnapshot());
+    };
+    const onStorage = () => {
+      if (dirtyRef.current) return;
+      db.reloadFromLocalStorage();
+      setContent(buildSnapshot());
+    };
+    window.addEventListener('cheotnun_db_change', onDbChange);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('cheotnun_db_change', onDbChange);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, [buildSnapshot]);
 
   function deepMerge(target: any, source: any) {
     if (!source || !target) return;
@@ -31,7 +70,9 @@ export default function SiteContentTab() {
         if (!target[key]) target[key] = {};
         deepMerge(target[key], source[key]);
       } else {
-        if (source[key] !== undefined && source[key] !== null && source[key] !== '') {
+        // Empty strings are valid content (an admin clearing a field), so they must
+        // overwrite the default instead of being silently ignored.
+        if (source[key] !== undefined && source[key] !== null) {
           target[key] = source[key];
         }
       }
@@ -39,8 +80,17 @@ export default function SiteContentTab() {
   }
 
   // Normal/Nested Fields Handlers
+
+  // Every content mutation goes through here so the "unsaved changes" state is
+  // tracked automatically and the auto re-sync can back off while the admin is typing.
+  const mutate = (updater: (prev: any) => any) => {
+    setContent((prev: any) => updater(prev));
+    setDirtyState(true);
+    setSaveState('idle');
+  };
+
   const handleChange = (section: string, field: string, value: any) => {
-    setContent((prev: any) => {
+    mutate((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const parts = field.split('.');
       
@@ -114,7 +164,7 @@ export default function SiteContentTab() {
 
   // Array Fields Handlers
   const handleArrayItemChange = (section: string, arrayField: string, index: number, field: string, value: any) => {
-    setContent((prev: any) => {
+    mutate((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       
       let root = updated;
@@ -172,7 +222,7 @@ export default function SiteContentTab() {
   // This prevents images uploaded while PT/EN tab is active from being lost.
 
   const handleImageChange = (section: string, field: string, value: string) => {
-    setContent((prev: any) => {
+    mutate((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parts = field.split('.');
@@ -203,7 +253,7 @@ export default function SiteContentTab() {
   };
 
   const handleArrayImageChange = (section: string, arrayField: string, index: number, field: string, value: string) => {
-    setContent((prev: any) => {
+    mutate((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       
@@ -269,7 +319,7 @@ export default function SiteContentTab() {
   // ─────────────────────────────────────────────────────────────────────────
 
   const addArrayItem = (section: string, arrayField: string, template: any) => {
-    setContent((prev: any) => {
+    mutate((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
 
@@ -294,7 +344,7 @@ export default function SiteContentTab() {
   };
 
   const removeArrayItem = (section: string, arrayField: string, index: number) => {
-    setContent((prev: any) => {
+    mutate((prev: any) => {
       const updated = JSON.parse(JSON.stringify(prev));
       const isRootSec = ['header', 'footer', 'marcas', 'comoFunciona', 'contacto', 'envios', 'ayudaDevoluciones', 'rutinasPage', 'experienciasPage', 'terminos', 'privacidad', 'blog'].includes(section);
       const parentObj = isRootSec ? updated : updated.home;
@@ -317,10 +367,39 @@ export default function SiteContentTab() {
     });
   };
 
-  const handleSave = () => {
-    db.save('site_content', content);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const handleSave = async () => {
+    if (!content) return;
+    setSaveState('saving');
+    setSaveError('');
+    try {
+      const ok = await db.save('site_content', content);
+      if (ok) {
+        setSaveState('saved');
+        setDirtyState(false);
+        setTimeout(() => setSaveState((s) => (s === 'saved' ? 'idle' : s)), 4000);
+      } else {
+        setSaveState('error');
+        setSaveError(t('O servidor não confirmou a gravação. As alterações ficaram só neste navegador.'));
+      }
+    } catch (e: any) {
+      setSaveState('error');
+      setSaveError(e?.message || t('Falha ao salvar.'));
+    }
+  };
+
+  // Pull the latest state from Supabase and rebuild the editor, discarding local edits.
+  const handlePullFromServer = async () => {
+    if (dirty && !window.confirm(t('Há alterações não salvas. Descartar e recarregar do servidor?'))) return;
+    setSyncing(true);
+    try {
+      await db.reloadFromSupabase();
+      await db.syncPublicCatalog();
+      setContent(buildSnapshot());
+      setDirtyState(false);
+      setSaveState('idle');
+    } finally {
+      setSyncing(false);
+    }
   };
 
   // Translation Reading Helpers
@@ -483,7 +562,7 @@ export default function SiteContentTab() {
     { id: 'bestSellers', label: t('Mais Vendidos') },
     { id: 'experiencias', label: t('Experiencias (Home)'), toggleKey: 'experiencias' },
     { id: 'routines', label: t('Rotinas (Home)'), toggleKey: 'routines' },
-    { id: 'instagram', label: t('Instagram') },
+    { id: 'instagram', label: t('Instagram'), toggleKey: 'instagram' },
     { id: 'newsletter', label: t('Newsletter') },
   ];
 
@@ -528,17 +607,42 @@ export default function SiteContentTab() {
 
   return (
     <div className="bg-card border border-white/5 rounded-3xl p-6 md:p-8 shadow-xl">
-      <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
+      <div className="flex items-center justify-between gap-4 border-b border-white/5 pb-4 mb-6 flex-wrap">
         <h2 className="font-heading text-2xl font-light text-white uppercase tracking-wide">{t('Conteúdo do Site')}</h2>
-        <Button onClick={handleSave} className="bg-accent hover:bg-accentHover text-background font-bold text-xs px-6 py-2 rounded-xl flex items-center gap-2">
-          <Save className="h-4 w-4" />
-          {saved ? t('✓ SALVO!') : t('SALVAR TUDO')}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={handlePullFromServer}
+            disabled={syncing}
+            variant="ghost"
+            className="text-muted-foreground hover:text-white hover:bg-white/5 font-bold text-[10px] px-4 py-2 rounded-xl flex items-center gap-2"
+          >
+            {syncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+            {t('RECARREGAR DO SERVIDOR')}
+          </Button>
+          <Button
+            onClick={handleSave}
+            disabled={saveState === 'saving' || !dirty}
+            className="bg-accent hover:bg-accentHover disabled:opacity-40 disabled:hover:bg-accent text-background font-bold text-xs px-6 py-2 rounded-xl flex items-center gap-2"
+          >
+            {saveState === 'saving'
+              ? <Loader2 className="h-4 w-4 animate-spin" />
+              : <Save className="h-4 w-4" />}
+            {saveState === 'saved' ? t('✓ SALVO!') : saveState === 'saving' ? t('SALVANDO...') : t('SALVAR TUDO')}
+          </Button>
+        </div>
       </div>
 
-      {saved && (
-        <div className="bg-green-50/10 border border-green-50/20 text-green-400 text-xs rounded-xl p-3.5 mb-6">
+      {saveState === 'saved' && (
+        <div className="bg-green-50/10 border border-green-50/20 text-green-400 text-xs rounded-xl p-3.5 mb-6 flex items-center gap-2">
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
           {t('✓ Todo o conteúdo foi salvo com sucesso!')}
+        </div>
+      )}
+
+      {saveState === 'error' && (
+        <div className="bg-red-500/10 border border-red-500/30 text-red-300 text-xs rounded-xl p-3.5 mb-6 flex items-start gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0 mt-px" />
+          <span>{saveError}</span>
         </div>
       )}
 
@@ -868,16 +972,33 @@ export default function SiteContentTab() {
         {activeSection === 'instagram' && (
           <div className="space-y-5">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/5 pb-2">{t('Seção Instagram')}</h3>
+
+            <label className="flex items-center gap-3 bg-[#030712] border border-white/5 rounded-xl p-4 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={content.home?.instagram?.enabled !== false}
+                onChange={(e) => handleChange('instagram', 'enabled', e.target.checked)}
+                className="w-4 h-4 accent-[var(--accent)]"
+              />
+              <span className="text-xs font-bold text-white">{t('Exibir esta seção na página inicial')}</span>
+            </label>
+
             <div className="grid grid-cols-2 gap-4">
               {renderInput(t('Título'), 'instagram', 'title')}
               {renderInput(t('Subtítulo'), 'instagram', 'subtitle')}
               {renderInput(t('Texto do Botão'), 'instagram', 'buttonText')}
               {renderInput(t('Link do Botão'), 'instagram', 'buttonLink')}
             </div>
+
             <div className="border-t border-white/5 pt-4">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-[10px] font-bold text-accent uppercase">{t('Imagens do Feed')}</h4>
-                <Button onClick={() => addArrayItem('instagram', 'images', 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=400')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1">
+              <div className="flex items-center justify-between mb-3 gap-4">
+                <div>
+                  <h4 className="text-[10px] font-bold text-accent uppercase">{t('Imagens do Feed')}</h4>
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    {t('As imagens são compartilhadas pelos 3 idiomas (ES / PT / EN) e aplicadas em todas as páginas. Para exibir apenas 5 imagens, deixe exatamente 5.')}
+                  </p>
+                </div>
+                <Button onClick={() => addArrayItem('instagram', 'images', '')} className="bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg flex items-center gap-1 shrink-0">
                   <Plus className="h-3 w-3" /> {t('ADICIONAR')}
                 </Button>
               </div>
@@ -886,7 +1007,7 @@ export default function SiteContentTab() {
                   <div key={idx} className="flex gap-2 items-start">
                     <div className="flex-1">
                       <ImageUpload
-                        currentUrl={url}
+                        currentUrl={getBaseArrayValue('instagram', 'images', idx, '')}
                         onUrlChange={v => handleArrayImageChange('instagram', 'images', idx, '', v)}
                         folder="instagram"
                         label={t('Imagem') + ` ${idx + 1}`}
@@ -895,6 +1016,9 @@ export default function SiteContentTab() {
                     <button onClick={() => removeArrayItem('instagram', 'images', idx)} className="text-red-500 mt-7"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
+                {instagramImages.length === 0 && (
+                  <p className="text-[11px] text-muted-foreground italic">{t('Nenhuma imagem adicionada.')}</p>
+                )}
               </div>
             </div>
           </div>
@@ -2264,11 +2388,26 @@ export default function SiteContentTab() {
         )}
       </div>
 
-      <div className="mt-8 pt-6 border-t border-white/5">
-        <Button onClick={handleSave} className="bg-accent hover:bg-accentHover text-background font-bold py-3 px-8 rounded-xl flex items-center gap-2">
-          <Save className="h-4 w-4" />
-          {saved ? '✓ SALVO!' : 'SALVAR TODAS AS ALTERAÇÕES'}
+      <div className="mt-8 pt-6 border-t border-white/5 flex flex-col gap-3">
+        {saveState === 'error' && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 text-xs rounded-xl p-3.5 flex items-start gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0 mt-px" />
+            <span>{saveError}</span>
+          </div>
+        )}
+        <Button
+          onClick={handleSave}
+          disabled={saveState === 'saving' || !dirty}
+          className="self-start bg-accent hover:bg-accentHover disabled:opacity-40 disabled:hover:bg-accent text-background font-bold py-3 px-8 rounded-xl flex items-center gap-2"
+        >
+          {saveState === 'saving'
+            ? <Loader2 className="h-4 w-4 animate-spin" />
+            : <Save className="h-4 w-4" />}
+          {saveState === 'saved' ? '✓ SALVO!' : saveState === 'saving' ? t('SALVANDO...') : 'SALVAR TODAS AS ALTERAÇÕES'}
         </Button>
+        {!dirty && saveState !== 'saved' && (
+          <p className="text-[10px] text-muted-foreground">{t('Nenhuma alteração pendente.')}</p>
+        )}
       </div>
     </div>
   );

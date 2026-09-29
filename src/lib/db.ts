@@ -181,6 +181,7 @@ const DEFAULT_STATE: DbState = {
         ]
       },
       instagram: {
+        enabled: true,
         title: 'Únete a nuestra comunidad',
         subtitle: 'Tips, rutinas, lanzamientos y mucho más en Instagram.',
         buttonText: 'SEGUIR EN INSTAGRAM',
@@ -796,13 +797,10 @@ const DEFAULT_STATE: DbState = {
             title: 'Siga-nos no Instagram',
             subtitle: 'Compartilhamos dicas, novidades e bastidores do K-Beauty.',
             buttonLink: 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==',
-            buttonText: '@lacheotnun',
-            images: [
-              'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
-              'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=400',
-              'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=400',
-              'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=400'
-            ]
+            buttonText: 'SEGUIR NO INSTAGRAM'
+            // NOTE: no `images` here on purpose. Images are shared by the 3 languages
+            // (mergeTranslations forces the base array), so a per-language copy would
+            // be dead data and misleading in the admin panel.
           },
           newsletter: {
             preTitle: 'NEWSLETTER',
@@ -1283,13 +1281,10 @@ const DEFAULT_STATE: DbState = {
             title: 'Follow us on Instagram',
             subtitle: 'We share tips, news and behind-the-scenes of K-Beauty.',
             buttonLink: 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==',
-            buttonText: '@lacheotnun',
-            images: [
-              'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400',
-              'https://images.unsplash.com/photo-1570194065650-d99fb4b38b34?q=80&w=400',
-              'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?q=80&w=400',
-              'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=400'
-            ]
+            buttonText: 'FOLLOW ON INSTAGRAM'
+            // NOTE: no `images` here on purpose. Images are shared by the 3 languages
+            // (mergeTranslations forces the base array), so a per-language copy would
+            // be dead data and misleading in the admin panel.
           },
           newsletter: {
             preTitle: 'NEWSLETTER',
@@ -1823,13 +1818,63 @@ function deepMerge(target: any, source: any): any {
   return result;
 }
 
+/**
+ * Tables that are ALWAYS re-fetched from the server on db.init() via /api/catalog.
+ * Caching them in localStorage adds nothing but quota pressure — and because image
+ * uploads can degrade to base64 data: URLs, these tables are what pushed the
+ * snapshot past the ~5MB localStorage limit, which made EVERY write throw
+ * QuotaExceededError and silently drop the admin's changes on reload.
+ */
+const SERVER_AUTHORITATIVE_TABLES = new Set<string>([
+  'products', 'categories', 'brands', 'product_images',
+]);
+
+// Ordered fallbacks used only if the full snapshot still doesn't fit. Each tier
+// drops the next-heaviest tables so a quota error degrades gracefully instead of
+// losing the whole write.
+const PERSIST_FALLBACK_TIERS: string[][] = [
+  ['orders', 'order_items', 'order_tracking', 'communication_logs'],
+  ['cms_blocks', 'routines', 'blog_posts', 'favorites', 'subscriptions', 'newsletter_subscribers'],
+];
+
+function buildSnapshot(drop: string[]): any {
+  const snapshot: any = {};
+  for (const key of Object.keys(memoryDb) as (keyof DbState)[]) {
+    if (SERVER_AUTHORITATIVE_TABLES.has(key as string)) continue;
+    if (drop.includes(key as string)) continue;
+    snapshot[key] = memoryDb[key];
+  }
+  return snapshot;
+}
+
+function isQuotaError(e: any): boolean {
+  if (!e) return false;
+  return (
+    e.name === 'QuotaExceededError' ||
+    e.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+    e.code === 22 ||
+    e.code === 1014 ||
+    /quota|exceed/i.test(String(e.message || e))
+  );
+}
+
 function persistToLocalStorage() {
   if (typeof window === 'undefined') return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryDb));
-  } catch (e) {
-    console.error('Failed to persist DB state:', e);
+
+  let lastError: any = null;
+  const tiers: string[][] = [[], ...PERSIST_FALLBACK_TIERS];
+
+  for (const drop of tiers) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(buildSnapshot(drop)));
+      return;
+    } catch (e) {
+      lastError = e;
+      if (!isQuotaError(e)) break;
+    }
   }
+
+  console.error('Failed to persist DB state:', lastError);
 }
 
 function loadFromLocalStorage(): boolean {
@@ -1880,8 +1925,14 @@ function loadFromLocalStorage(): boolean {
       }
       const parsed = JSON.parse(stringified);
       
-      // A saved DB exists in this browser — treat local site_content as a real override
-      hasLocalSiteContentOverride = true;
+      // A saved DB exists in this browser — but only treat local site_content as a real
+      // override when it actually differs from the shipped defaults. Otherwise every
+      // visitor (who now always has a snapshot, since the catalog is server-authoritative)
+      // would be treated as "the admin" and could win a merge tie against a newer
+      // server-side save.
+      hasLocalSiteContentOverride =
+        JSON.stringify(parsed.site_content || {}) !==
+        JSON.stringify(DEFAULT_STATE.site_content);
 
       // Force social links update
       if (parsed.system_settings && parsed.system_settings.social_links) {
@@ -1893,6 +1944,13 @@ function loadFromLocalStorage(): boolean {
       memoryDb = {
         ...DEFAULT_STATE,
         ...parsed,
+        // The catalog is never persisted (server-authoritative) — always start from the
+        // defaults and let publicCatalogSync()/tryLoadFromSupabase() fill it in, so a
+        // stale or partial snapshot can never blank out the shop.
+        products: DEFAULT_STATE.products,
+        categories: DEFAULT_STATE.categories,
+        brands: DEFAULT_STATE.brands,
+        product_images: DEFAULT_STATE.product_images,
         site_content: deepMerge(DEFAULT_STATE.site_content, parsed.site_content || {}),
         system_settings: deepMerge(DEFAULT_STATE.system_settings, parsed.system_settings || {})
       };
@@ -2116,7 +2174,9 @@ function mergeTableData(table: string, incoming: any[]) {
   // Build a map of kept records for fast lookup
   const localMap = new Map(kept.map((r: any) => [r.id, r]));
 
-  // Add new records or update existing ones
+  // Add new records or update existing ones.
+  // updated_at is compared first and short-circuits the deep compare whenever the server
+  // copy is genuinely newer, so the common "nothing changed" path stays cheap.
   for (const record of incoming) {
     if (deletedIds.has(record.id)) continue;
     const localRecord = localMap.get(record.id);
@@ -2185,7 +2245,7 @@ async function tryLoadFromSupabase() {
   }
 }
 
-async function trySaveToSupabase(table: string, records: any[]) {
+async function trySaveToSupabase(table: string, records: any[]): Promise<boolean> {
   try {
     const chunkSize = 20;
     for (let i = 0; i < records.length; i += chunkSize) {
@@ -2199,7 +2259,7 @@ async function trySaveToSupabase(table: string, records: any[]) {
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: `HTTP error ${res.status}` } }));
         }
-        return;
+        return false;
       }
       const data = await res.json();
       if (!data.success) {
@@ -2207,14 +2267,22 @@ async function trySaveToSupabase(table: string, records: any[]) {
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: data.error } }));
         }
-        return;
+        return false;
+      }
+      // The API silently skips rows whose id is not a valid UUID, and returns
+      // local_only when the target table does not exist. Treat those as failures so
+      // the admin panel can warn instead of pretending the save was persisted.
+      if (data.local_only || (typeof data.synced === 'number' && data.synced === 0 && chunk.length > 0)) {
+        return false;
       }
     }
+    return true;
   } catch (err: any) {
     console.error('Supabase fetch failed:', err);
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('cheotnun_sync_error', { detail: { error: err.message || 'Falha de rede ao salvar' } }));
     }
+    return false;
   }
 }
 
@@ -2270,7 +2338,7 @@ async function loadSettingsFromSupabase() {
   } catch {}
 }
 
-async function trySaveSettingsToSupabase(key: string, value: any) {
+async function trySaveSettingsToSupabase(key: string, value: any): Promise<boolean> {
   // No early return on !supabaseReady: settings must reach Supabase even right after page load.
   try {
     const res = await fetch('/api/supabase-reload', {
@@ -2278,12 +2346,19 @@ async function trySaveSettingsToSupabase(key: string, value: any) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'saveSetting', key, value }),
     });
+    if (!res.ok) {
+      console.error('Supabase save setting HTTP error:', res.status);
+      return false;
+    }
     const data = await res.json();
     if (!data.success) {
       console.error('Supabase save setting error:', data.error);
+      return false;
     }
+    return true;
   } catch (err) {
     console.error('Supabase fetch failed:', err);
+    return false;
   }
 }
 
@@ -2381,33 +2456,45 @@ export const db = {
     return memoryDb[table];
   },
 
-  save: async <K extends keyof DbState>(table: K, records: DbState[K]): Promise<void> => {
+  /**
+   * Saves a table to memory + localStorage and pushes it to Supabase.
+   * Resolves to `true` only when the server acknowledged the write, so callers
+   * (e.g. the admin panel) can surface real failures instead of a fake "saved" toast.
+   */
+  save: async <K extends keyof DbState>(table: K, records: DbState[K]): Promise<boolean> => {
+    // Stamp BEFORE persisting so the snapshot in localStorage carries the same
+    // updated_at that goes to the server. Otherwise the next reload saw an empty
+    // local timestamp and lost the newest-writer merge.
+    if (table === 'site_content') {
+      hasLocalSiteContentOverride = true;
+      (records as any).updated_at = new Date().toISOString();
+    }
+
     memoryDb[table] = records;
     persistToLocalStorage();
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { table } }));
     }
+
     if (table === 'site_content') {
-      hasLocalSiteContentOverride = true;
-      // Stamp when this content was saved so merges can pick the NEWEST writer. This prevents a
-      // stale localStorage (e.g. quota failure) from silently overriding the admin's latest save
-      // on the next load.
-      (records as any).updated_at = new Date().toISOString();
-      await trySaveSettingsToSupabase('site_content', records);
+      return trySaveSettingsToSupabase('site_content', records);
     } else if (table === 'coupons') {
       // Coupons are saved via cheotnun_system_settings (key "coupons") — the same table that
       // reliably backs site_content/theme. The dedicated cheotnun_coupons table may not exist,
       // which caused admin-created coupons to never reach Supabase (and disappear after F5).
-      await trySaveSettingsToSupabase('coupons', records as any[]);
+      return trySaveSettingsToSupabase('coupons', records as any[]);
     } else if (table === 'system_settings') {
       const settings = records as any;
-      if (settings.visual_theme) await trySaveSettingsToSupabase('visual_theme', settings.visual_theme);
-      if (settings.company_details) await trySaveSettingsToSupabase('company_details', settings.company_details);
-      if (settings.seo) await trySaveSettingsToSupabase('seo', settings.seo);
-      if (settings.shipping_zones) await trySaveSettingsToSupabase('shipping_zones', settings.shipping_zones);
-      if (settings.invoice_templates) await trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates);
+      const results = await Promise.all([
+        settings.visual_theme && trySaveSettingsToSupabase('visual_theme', settings.visual_theme),
+        settings.company_details && trySaveSettingsToSupabase('company_details', settings.company_details),
+        settings.seo && trySaveSettingsToSupabase('seo', settings.seo),
+        settings.shipping_zones && trySaveSettingsToSupabase('shipping_zones', settings.shipping_zones),
+        settings.invoice_templates && trySaveSettingsToSupabase('invoice_templates', settings.invoice_templates),
+      ]);
+      return results.every((r) => r !== false);
     } else {
-      await trySaveToSupabase(table as string, records as any[]);
+      return trySaveToSupabase(table as string, records as any[]);
     }
   },
 
@@ -2487,15 +2574,21 @@ export const db = {
   getTranslatedRecord: (record: any, locale: string) => getTranslatedRecord(record, locale),
 };
 
+// Keys that must ALWAYS resolve to the base (Spanish) value, never a translation.
+// This is a deliberate contract: visual assets and visibility flags are edited once
+// in the admin panel and apply to es/pt/en alike. A per-language image copy would be
+// dead data that the admin could edit without ever seeing it applied.
+const LOCALE_INDEPENDENT_KEYS = new Set([
+  'img', 'image', 'imageMobile', 'icon', 'images',
+  'bgImage', 'bgImageMobile', 'logoUrl', 'logo_url', 'flagUrl', 'enabled',
+]);
+
 export function mergeTranslations(base: any, translation: any): any {
   if (!base) return translation || {};
   if (!translation) return base;
   const result = { ...base };
   for (const key in translation) {
-    if (['img', 'image', 'imageMobile', 'icon', 'images', 'bgImage', 'bgImageMobile', 'logoUrl', 'logo_url', 'flagUrl', 'enabled'].includes(key)) {
-      continue; // Always force base images, icons and section visibility flags, ignore translations
-    }
-    
+    if (LOCALE_INDEPENDENT_KEYS.has(key)) continue;
     if (translation[key] && typeof translation[key] === 'object' && !Array.isArray(translation[key])) {
       result[key] = mergeTranslations(base[key], translation[key]);
     } else if (Array.isArray(translation[key]) && Array.isArray(base[key])) {
