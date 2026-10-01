@@ -2103,7 +2103,7 @@ function mergeSiteContentFromServer(supabaseContent: any): boolean {
 }
 
 let supabaseReady = false;
-let liveSyncTimer: ReturnType<typeof setInterval> | null = null;
+let liveSyncTimer: ReturnType<typeof setTimeout> | null = null;
 let liveSyncStarted = false;
 
 // IDs deletados localmente que nao devem ser ressuscitados pelo Supabase
@@ -2384,24 +2384,47 @@ export const db = {
    *  newly-created coupons reach the cart even when this browser has no local data. */
   syncPublicCatalog: async (): Promise<boolean> => publicCatalogSync(),
 
-  /** Starts a lightweight live sync: re-fetches the public catalog whenever the tab gains focus
-   *  and every 20s while visible. This makes admin panel changes (section toggles, coupons,
-   *  content) appear on the site without the visitor needing CTRL+F5. */
+  /**
+   * Starts a lightweight live sync so admin-panel changes (toggles, coupons, content)
+   * appear without the visitor needing CTRL+F5.
+   *
+   * The interval backs off on purpose. A flat 20s poll was multiplied by every open tab
+   * and re-downloaded the full catalog each time — the single biggest consumer of the
+   * Supabase egress quota. Now: fast while the visitor is actively browsing, then slow
+   * and slower, and never while the tab is hidden.
+   */
   startLiveSync: (): void => {
     if (typeof window === 'undefined' || liveSyncStarted) return;
     liveSyncStarted = true;
-    const syncIfVisible = () => {
-      if (document.visibilityState === 'visible') {
-        publicCatalogSync();
-      }
+
+    // Janela curta só existe logo após o carregamento; depois disso o intervalo só
+    // cresce, até 10 minutos.
+    const LADDER = [20_000, 60_000, 180_000, 600_000];
+    let step = 0;
+
+    const scheduleNext = () => {
+      if (liveSyncTimer) clearTimeout(liveSyncTimer);
+      liveSyncTimer = setTimeout(syncIfVisible, LADDER[Math.min(step, LADDER.length - 1)]);
     };
+
+    const syncIfVisible = () => {
+      if (document.visibilityState !== 'visible') {
+        scheduleNext();
+        return;
+      }
+      publicCatalogSync().finally(() => {
+        if (step < LADDER.length - 1) step++;
+        scheduleNext();
+      });
+    };
+
     window.addEventListener('focus', syncIfVisible);
     document.addEventListener('visibilitychange', syncIfVisible);
-    liveSyncTimer = setInterval(syncIfVisible, 20000);
+    liveSyncTimer = setTimeout(syncIfVisible, LADDER[0]);
   },
 
   stopLiveSync: (): void => {
-    if (liveSyncTimer) clearInterval(liveSyncTimer);
+    if (liveSyncTimer) clearTimeout(liveSyncTimer);
     liveSyncTimer = null;
     liveSyncStarted = false;
   },
