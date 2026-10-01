@@ -45,9 +45,13 @@ export async function GET(req: Request) {
   // ───────────────────────────────────────────────────────────────────────────
   const CACHE_TTL_MS = 60_000;
   const cache = new Map<string, { data: Record<string, any>; expiresAt: number }>();
+  // Último dado bom, sem expiração: só entra em ação quando o Supabase recusa a
+  // requisição. É o que impede uma indisponibilidade momentânea de zerar a vitrine.
+  const staleCache = new Map<string, Record<string, any>>();
   // uma única entrada em voo por chave, para várias abas simultâneas não dispararem
   // N consultas iguais ao mesmo tempo (cache stampede)
-  const inFlight = new Map<string, Promise<Record<string, any>>>();
+  const inFlight = new Map<string, Promise<any>>();
+  const TABLE_UNAVAILABLE = Symbol('unavailable');
 
   try {
     const cacheKey = requestedTables.slice().sort().join(',');
@@ -64,6 +68,10 @@ export async function GET(req: Request) {
       pending = (async () => {
         const supabase = createClient(supabaseUrl, serviceRoleKey);
         const result: Record<string, any> = {};
+        // A tabela vem None quando o Supabase recusa a requisição (ex.: projeto
+        // bloqueado por exceed_egress_quota, ou falha de rede). Nesse caso devolvemos
+        // undefined para esta tabela em vez de mascarar com lista vazia.
+        let unavailable = false;
 
         // Run all table fetches in parallel (the previous sequential loop made every page load wait
         // for all Supabase round-trips, adding noticeable latency before fresh content appeared).
@@ -75,27 +83,51 @@ export async function GET(req: Request) {
               .select('value')
               .eq('key', table)
               .single();
-            return { table, value: (!err && setting?.value) ? (typeof setting.value === 'string' ? JSON.parse(setting.value) : setting.value) : undefined };
+            if (err) { unavailable = true; return { table, value: undefined }; }
+            return { table, value: setting?.value ? (typeof setting.value === 'string' ? JSON.parse(setting.value) : setting.value) : undefined };
           }
           const tableName = PUBLIC_TABLE_MAP[table];
           if (!tableName) return { table, value: undefined }; // Skip tables not in public whitelist
           const { data, error } = await supabase.from(tableName).select('*');
-          return { table, value: (!error && data) ? data : undefined };
+          if (error) { unavailable = true; return { table, value: undefined }; }
+          return { table, value: data ?? undefined };
         });
 
         const settled = await Promise.all(fetchers);
         for (const { table, value } of settled) {
           if (value !== undefined) result[table] = value;
         }
-        return result;
+        return unavailable ? TABLE_UNAVAILABLE : result;
       })().finally(() => inFlight.delete(cacheKey));
-      inFlight.set(cacheKey, pending);
+      inFlight.set(cacheKey, pending as Promise<any>);
     }
 
-    const data = await pending;
+    const fetched = await pending;
+
+    // Upstream indisponível: serve o último dado bom em vez de devolver erro/vazio.
+    // Sem isso, uma indisponibilidade momentânea do Supabase (ou uma restrição de
+    // egress) esvazia a vitrine inteira do site.
+    if (fetched === TABLE_UNAVAILABLE) {
+      const stale = staleCache.get(cacheKey);
+      if (stale) {
+        return NextResponse.json(
+          { success: true, data: stale, degraded: true },
+          { headers: { 'Cache-Control': 'no-store', 'X-Catalog-Degraded': '1' } },
+        );
+      }
+      return NextResponse.json(
+        { success: false, error: 'Catalog temporarily unavailable' },
+        { status: 503, headers: { 'Cache-Control': 'no-store' } },
+      );
+    }
+
+    const data = fetched as Record<string, any>;
     cache.set(cacheKey, { data, expiresAt: Date.now() + CACHE_TTL_MS });
-    // Mantém o mapa pequeno: no máximo as algumas combinações de tabelas em uso.
+    // cópia durável (sem TTL) usada só como fallback de emergência
+    staleCache.set(cacheKey, data);
+    // Mantém os mapas pequenos: no máximo as algumas combinações de tabelas em uso.
     if (cache.size > 12) cache.delete(cache.keys().next().value as string);
+    if (staleCache.size > 12) staleCache.delete(staleCache.keys().next().value as string);
 
     return NextResponse.json(
       { success: true, data },
