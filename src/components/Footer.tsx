@@ -47,10 +47,9 @@ export default function Footer() {
   const content = translatedContent.footer || null;
   const settings = db.get('system_settings');
   const company = settings?.company_details || {};
-
+  const social = content?.social || company?.social || {};
   const logoUrl = content?.logoUrl || translatedContent.header?.logoUrl || '/images/cheotnun-k-beauty-logo-oficial.webp';
   const description = content?.description || '';
-  const social = content?.social || {};
   const col1 = content?.col1 || { title: 'Tienda', links: [] };
   const col2 = content?.col2 || { title: 'Ayuda & Políticas', links: [] };
   const col3 = content?.col3 || { title: 'Atención al Cliente', links: [] };

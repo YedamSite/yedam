@@ -1839,9 +1839,14 @@ const SERVER_AUTHORITATIVE_TABLES = new Set<string>([
 // Ordered fallbacks used only if the full snapshot still doesn't fit. Each tier
 // drops the next-heaviest tables so a quota error degrades gracefully instead of
 // losing the whole write.
+// Tier 0: drop nothing (full snapshot)
+// Tier 1: drop heavy operational tables
+// Tier 2: drop CMS/content tables
+// Tier 3: drop catalog tables (products/categories/brands) - LAST RESORT to avoid quota
 const PERSIST_FALLBACK_TIERS: string[][] = [
   ['orders', 'order_items', 'order_tracking', 'communication_logs'],
   ['cms_blocks', 'routines', 'blog_posts', 'favorites', 'subscriptions', 'newsletter_subscribers'],
+  ['products', 'categories', 'brands', 'coupons'],
 ];
 
 function buildSnapshot(drop: string[]): any {
@@ -1865,6 +1870,36 @@ function isQuotaError(e: any): boolean {
   );
 }
 
+function sanitizeSnapshotForStorage(snapshot: any): any {
+  // Remove base64 data URLs from product images to avoid quota issues
+  if (snapshot.products && Array.isArray(snapshot.products)) {
+    snapshot.products = snapshot.products.map((p: any) => {
+      if (p.image && typeof p.image === 'string' && p.image.startsWith('data:')) {
+        return { ...p, image: '' };
+      }
+      return p;
+    });
+  }
+  if (snapshot.categories && Array.isArray(snapshot.categories)) {
+    snapshot.categories = snapshot.categories.map((c: any) => {
+      if (c.image && typeof c.image === 'string' && c.image.startsWith('data:')) {
+        return { ...c, image: '' };
+      }
+      return c;
+    });
+  }
+  if (snapshot.brands && Array.isArray(snapshot.brands)) {
+    snapshot.brands = snapshot.brands.map((b: any) => {
+      if (b.image && typeof b.image === 'string' && b.image.startsWith('data:')) {
+        return { ...b, image: '' };
+      }
+      return b;
+    });
+  }
+  // product_images table is already excluded via SERVER_AUTHORITATIVE_TABLES
+  return snapshot;
+}
+
 function persistToLocalStorage() {
   if (typeof window === 'undefined') return;
 
@@ -1873,7 +1908,9 @@ function persistToLocalStorage() {
 
   for (const drop of tiers) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(buildSnapshot(drop)));
+      const snapshot = buildSnapshot(drop);
+      const sanitized = sanitizeSnapshotForStorage(snapshot);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
       return;
     } catch (e) {
       lastError = e;
@@ -1941,11 +1978,24 @@ function loadFromLocalStorage(): boolean {
         JSON.stringify(parsed.site_content || {}) !==
         JSON.stringify(DEFAULT_STATE.site_content);
 
-      // Force social links update
-      if (parsed.system_settings && parsed.system_settings.social_links) {
-        parsed.system_settings.social_links.tiktok = 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98z1msmaull';
-        parsed.system_settings.social_links.youtube = 'https://youtube.com/@enquantoaconteceoficial?si=NI6G-hH2TMoK69-H';
-        parsed.system_settings.social_links.instagram = 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==';
+      // Force social links update (single source of truth: system_settings.company_details.social)
+      const canonicalSocial = {
+        instagram: 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==',
+        youtube: 'https://youtube.com/@enquantoaconteceoficial?si=NI6G-hH2TMoK69-H',
+        tiktok: 'https://www.tiktok.com/@lacheotnun?_r=1&_t=ZS-98z1msmaull'
+      };
+      if (parsed.system_settings?.company_details) {
+        parsed.system_settings.company_details.social = canonicalSocial;
+      }
+      if (parsed.site_content?.footer) {
+        parsed.site_content.footer.social = canonicalSocial;
+      }
+      // Also update translations for all languages
+      for (const lang of ['pt', 'en']) {
+        const trans = parsed.site_content?.translations?.[lang];
+        if (trans?.footer) {
+          trans.footer.social = canonicalSocial;
+        }
       }
 
       // Catalog (products/categories/brands) IS now persisted to localStorage as fallback.
