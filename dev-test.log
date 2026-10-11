@@ -1,0 +1,24 @@
+
+> cheotnun@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://169.254.108.146:3000
+- Environments: .env.local, .env
+✓ Ready in 3.1s
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 2.5s (next.js: 1826ms, application-code: 634ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 102ms (next.js: 13ms, application-code: 89ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 99ms (next.js: 9ms, application-code: 90ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 104ms (next.js: 12ms, application-code: 92ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 109ms (next.js: 17ms, application-code: 92ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 96ms (next.js: 10ms, application-code: 86ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 97ms (next.js: 10ms, application-code: 87ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 90ms (next.js: 11ms, application-code: 79ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 106ms (next.js: 11ms, application-code: 95ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 95ms (next.js: 11ms, application-code: 84ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 85ms (next.js: 11ms, application-code: 74ms)
+ GET /api/catalog?tables=products,categories,brands,coupons,site_content,shipping_zones 200 in 81ms (next.js: 9ms, application-code: 72ms)
+ GET /api/catalog?tables=products 200 in 76ms (next.js: 8ms, application-code: 68ms)

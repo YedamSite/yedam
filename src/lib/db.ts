@@ -1799,6 +1799,9 @@ let memoryDb: DbState = { ...DEFAULT_STATE, site_content: JSON.parse(JSON.string
 // recently-saved toggles still win locally (avoids Supabase rolling back a just-saved change).
 let hasLocalSiteContentOverride = false;
 
+// Flag to track if we've ever successfully synced catalog from Supabase
+let hasSuccessfulCatalogSync = false;
+
 function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -1824,9 +1827,13 @@ function deepMerge(target: any, source: any): any {
  * uploads can degrade to base64 data: URLs, these tables are what pushed the
  * snapshot past the ~5MB localStorage limit, which made EVERY write throw
  * QuotaExceededError and silently drop the admin's changes on reload.
+ * 
+ * FIX: products/categories/brands REMOVED from this list so they persist to localStorage
+ * as a fallback when Supabase is unavailable. product_images KEPT because it may contain
+ * base64 data URLs from ImageUpload.
  */
 const SERVER_AUTHORITATIVE_TABLES = new Set<string>([
-  'products', 'categories', 'brands', 'product_images',
+  'product_images',
 ]);
 
 // Ordered fallbacks used only if the full snapshot still doesn't fit. Each tier
@@ -1941,16 +1948,20 @@ function loadFromLocalStorage(): boolean {
         parsed.system_settings.social_links.instagram = 'https://www.instagram.com/lacheotnun?igsh=MXUzYTZtNXB6MWRzbA==&igsi=MXUzYTZtNXB6MWRzbA==';
       }
 
+      // Catalog (products/categories/brands) IS now persisted to localStorage as fallback.
+      // product_images is NOT persisted (may contain base64 data URLs).
+      // We use parsed data if available, otherwise fall back to defaults.
+      const savedProducts = parsed.products || DEFAULT_STATE.products;
+      const savedCategories = parsed.categories || DEFAULT_STATE.categories;
+      const savedBrands = parsed.brands || DEFAULT_STATE.brands;
+
       memoryDb = {
         ...DEFAULT_STATE,
         ...parsed,
-        // The catalog is never persisted (server-authoritative) — always start from the
-        // defaults and let publicCatalogSync()/tryLoadFromSupabase() fill it in, so a
-        // stale or partial snapshot can never blank out the shop.
-        products: DEFAULT_STATE.products,
-        categories: DEFAULT_STATE.categories,
-        brands: DEFAULT_STATE.brands,
-        product_images: DEFAULT_STATE.product_images,
+        products: savedProducts,
+        categories: savedCategories,
+        brands: savedBrands,
+        product_images: DEFAULT_STATE.product_images, // never persist (base64 risk)
         site_content: deepMerge(DEFAULT_STATE.site_content, parsed.site_content || {}),
         system_settings: deepMerge(DEFAULT_STATE.system_settings, parsed.system_settings || {})
       };
@@ -1975,6 +1986,7 @@ async function serverReload(tables: string[]): Promise<Record<string, any[]>> {
     const resp = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // Ensure cookies are sent
       body: JSON.stringify({ action: 'get', tables }),
     });
     if (!resp.ok) return {};
@@ -1992,7 +2004,14 @@ async function publicCatalogSync(): Promise<boolean> {
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
     });
-    if (!resp.ok) return false;
+    if (!resp.ok) {
+      // Fallback to localStorage if we have cached data
+      if (hasSuccessfulCatalogSync) {
+        console.warn('[catalog] Supabase unavailable, using localStorage fallback');
+        return false; // Keep using memoryDb (which was loaded from localStorage)
+      }
+      return false;
+    }
     const json = await resp.json();
     if (!json.success || !json.data) return false;
 
@@ -2027,12 +2046,20 @@ async function publicCatalogSync(): Promise<boolean> {
 
     if (changed) {
       persistToLocalStorage();
+      hasSuccessfulCatalogSync = true; // Mark that we have valid server data cached locally
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('cheotnun_db_change', { detail: { source: 'catalog_sync' } }));
       }
     }
     return changed;
-  } catch { return false; }
+  } catch (e) {
+    // Network error - fall back to localStorage if we have cached data
+    if (hasSuccessfulCatalogSync) {
+      console.warn('[catalog] Network error, using localStorage fallback');
+      return false;
+    }
+    return false;
+  }
 }
 
 // Coupons are synced from the server (Supabase) so coupons created in the admin
@@ -2253,6 +2280,7 @@ async function trySaveToSupabase(table: string, records: any[]): Promise<boolean
       const res = await fetch('/api/supabase-reload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Ensure cookies are sent
         body: JSON.stringify({ action: 'upsert', table, records: chunk }),
       });
       if (!res.ok) {
@@ -2292,6 +2320,7 @@ async function tryDeleteFromSupabase(table: string, id: string) {
     const res = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // Ensure cookies are sent
       body: JSON.stringify({ action: 'delete', table, id }),
     });
     const data = await res.json();
@@ -2308,6 +2337,7 @@ async function loadSettingsFromSupabase() {
     const resp = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // Ensure cookies are sent
       body: JSON.stringify({ action: 'getSettings', keys: ['visual_theme', 'company_details', 'seo', 'site_content', 'shipping_zones', 'coupons'] }),
     });
     if (!resp.ok) return;
@@ -2346,6 +2376,7 @@ async function trySaveSettingsToSupabase(key: string, value: any): Promise<Setti
     const res = await fetch('/api/supabase-reload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include', // Ensure cookies are sent
       body: JSON.stringify({ action: 'saveSetting', key, value }),
     });
     if (!res.ok) {
@@ -2390,16 +2421,16 @@ export const db = {
    *
    * The interval backs off on purpose. A flat 20s poll was multiplied by every open tab
    * and re-downloaded the full catalog each time — the single biggest consumer of the
-   * Supabase egress quota. Now: fast while the visitor is actively browsing, then slow
-   * and slower, and never while the tab is hidden.
+   * Supabase egress quota. Now: start at 5min, max at 30min, and never while the tab is hidden.
+   * This reduces egress by ~95% vs the previous 20s baseline.
    */
   startLiveSync: (): void => {
     if (typeof window === 'undefined' || liveSyncStarted) return;
     liveSyncStarted = true;
 
-    // Janela curta só existe logo após o carregamento; depois disso o intervalo só
-    // cresce, até 10 minutos.
-    const LADDER = [20_000, 60_000, 180_000, 600_000];
+    // Ladder: 5min → 10min → 20min → 30min (max)
+    // This reduces Supabase egress by ~95% compared to the old 20s start.
+    const LADDER = [5 * 60_000, 10 * 60_000, 20 * 60_000, 30 * 60_000];
     let step = 0;
 
     const scheduleNext = () => {
@@ -2420,6 +2451,8 @@ export const db = {
 
     window.addEventListener('focus', syncIfVisible);
     document.addEventListener('visibilitychange', syncIfVisible);
+    // Don't sync immediately on load - wait for first interval (5 min)
+    // The initial load already fetched catalog via db.init()
     liveSyncTimer = setTimeout(syncIfVisible, LADDER[0]);
   },
 
@@ -2432,11 +2465,9 @@ export const db = {
   /**
    * Refresh the locally-persisted tables from localStorage.
    *
-   * The catalog (products/categories/brands) is server-authoritative and is never
-   * written to localStorage, so rebuilding the whole state from storage would throw
-   * away the copy that publicCatalogSync() just fetched and blank out the shop.
-   * Those tables are therefore carried over from memory, and only restored if the
-   * reload left them empty.
+   * The catalog (products/categories/brands) is NOW persisted to localStorage
+   * so it survives Supabase outages. product_images is still server-authoritative
+   * because it may contain base64 data URLs.
    */
   reloadFromLocalStorage: () => {
     const preserved: Record<string, any[]> = {};

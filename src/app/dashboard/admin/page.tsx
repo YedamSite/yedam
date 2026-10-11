@@ -240,11 +240,11 @@ export default function AdminDashboard() {
     window.addEventListener('cheotnun_db_change', handleDbChange as EventListener);
     window.addEventListener('cheotnun_sync_error', handleSyncError as EventListener);
     
-    // Polling: recarregar pedidos do Supabase a cada 3 segundos
+    // Polling: recarregar pedidos do Supabase a cada 30 segundos (era 3s - reduzido para poupar egress)
     const poll = setInterval(async () => {
       await db.reloadFromSupabase(['orders', 'order_tracking', 'communication_logs']);
       loadData();
-    }, 3000);
+    }, 30_000);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -298,7 +298,7 @@ export default function AdminDashboard() {
       } catch {}
     };
 
-    const interval = setInterval(checkChatNotifications, 3000);
+    const interval = setInterval(checkChatNotifications, 15_000); // Era 3s - reduzido para poupar egress
     return () => clearInterval(interval);
   }, [activeSubTab]);
 

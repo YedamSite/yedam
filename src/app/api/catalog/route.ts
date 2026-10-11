@@ -29,21 +29,17 @@ export async function GET(req: Request) {
   const requestedTables = tablesParam.split(',').map(t => t.trim()).filter(Boolean);
 
   // ───────────────────────────────────────────────────────────────────────────
-  // CACHE DE EGRESS
+  // CACHE DE EGRESS — OTIMIZADO PARA FREE TIER
   // ───────────────────────────────────────────────────────────────────────────
-  // Esta rota é pública e devolve o catálogo para TODA aba que abre o site, e o
-  // cliente a chama a cada ~20s (live sync). Sem cache, cada chamada multiplica o
-  // volume de saída do Supabase: são ~6 MB por resposta. Com várias abas/visitantes
-  // isso consome a cota de egress do plano gratuito em horas — o projeto chegou a
-  // ser bloqueado com "exceed_egress_quota".
-  //
+  // Esta rota é pública e devolve o catálogo para TODA aba que abre o site.
+  // Com o novo live sync (5min → 30min), o TTL pode ser maior.
   // Duas camadas:
-  //  1) TTL em memória por instância, para não repetir a consulta ao Supabase;
-  //  2) s-maxage/stale-while-revalidate, para o CDN/proxy compartilhado também
-  //     absorver as requisições entre instâncias.
+  //  1) TTL em memória por instância (5 min), para não repetir a consulta ao Supabase;
+  //  2) s-maxage/stale-while-revalidate (5 min / 30 min), para o CDN/proxy compartilhado
+  //     também absorver as requisições entre instâncias.
   // Só dados públicos (catálogo + conteúdo do site) são cacheados.
   // ───────────────────────────────────────────────────────────────────────────
-  const CACHE_TTL_MS = 60_000;
+  const CACHE_TTL_MS = 5 * 60_000; // 5 minutes (matches live sync minimum interval)
   const cache = new Map<string, { data: Record<string, any>; expiresAt: number }>();
   // Último dado bom, sem expiração: só entra em ação quando o Supabase recusa a
   // requisição. É o que impede uma indisponibilidade momentânea de zerar a vitrine.
@@ -133,10 +129,10 @@ export async function GET(req: Request) {
       { success: true, data },
       {
         headers: {
-          // `s-maxage` é o que o proxy compartilhado respeita; `no-store` no browser
-          // foi removido de propósito para que o CDN também absorva as requisições.
-          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=600',
-          'CDN-Cache-Control': 'public, s-maxage=60, stale-while-revalidate=600',
+          // `s-maxage` = 5 min (matches live sync minimum interval)
+          // `stale-while-revalidate` = 30 min (matches live sync maximum interval)
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=1800',
+          'CDN-Cache-Control': 'public, s-maxage=300, stale-while-revalidate=1800',
         },
       }
     );
